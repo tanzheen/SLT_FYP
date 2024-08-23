@@ -75,10 +75,10 @@ def main():
 
     for ty in ['train', 'dev', 'test']: 
         ## repeat itself for train, dev and test set
-        dataset_path = f'../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/manual/PHOENIX-2014-T.{ty}.corpus.csv'  
+        dataset_path = f'../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/manual/PHOENIX-2014-T.{ty}.corpus.csv'  
         os.makedirs(output_folder, exist_ok=True)
-        output_path = f'../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_{ty}.pkl'
-        img_path = f'../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px/{ty}/'
+        output_path = f'../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_{ty}.pkl'
+        img_path = f'../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px/{ty}/'
         
         # Process the dataset and save the results
         create_phoenix_annot(dataset_path, output_path, img_path)

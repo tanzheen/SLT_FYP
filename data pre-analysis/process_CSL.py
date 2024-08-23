@@ -136,11 +136,11 @@ def split_and_move_data(CSL_annot_path, split_txt_path, img_path, output_label_p
 
 
 def main():
-    output_label_path= '../../../CSL-Daily/sentence_label/processed'
+    output_label_path= '../../CSL-Daily/sentence_label/processed'
     os.makedirs(output_label_path, exist_ok=True)
-    img_path = '../../../CSL-Daily/sentence/frames_512x512'
-    CSL_annot_path = '../../../CSL-Daily/sentence_label/csl2020ct_v2.pkl'
-    split_txt_path= '../../../CSL-Daily/sentence_label/split_1.txt'
+    img_path = '../../CSL-Daily/sentence/frames_512x512'
+    CSL_annot_path = '../../CSL-Daily/sentence_label/csl2020ct_v2.pkl'
+    split_txt_path= '../../CSL-Daily/sentence_label/split_1.txt'
     split_and_move_data(CSL_annot_path, split_txt_path, img_path, output_label_path)
     
 
