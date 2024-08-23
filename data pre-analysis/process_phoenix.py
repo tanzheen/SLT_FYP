@@ -71,7 +71,7 @@ def save_results(video_info_dict, output_path):
 
 
 def main():
-    output_folder = '../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/'
+    output_folder = '../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/'
 
     for ty in ['train', 'dev', 'test']: 
         ## repeat itself for train, dev and test set
