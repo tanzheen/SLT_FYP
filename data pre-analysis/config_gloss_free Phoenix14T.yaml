@@ -1,0 +1,14 @@
+name: GFSLT-VLP Phoenix14T
+data:
+  train: ../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../../PHOENIX-2014-T-release-v3/features/fullFrame-210x260px/ # + <train/dev/test> + <video_name>
+  max_length: 300
+training:
+  wandb: disabled # online or disabled
+  scale_embedding: False
+model:
+  transformer: ./pretrain_models/MBart_trimmed
+  visual_encoder: ./pretrain_models/mytran
+  sign_proj: True
