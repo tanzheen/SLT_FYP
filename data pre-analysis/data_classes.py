@@ -18,6 +18,14 @@ from vidaug import augmentors as va
 from loguru import logger
 from augmentation import *
 from definition import *
+import pickle
+
+def load_annot_file(file_path):
+    with open(file_path, 'rb') as file:
+        data = pickle.load(file)
+    return data
+
+
 
 class S2T_Dataset(Dataset.Dataset):
     def __init__ (self, tokenizer, config, args, phase, training_refurbish = False):
@@ -25,7 +33,8 @@ class S2T_Dataset(Dataset.Dataset):
         self.args = args 
         self.training_refurbish = training_refurbish
         self.phase = phase 
-        self.raw_data = utils.load_annot_file(config['data'][[phase]])  # path will be the split set to retrieve (train, dev, test)
+        
+        self.raw_data = load_annot_file(config['data'][phase])  # path will be the split set to retrieve (train, dev, test)
         self.tokenizer = tokenizer
         self.max_length = self.raw_data['max_length']
         self.img_path = os.path.join(config['data']['img_path'], phase)
@@ -59,19 +68,22 @@ class S2T_Dataset(Dataset.Dataset):
     def __getitem__(self, index): 
         file = self.data_list[index]
         name = file['name']
-        text_label = file['text']
+        text_label = file['translation']
         length = file['length']
-        img_sample = self.load_imgs(os.path.join(self.img_path , name)) ## load_imgs will retrieve all the images from the folder to consolidate into one folder
+        img_folder_path = os.path.join(self.img_path , name)
+
+        img_sample = self.load_imgs(img_folder_path) ## load_imgs will retrieve all the images from the folder to consolidate into one folder
         return name, img_sample, text_label
     
     def load_imgs(self, dir_path):
 
         data_transform = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]), ## these values are the mean and s.d of RGB channels from the ImageNet dataset
         ])
 
         paths = sorted(os.listdir(dir_path)) 
+        
         if len(paths) > self.max_length:
             tmp = sorted(random.sample(range(len(paths)), k=self.max_length))
             new_paths = []
@@ -86,6 +98,7 @@ class S2T_Dataset(Dataset.Dataset):
         
         batch_image = []
         for i, img_path in enumerate(paths):
+            img_path = os.path.join(dir_path, img_path)
             img = cv2.imread(img_path)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             img = Image.fromarray(img)
@@ -164,7 +177,7 @@ class S2T_Dataset(Dataset.Dataset):
         return src_input, tgt_input, name_batch 
 
     def __str__(self):
-        return f'#total {self.phase} set: {len(self.list)}.'
+        return f'#total {self.phase} set: {len(self.data_list)}.'
     
 
     def collate_fn_wname(self, batch):
