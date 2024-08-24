@@ -160,6 +160,7 @@ class S2T_Dataset(Dataset.Dataset):
 
         with self.tokenizer.as_target_tokenizer():
             tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
+            # this tgt_input is returned from 
 
         src_input = {}
         src_input['input_ids'] = img_batch

@@ -9,7 +9,6 @@ import torch.distributed as dist
 
 
 def create_dataloaders(config, args): 
-    device = torch.device(args.device)
     
     tokenizer = MBart50Tokenizer.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
 
