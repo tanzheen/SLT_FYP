@@ -91,7 +91,7 @@ class S2T_Dataset(Dataset.Dataset):
                 new_paths.append(paths[i])
             paths = new_paths
 
-        # number of frames, RGB, Height, Widht
+        # number of frames, RGB, Height, Width 
         imgs = torch.zeros(len(paths ), 3, self.args.input_size, self.args.input_size)
         crop_rect, resize = utils.data_augmentation(resize=(self.args.resize, self.args.resize),
                                                     crop_size=self.args.input_size, is_train=(self.phase == 'train'))
@@ -140,12 +140,11 @@ class S2T_Dataset(Dataset.Dataset):
         
         img_tmp = [padded_video[i][0:video_length[i], :, :, :] for i in range(len(padded_video))]
 
-
         for i in range(len(img_tmp)):
             src_length_batch.append(len(img_tmp[i]))
         src_length_batch = torch.tensor(src_length_batch)
 
-        img_batch = torch.cat(img_tmp, 0)
+        img_batch = torch.cat(img_tmp, 0) # final batch size will be Batch_size , Frames, RGB , Height , Width  
         
         new_src_lengths = (((src_length_batch - 5 + 1) / 2) - 5 + 1) / 2
         new_src_lengths = new_src_lengths.long()
@@ -160,7 +159,7 @@ class S2T_Dataset(Dataset.Dataset):
 
         with self.tokenizer.as_target_tokenizer():
             tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
-            # this tgt_input is returned from 
+            # this tgt_input is returned from tokenizer as a dictionary
 
         src_input = {}
         src_input['input_ids'] = img_batch

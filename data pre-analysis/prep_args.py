@@ -1,6 +1,6 @@
 
 import argparse
-from hpman.m import _
+
 import hpargparse
 
 # global definition

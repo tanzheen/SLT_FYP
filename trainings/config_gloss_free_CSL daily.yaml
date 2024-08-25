@@ -9,6 +9,6 @@ training:
   wandb: disabled # online or disabled
   scale_embedding: False
 model:
-  transformer: ./pretrain_models/CSL/MBart_trimmed
+  transformer: "facebook/mbart-large-50-many-to-many-mmt"
   visual_encoder: ./pretrain_models/CSL/mytran
   sign_proj: True

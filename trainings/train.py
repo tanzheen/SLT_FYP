@@ -11,10 +11,11 @@ from torch import nn
 from torch.utils.data import DataLoader
 from timm.utils import NativeScaler
 from torch.utils.data import DataLoader
+from definition import * 
 
-# *transformers
+# *transformers and models 
 from transformers import MBartForConditionalGeneration, MBartTokenizer, MBartConfig
-
+from models import * 
 
 # *basic
 import os
@@ -33,6 +34,7 @@ import math
 import sys
 from typing import Iterable, Optional
 from loguru import logger
+import utils 
 
 # *metric
 from sacrebleu.metrics import BLEU, CHRF, TER
@@ -52,7 +54,12 @@ from hpman.m import _
 import hpargparse
 from create_dataloaders import create_dataloaders
 
-def train_model(config, args): 
+# Contrastive loss 
+from SignCL import sign_cl
+
+def train_model(config, args):
+    torch.cuda.empty_cache() 
+    cl_criterion = sign_cl()
     device = torch.device(args.device)
     train_dataloader, dev_dataloader, test_dataloader = create_dataloaders(config, args)
     print(f"Creating model: ")
@@ -122,13 +129,16 @@ def train_model(config, args):
         return  # break the function here so that it will not go into training
     
     # Training loop for multiple epochs
+    print(f"Starting training for {args.epochs} epochs")
+    start_time = time.time()
+    min_loss = np.inf
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_dataloader.sampler.set_epoch(epoch)
 
         # Train the model for one epoch
         train_stats = train_one_epoch(
-            args, model, criterion, train_dataloader, optimizer, device, epoch, config,
+            args, model, criterion, cl_criterion, train_dataloader, optimizer, device, epoch, config,
             PAD_IDX, loss_scaler, TD_train_dict
         )
 
@@ -169,4 +179,188 @@ def train_model(config, args):
                     }, checkpoint_path)
 
         print(f"* DEV loss {test_stats['loss']:.3f} Min DEV loss {min_loss}")
+
+        # Optionally log metrics to an external service like Weights & Biases
+        if args.run:
+            args.run.log({
+                'epoch': epoch + 1,
+                'training/train_loss': train_stats['loss'],
+                'training/masked_lm_loss': train_stats['masked_lm_loss'],
+                'dev/dev_loss': test_stats['loss'],
+                'dev/min_loss': min_loss
+            })
+
+        # Log training statistics to a file
+        log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
+                     **{f'test_{k}': v for k, v in test_stats.items()},
+                     'epoch': epoch,
+                     'n_parameters': n_parameters}
+
+        if args.output_dir and utils.is_main_process():
+            with (output_dir / "log.txt").open("a") as f:
+                f.write(json.dumps(log_stats) + "\n")
+
+    # Final evaluation after training completes
+    test_on_last_epoch = True
+    if test_on_last_epoch and args.output_dir:
+        torch.distributed.barrier()  # Synchronize all processes before final evaluation
+        checkpoint = torch.load(args.output_dir + '/best_checkpoint.pth', map_location='cpu')
+        model_without_ddp.load_state_dict(checkpoint['model'], strict=True)
+
+        dev_stats = evaluate(
+            args, dev_dataloader, model, model_without_ddp, criterion, config, epoch, UNK_IDX,
+            SPECIAL_SYMBOLS, PAD_IDX, device, TD_train_dict
+        )
+        print(f"Dev loss of the network on the {len(dev_dataloader)} test videos: {dev_stats['loss']:.3f}")
+
+        test_stats = evaluate(
+            args, test_dataloader, model, model_without_ddp, criterion, config, epoch, UNK_IDX,
+            SPECIAL_SYMBOLS, PAD_IDX, device, TD_train_dict
+        )
+        print(f"Test loss of the network on the {len(test_dataloader)} test videos: {test_stats['loss']:.3f}")
+
+    total_time = time.time() - start_time
+    total_time_str = str(datetime.timedelta(seconds=int(total_time)))
+    print('Training time {}'.format(total_time_str))
+
+
+# Function to train the model for one epoch
+def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss, cl_criterion, 
+                    data_loader: Iterable, optimizer: torch.optim.Optimizer,
+                    device: torch.device, epoch: int, config, PAD_IDX, loss_scaler, TD_train_dict, max_norm: float = 0,
+                    set_training_mode=True):
+    
+    # Set the model to training mode
+    model = model.to(device)
+    model.train(set_training_mode)
+
+    # Initialize metric logger
+    metric_logger = utils.MetricLogger(delimiter="  ")
+    metric_logger.add_meter('lr', utils.SmoothedValue(window_size=1, fmt='{value:.6f}'))
+    header = 'Epoch: [{}/{}]'.format(epoch, args.epochs)
+    print_freq = 10  # Frequency of logging training status
+
+    # Define the loss functions
+    loss_img = criterion
+    loss_txt = criterion
+    loss_fct = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX, label_smoothing=0.2)
+
+    for step, (src_input, tgt_input, masked_tgt_input) in enumerate(
+            metric_logger.log_every(data_loader, print_freq, header)):
+
+        optimizer.zero_grad()
+
+        # Forward pass with automatic mixed precision
+        with torch.cuda.amp.autocast():
+            logits_per_image, logits_per_text, ground_truth, frames_feature = model(src_input, tgt_input)
+            loss_imgs = loss_img(logits_per_image, ground_truth)
+            loss_texts = loss_txt(logits_per_text, ground_truth)
+
+            # Calculate contrastive loss and margin adjustment
+            margin = max(10, int((frames_feature.shape[1] // tgt_input['input_ids'].shape[1] + 1) * 2.3)) * 2
+            num_negative = 30
+            margin = min(margin, int((frames_feature.shape[1] - num_negative) / 2))  # Ensure margin for negative sampling
+            cl_loss = cl_criterion(frames_feature, margin=margin)
+
+            # Combine image-text losses and add contrastive loss
+            ml_loss = (loss_imgs + loss_texts) / 2.
+            total_loss = ml_loss + 0.01 * cl_loss
+
+        # Backward pass and optimization step
+        loss_scaler(ml_loss, optimizer)
+
+        # Update text decoder parameters periodically
+        if step % 5 == 0:
+            TD_train_dict['optimizer'].zero_grad()
+            with torch.cuda.amp.autocast():
+                lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.module.model_txt)
+                masked_lm_loss = loss_fct(
+                    lm_logits.view(-1, lm_logits.shape[-1]),
+                    tgt_input['input_ids'].cuda().view(-1)
+                ) * args.loss_lambda
+            loss_scaler(masked_lm_loss, TD_train_dict['optimizer'])
+
+        # Log and handle potential training issues
+        loss_value = total_loss.item()
+        if not math.isfinite(loss_value):
+            print("Loss is {}, stopping training".format(loss_value))
+            sys.exit(1)
+
+        metric_logger.update(loss=loss_value)
+        metric_logger.update(cl_loss=cl_loss.item())
+        metric_logger.update(masked_lm_loss=masked_lm_loss.item())
+        metric_logger.update(lr=optimizer.param_groups[0]["lr"])
+        metric_logger.update(td_lr=TD_train_dict['optimizer'].param_groups[0]["lr"])
+
+        # Optionally visualize the training process
+        if (step + 1) % 10 == 0 and utils.is_main_process():
+            visual_map = torch.cat((logits_per_image.unsqueeze(0), logits_per_text.unsqueeze(0)))
+            utils.visualization([visual_map, ])
+
+    if args.run:
+        args.run.log({
+            'epoch': epoch + 1,
+            'epoch/train_loss': loss_value,
+            'epoch/masked_lm_loss': masked_lm_loss.item()
+        })
+
+    # Synchronize metrics across processes
+    metric_logger.synchronize_between_processes()
+    print("Averaged stats:", metric_logger)
+
+    return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
+
+
+
+
+# Function to evaluate the model on the validation or test dataset
+def evaluate(args, dev_dataloader, model, model_without_ddp, criterion, config, epoch, UNK_IDX, SPECIAL_SYMBOLS,
+             PAD_IDX, device, TD_train_dict):
+    model.eval()
+
+    metric_logger = utils.MetricLogger(delimiter="  ")
+    header = 'Test:'
+    print_freq = 10  # Frequency of logging evaluation status
+
+    # Define the loss functions
+    loss_img = criterion
+    loss_txt = criterion
+    loss_fct = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX, label_smoothing=0.2)
+
+    # Disable gradient calculation for evaluation
+    with torch.no_grad():
+        for step, (src_input, tgt_input, masked_tgt_input) in enumerate(
+                metric_logger.log_every(dev_dataloader, print_freq, header)):
+
+            logits_per_image, logits_per_text, ground_truth, frames_feature = model(src_input, tgt_input)
+            loss_imgs = loss_img(logits_per_image, ground_truth)
+            loss_texts = loss_txt(logits_per_text, ground_truth)
+
+            # Compute the text decoder's loss
+            lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model_without_ddp.model_txt)
+            masked_lm_loss = loss_fct(
+                lm_logits.view(-1, lm_logits.shape[-1]), tgt_input['input_ids'].cuda().view(-1)
+            )
+            total_loss = (loss_imgs + loss_texts) / 2.
+
+            metric_logger.update(loss=total_loss.item())
+            metric_logger.update(masked_lm_loss=masked_lm_loss.item())
+
+            # Optionally visualize the evaluation process
+            if (step + 1) % 10 == 0 and utils.is_main_process():
+                visual_map = torch.cat((logits_per_image.unsqueeze(0), logits_per_text.unsqueeze(0)))
+                utils.visualization([visual_map, ])
+
+    if args.run:
+        args.run.log({'epoch': epoch + 1, 'epoch/dev_loss': total_loss.item()})
+
+    metric_logger.synchronize_between_processes()
+    print("* Averaged stats:", metric_logger)
+    print('* DEV loss {losses.global_avg:.3f}'.format(losses=metric_logger.loss))
+
+    return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
+
+
+
+        
 
