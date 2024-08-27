@@ -26,7 +26,7 @@ def create_dataloaders(config, args):
 								collate_fn=train_data.collate_fn,
 								#sampler=train_sampler,
 								pin_memory=args.pin_mem,
-								drop_last=True)
+								drop_last=False )
     print(len(train_dataloader))
 	# Creating validation/dev dataset
     dev_data = S2T_Dataset(tokenizer=tokenizer, config=config,args=args,phase='dev', training_refurbish=True)
@@ -39,6 +39,7 @@ def create_dataloaders(config, args):
                                 #sampler=dev_sampler,
                                 pin_memory=args.pin_mem)
     print(len(dev_dataloader))
+    #print(dev_dataloader.dataset[2][1].shape)
 	# Creating testing dataset
     test_data = S2T_Dataset(tokenizer=tokenizer, config=config, args=args,
                             phase='test', training_refurbish=True)
@@ -51,6 +52,7 @@ def create_dataloaders(config, args):
                                  #sampler=test_sampler,
                                  pin_memory=args.pin_mem)
     print(len(test_dataloader))
+    #print(len(test_dataloader.dataset))
     
     return train_dataloader, dev_dataloader, test_dataloader
 

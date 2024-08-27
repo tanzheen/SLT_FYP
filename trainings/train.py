@@ -37,7 +37,7 @@ from typing import Iterable, Optional
 from loguru import logger
 import utils 
 from prep_args import get_args_parser
-
+print (torch.__version__)
 # *metric
 from sacrebleu.metrics import BLEU, CHRF, TER
 
@@ -58,7 +58,7 @@ from create_dataloaders import create_dataloaders
 
 # Contrastive loss 
 from SignCL import SignCL
-print(transformers.__version__)
+print (torch.cuda.is_available())
 def train_model(args, config ):
     torch.cuda.empty_cache() 
     cl_criterion =  SignCL(max_distance=32.0, pos_samples=2, neg_samples=4)
@@ -249,6 +249,8 @@ def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss
     for step, (src_input, tgt_input, masked_tgt_input) in enumerate(
             metric_logger.log_every(data_loader, print_freq, header)):
         print(f"current batch: {step}")
+        print (src_input)
+
         optimizer.zero_grad()
 
         # Forward pass with automatic mixed precision

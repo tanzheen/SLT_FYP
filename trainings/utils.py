@@ -5,7 +5,8 @@ import torch.nn.functional as F
 import time 
 import datetime 
 from collections import defaultdict, deque 
-
+from definition import * 
+import random
 
 class SmoothedValue(object): # Actually pytorch also has a SmoothedValue function but we shall just go with this for now
     """
@@ -329,3 +330,72 @@ def is_dist_avail_and_initialized():
 # count number of parameters in model 
 def count_parameters_in_MB(model):
   return np.sum(np.prod(v.size()) for name, v in model.named_parameters())/1e6
+
+
+
+def data_augmentation(resize=(320, 240), crop_size=224, is_train=True):
+    if is_train:
+        left, top = np.random.randint(0, resize[0] - crop_size), np.random.randint(0, resize[1] - crop_size)
+    else:
+        left, top = (resize[0] - crop_size) // 2, (resize[1] - crop_size) // 2
+
+    return (left, top, left + crop_size, top + crop_size), resize
+
+
+def NoiseInjecting(raw_gloss, noise_rate=0.15, noise_type='omit_last', random_shuffle=False, is_train=True):
+    new_gloss = []
+
+    for ii, gloss in enumerate(raw_gloss):
+        text = gloss.split()
+
+        if noise_type == 'omit':
+            # del noise
+            if random.uniform(0, 1) <= 1. and is_train:
+                index = sampler_func(len(text), int(len(text)*(1. - noise_rate)), random_choice=is_train)
+                noise_gloss = []
+                noise_idx = []
+                for i, d in enumerate(text):
+                    if i in index:
+                        noise_gloss.append(d)
+                    else:
+                        noise_gloss.append(WORD_MASK)
+                        noise_idx.append(i)
+            else:
+                noise_gloss = [d for d in text]
+
+        elif noise_type == 'omit_last' :
+            if random.uniform(0, 1) <= 1.0 and is_train:
+                index = np.arange(0, len(text) - int(np.ceil(len(text)*(np.random.uniform(0,noise_rate,(1,))))), 1, dtype=int)
+                noise_gloss = []
+                for i, d in enumerate(text):
+                    if i in index:
+                        noise_gloss.append(d)
+                    else:
+                        noise_gloss.append(WORD_MASK)
+            else:
+                noise_gloss = [d for d in text]
+        
+        if is_train and random_shuffle and random.uniform(0, 1) > 0.5:
+            random.shuffle(noise_gloss) # random shuffle sequence
+
+        new_gloss.append(' '.join(noise_gloss))
+    return new_gloss
+
+
+
+def sampler_func(clip, sn, random_choice=True):
+    if random_choice:
+        f = lambda n: [(lambda n, arr: n if arr == [] else np.random.choice(arr))(n * i / sn,
+                                                                                range(int(n * i / sn),
+                                                                                        max(int(n * i / sn) + 1,
+                                                                                            int(n * (
+                                                                                                    i + 1) / sn))))
+                        for i in range(sn)]
+    else:
+        f = lambda n: [(lambda n, arr: n if arr == [] else int(np.mean(arr)))(n * i / sn, range(int(n * i / sn),
+                                                                                                max(int(
+                                                                                                    n * i / sn) + 1,
+                                                                                                    int(n * (
+                                                                                                            i + 1) / sn))))
+                        for i in range(sn)]
+    return f(clip)
