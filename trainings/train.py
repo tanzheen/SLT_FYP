@@ -84,14 +84,14 @@ def train_model(args, config ):
     #     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=True)
     #     model_without_ddp = model.module
     n_parameters = utils.count_parameters_in_MB(model_without_ddp)
-    print(f'number of params: {n_parameters}M')
+    print(f'Model created! number of params: {n_parameters}M')
     
 	 # Create the optimizer and learning rate scheduler
     optimizer = create_optimizer(args, model_without_ddp)
     lr_scheduler, _ = create_scheduler(args, optimizer)
     text_decoder = Text_Decoder(config).to(device)
     
-    optimizer_td = AdamW(text_decoder.module.parameters(), lr=1e-3, weight_decay=0, betas=(0.9, 0.98))
+    optimizer_td = AdamW(text_decoder.parameters(), lr=1e-3, weight_decay=0, betas=(0.9, 0.98))
 
     lr_scheduler_td = scheduler.CosineAnnealingLR(
         optimizer=optimizer_td,
@@ -135,8 +135,6 @@ def train_model(args, config ):
     start_time = time.time()
     min_loss = np.inf
     for epoch in range(args.start_epoch, args.epochs):
-        if args.distributed:
-            train_dataloader.sampler.set_epoch(epoch)
 
         # Train the model for one epoch
         print(f"training epoch {epoch}")
@@ -250,7 +248,7 @@ def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss
     #enumerate(tqdm(train_loader, desc=f'Training Epoch {epoch+1}/{num_epochs}', leave=False))
     for step, (src_input, tgt_input, masked_tgt_input) in enumerate(
             metric_logger.log_every(data_loader, print_freq, header)):
-
+        print(f"current batch: {step}")
         optimizer.zero_grad()
 
         # Forward pass with automatic mixed precision

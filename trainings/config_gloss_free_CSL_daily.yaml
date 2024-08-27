@@ -10,5 +10,5 @@ training:
   scale_embedding: False
 model:
   transformer: "facebook/mbart-large-50-many-to-many-mmt"
-  visual_encoder: ./pretrain_models/CSL/mytran
+  visual_encoder: ../pretrain_models/CSL/mytran
   sign_proj: True

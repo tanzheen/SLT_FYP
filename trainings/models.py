@@ -25,7 +25,7 @@ from transformers.modeling_outputs import (
     Seq2SeqSequenceClassifierOutput,
 )
 from transformers.models.mbart.modeling_mbart import shift_tokens_right
-
+from transformers import TimesformerConfig, TimesformerModel
 from transformers.models.mbart.modeling_mbart import MBartLearnedPositionalEmbedding, MBartEncoderLayer
 
 from collections import OrderedDict
@@ -241,31 +241,24 @@ class TextCLIP(nn.Module):
 #         # Pass the first token's hidden state (corresponding to the class token) through the head
 #         output = self.lm_head(last_hidden_state[:, 0, :])  # [batch_size, feature_dim]
 #         return output
-    
+
 class ImageCLIP(nn.Module):
     """
-    VideoCLIP class processes video inputs using a Feature Extractor followed by a Video Vision Transformer 
-    (e.g., TimeSformer) to extract feature representations that can be aligned with textual features.
-
+    ImageCLIP class processes visual inputs and extracts feature representations 
+    using TimeSformer from the transformers library, which can be aligned with textual features.
+    
     Attributes:
-        feature_extractor (nn.Module): A feature extractor model, typically a CNN, such as ResNet, followed by a temporal convolutional network.
-        vit (nn.Module): A Video Vision Transformer model for further feature extraction.
+        time_sformer (TimeSformerModel): A Video Vision Transformer model for feature extraction.
         lm_head (nn.Module): The head of the model, which could be a linear layer or an identity layer, 
                              depending on the configuration.
     """
     
-    def __init__(self, config, vit_model_name='timesformer_base_patch16_224', inplanes=768, planes=1024, head_type='linear'):
+    def __init__(self, config, inplanes=768, planes=1024, head_type='linear'):
         super(ImageCLIP, self).__init__()
         
-        # Initialize the Feature Extractor (e.g., ResNet + TemporalConv)
-        self.feature_extractor = FeatureExtracter()
-        
-        # Initialize the Video Vision Transformer (e.g., TimeSformer)
-        self.vit = create_model(vit_model_name, pretrained=True)
-        
-        # Remove the final classification head of the Video Vision Transformer (if present)
-        if hasattr(self.vit, 'head'):
-            self.vit.head = nn.Identity()
+        # Initialize the TimeSformer model from transformers
+        self.config = TimesformerConfig()
+        self.time_sformer = TimesformerModel(self.config)
         
         # Define the final head layer, which could be linear or identity
         self.lm_head = self.make_head(inplanes, planes, head_type)
@@ -287,46 +280,41 @@ class ImageCLIP(nn.Module):
         else:
             return nn.Identity()
         
-    def forward(self, src_input, attention_mask=None):
+    def forward(self, src_input):
         """
-        Forward pass of the VideoCLIP model.
+        Forward pass of the ImageCLIP model.
 
         Args:
             src_input (Tensor): Input tensor containing video frames (batch_size, num_frames, channels, height, width).
-            attention_mask (Tensor): Optional attention mask.
 
         Returns:
-            Tensor: Processed visual features after passing through the Feature Extractor, Video Vision Transformer, and head.
+            Tensor: Processed visual features after passing through the TimeSformer and head.
         """
         
-        # Extract features from the video input using the Feature Extractor
-        src_length_batch= src_input['src_length_batch']  # Assuming this is part of the input dict
-        extracted_features, images  = self.feature_extractor(src_input['input_ids'].cuda(), src_length_batch)
+        # Pass the video input through the TimeSformer model
+        outputs = self.time_sformer(pixel_values=src_input)
         
-        # Reshape and rearrange the extracted features for the Video Vision Transformer
-        # Assuming `extracted_features` needs to be shaped into (batch_size, channels, num_frames, height, width)
-        extracted_features = rearrange(extracted_features, 'b n c -> b c n')
+        # Extract the last hidden state (you may modify this depending on your task)
+        last_hidden_state = outputs.last_hidden_state  # [batch_size, num_patches, hidden_dim]
         
-        # Pass through the Video Vision Transformer (e.g., TimeSformer)
-        x = self.vit(extracted_features)  # [batch_size, num_patches, embed_dim]
-        
-        # Pass the output through the final head
-        output = self.lm_head(x[:, 0])  # Use the first token's output (typically the class token) for final representation
+        # Pass the first token's hidden state (corresponding to the class token) through the final head
+        output = self.lm_head(last_hidden_state[:, 0, :])  # [batch_size, feature_dim]
         return output
     
-
+# Actually why is the text decoder using visual encoder weights
+# Can i use the text transformer weights instead?
 class Text_Decoder(nn.Module):
     def __init__(self, config):
         super(Text_Decoder, self).__init__()
         # decoder is responsible for generating text sequences based on the hidden states provided by an encoder.
-        self.text_decoder = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_decoder()
+        self.text_decoder = MBartForConditionalGeneration.from_pretrained(config['model']['transformer']).get_decoder()
 
         # linear layer that converts the decoder’s hidden states into logits over the vocabulary,
         # effectively producing the likelihood of each word in the vocabulary at each position in the output sequence.
-        self.lm_head = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_output_embeddings()
+        self.lm_head = MBartForConditionalGeneration.from_pretrained(config['model']['transformer']).get_output_embeddings()
 
         # register_buffer so that it will be fixed and not updated by the optimizer during training 
-        self.register_buffer("final_logits_bias", torch.zeros((1, MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).model.shared.num_embeddings)))
+        self.register_buffer("final_logits_bias", torch.zeros((1, MBartForConditionalGeneration.from_pretrained(config['model']['transformer']).model.shared.num_embeddings)))
 
     
     def forward(self, tgt_input, masked_tgt_input, model_txt):

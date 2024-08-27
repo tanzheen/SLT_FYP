@@ -62,19 +62,19 @@ class SignCL(nn.Module):
         return total_loss
 
 
-if __name__ == "__main__":
-    # Example usage of the SignCL class
-    batch_size = 8
-    seq_len = 16
-    embed_dim = 64
+# if __name__ == "__main__":
+#     # Example usage of the SignCL class
+#     batch_size = 8
+#     seq_len = 16
+#     embed_dim = 64
 
-    # Randomly generated input embeddings
-    inputs_embeds = torch.randn(batch_size, seq_len, embed_dim)
+#     # Randomly generated input embeddings
+#     inputs_embeds = torch.randn(batch_size, seq_len, embed_dim)
 
-    # Initialize the SignCL model
-    sign_cl = SignCL(max_distance=32.0, pos_samples=2, neg_samples=4)
+#     # Initialize the SignCL model
+#     sign_cl = SignCL(max_distance=32.0, pos_samples=2, neg_samples=4)
 
-    # Compute the contrastive loss
-    loss = sign_cl(inputs_embeds, margin=20)
-    print(f"Contrastive Loss: {loss.item()}")
+#     # Compute the contrastive loss
+#     loss = sign_cl(inputs_embeds, margin=20)
+#     print(f"Contrastive Loss: {loss.item()}")
   
