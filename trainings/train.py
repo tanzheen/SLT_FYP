@@ -12,7 +12,8 @@ from torch.utils.data import DataLoader
 from timm.utils import NativeScaler
 from torch.utils.data import DataLoader
 from definition import * 
-
+import sentencepiece
+import transformers
 # *transformers and models 
 from transformers import MBartForConditionalGeneration, MBartTokenizer, MBartConfig
 from models import * 
@@ -35,6 +36,7 @@ import sys
 from typing import Iterable, Optional
 from loguru import logger
 import utils 
+from prep_args import get_args_parser
 
 # *metric
 from sacrebleu.metrics import BLEU, CHRF, TER
@@ -55,11 +57,11 @@ import hpargparse
 from create_dataloaders import create_dataloaders
 
 # Contrastive loss 
-from SignCL import sign_cl
-
-def train_model(config, args):
+from SignCL import SignCL
+print(transformers.__version__)
+def train_model(args, config ):
     torch.cuda.empty_cache() 
-    cl_criterion = sign_cl()
+    cl_criterion =  SignCL(max_distance=32.0, pos_samples=2, neg_samples=4)
     device = torch.device(args.device)
     train_dataloader, dev_dataloader, test_dataloader = create_dataloaders(config, args)
     print(f"Creating model: ")
@@ -137,6 +139,7 @@ def train_model(config, args):
             train_dataloader.sampler.set_epoch(epoch)
 
         # Train the model for one epoch
+        print(f"training epoch {epoch}")
         train_stats = train_one_epoch(
             args, model, criterion, cl_criterion, train_dataloader, optimizer, device, epoch, config,
             PAD_IDX, loss_scaler, TD_train_dict
@@ -244,7 +247,7 @@ def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss
     loss_img = criterion
     loss_txt = criterion
     loss_fct = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX, label_smoothing=0.2)
-
+    #enumerate(tqdm(train_loader, desc=f'Training Epoch {epoch+1}/{num_epochs}', leave=False))
     for step, (src_input, tgt_input, masked_tgt_input) in enumerate(
             metric_logger.log_every(data_loader, print_freq, header)):
 
@@ -360,7 +363,55 @@ def evaluate(args, dev_dataloader, model, model_without_ddp, criterion, config, 
 
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
 
+def setup_run(args, config):
+    if args.log_all:
+        os.environ["WANDB_MODE"] = config['training']['wandb'] if not args.eval else 'disabled'
+        run = wandb.init(
+            entity=args.entity,
+            project=args.project,
+            group=args.output_dir.split('/')[-1],
+            config=config,
+        )
+        run.define_metric("epoch")
+        run.define_metric("training/*", step_metric="epoch")
+        run.define_metric("dev/*", step_metric="epoch")
+    else:
+        if utils.is_main_process():
+            os.environ["WANDB_MODE"] = config['training']['wandb'] if not args.eval else 'disabled'
+            run = wandb.init(
+                entity=args.entity,
+                project=args.project,
+                config=config,
+            )
+            run.define_metric("epoch")
+            run.define_metric("training/*", step_metric="epoch")
+            run.define_metric("dev/*", step_metric="epoch")
+            #run.name = args.output_dir.split('/')[-1]
+        else:
+            os.environ["WANDB_MODE"] = 'disabled'
+            run = False
+
+    return run
 
 
+if __name__ == '__main__':
+    # before running, remember to set the cd correctly to the folder "trainings"
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    parser = argparse.ArgumentParser('Visual-Language-Pretraining (VLP) V2 scripts', parents=[get_args_parser()])
+    _.parse_file(Path(__file__).resolve().parent)
+    hpargparse.bind(parser, _)
+    args = parser.parse_args()
+
+    with open(args.config, 'r+', encoding='utf-8') as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+
+    # wandb.init a run if logging, otherwise return None
+    args.run = setup_run(args, config)
+
+    if args.output_dir:
+        Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+    train_model(args, config)
+    # main_extract_features(args, config)
         
 

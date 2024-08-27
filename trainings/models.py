@@ -26,9 +26,10 @@ from transformers.modeling_outputs import (
 )
 from transformers.models.mbart.modeling_mbart import shift_tokens_right
 
-from transformers.models.mbart.modeling_mbart import MBartLearnedPositionalEmbedding, MBartEncoderLayer, _expand_mask
+from transformers.models.mbart.modeling_mbart import MBartLearnedPositionalEmbedding, MBartEncoderLayer
 
 from collections import OrderedDict
+from timm import create_model
 
 
 import copy
@@ -171,80 +172,160 @@ class TextCLIP(nn.Module):
         return self.lm_head(output), txt_logits
 
 
+# class ImageCLIP(nn.Module):
+#     """
+#     ImageCLIP class processes visual inputs and extracts feature representations 
+#     that can be aligned with textual features from the TextCLIP model.
+
+#     Attributes:
+#         config (dict): Configuration dictionary containing model parameters.
+#         model (nn.Module): A feature extractor model, typically a CNN (e.g., ResNet) 
+#                            followed by a temporal convolutional network.
+#         trans_encoder (MBartEncoder): An MBart encoder that further processes the visual features.
+#         cls_token (torch.nn.Parameter): A learnable class token appended to the sequence of visual features.
+#         lm_head (nn.Module): The head of the model, which could be a linear layer or an identity layer, 
+#                              depending on the configuration.
+#     """
+    
+#     def __init__(self, config, inplanes=1024, planes=1024, head_type='linear') :
+#         """
+#         Initializes the ImageCLIP model with the provided configuration.
+
+#         Args:
+#             config (dict): Configuration dictionary containing model parameters.
+#             inplanes (int): Number of input features to the head layer.
+#             planes (int): Number of output features from the head layer.
+#             head_type (str): Type of the head layer ('linear' for nn.Linear or 'identity' for nn.Identity).
+#         """
+
+#         super(ImageCLIP, self).__init__()
+#         self.config = config
+#         self.model =  FeatureExtracter() 
+#         # Initialize the MBart encoder for further processing of visual features, though I am a little confused by this, 
+#         # should check the shape inputted and outputted 
+#         # why do they choose to use an MBart especially when it is for visual?
+#         self.trans_encoder = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_encoder()
+#         self.cls_token = nn.Parameter(torch.randn(1, 1, inplanes))
+#         self.lm_head = make_head(inplanes, planes, head_type)
+        
+#     def forward(self, src_input):
+#         """
+#         Forward pass of the ImageCLIP model.
+
+#         Args:
+#             src_input (Tensor): Input tensor containing images.
+
+#         Returns:
+#             Tensor: Processed visual features after passing through the ViT and head.
+#         """
+        
+#         # Extract features from the visual input using the feature extractor model 
+#         x = self.model(src_input['input_ids'].cuda(), src_input['src_length_batch']) # [b, n, c]
+#         # Attention mask for the visual input
+#         attention_mask = src_input['attention_mask']
+
+#         # Add the class token to the sequence of features
+#         B, N, C = x.shape  # B: batch size, N: sequence length, C: number of channels (features)
+
+#         ## !! why is this like that? 
+#         cls_token = repeat(self.cls_token, '() n d -> b n d', b=B)  # Repeat the class token for each element in the batch
+#         x = torch.cat((cls_token, x), dim=1)  # Concatenate class token to the beginning of the sequence
+        
+#         # Adjust the attention mask to account for the added class token
+#         attention_mask = F.pad(attention_mask.flatten(1), (1, 0), value=1.0)  # [batch_size, N] -> [batch_size, N+1]
+        
+#         # Pass the concatenated features through the MBart encoder
+#         outs = self.trans_encoder(inputs_embeds=x, attention_mask=attention_mask.cuda(), return_dict=True)
+#         last_hidden_state = outs['last_hidden_state']  # Extract the hidden states from the encoder
+        
+#         # Pass the first token's hidden state (corresponding to the class token) through the head
+#         output = self.lm_head(last_hidden_state[:, 0, :])  # [batch_size, feature_dim]
+#         return output
+    
 class ImageCLIP(nn.Module):
     """
-    ImageCLIP class processes visual inputs and extracts feature representations 
-    that can be aligned with textual features from the TextCLIP model.
+    VideoCLIP class processes video inputs using a Feature Extractor followed by a Video Vision Transformer 
+    (e.g., TimeSformer) to extract feature representations that can be aligned with textual features.
 
     Attributes:
-        config (dict): Configuration dictionary containing model parameters.
-        model (nn.Module): A feature extractor model, typically a CNN (e.g., ResNet) 
-                           followed by a temporal convolutional network.
-        trans_encoder (MBartEncoder): An MBart encoder that further processes the visual features.
-        cls_token (torch.nn.Parameter): A learnable class token appended to the sequence of visual features.
+        feature_extractor (nn.Module): A feature extractor model, typically a CNN, such as ResNet, followed by a temporal convolutional network.
+        vit (nn.Module): A Video Vision Transformer model for further feature extraction.
         lm_head (nn.Module): The head of the model, which could be a linear layer or an identity layer, 
                              depending on the configuration.
     """
     
-    def __init__(self, config, inplanes=1024, planes=1024, head_type='linear') :
+    def __init__(self, config, vit_model_name='timesformer_base_patch16_224', inplanes=768, planes=1024, head_type='linear'):
+        super(ImageCLIP, self).__init__()
+        
+        # Initialize the Feature Extractor (e.g., ResNet + TemporalConv)
+        self.feature_extractor = FeatureExtracter()
+        
+        # Initialize the Video Vision Transformer (e.g., TimeSformer)
+        self.vit = create_model(vit_model_name, pretrained=True)
+        
+        # Remove the final classification head of the Video Vision Transformer (if present)
+        if hasattr(self.vit, 'head'):
+            self.vit.head = nn.Identity()
+        
+        # Define the final head layer, which could be linear or identity
+        self.lm_head = self.make_head(inplanes, planes, head_type)
+        
+    def make_head(self, inplanes, planes, head_type):
         """
-        Initializes the ImageCLIP model with the provided configuration.
+        Creates the head of the model based on the specified head type.
 
         Args:
-            config (dict): Configuration dictionary containing model parameters.
             inplanes (int): Number of input features to the head layer.
             planes (int): Number of output features from the head layer.
-            head_type (str): Type of the head layer ('linear' for nn.Linear or 'identity' for nn.Identity).
-        """
-
-        super(ImageCLIP, self).__init__()
-        self.config = config
-        self.model =  FeatureExtracter() 
-        # Initialize the MBart encoder for further processing of visual features, though I am a little confused by this, 
-        # should check the shape inputted and outputted 
-        self.trans_encoder = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_encoder()
-        self.cls_token = nn.Parameter(torch.randn(1, 1, inplanes))
-        self.lm_head = make_head(inplanes, planes, head_type)
-        
-    def forward(self, src_input):
-        """
-        Forward pass of the ImageCLIP model.
-
-        Args:
-            src_input (Tensor): Input tensor containing images.
+            head_type (str): Type of the head layer ('linear' or 'identity').
 
         Returns:
-            Tensor: Processed visual features after passing through the ViT and head.
+            nn.Module: The head of the model.
+        """
+        if head_type == 'linear':
+            return nn.Linear(inplanes, planes, bias=False)
+        else:
+            return nn.Identity()
+        
+    def forward(self, src_input, attention_mask=None):
+        """
+        Forward pass of the VideoCLIP model.
+
+        Args:
+            src_input (Tensor): Input tensor containing video frames (batch_size, num_frames, channels, height, width).
+            attention_mask (Tensor): Optional attention mask.
+
+        Returns:
+            Tensor: Processed visual features after passing through the Feature Extractor, Video Vision Transformer, and head.
         """
         
-        # Extract features from the visual input using the feature extractor model 
-        x = self.model(src_input['input_ids'].cuda(), src_input['src_length_batch']) # [b, n, c]
-        # Attention mask for the visual input
-        attention_mask = src_input['attention_mask']
-
-        # Add the class token to the sequence of features
-        B, N, C = x.shape  # B: batch size, N: sequence length, C: number of channels (features)
-
-        ## !! why is this like that? 
-        cls_token = repeat(self.cls_token, '() n d -> b n d', b=B)  # Repeat the class token for each element in the batch
-        x = torch.cat((cls_token, x), dim=1)  # Concatenate class token to the beginning of the sequence
+        # Extract features from the video input using the Feature Extractor
+        src_length_batch= src_input['src_length_batch']  # Assuming this is part of the input dict
+        extracted_features, images  = self.feature_extractor(src_input['input_ids'].cuda(), src_length_batch)
         
-        # Adjust the attention mask to account for the added class token
-        attention_mask = F.pad(attention_mask.flatten(1), (1, 0), value=1.0)  # [batch_size, N] -> [batch_size, N+1]
+        # Reshape and rearrange the extracted features for the Video Vision Transformer
+        # Assuming `extracted_features` needs to be shaped into (batch_size, channels, num_frames, height, width)
+        extracted_features = rearrange(extracted_features, 'b n c -> b c n')
         
-        # Pass the concatenated features through the MBart encoder
-        outs = self.trans_encoder(inputs_embeds=x, attention_mask=attention_mask.cuda(), return_dict=True)
-        last_hidden_state = outs['last_hidden_state']  # Extract the hidden states from the encoder
+        # Pass through the Video Vision Transformer (e.g., TimeSformer)
+        x = self.vit(extracted_features)  # [batch_size, num_patches, embed_dim]
         
-        # Pass the first token's hidden state (corresponding to the class token) through the head
-        output = self.lm_head(last_hidden_state[:, 0, :])  # [batch_size, feature_dim]
+        # Pass the output through the final head
+        output = self.lm_head(x[:, 0])  # Use the first token's output (typically the class token) for final representation
         return output
+    
 
 class Text_Decoder(nn.Module):
     def __init__(self, config):
         super(Text_Decoder, self).__init__()
+        # decoder is responsible for generating text sequences based on the hidden states provided by an encoder.
         self.text_decoder = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_decoder()
+
+        # linear layer that converts the decoder’s hidden states into logits over the vocabulary,
+        # effectively producing the likelihood of each word in the vocabulary at each position in the output sequence.
         self.lm_head = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_output_embeddings()
+
+        # register_buffer so that it will be fixed and not updated by the optimizer during training 
         self.register_buffer("final_logits_bias", torch.zeros((1, MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).model.shared.num_embeddings)))
 
     
@@ -260,6 +341,7 @@ class Text_Decoder(nn.Module):
                     encoder_attention_mask = masked_tgt_input['attention_mask'].cuda(),
                     return_dict = True,
                     )
+        # Add the final_logits_bias for refining --> based on class imbalance and to increase the model's confidence to adjust output
         lm_logits = self.lm_head(decoder_out[0]) + self.final_logits_bias
 
         return lm_logits
@@ -296,6 +378,7 @@ class SLRCLIP(nn.Module):
         text_features = text_features / text_features.norm(dim=-1, keepdim=True)
 
         # cosine similarity as logits to map them together 
+        # logit scale is like a weight parameter
         logit_scale = self.logit_scale.exp()
         logits_per_image = logit_scale * image_features @ text_features.t()
         logits_per_text = logit_scale * text_features @ image_features.t()
@@ -323,10 +406,10 @@ class FeatureExtracter(nn.Module):
                 src: Tensor,
                 src_length_batch
                 ):
-        src = self.conv_2d(src,src_length_batch)
-        src = self.conv_1d(src)
+        images = self.conv_2d(src,src_length_batch)
+        src = self.conv_1d(images)
 
-        return src
+        return src, images
 
 class V_encoder(nn.Module):
     def __init__(self,

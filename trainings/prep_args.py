@@ -65,7 +65,7 @@ def get_args_parser():
     # * Baise params
     parser.add_argument('--output_dir', default='',
                         help='path where to save, empty for no saving')
-    parser.add_argument('--device', default='cuda',
+    parser.add_argument('--device', default='mps',
                         help='device to use for training / testing')
     parser.add_argument('--seed', default=0, type=int)
     parser.add_argument('--resume', default='', help='resume from checkpoint')
@@ -78,7 +78,7 @@ def get_args_parser():
     parser.add_argument('--no-pin-mem', action='store_false', dest='pin_mem',
                         help='')
     parser.set_defaults(pin_mem=True)
-    parser.add_argument('--config', type=str, default='./config_gloss_free_CSL daily.yaml')
+    parser.add_argument('--config', type=str, default='./config_gloss_free_CSL_daily.yaml')
 
     # * data process params
     parser.add_argument('--input-size', default=224, type=int)
