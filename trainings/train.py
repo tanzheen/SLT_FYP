@@ -280,10 +280,10 @@ def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss
         if step % 5 == 0:
             TD_train_dict['optimizer'].zero_grad()
             with torch.cuda.amp.autocast():
-                lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.module.model_txt)
+                lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.model_txt)
                 masked_lm_loss = loss_fct(
                     lm_logits.view(-1, lm_logits.shape[-1]),
-                    tgt_input['input_ids'].cuda().view(-1)
+                    tgt_input['input_ids'].to(device).view(-1)
                 ) * args.loss_lambda
             loss_scaler(masked_lm_loss, TD_train_dict['optimizer'])
 
@@ -345,7 +345,7 @@ def evaluate(args, dev_dataloader, model, model_without_ddp, criterion, config, 
             # Compute the text decoder's loss
             lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model_without_ddp.model_txt)
             masked_lm_loss = loss_fct(
-                lm_logits.view(-1, lm_logits.shape[-1]), tgt_input['input_ids'].cuda().view(-1)
+                lm_logits.view(-1, lm_logits.shape[-1]), tgt_input['input_ids'].to(device).view(-1)
             )
             total_loss = (loss_imgs + loss_texts) / 2.
 

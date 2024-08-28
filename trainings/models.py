@@ -298,7 +298,7 @@ class Text_Decoder(nn.Module):
         with torch.no_grad():
             _, encoder_hidden_states = model_txt(masked_tgt_input)
 
-        decoder_input_ids = shift_tokens_right(tgt_input['input_ids'].to(device)(), self.text_decoder.config.pad_token_id)
+        decoder_input_ids = shift_tokens_right(tgt_input['input_ids'].to(device), self.text_decoder.config.pad_token_id)
         decoder_out = self.text_decoder(
                     input_ids = decoder_input_ids,
                     attention_mask = tgt_input['attention_mask'].to(device),
