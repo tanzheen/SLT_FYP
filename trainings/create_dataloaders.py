@@ -11,7 +11,7 @@ import torch.distributed as dist
 def create_dataloaders(config, args): 
     
     tokenizer = MBart50Tokenizer.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
-
+    
 	# Creating training dataset
     print(f"Creating datasets:")
     train_data = S2T_Dataset(tokenizer=tokenizer, config=config, args=args,
@@ -23,10 +23,11 @@ def create_dataloaders(config, args):
     train_dataloader = DataLoader(train_data,
 								batch_size=args.batch_size,
 								num_workers=args.num_workers,
-								collate_fn=train_data.collate_fn,
+								#collate_fn=train_data.collate_fn,
 								#sampler=train_sampler,
 								pin_memory=args.pin_mem,
 								drop_last=False )
+    print('trainloader dataset length', train_dataloader.dataset)
     print(len(train_dataloader))
 	# Creating validation/dev dataset
     dev_data = S2T_Dataset(tokenizer=tokenizer, config=config,args=args,phase='dev', training_refurbish=True)
@@ -35,7 +36,7 @@ def create_dataloaders(config, args):
     dev_dataloader = DataLoader(dev_data,
                                 batch_size=args.batch_size,
                                 num_workers=args.num_workers,
-                                collate_fn=dev_data.collate_fn,
+                                #collate_fn=dev_data.collate_fn,
                                 #sampler=dev_sampler,
                                 pin_memory=args.pin_mem)
     print(len(dev_dataloader))
@@ -48,7 +49,7 @@ def create_dataloaders(config, args):
     test_dataloader = DataLoader(test_data,
                                  batch_size=args.batch_size,
                                  num_workers=args.num_workers,
-                                 collate_fn=test_data.collate_fn,
+                                 #collate_fn=test_data.collate_fn,
                                  #sampler=test_sampler,
                                  pin_memory=args.pin_mem)
     print(len(test_dataloader))

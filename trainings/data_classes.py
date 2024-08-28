@@ -71,12 +71,30 @@ class S2T_Dataset(Dataset.Dataset):
         text_label = file['translation']
         length = file['length']
         img_folder_path = os.path.join(self.img_path , name)
-
+        
         img_sample = self.load_imgs(img_folder_path) ## load_imgs will retrieve all the images from the folder to consolidate into one folder
+        
+        # need to pad according to max length
+        max_len = self.max_length
+        left_pad = 8 
+        right_pad = right_pad = int(np.ceil(max_len / 4.0)) * 4 - max_len + 8
+        max_len = max_len + left_pad + right_pad
+        padded_video = torch.cat(
+            (
+                img_sample[0][None].expand(left_pad, -1, -1, -1), # repeated first frame 
+                img_sample,
+                img_sample[-1][None].expand(max_len - len(img_sample) - left_pad, -1, -1, -1), # repeated last frame
+            )
+            , dim=0)
+            
+
+
+
+        
         return name, img_sample, text_label
     
     def load_imgs(self, dir_path):
-
+        print('img directory: ', dir_path )
         data_transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]), ## these values are the mean and s.d of RGB channels from the ImageNet dataset
@@ -111,134 +129,13 @@ class S2T_Dataset(Dataset.Dataset):
             img = img.resize(resize)
             img = data_transform(img).unsqueeze(0)
             imgs[i, :, :, :] = img[:, :, crop_rect[1]:crop_rect[3], crop_rect[0]:crop_rect[2]]
-
-        return imgs
+        
+        return imgs # frames, RGB, height, width 
     
-    def collate_fn(self, batch): 
-        tgt_batch, img_tmp, src_length_batch, name_batch = [], [] , [], []
-        
-        for name_sample, img_sample, tgt_sample in batch:
-            name_batch.append(name_sample)
-            img_tmp.append(img_sample)
-            tgt_batch.append(tgt_sample)
-
-        max_len = max([len(vid) for vid in img_tmp]) ## the greatest number of frames in any video, value can also be retrieved from the annotated labels
-        
-        # adjust the frames and padding of the video accordingly
-        video_length = torch.LongTensor([np.ceil(len(vid) / 4.0) * 4 + 16 for vid in img_tmp]) 
-        left_pad = 8
-        right_pad = int(np.ceil(max_len / 4.0)) * 4 - max_len + 8
-        max_len = max_len + left_pad + right_pad
-        padded_video = [torch.cat(
-            (
-                vid[0][None].expand(left_pad, -1, -1, -1),
-                vid,
-                vid[-1][None].expand(max_len - len(vid) - left_pad, -1, -1, -1),
-            )
-            , dim=0)
-            for vid in img_tmp]
-        
-        img_tmp = [padded_video[i][0:video_length[i], :, :, :] for i in range(len(padded_video))]
-
-        for i in range(len(img_tmp)):
-            src_length_batch.append(len(img_tmp[i]))
-        src_length_batch = torch.tensor(src_length_batch)
-
-        img_batch = torch.cat(img_tmp, 0) # final batch size will be Batch_size , Frames, RGB , Height , Width  
-        
-        new_src_lengths = (((src_length_batch - 5 + 1) / 2) - 5 + 1) / 2
-        new_src_lengths = new_src_lengths.long()
-        mask_gen = []
-        for i in new_src_lengths:
-            tmp = torch.ones([i]) + 7
-            mask_gen.append(tmp)
-        mask_gen = pad_sequence(mask_gen, padding_value=PAD_IDX, batch_first=True)
-        img_padding_mask = (mask_gen != PAD_IDX).long()         
-        # This padding mask is created based on the lengths of the video sequences after they have been adjusted. 
-        # This mask helps the model ignore padding tokens <BOS> and <EOS> when processing the input sequences, focusing on only the actual data
-
-        with self.tokenizer.as_target_tokenizer():
-            tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
-            # this tgt_input is returned from tokenizer as a dictionary
-
-        src_input = {}
-        src_input['input_ids'] = img_batch
-        src_input['attention_mask'] = img_padding_mask
-
-        src_input['src_length_batch'] = src_length_batch
-        src_input['new_src_length_batch'] = new_src_lengths
- 
-        if self.training_refurbish: # Default setting = FALSE 
-            masked_tgt = utils.NoiseInjecting(tgt_batch, self.args.noise_rate, noise_type=self.args.noise_type,
-                                              random_shuffle=self.args.random_shuffle, is_train=(self.phase == 'train'))
-            with self.tokenizer.as_target_tokenizer():
-                masked_tgt_input = self.tokenizer(masked_tgt, return_tensors="pt", padding=True, truncation=True)
-            return src_input, tgt_input, masked_tgt_input
-        return src_input, tgt_input, name_batch 
 
     def __str__(self):
         return f'#total {self.phase} set: {len(self.data_list)}.'
     
-
-    def collate_fn_wname(self, batch):
-
-        tgt_batch, img_tmp, src_length_batch, name_batch = [], [], [], []
-
-        for name_sample, img_sample, tgt_sample in batch:
-            name_batch.append(name_sample)
-
-            img_tmp.append(img_sample)
-
-            tgt_batch.append(tgt_sample)
-
-        max_len = max([len(vid) for vid in img_tmp])
-        video_length = torch.LongTensor([np.ceil(len(vid) / 4.0) * 4 + 16 for vid in img_tmp])
-        left_pad = 8
-        right_pad = int(np.ceil(max_len / 4.0)) * 4 - max_len + 8
-        max_len = max_len + left_pad + right_pad
-        padded_video = [torch.cat(
-            (
-                vid[0][None].expand(left_pad, -1, -1, -1),
-                vid,
-                vid[-1][None].expand(max_len - len(vid) - left_pad, -1, -1, -1),
-            )
-            , dim=0)
-            for vid in img_tmp]
-
-        img_tmp = [padded_video[i][0:video_length[i], :, :, :] for i in range(len(padded_video))]
-
-        for i in range(len(img_tmp)):
-            src_length_batch.append(len(img_tmp[i]))
-        src_length_batch = torch.tensor(src_length_batch)
-
-        img_batch = torch.cat(img_tmp, 0)
-
-        new_src_lengths = (((src_length_batch - 5 + 1) / 2) - 5 + 1) / 2  # temporal  conv
-        new_src_lengths = new_src_lengths.long()
-        mask_gen = []
-        for i in new_src_lengths:
-            tmp = torch.ones([i]) + 7
-            mask_gen.append(tmp)
-        mask_gen = pad_sequence(mask_gen, padding_value=PAD_IDX, batch_first=True)
-        img_padding_mask = (mask_gen != PAD_IDX).long()
-        with self.tokenizer.as_target_tokenizer():
-            tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
-
-        src_input = {}
-        src_input['input_ids'] = img_batch
-        src_input['attention_mask'] = img_padding_mask
-
-        src_input['src_length_batch'] = src_length_batch
-        src_input['new_src_length_batch'] = new_src_lengths
-        src_input["name_batch"] = name_batch
-        if self.training_refurbish:
-            masked_tgt = utils.NoiseInjecting(tgt_batch, self.args.noise_rate, noise_type=self.args.noise_type,
-                                              random_shuffle=self.args.random_shuffle, is_train=(self.phase == 'train'))
-            with self.tokenizer.as_target_tokenizer():
-                masked_tgt_input = self.tokenizer(masked_tgt, return_tensors="pt", padding=True, truncation=True)
-            return src_input, tgt_input, masked_tgt_input
-        return src_input, tgt_input
-
 
 
 

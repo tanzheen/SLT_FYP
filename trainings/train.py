@@ -249,7 +249,7 @@ def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss
     for step, (src_input, tgt_input, masked_tgt_input) in enumerate(
             metric_logger.log_every(data_loader, print_freq, header)):
         print(f"current batch: {step}")
-        print (src_input)
+        print (src_input['input_ids'].shape)
 
         optimizer.zero_grad()
 
@@ -312,7 +312,6 @@ def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss
     print("Averaged stats:", metric_logger)
 
     return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
-
 
 
 

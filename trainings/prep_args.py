@@ -5,18 +5,14 @@ import hpargparse
 
 # global definition
 from definition import *
-
+from sys import platform
 
 def get_args_parser():
     parser = argparse.ArgumentParser('Visual-Language-Pretraining (VLP) V2 scripts', add_help=False)
     parser.add_argument('--batch-size', default=16, type=int)
     parser.add_argument('--epochs', default=80, type=int)
 
-    # distributed training parameters
-    parser.add_argument('--world_size', default=1, type=int,
-                        help='number of distributed processes')
-    parser.add_argument('--dist_url', default='env://', help='url used to set up distributed training')
-    parser.add_argument('--local_rank', default=0, type=int)
+    
 
     # * Finetuning params
     parser.add_argument('--finetune', default='', help='finetune from checkpoint')
@@ -50,7 +46,7 @@ def get_args_parser():
                         help='warmup learning rate (default: 1e-6)')
     parser.add_argument('--min-lr', type=float, default=1.0e-08, metavar='LR',
                         help='lower lr bound for cyclic schedulers that hit 0 (1e-5)')
-
+    
     parser.add_argument('--decay-epochs', type=float, default=30, metavar='N',
                         help='epoch interval to decay LR')
     parser.add_argument('--warmup-epochs', type=int, default=0, metavar='N',
@@ -63,16 +59,19 @@ def get_args_parser():
                         help='LR decay rate (default: 0.1)')
 
     # * Baise params
+    print(platform)
+    if platform == "darwin": gpu = 'mps'
+    else : gpu = 'cuda'
     parser.add_argument('--output_dir', default='',
                         help='path where to save, empty for no saving')
-    parser.add_argument('--device', default='cuda',
+    parser.add_argument('--device', default=gpu,
                         help='device to use for training / testing')
     parser.add_argument('--seed', default=0, type=int)
     parser.add_argument('--resume', default='', help='resume from checkpoint')
     parser.add_argument('--start_epoch', default=0, type=int, metavar='N',
                         help='start epoch')
     parser.add_argument('--eval', action='store_true', help='Perform evaluation only')
-    parser.add_argument('--num_workers', default=8, type=int)
+    parser.add_argument('--num_workers', default=0, type=int)
     parser.add_argument('--pin-mem', action='store_true',
                         help='Pin CPU memory in DataLoader for more efficient (sometimes) transfer to GPU.')
     parser.add_argument('--no-pin-mem', action='store_false', dest='pin_mem',
