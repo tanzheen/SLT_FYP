@@ -3,12 +3,14 @@ data:
   train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
   dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
   test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
-  img_path: ../../CSL-Daily/sentence/frames_512x512 # + <train/dev/test> + <video_name>
+  img_path: ../../CSL-Daily/sentence/frames_512x512/ # + <train/dev/test> + <video_name>
   max_length: 300
 training:
   wandb: disabled # online or disabled
   scale_embedding: False
+  tgt_lang: "zh_CN"
 model:
   transformer: "facebook/mbart-large-50-many-to-many-mmt"
-  visual_encoder: ../pretrain_models/CSL/mytran
+  visual_encoder: ../pretrain_models/mytran
   sign_proj: True
+

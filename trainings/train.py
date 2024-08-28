@@ -58,7 +58,10 @@ from create_dataloaders import create_dataloaders
 
 # Contrastive loss 
 from SignCL import SignCL
-print (torch.cuda.is_available())
+if torch.cuda.is_available():
+    device = "cuda"
+else: 
+    device = "mps"
 def train_model(args, config ):
     torch.cuda.empty_cache() 
     cl_criterion =  SignCL(max_distance=32.0, pos_samples=2, neg_samples=4)
@@ -268,6 +271,7 @@ def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss
             # Combine image-text losses and add contrastive loss
             ml_loss = (loss_imgs + loss_texts) / 2.
             total_loss = ml_loss + 0.01 * cl_loss
+            print(f"total loss calculated: {total_loss}")
 
         # Backward pass and optimization step
         loss_scaler(ml_loss, optimizer)

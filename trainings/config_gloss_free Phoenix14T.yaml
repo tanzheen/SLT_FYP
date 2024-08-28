@@ -8,6 +8,7 @@ data:
 training:
   wandb: disabled # online or disabled
   scale_embedding: False
+  tgt_lang: "de_DE"
 model:
   transformer: "facebook/mbart-large-50-many-to-many-mmt"
   visual_encoder: ../pretrain_models/mytran

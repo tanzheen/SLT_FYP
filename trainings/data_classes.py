@@ -36,10 +36,11 @@ class S2T_Dataset(Dataset.Dataset):
         
         self.raw_data = load_annot_file(config['data'][phase])  # path will be the split set to retrieve (train, dev, test)
         self.tokenizer = tokenizer
+        self.tokenizer.tgt_lang = config['training']['tgt_lang']
         self.max_length = self.raw_data['max_length']
         self.img_path = os.path.join(config['data']['img_path'], phase)
         self.data_list = self.raw_data['info']
-
+        
         # the following parameters are for data augmentation which is proven to improve the training process
         sometimes = lambda aug: va.Sometimes(0.5, aug)  # Used to apply augmentor with 50% probability
         self.seq = va.Sequential([
@@ -61,40 +62,25 @@ class S2T_Dataset(Dataset.Dataset):
             # sometimes(Sharpness(min=0.1, max=2.))
         ])
         # self.seq = SomeOf(self.seq_geo, self.seq_color)
+      
 
     def __len__(self):
-        return len(self.raw_data)
+        return len(self.data_list)
     
     def __getitem__(self, index): 
         file = self.data_list[index]
         name = file['name']
         text_label = file['translation']
-        length = file['length']
-        img_folder_path = os.path.join(self.img_path , name)
-        
-        img_sample = self.load_imgs(img_folder_path) ## load_imgs will retrieve all the images from the folder to consolidate into one folder
-        
+        img_sample = self.load_imgs(os.path.join(self.img_path, name)) ## load_imgs will retrieve all the images from the folder to consolidate into one folder
+        #e size before padding: {img_sample.shape}")
         # need to pad according to max length
-        max_len = self.max_length
-        left_pad = 8 
-        right_pad = right_pad = int(np.ceil(max_len / 4.0)) * 4 - max_len + 8
-        max_len = max_len + left_pad + right_pad
-        padded_video = torch.cat(
-            (
-                img_sample[0][None].expand(left_pad, -1, -1, -1), # repeated first frame 
-                img_sample,
-                img_sample[-1][None].expand(max_len - len(img_sample) - left_pad, -1, -1, -1), # repeated last frame
-            )
-            , dim=0)
-            
 
-
-
+      
         
         return name, img_sample, text_label
     
     def load_imgs(self, dir_path):
-        print('img directory: ', dir_path )
+        # print('img directory: ', dir_path )
         data_transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]), ## these values are the mean and s.d of RGB channels from the ImageNet dataset
@@ -115,6 +101,7 @@ class S2T_Dataset(Dataset.Dataset):
                                                     crop_size=self.args.input_size, is_train=(self.phase == 'train'))
         
         batch_image = []
+
         for i, img_path in enumerate(paths):
             img_path = os.path.join(dir_path, img_path)
             img = cv2.imread(img_path)
@@ -135,19 +122,66 @@ class S2T_Dataset(Dataset.Dataset):
 
     def __str__(self):
         return f'#total {self.phase} set: {len(self.data_list)}.'
-    
-
-
-
-
+  
+    def collate_fn(self,batch):
         
+        tgt_batch,img_tmp,src_length_batch,name_batch = [],[],[],[]
 
+        for name_sample, img_sample, tgt_sample in batch:
+            name_batch.append(name_sample)
+            img_tmp.append(img_sample)
+            tgt_batch.append(tgt_sample)
 
+        max_len = max([len(vid) for vid in img_tmp])
+        video_length = torch.LongTensor([np.ceil(len(vid) / 4.0) * 4 + 16 for vid in img_tmp])
+        left_pad = 8
+        right_pad = int(np.ceil(max_len / 4.0)) * 4 - max_len + 8
+        max_len = max_len + left_pad + right_pad
+        print(f"Max video length before padding: {max_len}")
+        padded_video = [torch.cat(
+            (
+                vid[0][None].expand(left_pad, -1, -1, -1),
+                vid,
+                vid[-1][None].expand(max_len - len(vid) - left_pad, -1, -1, -1),
+            )
+            , dim=0)
+            for vid in img_tmp]
         
-
+        img_tmp = [padded_video[i][0:video_length[i],:,:,:] for i in range(len(padded_video))]
+        print(f"Max length after padding: {img_tmp[0].shape}")
+        for i in range(len(img_tmp)):
+            src_length_batch.append(len(img_tmp[i]))
+        src_length_batch = torch.tensor(src_length_batch)
         
+        img_batch = torch.cat(img_tmp,0)
+        print(f"after processing batch size: {img_batch.shape}")
+        print(f"src length batch total: {src_length_batch.sum}")
+        new_src_lengths = (((src_length_batch-5+1) / 2)-5+1)/2
+        new_src_lengths = new_src_lengths.long()
+        mask_gen = []
+        for i in new_src_lengths:
+            tmp = torch.ones([i]) + 7
+            mask_gen.append(tmp)
+        mask_gen = pad_sequence(mask_gen, padding_value=PAD_IDX,batch_first=True)
+        img_padding_mask = (mask_gen != PAD_IDX).long()
+        print("About to tokenize the batch...")  # Debugging output
+        with self.tokenizer.as_target_tokenizer():
+            tgt_input = self.tokenizer(tgt_batch, return_tensors="pt",padding = True,  truncation=True)
+        print("done with tokenizing the batch ")
+        src_input = {}
+        src_input['input_ids'] = img_batch
+        src_input['attention_mask'] = img_padding_mask
+        src_input['name_batch'] = name_batch
 
-
-
-
+        src_input['src_length_batch'] = src_length_batch
+        src_input['new_src_length_batch'] = new_src_lengths
         
+        if self.training_refurbish:
+            print("about to inject noise into training data...")
+            masked_tgt = utils.NoiseInjecting(tgt_batch, self.args.noise_rate, noise_type=self.args.noise_type, random_shuffle=self.args.random_shuffle, is_train=(self.phase=='train'))
+            print("noise injection complete ")
+            with self.tokenizer.as_target_tokenizer():
+                masked_tgt_input = self.tokenizer(masked_tgt, return_tensors="pt", padding = True,  truncation=True)
+            return src_input, tgt_input, masked_tgt_input
+        return src_input, tgt_input
+ 

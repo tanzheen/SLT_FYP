@@ -45,7 +45,10 @@ from definition import *
 
 from hpman.m import _
 from pathlib import Path
-
+if torch.cuda.is_available():
+    device = "cuda"
+else: 
+    device = "mps"
 # Position encodings are used to add position information to the token embeddings
 class PositionalEncoding(nn.Module):
     def __init__(self,
@@ -72,7 +75,7 @@ class PositionalEncoding(nn.Module):
         return self.dropout(token_embedding + self.pos_embedding[:token_embedding.size(0), :])
 
 
-def make_resnet(name='resnet50'):
+def make_resnet(name='resnet18'):
     if name == 'resnet18':
         model = torchvision.models.resnet18(pretrained=True)
     elif name == 'resnet34':
@@ -88,6 +91,7 @@ def make_resnet(name='resnet50'):
     model.fc = nn.Identity()
     return model
 
+## this resnet is a tad special 
 class resnet(nn.Module):
     def __init__(self):
         super(resnet, self).__init__()
@@ -165,11 +169,40 @@ class TextCLIP(nn.Module):
 
     def forward(self, tgt_input):
         # Encode the input text using MBart 
-        txt_logits = self.model_txt(input_ids=tgt_input['input_ids'].cuda(), attention_mask=tgt_input['attention_mask'].cuda())[0]
+        txt_logits = self.model_txt(input_ids=tgt_input['input_ids'].to(device), attention_mask=tgt_input['attention_mask'].to(device))[0]
         
         # Extract features from encoded text at the position of the last token
         output = txt_logits[torch.arange(txt_logits.shape[0]), tgt_input['input_ids'].argmax(dim=-1)]
         return self.lm_head(output), txt_logits
+    
+
+class ImageCLIP(nn.Module):
+    def __init__(self, config, inplanes=1024, planes=1024, head_type='linear'):
+        super(ImageCLIP, self).__init__()
+        self.config = config
+        self.model = FeatureExtracter()  # jinhui
+        
+        self.trans_encoder = MBartForConditionalGeneration.from_pretrained(
+            config['model']['visual_encoder']).get_encoder()
+        self.cls_token = nn.Parameter(torch.randn(1, 1, inplanes))
+
+        self.lm_head = make_head(inplanes, planes, head_type)
+
+    def forward(self, src_input):
+        x, images = self.model(src_input['input_ids'].to(device), src_input['src_length_batch'])  # [b, n, c]
+        attention_mask = src_input['attention_mask']
+        frames_feature = x
+
+        B, N, C = x.shape
+        cls_token = repeat(self.cls_token, '() n d -> b n d', b=B)
+        x = torch.cat((cls_token, x), dim=1)
+        attention_mask = F.pad(attention_mask.flatten(1), (1, 0), value=1.)  # [b, 64] --> [b, 65]
+
+        outs = self.trans_encoder(inputs_embeds=x, attention_mask=attention_mask.to(device), return_dict=True)
+        last_hidden_state = outs['last_hidden_state']
+        output = self.lm_head(last_hidden_state[:, 0, :])
+        return output, images
+
 
 
 # class ImageCLIP(nn.Module):
@@ -201,10 +234,12 @@ class TextCLIP(nn.Module):
 #         super(ImageCLIP, self).__init__()
 #         self.config = config
 #         self.model =  FeatureExtracter() 
+
 #         # Initialize the MBart encoder for further processing of visual features, though I am a little confused by this, 
 #         # should check the shape inputted and outputted 
 #         # why do they choose to use an MBart especially when it is for visual?
-#         self.trans_encoder = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_encoder()
+#         # Final verdict: replace MBart with TimeSformer model 
+#         self.trans_encoder = TimesformerModel.from_pretrained("facebook/timesformer-base-finetuned-k400")
 #         self.cls_token = nn.Parameter(torch.randn(1, 1, inplanes))
 #         self.lm_head = make_head(inplanes, planes, head_type)
         
@@ -220,7 +255,7 @@ class TextCLIP(nn.Module):
 #         """
         
 #         # Extract features from the visual input using the feature extractor model 
-#         x = self.model(src_input['input_ids'].cuda(), src_input['src_length_batch']) # [b, n, c]
+#         x, images = self.model(src_input['input_ids'].to(device), src_input['src_length_batch']) # [b, n, c]
 #         # Attention mask for the visual input
 #         attention_mask = src_input['attention_mask']
 
@@ -235,71 +270,13 @@ class TextCLIP(nn.Module):
 #         attention_mask = F.pad(attention_mask.flatten(1), (1, 0), value=1.0)  # [batch_size, N] -> [batch_size, N+1]
         
 #         # Pass the concatenated features through the MBart encoder
-#         outs = self.trans_encoder(inputs_embeds=x, attention_mask=attention_mask.cuda(), return_dict=True)
+#         outs = self.trans_encoder(x , return_dict=True)
 #         last_hidden_state = outs['last_hidden_state']  # Extract the hidden states from the encoder
         
 #         # Pass the first token's hidden state (corresponding to the class token) through the head
 #         output = self.lm_head(last_hidden_state[:, 0, :])  # [batch_size, feature_dim]
-#         return output
+#         return output, images
 
-class ImageCLIP(nn.Module):
-    """
-    ImageCLIP class processes visual inputs and extracts feature representations 
-    using TimeSformer from the transformers library, which can be aligned with textual features.
-    
-    Attributes:
-        time_sformer (TimeSformerModel): A Video Vision Transformer model for feature extraction.
-        lm_head (nn.Module): The head of the model, which could be a linear layer or an identity layer, 
-                             depending on the configuration.
-    """
-    
-    def __init__(self, config, inplanes=768, planes=1024, head_type='linear'):
-        super(ImageCLIP, self).__init__()
-        
-        # Initialize the TimeSformer model from transformers
-        self.config = TimesformerConfig()
-        self.time_sformer = TimesformerModel(self.config)
-        
-        # Define the final head layer, which could be linear or identity
-        self.lm_head = self.make_head(inplanes, planes, head_type)
-        
-    def make_head(self, inplanes, planes, head_type):
-        """
-        Creates the head of the model based on the specified head type.
-
-        Args:
-            inplanes (int): Number of input features to the head layer.
-            planes (int): Number of output features from the head layer.
-            head_type (str): Type of the head layer ('linear' or 'identity').
-
-        Returns:
-            nn.Module: The head of the model.
-        """
-        if head_type == 'linear':
-            return nn.Linear(inplanes, planes, bias=False)
-        else:
-            return nn.Identity()
-        
-    def forward(self, src_input):
-        """
-        Forward pass of the ImageCLIP model.
-
-        Args:
-            src_input (Tensor): Input tensor containing video frames (batch_size, num_frames, channels, height, width).
-
-        Returns:
-            Tensor: Processed visual features after passing through the TimeSformer and head.
-        """
-        
-        # Pass the video input through the TimeSformer model
-        outputs = self.time_sformer(pixel_values=src_input)
-        
-        # Extract the last hidden state (you may modify this depending on your task)
-        last_hidden_state = outputs.last_hidden_state  # [batch_size, num_patches, hidden_dim]
-        
-        # Pass the first token's hidden state (corresponding to the class token) through the final head
-        output = self.lm_head(last_hidden_state[:, 0, :])  # [batch_size, feature_dim]
-        return output
     
 # Actually why is the text decoder using visual encoder weights
 # Can i use the text transformer weights instead?
@@ -321,12 +298,12 @@ class Text_Decoder(nn.Module):
         with torch.no_grad():
             _, encoder_hidden_states = model_txt(masked_tgt_input)
 
-        decoder_input_ids = shift_tokens_right(tgt_input['input_ids'].cuda(), self.text_decoder.config.pad_token_id)
+        decoder_input_ids = shift_tokens_right(tgt_input['input_ids'].to(device)(), self.text_decoder.config.pad_token_id)
         decoder_out = self.text_decoder(
                     input_ids = decoder_input_ids,
-                    attention_mask = tgt_input['attention_mask'].cuda(),
+                    attention_mask = tgt_input['attention_mask'].to(device),
                     encoder_hidden_states = encoder_hidden_states,
-                    encoder_attention_mask = masked_tgt_input['attention_mask'].cuda(),
+                    encoder_attention_mask = masked_tgt_input['attention_mask'].to(device),
                     return_dict = True,
                     )
         # Add the final_logits_bias for refining --> based on class imbalance and to increase the model's confidence to adjust output
@@ -356,7 +333,7 @@ class SLRCLIP(nn.Module):
     
     def forward(self, src_input, tgt_input):
         # generate embeddings representing the visual input
-        image_features = self.model_images(src_input)
+        image_features, frames_features = self.model_images(src_input)
 
         # generate embeddings representing textual input
         text_features, self.encoder_hidden_states = self.model_txt(tgt_input)
@@ -374,7 +351,7 @@ class SLRCLIP(nn.Module):
         # Naturally if correctly mapped then the the logits would be all 1
         ground_truth = torch.eye(logits_per_image.shape[0], device=logits_per_text.device, dtype=logits_per_image.dtype, requires_grad=False)
 
-        return logits_per_image, logits_per_text, ground_truth
+        return logits_per_image, logits_per_text, ground_truth, frames_features
 
 class FeatureExtracter(nn.Module):
     '''
@@ -384,7 +361,8 @@ class FeatureExtracter(nn.Module):
     def __init__(self, frozen=False):
         super(FeatureExtracter, self).__init__()
         self.conv_2d = resnet() # InceptionI3d()
-        self.conv_1d = TemporalConv(input_size=512, hidden_size=1024, conv_type=2)
+        #512 will be the output from the modified resnet
+        self.conv_1d = TemporalConv(input_size=512, hidden_size=1024, conv_type=2) 
 
         if frozen:
             for param in self.conv_2d.parameters():
@@ -460,7 +438,7 @@ class gloss_free_model(nn.Module):
         
     def share_forward(self, src_input):
         
-        frames_feature = self.backbone(src_input['input_ids'].cuda(), src_input['src_length_batch'])
+        frames_feature = self.backbone(src_input['input_ids'].to(device), src_input['src_length_batch'])
         attention_mask = src_input['attention_mask']
 
         inputs_embeds = self.sign_emb(frames_feature)
@@ -473,10 +451,10 @@ class gloss_free_model(nn.Module):
         inputs_embeds, attention_mask = self.share_forward(src_input)
 
         out = self.mbart(inputs_embeds = inputs_embeds,
-                    attention_mask = attention_mask.cuda(),
-                    # decoder_input_ids = tgt_input['input_ids'].cuda(),
-                    labels = tgt_input['input_ids'].cuda(),
-                    decoder_attention_mask = tgt_input['attention_mask'].cuda(),
+                    attention_mask = attention_mask.to(device),
+                    # decoder_input_ids = tgt_input['input_ids'].to(device),
+                    labels = tgt_input['input_ids'].to(device),
+                    decoder_attention_mask = tgt_input['attention_mask'].to(device),
                     return_dict = True,
                     )
         return out['logits']
@@ -486,7 +464,7 @@ class gloss_free_model(nn.Module):
         inputs_embeds, attention_mask = self.share_forward(src_input)
 
         out = self.mbart.generate(inputs_embeds = inputs_embeds,
-                    attention_mask = attention_mask.cuda(),max_new_tokens=max_new_tokens,num_beams = num_beams,
+                    attention_mask = attention_mask.to(device),max_new_tokens=max_new_tokens,num_beams = num_beams,
                                 decoder_start_token_id=decoder_start_token_id
                             )
         return out

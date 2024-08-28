@@ -9,7 +9,7 @@ from sys import platform
 
 def get_args_parser():
     parser = argparse.ArgumentParser('Visual-Language-Pretraining (VLP) V2 scripts', add_help=False)
-    parser.add_argument('--batch-size', default=16, type=int)
+    parser.add_argument('--batch-size', default=8, type=int)
     parser.add_argument('--epochs', default=80, type=int)
 
     
@@ -60,8 +60,14 @@ def get_args_parser():
 
     # * Baise params
     print(platform)
-    if platform == "darwin": gpu = 'mps'
-    else : gpu = 'cuda'
+    if platform == "darwin": 
+        gpu = 'mps'
+        mem = False
+        num_work = 0 
+    else : 
+        gpu = 'cuda'
+        mem = True 
+        num_work = 4 
     parser.add_argument('--output_dir', default='',
                         help='path where to save, empty for no saving')
     parser.add_argument('--device', default=gpu,
@@ -71,12 +77,14 @@ def get_args_parser():
     parser.add_argument('--start_epoch', default=0, type=int, metavar='N',
                         help='start epoch')
     parser.add_argument('--eval', action='store_true', help='Perform evaluation only')
-    parser.add_argument('--num_workers', default=0, type=int)
+    parser.add_argument('--num_workers', default=num_work, type=int)
     parser.add_argument('--pin-mem', action='store_true',
                         help='Pin CPU memory in DataLoader for more efficient (sometimes) transfer to GPU.')
     parser.add_argument('--no-pin-mem', action='store_false', dest='pin_mem',
                         help='')
-    parser.set_defaults(pin_mem=True)
+    # tjos might be a problem 
+
+    parser.set_defaults(pin_mem= mem)
     parser.add_argument('--config', type=str, default='./config_gloss_free_CSL_daily.yaml')
 
     # * data process params

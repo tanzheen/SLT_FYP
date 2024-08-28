@@ -23,10 +23,10 @@ def create_dataloaders(config, args):
     train_dataloader = DataLoader(train_data,
 								batch_size=args.batch_size,
 								num_workers=args.num_workers,
-								#collate_fn=train_data.collate_fn,
+								collate_fn=train_data.collate_fn,
 								#sampler=train_sampler,
-								pin_memory=args.pin_mem,
-								drop_last=False )
+								 pin_memory=args.pin_mem
+                                 )
     print('trainloader dataset length', train_dataloader.dataset)
     print(len(train_dataloader))
 	# Creating validation/dev dataset
@@ -36,9 +36,10 @@ def create_dataloaders(config, args):
     dev_dataloader = DataLoader(dev_data,
                                 batch_size=args.batch_size,
                                 num_workers=args.num_workers,
-                                #collate_fn=dev_data.collate_fn,
+                                collate_fn=dev_data.collate_fn,
                                 #sampler=dev_sampler,
-                                pin_memory=args.pin_mem)
+                                pin_memory=args.pin_mem
+                                )   
     print(len(dev_dataloader))
     #print(dev_dataloader.dataset[2][1].shape)
 	# Creating testing dataset
@@ -49,9 +50,10 @@ def create_dataloaders(config, args):
     test_dataloader = DataLoader(test_data,
                                  batch_size=args.batch_size,
                                  num_workers=args.num_workers,
-                                 #collate_fn=test_data.collate_fn,
+                                 collate_fn=test_data.collate_fn,
                                  #sampler=test_sampler,
-                                 pin_memory=args.pin_mem)
+                                 pin_memory=args.pin_mem
+                                ) 
     print(len(test_dataloader))
     #print(len(test_dataloader.dataset))
     
