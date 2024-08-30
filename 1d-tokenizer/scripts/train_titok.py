@@ -60,7 +60,6 @@ def main():
 
     accelerator = Accelerator(
         gradient_accumulation_steps=config.training.gradient_accumulation_steps,
-        mixed_precision=config.training.mixed_precision,
         log_with=tracker,
         project_dir=config.experiment.logging_dir,
         split_batches=False,
@@ -169,17 +168,16 @@ if __name__ == "__main__":
 '''
 # Training for TiTok-B64
 # Stage 1
-WANDB_MODE=offline accelerate launch --num_machines=1 --num_processes=8 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network scripts/train_titok.py config=configs/training/stage1/titok_b64.yaml \
-    experiment.project="titok_b64_stage1" \
-    experiment.name="titok_b64_stage1_run1" \
-    experiment.output_dir="titok_b64_stage1_run1" \
+WANDB_MODE=offline accelerate launch --num_machines=1 --num_processes=8 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network scripts/train_titok.py config=configs/training/stage1/titok_b64_CSL.yaml \
+    experiment.project="titok_b64_CSL_stage1" \
+    experiment.name="titok_b64_CSL_stage1_run1" \
+    experiment.output_dir="titok_b64_CSL_stage1_run1" \
     training.per_gpu_batch_size=32
-
 # Stage 2
 WANDB_MODE=offline accelerate launch --num_machines=1 --num_processes=8 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network scripts/train_titok.py config=configs/training/stage2/titok_b64.yaml \
-    experiment.project="titok_b64_stage2" \
-    experiment.name="titok_b64_stage2_run1" \
-    experiment.output_dir="titok_b64_stage2_run1" \
+    experiment.project="titok_b64_CSL_stage2" \
+    experiment.name="titok_b64_CSL_stage2_run1" \
+    experiment.output_dir="titok_CSL_b64_stage2_run1" \
     training.per_gpu_batch_size=32 \
     experiment.init_weight=${PATH_TO_STAGE1_WEIGHT}
 '''

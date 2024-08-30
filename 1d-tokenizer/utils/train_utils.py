@@ -296,14 +296,14 @@ def train_one_epoch(config, logger, accelerator,
     discriminator_logs = defaultdict(float)
     for i, batch in enumerate(train_dataloader):
         model.train()
-        if "image" in batch:
-            images = batch["image"].to(
+        print(f"batch len: {len(batch)}")
+        print("batch shape: " ,batch.shape)
+
+        images = batch.to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
-        else:
-            raise ValueError(f"Not found valid keys: {batch.keys()}")
 
-        fnames = batch["__key__"]
+
         data_time_meter.update(time.time() - end)
 
         # Obtain proxy codes
@@ -590,7 +590,7 @@ def reconstruct_images(model, original_images, fnames, accelerator,
     root = Path(output_dir) / "train_images"
     os.makedirs(root, exist_ok=True)
     for i,img in enumerate(images_for_saving):
-        filename = f"{global_step:08}_s-{i:03}-{fnames[i]}.png"
+        filename = f"{global_step:08}_s-{i:03}.png"
         path = os.path.join(root, filename)
         img.save(path)
 

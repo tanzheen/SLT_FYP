@@ -65,7 +65,7 @@ class FeatureExtractorInceptionV3(FeatureExtractorBase):
 
         """
         super(FeatureExtractorInceptionV3, self).__init__(name, features_list)
-        self.feature_extractor_internal_dtype = torch.float64
+        self.feature_extractor_internal_dtype = torch.float32
 
         self.Conv2d_1a_3x3 = BasicConv2d(3, 32, kernel_size=3, stride=2)
         self.Conv2d_2a_3x3 = BasicConv2d(32, 32, kernel_size=3)

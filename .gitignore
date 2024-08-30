@@ -2,3 +2,4 @@
 /pretrain_models
 /trainings/.venv
 /trainings/myenv
+1d-tokenizer/maskgit-vqgan-imagenet-f16-256.bin

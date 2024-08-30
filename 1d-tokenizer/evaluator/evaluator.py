@@ -93,28 +93,28 @@ class VQGANEvaluator:
         self._num_updates = 0
 
         self._is_prob_total = torch.zeros(
-            self._is_num_features, dtype=torch.float64, device=self._device
+            self._is_num_features, dtype=torch.float32, device=self._device
         )
         self._is_total_kl_d = torch.zeros(
-            self._is_num_features, dtype=torch.float64, device=self._device
+            self._is_num_features, dtype=torch.float32, device=self._device
         )
         self._rfid_real_sigma = torch.zeros(
             (self._rfid_num_features, self._rfid_num_features),
-            dtype=torch.float64, device=self._device
+            dtype=torch.float32, device=self._device
         )
         self._rfid_real_total = torch.zeros(
-            self._rfid_num_features, dtype=torch.float64, device=self._device
+            self._rfid_num_features, dtype=torch.float32, device=self._device
         )
         self._rfid_fake_sigma = torch.zeros(
             (self._rfid_num_features, self._rfid_num_features),
-            dtype=torch.float64, device=self._device
+            dtype=torch.float32, device=self._device
         )
         self._rfid_fake_total = torch.zeros(
-            self._rfid_num_features, dtype=torch.float64, device=self._device
+            self._rfid_num_features, dtype=torch.float32, device=self._device
         )
 
         self._set_of_codebook_indices = set()
-        self._codebook_frequencies = torch.zeros((self._num_codebook_entries), dtype=torch.float64, device=self._device)
+        self._codebook_frequencies = torch.zeros((self._num_codebook_entries), dtype=torch.float32, device=self._device)
 
     def update(
         self,
@@ -147,12 +147,12 @@ class VQGANEvaluator:
             inception_probabilities_fake = F.softmax(inception_logits_fake, dim=-1)
         
         if self._enable_inception_score:
-            probabiliies_sum = torch.sum(inception_probabilities_fake, 0, dtype=torch.float64)
+            probabiliies_sum = torch.sum(inception_probabilities_fake, 0, dtype=torch.float32)
 
             log_prob = torch.log(inception_probabilities_fake + self._is_eps)
             if log_prob.dtype != inception_probabilities_fake.dtype:
                 log_prob = log_prob.to(inception_probabilities_fake)
-            kl_sum = torch.sum(inception_probabilities_fake * log_prob, 0, dtype=torch.float64)
+            kl_sum = torch.sum(inception_probabilities_fake * log_prob, 0, dtype=torch.float32)
 
             self._is_prob_total += probabiliies_sum
             self._is_total_kl_d += kl_sum

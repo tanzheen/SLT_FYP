@@ -32,8 +32,8 @@ losses:
 
 dataset:
     params:
-        train_shards_path_or_url: "imagenet_sharded/train/imagenet-train-{0000..0252}.tar"
-        eval_shards_path_or_url: "imagenet_sharded/val/imagenet-val-{0000..0009}.tar"
+        params: 
+        img_path: ../../CSL-Daily/sentence/frames_512x512/ # might need to resize
         num_workers_per_gpu: 12
     preprocessing:
         resize_shorter_edge: 256
@@ -60,7 +60,7 @@ lr_scheduler:
 training:
     gradient_accumulation_steps: 1
     per_gpu_batch_size: 32
-    mixed_precision: "fp16"
+    mixed_precision: "fp8"
     enable_tf32: True
     enable_wandb: True
     use_ema: True

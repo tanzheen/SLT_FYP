@@ -1,7 +1,7 @@
 experiment:
-    tokenizer_checkpoint: "tokenizer_titok_b64.bin"
-    generator_checkpoint: "generator_titok_b64.bin"
-    output_dir: "titok_b_64"
+    tokenizer_checkpoint: "tokenizer_titok_b64_CSL.bin"
+    generator_checkpoint: "generator_titok_b64_CSL.bin"
+    output_dir: "titok_b_64_CSL"
 model:
     vq_model:
         codebook_size: 4096
@@ -39,6 +39,4 @@ dataset:
     preprocessing:
         crop_size: 256
     params: 
-    
-         
         img_path: ../../CSL-Daily/sentence/frames_512x512/ # might need to resize

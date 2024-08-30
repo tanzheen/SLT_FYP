@@ -62,4 +62,4 @@ class SimpleImageDataset(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        return image, img_path
+        return image
