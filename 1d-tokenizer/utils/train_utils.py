@@ -35,6 +35,7 @@ import torchvision.transforms as transforms
 from utils.viz_utils import make_viz_from_samples
 from torchinfo import summary
 from torch.utils.data import DataLoader
+from tqdm import tqdm 
 
 def get_config():
     """Reads configs from a yaml file and terminal."""
@@ -294,10 +295,11 @@ def train_one_epoch(config, logger, accelerator,
 
     autoencoder_logs = defaultdict(float)
     discriminator_logs = defaultdict(float)
-    for i, batch in enumerate(train_dataloader):
+
+    for i, batch in enumerate(tqdm(train_dataloader, desc=f"Training!")):
         model.train()
-        print(f"batch len: {len(batch)}")
-        print("batch shape: " ,batch.shape)
+        # print(f"batch len: {len(batch)}")
+        # print("batch shape: " ,batch.shape)
 
         images = batch.to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True

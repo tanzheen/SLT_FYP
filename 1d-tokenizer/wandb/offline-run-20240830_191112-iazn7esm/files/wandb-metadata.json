@@ -1,0 +1,59 @@
+{
+    "os": "Windows-10-10.0.19045-SP0",
+    "python": "3.11.6",
+    "heartbeatAt": "2024-08-30T11:11:12.353674",
+    "startedAt": "2024-08-30T11:11:12.251676",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "config=configs/training/stage1/titok_b64_CSL.yaml",
+        "--experiment.project=titok_b64_CSL_stage1",
+        "--experiment.name=titok_b64_CSL_stage1_run1",
+        "--experiment.output_dir=titok_b64_CSL_stage1_run1",
+        "--training.per_gpu_batch_size=32"
+    ],
+    "state": "running",
+    "program": "E:\\SLT_FYP\\1d-tokenizer\\scripts\\train_titok.py",
+    "codePathLocal": "scripts\\train_titok.py",
+    "codePath": "1d-tokenizer\\scripts\\train_titok.py",
+    "git": {
+        "remote": "https://github.com/tanzheen/SLT_FYP.git",
+        "commit": "fbe2f2b00ee2d112003cd2bff1370594d3bc51c4"
+    },
+    "email": "85047594+tanzheen@users.noreply.github.com",
+    "root": "E:/SLT_FYP",
+    "host": "DESKTOP-1I26G2B",
+    "username": "Lord Nicholas",
+    "executable": "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "cpu_count": 12,
+    "cpu_count_logical": 24,
+    "cpu_freq": {
+        "current": 3701.0,
+        "min": 0.0,
+        "max": 3701.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3701.0,
+            "min": 0.0,
+            "max": 3701.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 931.5107383728027,
+            "used": 581.4511451721191
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 3090",
+            "memory_total": 25769803776
+        }
+    ],
+    "memory": {
+        "total": 63.923301696777344
+    }
+}

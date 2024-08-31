@@ -6,7 +6,6 @@ TiTok.egg-info/SOURCES.txt
 TiTok.egg-info/dependency_links.txt
 TiTok.egg-info/top_level.txt
 data/__init__.py
-data/convert_imagenet_to_wds.py
 data/webdataset_reader.py
 evaluator/__init__.py
 evaluator/evaluator.py
