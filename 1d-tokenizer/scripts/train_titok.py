@@ -19,6 +19,7 @@ Reference:
 """
 import math
 import os
+import sys
 from pathlib import Path
 
 from accelerate.utils import set_seed
@@ -166,6 +167,8 @@ def main():
 
 
 if __name__ == "__main__":
+ 
+    sys.path.append("..")
     print(torch.__version__)
     if torch.cuda.is_available():
         current_device = torch.cuda.current_device()
