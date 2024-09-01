@@ -451,10 +451,10 @@ def train_one_epoch(config, logger, accelerator,
                     ema_model.store(model.parameters())
                     ema_model.copy_to(model.parameters())
 
+                # save a sample of reconstructed images to check by eye
                 reconstruct_images(
                     model,
                     images[:config.training.num_generated_images],
-                    fnames[:config.training.num_generated_images],
                     accelerator,
                     global_step + 1,
                     config.experiment.output_dir,
@@ -557,7 +557,7 @@ def eval_reconstruction(
 
 
 @torch.no_grad()
-def reconstruct_images(model, original_images, fnames, accelerator, 
+def reconstruct_images(model, original_images, accelerator, 
                     global_step, output_dir, logger, config=None,
                     pretrained_tokenizer=None):
     logger.info("Reconstructing images...")

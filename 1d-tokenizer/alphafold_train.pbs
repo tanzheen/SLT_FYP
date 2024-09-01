@@ -1,0 +1,53 @@
+#!/bin/bash
+#PBS -P alphafold_project_name
+#PBS -j oe
+#PBS -N alphafold_jobname
+#PBS -q volta_gpu
+#PBS -l select=1:ncpus=10:mem=100gb:ngpus=1
+#PBS -l walltime=3:00:00
+
+cd $PBS_O_WORKDIR;
+np=$(cat ${PBS_NODEFILE} | wc -l);
+
+## TO CHANGE ##
+# User settings
+
+INPUT_FASTA_FILE_PATH=wcrC_39.fasta
+OUTPUT_DIR=`pwd`/alphafold_output_5
+
+# Create output directory
+mkdir -p $OUTPUT_DIR
+
+## END TO CHANGE ##
+
+## Might not need to change ##
+# Change this to a newer alphafold container when it is released
+IMAGE=/app1/common/singularity/img/3.0.0/alphafold/alphafold_11.0_20.04_3.8.sif
+
+## END ##
+
+ALPHAFOLD_DATA_PATH=/scratch2/biodata/alphafold/database/
+ALPHAFOLD_MODELS=/scratch2/biodata/alphafold/database/params
+
+# Do not remove
+mkdir -p alphafold/common
+cp -n /scratch2/biodata/alphafold/setup_files/stereo_chemical_props.txt alphafold/common/
+
+singularity run --nv \
+-B $ALPHAFOLD_DATA_PATH:/data \
+-B $ALPHAFOLD_MODELS \
+-B .:/etc \
+--pwd `pwd` $IMAGE \
+--fasta_paths=$INPUT_FASTA_FILE_PATH \
+--uniref90_database_path=/data/uniref90/uniref90.fasta \
+--data_dir=/data \
+--mgnify_database_path=/data/mgnify/mgy_clusters.fa \
+--bfd_database_path=/data/bfd/bfd_metaclust_clu_complete_id30_c90_final_seq.sorted_opt \
+--uniclust30_database_path=/data/uniclust30/uniclust30_2018_08/uniclust30_2018_08 \
+--pdb70_database_path=/data/pdb70/pdb70 \
+--template_mmcif_dir=/data/pdb_mmcif/mmcif_files \
+--obsolete_pdbs_path=/data/pdb_mmcif/obsolete.dat \
+--max_template_date=2020-05-14 \
+--output_dir=$OUTPUT_DIR \
+--model_names='model_1' \
+--preset=casp14 > stdout.$PBS_JOBID 2> stderr.$PBS_JOBID
