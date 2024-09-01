@@ -23,7 +23,7 @@ import pprint
 import glob
 from collections import defaultdict
 
-from dataset import SimpleImageDataset
+from dataclass import SimpleImageDataset
 import torch
 from omegaconf import OmegaConf
 from torch.optim import AdamW

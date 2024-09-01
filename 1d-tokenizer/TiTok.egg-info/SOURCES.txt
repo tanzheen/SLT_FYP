@@ -5,7 +5,6 @@ TiTok.egg-info/PKG-INFO
 TiTok.egg-info/SOURCES.txt
 TiTok.egg-info/dependency_links.txt
 TiTok.egg-info/top_level.txt
-data/__init__.py
 evaluator/__init__.py
 evaluator/evaluator.py
 evaluator/inception.py
@@ -23,7 +22,6 @@ modeling/modules/perceptual_loss.py
 modeling/quantizer/__init__.py
 modeling/quantizer/quantizer.py
 utils/__init__.py
-utils/dataset.py
 utils/logger.py
 utils/lr_schedulers.py
 utils/train_utils.py

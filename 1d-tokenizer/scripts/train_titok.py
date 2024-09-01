@@ -60,7 +60,7 @@ def main():
 
     accelerator = Accelerator(
         gradient_accumulation_steps=config.training.gradient_accumulation_steps,
-        #mixed_precision=config.training.mixed_precision,
+        mixed_precision=config.training.mixed_precision,
         log_with=tracker,
         project_dir=config.experiment.logging_dir,
         split_batches=False,

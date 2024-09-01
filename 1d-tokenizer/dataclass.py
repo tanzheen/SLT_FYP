@@ -24,7 +24,7 @@ class SimpleImageDataset(Dataset):
     def __init__(self, root_dir,phase,   transform=None):
         """
         Args:
-            root_dir (string): Directory with all the images organized in subfolders.
+            root_dir (string): Directory with all the images orsganized in subfolders.
             transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
