@@ -23,7 +23,7 @@ import pprint
 import glob
 from collections import defaultdict
 
-from data import SimpleImageDataset
+from dataset import SimpleImageDataset
 import torch
 from omegaconf import OmegaConf
 from torch.optim import AdamW
@@ -217,19 +217,20 @@ def create_lr_scheduler(config, logger, accelerator, optimizer, discriminator_op
 
 def create_dataloader(config, logger, accelerator):
     """Creates data loader for training and testing."""
-    logger.info("Creating dataloaders.")
     batch_size  = config.training.per_gpu_batch_size * accelerator.num_processes
+    logger.info(f"Creating dataloaders. Batch size = {batch_size}")
+    
     transform = transforms.Compose([
     transforms.Resize((256, 256)),
     transforms.ToTensor(),
 ])
     root_dir = config.dataset.params.img_path
     train_dataset = SimpleImageDataset(root_dir=root_dir,phase ='train', transform=transform)
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device))
     dev_dataset = SimpleImageDataset(root_dir=root_dir,phase ='dev', transform=transform)
-    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True)
+    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device))
     test_dataset = SimpleImageDataset(root_dir= root_dir,phase ='test', transform=transform)
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device))
     return train_dataloader, dev_dataloader, test_dataloader
 
 

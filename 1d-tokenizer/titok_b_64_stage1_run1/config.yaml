@@ -10,7 +10,7 @@ experiment:
   log_grad_norm_every: 1000
   resume: true
   init_weight: ''
-  logging_dir: titok_b_64_stage1_run1\logs
+  logging_dir: titok_b_64_stage1_run1/logs
 model:
   vq_model:
     codebook_size: 4096
@@ -61,9 +61,3 @@ training:
   num_generated_images: 2
   max_grad_norm: 1.0
 config: configs/training/stage1/titok_b64_CSL.yaml
---experiment:
-  project: titok_b64_CSL_stage1
-  name: titok_b64_CSL_stage1_run1
-  output_dir: titok_b64_CSL_stage1_run1
---training:
-  per_gpu_batch_size: 32

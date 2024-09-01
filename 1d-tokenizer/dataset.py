@@ -41,6 +41,9 @@ class SimpleImageDataset(Dataset):
             for file in files:
                 if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
                     image_paths.append(os.path.join(subdir, file))
+                    
+                # for small run purposes
+            if len(image_paths)>20: break 
         return image_paths
 
     def __len__(self):

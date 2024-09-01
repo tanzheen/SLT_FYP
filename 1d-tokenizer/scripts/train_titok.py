@@ -40,7 +40,7 @@ def main():
     workspace = os.environ.get('WORKSPACE', '')
     if workspace:
         torch.hub.set_dir(workspace + "/models/hub")
-
+    
     config = get_config()
     # Enable TF32 on Ampere GPUs.
     if config.training.enable_tf32:
@@ -60,7 +60,7 @@ def main():
 
     accelerator = Accelerator(
         gradient_accumulation_steps=config.training.gradient_accumulation_steps,
-        mixed_precision=config.training.mixed_precision,
+        #mixed_precision=config.training.mixed_precision,
         log_with=tracker,
         project_dir=config.experiment.logging_dir,
         split_batches=False,
@@ -128,6 +128,7 @@ def main():
         config.training.per_gpu_batch_size *
         accelerator.num_processes *
         config.training.gradient_accumulation_steps)}""")
+    logger.info(f"accelerator device: {accelerator.device}")
     global_step = 0
     first_epoch = 0
 
@@ -170,8 +171,9 @@ if __name__ == "__main__":
         current_device = torch.cuda.current_device()
         print(f"Current CUDA device: {torch.cuda.get_device_name(current_device)}")
     else:
+        torch.set_default_device('mps')
         print("CUDA is not available. Using CPU.")
-    
+    torch.cuda.empty_cache()
     main()
 '''
 # Training for TiTok-B64
