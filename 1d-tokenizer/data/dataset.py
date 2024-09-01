@@ -10,15 +10,14 @@ Reference:
 
 import math
 from typing import List, Union, Text
-
+import torch
 from torch.utils.data import default_collate
 from torchvision import transforms
 import os
 from PIL import Image
 from torch.utils.data import Dataset
 import torchvision.transforms as transforms
-
-
+import matplotlib.pyplot as plt
 
 
 class SimpleImageDataset(Dataset):
@@ -63,3 +62,21 @@ class SimpleImageDataset(Dataset):
             image = self.transform(image)
 
         return image
+    
+    def plot_image(self, idx):
+        """
+        Plots the image at the given index.
+
+        Args:
+            idx (int): Index of the image to plot.
+        """
+        image = self.__getitem__(idx)
+
+        # Check if the image is a Tensor
+        if isinstance(image, torch.Tensor):
+            image = image.permute(1, 2, 0).numpy()  # Convert CHW to HWC for plotting
+
+        plt.imshow(image)
+        plt.title(f"Image {idx}")
+        plt.axis('off')
+        plt.show()

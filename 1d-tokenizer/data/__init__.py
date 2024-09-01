@@ -1,1 +1,1 @@
-from .webdataset_reader import SimpleImageDataset
+from .dataset import SimpleImageDataset

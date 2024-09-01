@@ -1,0 +1,21 @@
+#!/bin/bash
+#PBS -P project_name
+#PBS -j oe
+#PBS -N tensorflow or PyTorch
+#PBS -q volta_gpu
+#PBS -l select=1:ncpus=10:mem=80gb:ngpus=1
+#PBS -l walltime=24:00:00
+
+cd $PBS_O_WORKDIR
+np=$(cat ${PBS_NODEFILE} | wc -l)
+
+image="/app1/common/singularity-img/3.0.0/tensorflow_1.12_nvcr_19.01-py3.simg"
+
+singularity exec $image bash << EOF > stdout.$PBS_JOBID 2> stderr.$PBS_JOBID
+
+python train_titok.py
+
+# You can put more commands here
+# echo "Hello World"
+
+EOF
