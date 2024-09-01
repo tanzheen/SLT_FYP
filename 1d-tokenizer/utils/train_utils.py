@@ -22,8 +22,14 @@ from pathlib import Path
 import pprint
 import glob
 from collections import defaultdict
-
-from datasets import SimpleImageDataset
+import math
+import torch 
+from torchvision import transforms
+import os
+from PIL import Image
+from torch.utils.data import Dataset
+import torchvision.transforms as transforms
+import matplotlib.pyplot as plt
 import torch
 from omegaconf import OmegaConf
 from torch.optim import AdamW
@@ -219,18 +225,20 @@ def create_dataloader(config, logger, accelerator):
     """Creates data loader for training and testing."""
     batch_size  = config.training.per_gpu_batch_size * accelerator.num_processes
     logger.info(f"Creating dataloaders. Batch size = {batch_size}")
-    
+    norm_mean = [0.,0.,0.]
+    norm_std = [1.,1.,1.]
     transform = transforms.Compose([
     transforms.Resize((256, 256)),
     transforms.ToTensor(),
+    transforms.Normalize(norm_mean, norm_std)
 ])
     root_dir = config.dataset.params.img_path
     train_dataset = SimpleImageDataset(root_dir=root_dir,phase ='train', transform=transform)
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device))
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
     dev_dataset = SimpleImageDataset(root_dir=root_dir,phase ='dev', transform=transform)
-    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device))
-    test_dataset = SimpleImageDataset(root_dir= root_dir,phase ='test', transform=transform)
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device))
+    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),num_workers=config.dataset.params.num_workers)
+    test_dataset = SimpleImageDataset(root_dir= root_dir,phase ='test', transform=transform, )
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
     return train_dataloader, dev_dataloader, test_dataloader
 
 
@@ -248,8 +256,8 @@ def create_evaluator(config, logger, accelerator):
     return evaluator
 
 
-def auto_resume(config, logger, accelerator, ema_model,
-                num_update_steps_per_epoch, strict=True):
+def auto_resume(config, logger, accelerator, ema_model, num_update_steps_per_epoch,
+             strict=True):
     """Auto resuming the training."""
     global_step = 0
     first_epoch = 0
@@ -273,7 +281,7 @@ def auto_resume(config, logger, accelerator, ema_model,
             )
             if config.training.use_ema:
                 ema_model.set_step(global_step)
-            first_epoch = global_step // num_update_steps_per_epoch
+            first_epoch = 1
         else:
             logger.info("Training from scratch.")
     return global_step, first_epoch
@@ -636,3 +644,73 @@ def log_grad_norm(model, accelerator, global_step):
             grads = param.grad.detach().data
             grad_norm = (grads.norm(p=2) / grads.numel()).item()
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
+
+
+
+
+
+
+
+class SimpleImageDataset(Dataset):
+    def __init__(self, root_dir,phase,   transform=None):
+        """
+        Args:
+            root_dir (string): Directory with all the images orsganized in subfolders.
+            transform (callable, optional): Optional transform to be applied
+                on a sample.
+        """
+        self.root_dir = os.path.join(root_dir,phase) 
+        self.transform = transform
+        self.image_paths = self._gather_image_paths(root_dir)
+
+    def _gather_image_paths(self, root_dir):
+        """
+        Recursively collects all image file paths from the root directory.
+        """
+        image_paths = []
+        for subdir, _, files in os.walk(root_dir):
+            for file in files:
+                if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+                    image_paths.append(os.path.join(subdir, file))
+                    
+                # for small run purposes
+            #if len(image_paths)>20: break 
+        return image_paths
+
+    def __len__(self):
+        return len(self.image_paths)
+
+    def __getitem__(self, idx):
+        """
+        Args:
+            idx (int): Index of the image to retrieve.
+
+        Returns:
+            image: The image corresponding to the given index.
+            path: The path of the image.
+        """
+        img_path = self.image_paths[idx]
+        image = Image.open(img_path).convert("RGB")
+
+        if self.transform:
+            image = self.transform(image)
+
+        return image
+    
+    def plot_image(self, idx):
+        """
+        Plots the image at the given index.
+
+        Args:
+            idx (int): Index of the image to plot.
+        """
+        image = self.__getitem__(idx)
+
+        # Check if the image is a Tensor
+        if isinstance(image, torch.Tensor):
+            image = image.permute(1, 2, 0).numpy()  # Convert CHW to HWC for plotting
+
+        plt.imshow(image)
+        plt.title(f"Image {idx}")
+        plt.axis('off')
+        plt.show()

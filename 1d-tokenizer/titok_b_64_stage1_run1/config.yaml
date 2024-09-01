@@ -6,11 +6,11 @@ experiment:
   save_every: 50000
   eval_every: 50000
   generate_every: 5000
-  log_every: 50
-  log_grad_norm_every: 1000
+  log_every: 200
+  log_grad_norm_every: 4000
   resume: true
   init_weight: ''
-  logging_dir: titok_b_64_stage1_run1/logs
+  logging_dir: titok_b_64_stage1_run1\logs
 model:
   vq_model:
     codebook_size: 4096
@@ -30,7 +30,7 @@ dataset:
   params:
     params: null
     img_path: ../../CSL-Daily/sentence/frames_512x512/
-    num_workers_per_gpu: 12
+    num_workers: 10
   preprocessing:
     resize_shorter_edge: 256
     crop_size: 256
@@ -51,13 +51,19 @@ lr_scheduler:
     end_lr: 1.0e-05
 training:
   gradient_accumulation_steps: 1
-  per_gpu_batch_size: 32
+  per_gpu_batch_size: 64
   mixed_precision: fp16
   enable_tf32: true
   enable_wandb: true
   use_ema: true
   seed: 42
-  max_train_steps: 1000000
+  max_train_steps: 500000
   num_generated_images: 2
   max_grad_norm: 1.0
 config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32

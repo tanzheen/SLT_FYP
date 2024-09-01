@@ -1,0 +1,191 @@
+2024-09-01 19:32:53,985 INFO    StreamThr :24696 [internal.py:wandb_internal():85] W&B internal server running at pid: 24696, started at: 2024-09-01 19:32:53.985954
+2024-09-01 19:32:53,986 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: status
+2024-09-01 19:32:53,989 INFO    WriterThread:24696 [datastore.py:open_for_write():87] open: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\run-l94xdjjd.wandb
+2024-09-01 19:32:53,990 DEBUG   SenderThread:24696 [sender.py:send():391] send: header
+2024-09-01 19:32:54,025 DEBUG   SenderThread:24696 [sender.py:send():391] send: run
+2024-09-01 19:32:54,630 INFO    SenderThread:24696 [dir_watcher.py:__init__():211] watching files in: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files
+2024-09-01 19:32:54,631 INFO    SenderThread:24696 [sender.py:_start_run_threads():1200] run started: l94xdjjd with start time 1725190373.986955
+2024-09-01 19:32:54,640 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: check_version
+2024-09-01 19:32:54,640 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: check_version
+2024-09-01 19:32:54,690 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: run_start
+2024-09-01 19:32:54,709 DEBUG   HandlerThread:24696 [system_info.py:__init__():26] System info init
+2024-09-01 19:32:54,709 DEBUG   HandlerThread:24696 [system_info.py:__init__():41] System info init done
+2024-09-01 19:32:54,709 INFO    HandlerThread:24696 [system_monitor.py:start():194] Starting system monitor
+2024-09-01 19:32:54,710 INFO    SystemMonitor:24696 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-09-01 19:32:54,710 INFO    HandlerThread:24696 [system_monitor.py:probe():214] Collecting system info
+2024-09-01 19:32:54,715 INFO    SystemMonitor:24696 [interfaces.py:start():188] Started cpu monitoring
+2024-09-01 19:32:54,715 INFO    SystemMonitor:24696 [interfaces.py:start():188] Started disk monitoring
+2024-09-01 19:32:54,716 INFO    SystemMonitor:24696 [interfaces.py:start():188] Started gpu monitoring
+2024-09-01 19:32:54,723 INFO    SystemMonitor:24696 [interfaces.py:start():188] Started memory monitoring
+2024-09-01 19:32:54,730 INFO    SystemMonitor:24696 [interfaces.py:start():188] Started network monitoring
+2024-09-01 19:32:54,734 DEBUG   HandlerThread:24696 [system_info.py:probe():152] Probing system
+2024-09-01 19:32:54,735 DEBUG   HandlerThread:24696 [system_info.py:_probe_git():137] Probing git
+2024-09-01 19:32:54,800 DEBUG   HandlerThread:24696 [system_info.py:_probe_git():145] Probing git done
+2024-09-01 19:32:54,800 DEBUG   HandlerThread:24696 [system_info.py:probe():200] Probing system done
+2024-09-01 19:32:54,800 DEBUG   HandlerThread:24696 [system_monitor.py:probe():223] {'os': 'Windows-10-10.0.19045-SP0', 'python': '3.11.6', 'heartbeatAt': '2024-09-01T11:32:54.734954', 'startedAt': '2024-09-01T11:32:53.980955', 'docker': None, 'cuda': None, 'args': ('config=configs/training/stage1/titok_b64_CSL.yaml', '--experiment.project=titok_b64_CSL_stage1', '--experiment.name=titok_b64_CSL_stage1_run1', '--experiment.output_dir=titok_b64_CSL_stage1_run1', '--training.per_gpu_batch_size=32'), 'state': 'running', 'program': 'E:\\SLT_FYP\\1d-tokenizer\\scripts\\train_titok.py', 'codePathLocal': 'scripts\\train_titok.py', 'codePath': '1d-tokenizer\\scripts\\train_titok.py', 'git': {'remote': 'https://github.com/tanzheen/SLT_FYP.git', 'commit': '253e1ffa85a9d4b4ab99b695a10437048e43af6e'}, 'email': '85047594+tanzheen@users.noreply.github.com', 'root': 'E:/SLT_FYP', 'host': 'DESKTOP-1I26G2B', 'username': 'Lord Nicholas', 'executable': 'C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\python.exe', 'cpu_count': 12, 'cpu_count_logical': 24, 'cpu_freq': {'current': 3701.0, 'min': 0.0, 'max': 3701.0}, 'cpu_freq_per_core': [{'current': 3701.0, 'min': 0.0, 'max': 3701.0}], 'disk': {'/': {'total': 931.5107383728027, 'used': 476.0344123840332}}, 'gpu': 'NVIDIA GeForce RTX 3090', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA GeForce RTX 3090', 'memory_total': 25769803776}], 'memory': {'total': 63.923301696777344}}
+2024-09-01 19:32:54,800 INFO    HandlerThread:24696 [system_monitor.py:probe():224] Finished collecting system info
+2024-09-01 19:32:54,800 INFO    HandlerThread:24696 [system_monitor.py:probe():227] Publishing system info
+2024-09-01 19:32:54,801 INFO    HandlerThread:24696 [system_monitor.py:probe():229] Finished publishing system info
+2024-09-01 19:32:54,804 DEBUG   SenderThread:24696 [sender.py:send():391] send: files
+2024-09-01 19:32:54,804 INFO    SenderThread:24696 [sender.py:_save_file():1466] saving file wandb-metadata.json with policy now
+2024-09-01 19:32:55,053 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: python_packages
+2024-09-01 19:32:55,053 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: python_packages
+2024-09-01 19:32:55,054 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: stop_status
+2024-09-01 19:32:55,054 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: stop_status
+2024-09-01 19:32:55,055 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: internal_messages
+2024-09-01 19:32:55,383 DEBUG   SenderThread:24696 [sender.py:send():391] send: telemetry
+2024-09-01 19:32:55,635 INFO    Thread-16 :24696 [dir_watcher.py:_on_file_created():271] file/dir created: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\requirements.txt
+2024-09-01 19:32:55,635 INFO    Thread-16 :24696 [dir_watcher.py:_on_file_created():271] file/dir created: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\wandb-metadata.json
+2024-09-01 19:32:55,636 INFO    Thread-16 :24696 [dir_watcher.py:_on_file_created():271] file/dir created: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\output.log
+2024-09-01 19:32:56,058 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: internal_messages
+2024-09-01 19:32:56,369 INFO    wandb-upload_0:24696 [upload_job.py:push():130] Uploaded file C:\Users\User\AppData\Local\Temp\tmp35w80_u0wandb\rexmudxq-wandb-metadata.json
+2024-09-01 19:32:57,066 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: internal_messages
+2024-09-01 19:32:57,643 INFO    Thread-16 :24696 [dir_watcher.py:_on_file_modified():288] file/dir modified: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\output.log
+2024-09-01 19:32:58,079 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: internal_messages
+2024-09-01 19:32:58,744 DEBUG   SenderThread:24696 [sender.py:send():391] send: exit
+2024-09-01 19:32:58,745 INFO    SenderThread:24696 [sender.py:send_exit():598] handling exit code: 1
+2024-09-01 19:32:58,745 INFO    SenderThread:24696 [sender.py:send_exit():600] handling runtime: 4
+2024-09-01 19:32:58,745 INFO    SenderThread:24696 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-09-01 19:32:58,745 INFO    SenderThread:24696 [sender.py:send_exit():606] send defer
+2024-09-01 19:32:58,745 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:58,745 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 0
+2024-09-01 19:32:58,746 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:32:58,746 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 0
+2024-09-01 19:32:58,746 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 1
+2024-09-01 19:32:58,746 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:58,746 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 1
+2024-09-01 19:32:58,746 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:32:58,746 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 1
+2024-09-01 19:32:58,746 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 2
+2024-09-01 19:32:58,746 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:58,746 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 2
+2024-09-01 19:32:58,746 INFO    HandlerThread:24696 [system_monitor.py:finish():203] Stopping system monitor
+2024-09-01 19:32:58,753 DEBUG   SystemMonitor:24696 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-09-01 19:32:58,753 DEBUG   SystemMonitor:24696 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-09-01 19:32:58,753 INFO    HandlerThread:24696 [interfaces.py:finish():200] Joined cpu monitor
+2024-09-01 19:32:58,753 DEBUG   SystemMonitor:24696 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-09-01 19:32:58,753 INFO    HandlerThread:24696 [interfaces.py:finish():200] Joined disk monitor
+2024-09-01 19:32:58,790 INFO    HandlerThread:24696 [interfaces.py:finish():200] Joined gpu monitor
+2024-09-01 19:32:58,790 INFO    HandlerThread:24696 [interfaces.py:finish():200] Joined memory monitor
+2024-09-01 19:32:58,790 INFO    HandlerThread:24696 [interfaces.py:finish():200] Joined network monitor
+2024-09-01 19:32:58,791 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:32:58,791 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 2
+2024-09-01 19:32:58,791 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 3
+2024-09-01 19:32:58,791 DEBUG   SenderThread:24696 [sender.py:send():391] send: stats
+2024-09-01 19:32:58,791 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:58,791 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 3
+2024-09-01 19:32:58,791 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:32:58,792 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 3
+2024-09-01 19:32:58,792 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 4
+2024-09-01 19:32:58,792 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:58,792 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 4
+2024-09-01 19:32:58,792 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:32:58,792 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 4
+2024-09-01 19:32:58,792 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 5
+2024-09-01 19:32:58,792 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:58,792 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 5
+2024-09-01 19:32:58,792 DEBUG   SenderThread:24696 [sender.py:send():391] send: summary
+2024-09-01 19:32:58,793 INFO    SenderThread:24696 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-09-01 19:32:58,793 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:32:58,793 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 5
+2024-09-01 19:32:58,793 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 6
+2024-09-01 19:32:58,793 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:58,793 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 6
+2024-09-01 19:32:58,793 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:32:58,793 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 6
+2024-09-01 19:32:58,795 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: status_report
+2024-09-01 19:32:59,044 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 7
+2024-09-01 19:32:59,044 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:59,044 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 7
+2024-09-01 19:32:59,044 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:32:59,044 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 7
+2024-09-01 19:32:59,668 INFO    Thread-16 :24696 [dir_watcher.py:_on_file_modified():288] file/dir modified: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\config.yaml
+2024-09-01 19:32:59,668 INFO    Thread-16 :24696 [dir_watcher.py:_on_file_modified():288] file/dir modified: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\output.log
+2024-09-01 19:32:59,669 INFO    Thread-16 :24696 [dir_watcher.py:_on_file_created():271] file/dir created: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\wandb-summary.json
+2024-09-01 19:32:59,747 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: poll_exit
+2024-09-01 19:32:59,850 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 8
+2024-09-01 19:32:59,850 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: poll_exit
+2024-09-01 19:32:59,850 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:59,850 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 8
+2024-09-01 19:32:59,850 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:32:59,850 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 8
+2024-09-01 19:32:59,850 INFO    SenderThread:24696 [job_builder.py:build():443] Attempting to build job artifact
+2024-09-01 19:32:59,851 INFO    SenderThread:24696 [job_builder.py:_get_source_type():572] is repo sourced job
+2024-09-01 19:32:59,898 INFO    SenderThread:24696 [job_builder.py:build():548] adding wandb-job metadata file
+2024-09-01 19:32:59,915 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 9
+2024-09-01 19:32:59,916 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:32:59,916 DEBUG   SenderThread:24696 [sender.py:send():391] send: artifact
+2024-09-01 19:32:59,916 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 9
+2024-09-01 19:33:00,681 INFO    Thread-16 :24696 [dir_watcher.py:_on_file_modified():288] file/dir modified: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\output.log
+2024-09-01 19:33:00,758 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: poll_exit
+2024-09-01 19:33:01,085 INFO    SenderThread:24696 [sender.py:send_artifact():1549] sent artifact job-https___github.com_tanzheen_SLT_FYP.git_1d-tokenizer_scripts_train_titok.py - {'id': 'QXJ0aWZhY3Q6MTE3NTEzMjI4NQ==', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjQxOTE2NTU4Nw==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTE3NTEzMjI4NQ==', 'versionIndex': 3}}}
+2024-09-01 19:33:01,085 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:33:01,085 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 9
+2024-09-01 19:33:01,085 INFO    SenderThread:24696 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-09-01 19:33:01,685 INFO    SenderThread:24696 [dir_watcher.py:finish():388] scan: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files
+2024-09-01 19:33:01,686 INFO    SenderThread:24696 [dir_watcher.py:finish():402] scan save: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\config.yaml config.yaml
+2024-09-01 19:33:01,686 INFO    SenderThread:24696 [dir_watcher.py:finish():402] scan save: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\output.log output.log
+2024-09-01 19:33:01,687 INFO    SenderThread:24696 [dir_watcher.py:finish():402] scan save: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\requirements.txt requirements.txt
+2024-09-01 19:33:01,689 INFO    SenderThread:24696 [dir_watcher.py:finish():402] scan save: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\wandb-metadata.json wandb-metadata.json
+2024-09-01 19:33:01,689 INFO    SenderThread:24696 [dir_watcher.py:finish():402] scan save: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\wandb-summary.json wandb-summary.json
+2024-09-01 19:33:01,691 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 10
+2024-09-01 19:33:01,691 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: poll_exit
+2024-09-01 19:33:01,691 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:33:01,693 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 10
+2024-09-01 19:33:01,693 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:33:01,693 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 10
+2024-09-01 19:33:01,693 INFO    SenderThread:24696 [file_pusher.py:finish():169] shutting down file pusher
+2024-09-01 19:33:01,762 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: poll_exit
+2024-09-01 19:33:01,763 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: poll_exit
+2024-09-01 19:33:02,273 INFO    wandb-upload_0:24696 [upload_job.py:push():130] Uploaded file E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\config.yaml
+2024-09-01 19:33:02,741 INFO    wandb-upload_3:24696 [upload_job.py:push():130] Uploaded file E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\wandb-summary.json
+2024-09-01 19:33:02,742 INFO    wandb-upload_2:24696 [upload_job.py:push():130] Uploaded file E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\requirements.txt
+2024-09-01 19:33:02,777 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: poll_exit
+2024-09-01 19:33:02,777 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: poll_exit
+2024-09-01 19:33:03,373 INFO    wandb-upload_1:24696 [upload_job.py:push():130] Uploaded file E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\files\output.log
+2024-09-01 19:33:03,580 INFO    Thread-15 (_thread_body):24696 [sender.py:transition_state():626] send defer: 11
+2024-09-01 19:33:03,580 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:33:03,580 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 11
+2024-09-01 19:33:03,580 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:33:03,580 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 11
+2024-09-01 19:33:03,581 INFO    SenderThread:24696 [file_pusher.py:join():175] waiting for file pusher
+2024-09-01 19:33:03,581 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 12
+2024-09-01 19:33:03,581 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:33:03,581 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 12
+2024-09-01 19:33:03,581 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:33:03,581 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 12
+2024-09-01 19:33:03,581 INFO    SenderThread:24696 [file_stream.py:finish():601] file stream finish called
+2024-09-01 19:33:03,786 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: poll_exit
+2024-09-01 19:33:04,241 INFO    SenderThread:24696 [file_stream.py:finish():605] file stream finish is done
+2024-09-01 19:33:04,241 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 13
+2024-09-01 19:33:04,241 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: poll_exit
+2024-09-01 19:33:04,241 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:33:04,241 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 13
+2024-09-01 19:33:04,241 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: status_report
+2024-09-01 19:33:04,242 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:33:04,242 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 13
+2024-09-01 19:33:04,242 INFO    SenderThread:24696 [sender.py:transition_state():626] send defer: 14
+2024-09-01 19:33:04,242 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: defer
+2024-09-01 19:33:04,242 DEBUG   SenderThread:24696 [sender.py:send():391] send: final
+2024-09-01 19:33:04,242 INFO    HandlerThread:24696 [handler.py:handle_request_defer():184] handle defer: 14
+2024-09-01 19:33:04,242 DEBUG   SenderThread:24696 [sender.py:send():391] send: footer
+2024-09-01 19:33:04,243 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: defer
+2024-09-01 19:33:04,243 INFO    SenderThread:24696 [sender.py:send_request_defer():622] handle sender defer: 14
+2024-09-01 19:33:04,243 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: poll_exit
+2024-09-01 19:33:04,243 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: server_info
+2024-09-01 19:33:04,243 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: poll_exit
+2024-09-01 19:33:04,244 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: poll_exit
+2024-09-01 19:33:04,244 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: get_summary
+2024-09-01 19:33:04,244 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: server_info
+2024-09-01 19:33:04,244 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: sampled_history
+2024-09-01 19:33:04,246 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: internal_messages
+2024-09-01 19:33:04,473 DEBUG   SenderThread:24696 [sender.py:send_request():418] send_request: poll_exit
+2024-09-01 19:33:04,474 INFO    MainThread:24696 [wandb_run.py:_footer_history_summary_info():4076] rendering history
+2024-09-01 19:33:04,474 INFO    MainThread:24696 [wandb_run.py:_footer_history_summary_info():4108] rendering summary
+2024-09-01 19:33:04,474 INFO    MainThread:24696 [wandb_run.py:_footer_sync_info():4035] logging synced files
+2024-09-01 19:33:04,475 DEBUG   HandlerThread:24696 [handler.py:handle_request():158] handle_request: shutdown
+2024-09-01 19:33:04,475 INFO    HandlerThread:24696 [handler.py:finish():880] shutting down handler
+2024-09-01 19:33:05,259 INFO    WriterThread:24696 [datastore.py:close():296] close: E:\SLT_FYP\1d-tokenizer\wandb\run-20240901_193253-l94xdjjd\run-l94xdjjd.wandb
+2024-09-01 19:33:05,478 INFO    SenderThread:24696 [sender.py:finish():1631] shutting down sender
+2024-09-01 19:33:05,478 INFO    SenderThread:24696 [file_pusher.py:finish():169] shutting down file pusher
+2024-09-01 19:33:05,478 INFO    SenderThread:24696 [file_pusher.py:join():175] waiting for file pusher

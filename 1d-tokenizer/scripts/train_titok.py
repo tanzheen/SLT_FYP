@@ -114,17 +114,17 @@ def main():
     if config.training.use_ema:
         ema_model.to(accelerator.device)
 
-    total_batch_size_without_accum = config.training.per_gpu_batch_size * accelerator.num_processes
+    total_batch_size_without_accum = config.training.per_gpu_batch_size * accelerator.num_processes #32
     num_batches = math.ceil(
-        config.experiment.max_train_examples / total_batch_size_without_accum)
-    num_update_steps_per_epoch = math.ceil(num_batches / config.training.gradient_accumulation_steps)
-    num_train_epochs = math.ceil(config.training.max_train_steps / num_update_steps_per_epoch)
+        config.experiment.max_train_examples / total_batch_size_without_accum) # 1 281 000 / 32
+    num_update_steps_per_epoch = math.ceil(num_batches / config.training.gradient_accumulation_steps) # 1 281 000 / 32 
+    num_train_epochs = math.ceil(config.training.max_train_steps / num_update_steps_per_epoch)  # 
 
     # Start training.
     logger.info("***** Running training *****")
     logger.info(f"  Num training steps = {config.training.max_train_steps}")
     logger.info(f"  Gradient Accumulation steps = {config.training.gradient_accumulation_steps}")
-    logger.info(f"  Instantaneous batch size per gpu = { config.training.per_gpu_batch_size}")
+    logger.info(f"mixed precision = {config.training.mixed_precision}")
     logger.info(f"""  Total train batch size (w. parallel, distributed & accumulation) = {(
         config.training.per_gpu_batch_size *
         accelerator.num_processes *
@@ -172,6 +172,7 @@ if __name__ == "__main__":
     print(torch.__version__)
     if torch.cuda.is_available():
         current_device = torch.cuda.current_device()
+        torch.set_default_device('cuda')
         print(f"Current CUDA device: {torch.cuda.get_device_name(current_device)}")
     else:
         torch.set_default_device('mps')
@@ -182,13 +183,13 @@ if __name__ == "__main__":
 # Training for TiTok-B64
 # Stage 1
 $env:WANDB_MODE="offline"
-accelerate launch --num_machines=1 --num_processes=8 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network scripts/train_titok.py config=configs/training/stage1/titok_b64_CSL.yaml `
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network scripts/train_titok.py config=configs/training/stage1/titok_b64_CSL.yaml `
     --experiment.project="titok_b64_CSL_stage1" `
     --experiment.name="titok_b64_CSL_stage1_run1" `
     --experiment.output_dir="titok_b64_CSL_stage1_run1" `
     --training.per_gpu_batch_size=32
 # Stage 2
-WANDB_MODE=offline accelerate launch --num_machines=1 --num_processes=8 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network scripts/train_titok.py config=configs/training/stage2/titok_b64.yaml \
+WANDB_MODE=offline accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network scripts/train_titok.py config=configs/training/stage2/titok_b64.yaml \
     experiment.project="titok_b64_CSL_stage2" \
     experiment.name="titok_b64_CSL_stage2_run1" \
     experiment.output_dir="titok_CSL_b64_stage2_run1" \
