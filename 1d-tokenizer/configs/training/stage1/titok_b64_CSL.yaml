@@ -3,10 +3,10 @@ experiment:
   name: "titok_b_64_stage1_run1"
   output_dir: "titok_b_64_stage1_run1"
   max_train_examples: 1_281_167
-  save_every: 50_000
-  eval_every: 50_000
-  generate_every: 5_000
-  log_every: 200
+  generate_every: 100
+  save_every: 100
+  log_every: 100
+  eval_every: 100
   log_grad_norm_every: 4_000
   resume: True
   init_weight: ""
@@ -63,6 +63,7 @@ training:
   enable_wandb: True
   use_ema: True
   seed: 42
-  max_train_steps: 500000
-  num_generated_images: 2
+  num_generated_images: 4
   max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5

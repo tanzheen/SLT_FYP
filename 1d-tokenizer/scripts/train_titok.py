@@ -92,10 +92,12 @@ def main():
 
     optimizer, discriminator_optimizer = create_optimizer(config, logger, model, loss_module)
 
-    lr_scheduler, discriminator_lr_scheduler = create_lr_scheduler(
-        config, logger, accelerator, optimizer, discriminator_optimizer)
-
     train_dataloader, eval_dataloader, test_dataloader = create_dataloader(config, logger, accelerator)
+
+    lr_scheduler, discriminator_lr_scheduler = create_lr_scheduler(
+        config, logger, accelerator, optimizer,len(train_dataloader), discriminator_optimizer)
+
+    
 
     # Set up evaluator.
     evaluator = create_evaluator(config, logger, accelerator)
@@ -115,14 +117,13 @@ def main():
         ema_model.to(accelerator.device)
 
     total_batch_size_without_accum = config.training.per_gpu_batch_size * accelerator.num_processes #32
-    num_batches = math.ceil(
-        config.experiment.max_train_examples / total_batch_size_without_accum) # 1 281 000 / 32
-    num_update_steps_per_epoch = math.ceil(num_batches / config.training.gradient_accumulation_steps) # 1 281 000 / 32 
-    num_train_epochs = math.ceil(config.training.max_train_steps / num_update_steps_per_epoch)  # 
-
+    #num_batches = math.ceil(config.experiment.max_train_examples / total_batch_size_without_accum) # 1 281 000 / 32
+    #num_update_steps_per_epoch = math.ceil(num_batches / config.training.gradient_accumulation_steps) # 1 281 000 / 32 
+    #num_train_epochs = math.ceil(config.training.max_train_steps / num_update_steps_per_epoch)  # 
+    num_train_epochs = config.training.num_epochs
     # Start training.
     logger.info("***** Running training *****")
-    logger.info(f"  Num training steps = {config.training.max_train_steps}")
+    #logger.info(f"  Num training steps = {config.training.max_train_steps}")
     logger.info(f"  Gradient Accumulation steps = {config.training.gradient_accumulation_steps}")
     logger.info(f"mixed precision = {config.training.mixed_precision}")
     logger.info(f"""  Total train batch size (w. parallel, distributed & accumulation) = {(
@@ -134,7 +135,7 @@ def main():
     first_epoch = 0
 
     global_step, first_epoch = auto_resume(
-        config, logger, accelerator, ema_model, num_update_steps_per_epoch,
+        config, logger, accelerator, ema_model,
         strict=True)
 
     for current_epoch in range(first_epoch, num_train_epochs):
@@ -147,12 +148,14 @@ def main():
                             evaluator,
                             global_step,
                             pretrained_tokenizer=pretrained_tokenizer)
-        # Stop training if max steps is reached.
-        if global_step >= config.training.max_train_steps:
-            accelerator.print(
-                f"Finishing training: Global step is >= Max train steps: {global_step} >= {config.training.max_train_steps}"
-            )
-            break
+        
+
+        # # Stop training if max steps is reached.
+        # if global_step >= config.training.max_train_steps:
+        #     accelerator.print(
+        #         f"Finishing training: Global step is >= Max train steps: {global_step} >= {config.training.max_train_steps}"
+        #     )
+        #     break
 
     accelerator.wait_for_everyone()
     # Save checkpoint at the end of training.

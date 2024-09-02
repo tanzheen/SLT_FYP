@@ -196,13 +196,13 @@ def create_optimizer(config, logger, model, loss_module):
     return optimizer, discriminator_optimizer
 
 
-def create_lr_scheduler(config, logger, accelerator, optimizer, discriminator_optimizer=None):
+def create_lr_scheduler(config, logger, accelerator, optimizer, len_data, discriminator_optimizer=None):
     """Creates learning rate scheduler for TiTok and discrminator."""
     logger.info("Creating lr_schedulers.")
     lr_scheduler = get_scheduler(
         config.lr_scheduler.scheduler,
         optimizer=optimizer,
-        num_training_steps=config.training.max_train_steps * accelerator.num_processes,
+        num_training_steps=config.training.num_epochs * len_data/config.training.gradient_accumulation_steps ,
         num_warmup_steps=config.lr_scheduler.params.warmup_steps * accelerator.num_processes,
         base_lr=config.lr_scheduler.params.learning_rate,
         end_lr=config.lr_scheduler.params.end_lr,
@@ -211,7 +211,7 @@ def create_lr_scheduler(config, logger, accelerator, optimizer, discriminator_op
         discriminator_lr_scheduler = get_scheduler(
             config.lr_scheduler.scheduler,
             optimizer=discriminator_optimizer,
-            num_training_steps=config.training.max_train_steps * accelerator.num_processes - config.losses.discriminator_start,
+            num_training_steps=config.training.num_epochs * len_data/config.training.gradient_accumulation_steps,
             num_warmup_steps=config.lr_scheduler.params.warmup_steps * accelerator.num_processes,
             base_lr=config.lr_scheduler.params.learning_rate,
             end_lr=config.lr_scheduler.params.end_lr,
@@ -256,7 +256,7 @@ def create_evaluator(config, logger, accelerator):
     return evaluator
 
 
-def auto_resume(config, logger, accelerator, ema_model, num_update_steps_per_epoch,
+def auto_resume(config, logger, accelerator, ema_model, 
              strict=True):
     """Auto resuming the training."""
     global_step = 0
@@ -525,11 +525,11 @@ def train_one_epoch(config, logger, accelerator,
 
             global_step += 1
 
-            if global_step >= config.training.max_train_steps:
-                accelerator.print(
-                    f"Finishing training: Global step is >= Max train steps: {global_step} >= {config.training.max_train_steps}"
-                )
-                break
+            # if global_step >= config.training.max_train_steps:
+            #     accelerator.print(
+            #         f"Finishing training: Global step is >= Max train steps: {global_step} >= {config.training.max_train_steps}"
+            #     )
+            #     break
 
 
     return global_step
@@ -548,7 +548,7 @@ def eval_reconstruction(
     local_model = accelerator.unwrap_model(model)
 
     for batch in eval_loader:
-        images = batch["image"].to(
+        images = batch.to(
             accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
         )
         original_images = torch.clone(images)
@@ -560,7 +560,7 @@ def eval_reconstruction(
         reconstructed_images = torch.round(reconstructed_images * 255.0) / 255.0
         original_images = torch.clamp(original_images, 0.0, 1.0)
         # For VQ model.
-        evaluator.update(original_images, reconstructed_images.squeeze(2), model_dict["min_encoding_indices"])
+        evaluator.update(original_images.float(), reconstructed_images.squeeze(2).float(), model_dict["min_encoding_indices"].float())
     model.train()
     return evaluator.result()
 
@@ -669,12 +669,12 @@ class SimpleImageDataset(Dataset):
         """
         image_paths = []
         for subdir, _, files in os.walk(root_dir):
-            for file in files:
-                if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+            for i, file in enumerate(sorted(files)) :
+                if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')) and i%5==0:
                     image_paths.append(os.path.join(subdir, file))
                     
                 # for small run purposes
-            #if len(image_paths)>20: break 
+            if len(image_paths)>10000: break 
         return image_paths
 
     def __len__(self):

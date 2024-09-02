@@ -1258,3 +1258,987 @@ config: configs/training/stage1/titok_b64_CSL.yaml
 [32m[09/02 00:05:22 TiTok]: [0mData (t): 0.0230, 57.76/s/gpu Batch (t): 1.1080 LR: 0.000076 Step: 7600 Total Loss: 3.0037 Recon Loss: 2.9990 
 [32m[09/02 00:09:04 TiTok]: [0mData (t): 0.0220, 57.76/s/gpu Batch (t): 1.1080 LR: 0.000078 Step: 7800 Total Loss: 2.9403 Recon Loss: 2.9356 
 [32m[09/02 00:12:50 TiTok]: [0mData (t): 0.0230, 51.69/s/gpu Batch (t): 1.2381 LR: 0.000080 Step: 8000 Total Loss: 2.7975 Recon Loss: 2.7929 
+[32m[09/02 00:16:38 TiTok]: [0mData (t): 0.0230, 56.42/s/gpu Batch (t): 1.1344 LR: 0.000082 Step: 8200 Total Loss: 2.8520 Recon Loss: 2.8475 
+[32m[09/02 00:20:26 TiTok]: [0mData (t): 0.0240, 56.19/s/gpu Batch (t): 1.1391 LR: 0.000084 Step: 8400 Total Loss: 2.8030 Recon Loss: 2.7984 
+[32m[09/02 00:24:13 TiTok]: [0mData (t): 0.0240, 56.32/s/gpu Batch (t): 1.1364 LR: 0.000086 Step: 8600 Total Loss: 2.8716 Recon Loss: 2.8670 
+[32m[09/02 00:27:55 TiTok]: [0mData (t): 0.0230, 58.02/s/gpu Batch (t): 1.1032 LR: 0.000088 Step: 8800 Total Loss: 2.8094 Recon Loss: 2.8049 
+[32m[09/02 00:31:36 TiTok]: [0mData (t): 0.0240, 58.09/s/gpu Batch (t): 1.1018 LR: 0.000090 Step: 9000 Total Loss: 2.7188 Recon Loss: 2.7143 
+[32m[09/02 00:35:17 TiTok]: [0mData (t): 0.0230, 58.10/s/gpu Batch (t): 1.1015 LR: 0.000092 Step: 9200 Total Loss: 2.8453 Recon Loss: 2.8407 
+[32m[09/02 00:38:58 TiTok]: [0mData (t): 0.0240, 58.02/s/gpu Batch (t): 1.1031 LR: 0.000094 Step: 9400 Total Loss: 2.7920 Recon Loss: 2.7876 
+[32m[09/02 00:42:38 TiTok]: [0mData (t): 0.0250, 57.92/s/gpu Batch (t): 1.1050 LR: 0.000096 Step: 9600 Total Loss: 2.7200 Recon Loss: 2.7155 
+[32m[09/02 00:46:20 TiTok]: [0mData (t): 0.0230, 58.07/s/gpu Batch (t): 1.1020 LR: 0.000098 Step: 9800 Total Loss: 2.6443 Recon Loss: 2.6399 
+[32m[09/02 00:50:00 TiTok]: [0mData (t): 0.0220, 58.10/s/gpu Batch (t): 1.1015 LR: 0.000100 Step: 10000 Total Loss: 2.6933 Recon Loss: 2.6890 
+[32m[09/02 00:50:00 TiTok]: [0mReconstructing images...
+[32m[09/02 00:53:42 TiTok]: [0mData (t): 0.0240, 58.07/s/gpu Batch (t): 1.1021 LR: 0.000100 Step: 10200 Total Loss: 2.6117 Recon Loss: 2.6073 
+[32m[09/02 00:57:22 TiTok]: [0mData (t): 0.0240, 58.08/s/gpu Batch (t): 1.1020 LR: 0.000100 Step: 10400 Total Loss: 2.7080 Recon Loss: 2.7037 
+[32m[09/02 01:01:03 TiTok]: [0mData (t): 0.0240, 58.12/s/gpu Batch (t): 1.1011 LR: 0.000100 Step: 10600 Total Loss: 2.7091 Recon Loss: 2.7047 
+[32m[09/02 01:04:44 TiTok]: [0mData (t): 0.0230, 58.07/s/gpu Batch (t): 1.1020 LR: 0.000100 Step: 10800 Total Loss: 2.6665 Recon Loss: 2.6622 
+[32m[09/02 01:08:25 TiTok]: [0mData (t): 0.0240, 58.07/s/gpu Batch (t): 1.1021 LR: 0.000100 Step: 11000 Total Loss: 2.6978 Recon Loss: 2.6935 
+[32m[09/02 01:12:06 TiTok]: [0mData (t): 0.0630, 56.14/s/gpu Batch (t): 1.1400 LR: 0.000100 Step: 11200 Total Loss: 2.7604 Recon Loss: 2.7561 
+[32m[09/02 01:15:46 TiTok]: [0mData (t): 0.0240, 57.97/s/gpu Batch (t): 1.1040 LR: 0.000100 Step: 11400 Total Loss: 2.6788 Recon Loss: 2.6745 
+[32m[09/02 01:19:28 TiTok]: [0mData (t): 0.0240, 58.02/s/gpu Batch (t): 1.1031 LR: 0.000100 Step: 11600 Total Loss: 2.5087 Recon Loss: 2.5045 
+[32m[09/02 01:23:08 TiTok]: [0mData (t): 0.0230, 58.14/s/gpu Batch (t): 1.1009 LR: 0.000100 Step: 11800 Total Loss: 2.6016 Recon Loss: 2.5974 
+[32m[09/02 01:26:49 TiTok]: [0mData (t): 0.0240, 53.20/s/gpu Batch (t): 1.2030 LR: 0.000100 Step: 12000 Total Loss: 2.5141 Recon Loss: 2.5099 
+[32m[09/02 01:30:29 TiTok]: [0mData (t): 0.0240, 58.13/s/gpu Batch (t): 1.1010 LR: 0.000100 Step: 12200 Total Loss: 2.5642 Recon Loss: 2.5600 
+[32m[09/02 01:34:10 TiTok]: [0mData (t): 0.0230, 58.05/s/gpu Batch (t): 1.1026 LR: 0.000100 Step: 12400 Total Loss: 2.5108 Recon Loss: 2.5067 
+[32m[09/02 01:37:50 TiTok]: [0mData (t): 0.0240, 57.97/s/gpu Batch (t): 1.1040 LR: 0.000100 Step: 12600 Total Loss: 2.4624 Recon Loss: 2.4582 
+[32m[09/02 01:41:32 TiTok]: [0mData (t): 0.0240, 58.07/s/gpu Batch (t): 1.1021 LR: 0.000100 Step: 12800 Total Loss: 2.6369 Recon Loss: 2.6328 
+[32m[09/02 01:45:12 TiTok]: [0mData (t): 0.0240, 58.13/s/gpu Batch (t): 1.1011 LR: 0.000100 Step: 13000 Total Loss: 2.5151 Recon Loss: 2.5109 
+[32m[09/02 01:48:53 TiTok]: [0mData (t): 0.0230, 57.97/s/gpu Batch (t): 1.1041 LR: 0.000100 Step: 13200 Total Loss: 2.5433 Recon Loss: 2.5392 
+[32m[09/02 01:52:33 TiTok]: [0mData (t): 0.0630, 56.09/s/gpu Batch (t): 1.1411 LR: 0.000100 Step: 13400 Total Loss: 2.5354 Recon Loss: 2.5313 
+[32m[09/02 01:56:14 TiTok]: [0mData (t): 0.0230, 58.21/s/gpu Batch (t): 1.0995 LR: 0.000100 Step: 13600 Total Loss: 2.5454 Recon Loss: 2.5413 
+[32m[09/02 01:59:55 TiTok]: [0mData (t): 0.0240, 58.13/s/gpu Batch (t): 1.1011 LR: 0.000100 Step: 13800 Total Loss: 2.4331 Recon Loss: 2.4292 
+[32m[09/02 02:03:35 TiTok]: [0mData (t): 0.0230, 58.13/s/gpu Batch (t): 1.1010 LR: 0.000100 Step: 14000 Total Loss: 2.4101 Recon Loss: 2.4060 
+[32m[09/02 02:07:16 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1000 LR: 0.000100 Step: 14200 Total Loss: 2.4220 Recon Loss: 2.4180 
+[32m[09/02 02:10:56 TiTok]: [0mData (t): 0.0230, 58.13/s/gpu Batch (t): 1.1010 LR: 0.000100 Step: 14400 Total Loss: 2.4685 Recon Loss: 2.4645 
+[32m[09/02 02:14:37 TiTok]: [0mData (t): 0.0240, 58.15/s/gpu Batch (t): 1.1005 LR: 0.000100 Step: 14600 Total Loss: 2.3887 Recon Loss: 2.3847 
+[32m[09/02 02:18:17 TiTok]: [0mData (t): 0.0230, 58.16/s/gpu Batch (t): 1.1004 LR: 0.000100 Step: 14800 Total Loss: 2.3830 Recon Loss: 2.3790 
+[32m[09/02 02:21:58 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1001 LR: 0.000100 Step: 15000 Total Loss: 2.5608 Recon Loss: 2.5567 
+[32m[09/02 02:21:59 TiTok]: [0mReconstructing images...
+[32m[09/02 02:25:39 TiTok]: [0mData (t): 0.0240, 58.02/s/gpu Batch (t): 1.1030 LR: 0.000100 Step: 15200 Total Loss: 2.3951 Recon Loss: 2.3912 
+[32m[09/02 02:29:20 TiTok]: [0mData (t): 0.0231, 58.17/s/gpu Batch (t): 1.1002 LR: 0.000100 Step: 15400 Total Loss: 2.3800 Recon Loss: 2.3760 
+[32m[09/02 02:33:01 TiTok]: [0mData (t): 0.0230, 58.17/s/gpu Batch (t): 1.1003 LR: 0.000100 Step: 15600 Total Loss: 2.4236 Recon Loss: 2.4196 
+[32m[09/02 02:36:41 TiTok]: [0mData (t): 0.0230, 58.23/s/gpu Batch (t): 1.0990 LR: 0.000100 Step: 15800 Total Loss: 2.4645 Recon Loss: 2.4605 
+[32m[09/02 02:40:23 TiTok]: [0mData (t): 0.0235, 53.07/s/gpu Batch (t): 1.2060 LR: 0.000100 Step: 16000 Total Loss: 2.3381 Recon Loss: 2.3341 
+[32m[09/02 02:44:03 TiTok]: [0mData (t): 0.0230, 58.13/s/gpu Batch (t): 1.1010 LR: 0.000100 Step: 16200 Total Loss: 2.3582 Recon Loss: 2.3542 
+[32m[09/02 02:47:44 TiTok]: [0mData (t): 0.0240, 58.13/s/gpu Batch (t): 1.1010 LR: 0.000100 Step: 16400 Total Loss: 2.3698 Recon Loss: 2.3658 
+[32m[09/02 02:51:24 TiTok]: [0mData (t): 0.0230, 58.23/s/gpu Batch (t): 1.0990 LR: 0.000100 Step: 16600 Total Loss: 2.3384 Recon Loss: 2.3344 
+[32m[09/02 02:55:05 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1000 LR: 0.000100 Step: 16800 Total Loss: 2.3555 Recon Loss: 2.3515 
+[32m[09/02 02:58:45 TiTok]: [0mData (t): 0.0230, 58.02/s/gpu Batch (t): 1.1030 LR: 0.000100 Step: 17000 Total Loss: 2.3144 Recon Loss: 2.3105 
+[32m[09/02 03:02:26 TiTok]: [0mData (t): 0.0230, 58.15/s/gpu Batch (t): 1.1006 LR: 0.000100 Step: 17200 Total Loss: 2.3287 Recon Loss: 2.3247 
+[32m[09/02 03:06:06 TiTok]: [0mData (t): 0.0230, 58.15/s/gpu Batch (t): 1.1005 LR: 0.000100 Step: 17400 Total Loss: 2.3012 Recon Loss: 2.2973 
+[32m[09/02 03:09:47 TiTok]: [0mData (t): 0.0240, 58.02/s/gpu Batch (t): 1.1031 LR: 0.000100 Step: 17600 Total Loss: 2.3885 Recon Loss: 2.3845 
+[32m[09/02 03:13:27 TiTok]: [0mData (t): 0.0230, 58.23/s/gpu Batch (t): 1.0991 LR: 0.000100 Step: 17800 Total Loss: 2.2350 Recon Loss: 2.2311 
+[32m[09/02 03:17:10 TiTok]: [0mData (t): 0.0230, 58.21/s/gpu Batch (t): 1.0995 LR: 0.000100 Step: 18000 Total Loss: 2.3011 Recon Loss: 2.2971 
+[32m[09/02 03:20:51 TiTok]: [0mData (t): 0.0230, 58.07/s/gpu Batch (t): 1.1021 LR: 0.000100 Step: 18200 Total Loss: 2.3961 Recon Loss: 2.3922 
+[32m[09/02 03:24:32 TiTok]: [0mData (t): 0.0230, 58.21/s/gpu Batch (t): 1.0994 LR: 0.000100 Step: 18400 Total Loss: 2.3022 Recon Loss: 2.2983 
+[32m[09/02 03:28:12 TiTok]: [0mData (t): 0.0250, 58.07/s/gpu Batch (t): 1.1020 LR: 0.000100 Step: 18600 Total Loss: 2.3584 Recon Loss: 2.3544 
+[32m[09/02 03:31:53 TiTok]: [0mData (t): 0.0240, 58.01/s/gpu Batch (t): 1.1032 LR: 0.000100 Step: 18800 Total Loss: 2.3674 Recon Loss: 2.3634 
+[32m[09/02 03:35:33 TiTok]: [0mData (t): 0.0630, 56.23/s/gpu Batch (t): 1.1382 LR: 0.000100 Step: 19000 Total Loss: 2.3313 Recon Loss: 2.3274 
+[32m[09/02 03:39:14 TiTok]: [0mData (t): 0.0230, 58.13/s/gpu Batch (t): 1.1011 LR: 0.000100 Step: 19200 Total Loss: 2.3628 Recon Loss: 2.3589 
+[32m[09/02 03:42:55 TiTok]: [0mData (t): 0.0230, 58.15/s/gpu Batch (t): 1.1005 LR: 0.000100 Step: 19400 Total Loss: 2.2931 Recon Loss: 2.2891 
+[32m[09/02 03:46:35 TiTok]: [0mData (t): 0.0240, 58.23/s/gpu Batch (t): 1.0991 LR: 0.000100 Step: 19600 Total Loss: 2.2845 Recon Loss: 2.2806 
+[32m[09/02 03:50:16 TiTok]: [0mData (t): 0.0240, 58.13/s/gpu Batch (t): 1.1010 LR: 0.000100 Step: 19800 Total Loss: 2.2340 Recon Loss: 2.2301 
+[32m[09/02 03:53:56 TiTok]: [0mData (t): 0.0240, 53.12/s/gpu Batch (t): 1.2047 LR: 0.000100 Step: 20000 Total Loss: 2.2408 Recon Loss: 2.2369 
+[32m[09/02 03:53:56 TiTok]: [0mReconstructing images...
+[32m[09/02 03:57:37 TiTok]: [0mData (t): 0.0230, 58.07/s/gpu Batch (t): 1.1021 LR: 0.000100 Step: 20200 Total Loss: 2.2811 Recon Loss: 2.2772 
+[32m[09/02 04:01:18 TiTok]: [0mData (t): 0.0235, 58.13/s/gpu Batch (t): 1.1009 LR: 0.000100 Step: 20400 Total Loss: 2.2844 Recon Loss: 2.2805 
+[32m[09/02 04:04:58 TiTok]: [0mData (t): 0.0230, 58.23/s/gpu Batch (t): 1.0991 LR: 0.000100 Step: 20600 Total Loss: 2.2459 Recon Loss: 2.2421 
+[32m[09/02 04:08:39 TiTok]: [0mData (t): 0.0240, 57.97/s/gpu Batch (t): 1.1040 LR: 0.000100 Step: 20800 Total Loss: 2.1368 Recon Loss: 2.1330 
+[32m[09/02 04:12:20 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1000 LR: 0.000100 Step: 21000 Total Loss: 2.2221 Recon Loss: 2.2182 
+[32m[09/02 04:16:00 TiTok]: [0mData (t): 0.0620, 56.29/s/gpu Batch (t): 1.1370 LR: 0.000100 Step: 21200 Total Loss: 2.2603 Recon Loss: 2.2565 
+[32m[09/02 04:19:41 TiTok]: [0mData (t): 0.0240, 58.18/s/gpu Batch (t): 1.1001 LR: 0.000100 Step: 21400 Total Loss: 2.2560 Recon Loss: 2.2521 
+[32m[09/02 04:23:22 TiTok]: [0mData (t): 0.0230, 58.26/s/gpu Batch (t): 1.0985 LR: 0.000100 Step: 21600 Total Loss: 2.1874 Recon Loss: 2.1835 
+[32m[09/02 04:27:02 TiTok]: [0mData (t): 0.0240, 58.13/s/gpu Batch (t): 1.1010 LR: 0.000100 Step: 21800 Total Loss: 2.1834 Recon Loss: 2.1795 
+[32m[09/02 04:30:42 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1000 LR: 0.000100 Step: 22000 Total Loss: 2.2634 Recon Loss: 2.2596 
+[32m[09/02 04:34:23 TiTok]: [0mData (t): 0.0230, 58.26/s/gpu Batch (t): 1.0986 LR: 0.000100 Step: 22200 Total Loss: 2.1228 Recon Loss: 2.1189 
+[32m[09/02 04:38:03 TiTok]: [0mData (t): 0.0240, 58.20/s/gpu Batch (t): 1.0997 LR: 0.000100 Step: 22400 Total Loss: 2.2600 Recon Loss: 2.2562 
+[32m[09/02 04:41:44 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1000 LR: 0.000100 Step: 22600 Total Loss: 2.2452 Recon Loss: 2.2413 
+[32m[09/02 04:45:24 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1001 LR: 0.000100 Step: 22800 Total Loss: 2.1877 Recon Loss: 2.1839 
+[32m[09/02 04:49:04 TiTok]: [0mData (t): 0.0240, 58.12/s/gpu Batch (t): 1.1012 LR: 0.000100 Step: 23000 Total Loss: 2.1932 Recon Loss: 2.1893 
+[32m[09/02 04:52:45 TiTok]: [0mData (t): 0.0230, 58.19/s/gpu Batch (t): 1.0999 LR: 0.000100 Step: 23200 Total Loss: 2.1987 Recon Loss: 2.1947 
+[32m[09/02 04:56:26 TiTok]: [0mData (t): 0.0240, 58.13/s/gpu Batch (t): 1.1009 LR: 0.000100 Step: 23400 Total Loss: 2.2666 Recon Loss: 2.2627 
+[32m[09/02 05:00:07 TiTok]: [0mData (t): 0.0225, 58.18/s/gpu Batch (t): 1.1001 LR: 0.000100 Step: 23600 Total Loss: 2.1988 Recon Loss: 2.1950 
+[32m[09/02 05:03:47 TiTok]: [0mData (t): 0.0240, 58.18/s/gpu Batch (t): 1.1001 LR: 0.000100 Step: 23800 Total Loss: 2.2104 Recon Loss: 2.2065 
+[32m[09/02 05:07:28 TiTok]: [0mData (t): 0.0240, 53.01/s/gpu Batch (t): 1.2074 LR: 0.000100 Step: 24000 Total Loss: 2.1374 Recon Loss: 2.1335 
+[32m[09/02 05:11:09 TiTok]: [0mData (t): 0.0240, 58.07/s/gpu Batch (t): 1.1020 LR: 0.000100 Step: 24200 Total Loss: 2.1433 Recon Loss: 2.1395 
+[32m[09/02 05:14:49 TiTok]: [0mData (t): 0.0240, 58.13/s/gpu Batch (t): 1.1010 LR: 0.000100 Step: 24400 Total Loss: 2.2732 Recon Loss: 2.2693 
+[32m[09/02 05:18:30 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1000 LR: 0.000100 Step: 24600 Total Loss: 2.1134 Recon Loss: 2.1096 
+[32m[09/02 05:22:10 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1000 LR: 0.000100 Step: 24800 Total Loss: 2.2462 Recon Loss: 2.2423 
+[32m[09/02 05:25:51 TiTok]: [0mData (t): 0.0230, 58.17/s/gpu Batch (t): 1.1002 LR: 0.000100 Step: 25000 Total Loss: 2.2327 Recon Loss: 2.2288 
+[32m[09/02 05:25:51 TiTok]: [0mReconstructing images...
+[32m[09/02 05:29:32 TiTok]: [0mData (t): 0.0620, 56.22/s/gpu Batch (t): 1.1384 LR: 0.000100 Step: 25200 Total Loss: 2.1385 Recon Loss: 2.1347 
+[32m[09/02 05:33:13 TiTok]: [0mData (t): 0.0240, 58.18/s/gpu Batch (t): 1.1000 LR: 0.000100 Step: 25400 Total Loss: 2.2322 Recon Loss: 2.2282 
+[32m[09/02 05:36:54 TiTok]: [0mData (t): 0.0230, 58.12/s/gpu Batch (t): 1.1011 LR: 0.000100 Step: 25600 Total Loss: 2.1853 Recon Loss: 2.1814 
+[32m[09/02 05:40:34 TiTok]: [0mData (t): 0.0270, 57.91/s/gpu Batch (t): 1.1051 LR: 0.000100 Step: 25800 Total Loss: 2.2040 Recon Loss: 2.2001 
+[32m[09/02 05:44:15 TiTok]: [0mData (t): 0.0230, 58.23/s/gpu Batch (t): 1.0991 LR: 0.000100 Step: 26000 Total Loss: 2.2301 Recon Loss: 2.2262 
+[32m[09/02 05:47:55 TiTok]: [0mData (t): 0.0230, 58.26/s/gpu Batch (t): 1.0984 LR: 0.000100 Step: 26200 Total Loss: 2.1705 Recon Loss: 2.1666 
+[32m[09/02 05:51:36 TiTok]: [0mData (t): 0.0240, 58.20/s/gpu Batch (t): 1.0997 LR: 0.000100 Step: 26400 Total Loss: 2.2062 Recon Loss: 2.2023 
+[32m[09/02 05:55:16 TiTok]: [0mData (t): 0.0230, 58.22/s/gpu Batch (t): 1.0993 LR: 0.000100 Step: 26600 Total Loss: 2.2750 Recon Loss: 2.2711 
+[32m[09/02 05:58:57 TiTok]: [0mData (t): 0.0230, 58.17/s/gpu Batch (t): 1.1002 LR: 0.000100 Step: 26800 Total Loss: 2.1430 Recon Loss: 2.1392 
+[32m[09/02 06:02:37 TiTok]: [0mData (t): 0.0240, 58.16/s/gpu Batch (t): 1.1005 LR: 0.000100 Step: 27000 Total Loss: 2.1644 Recon Loss: 2.1606 
+[32m[09/02 06:06:18 TiTok]: [0mData (t): 0.0245, 58.19/s/gpu Batch (t): 1.0999 LR: 0.000100 Step: 27200 Total Loss: 2.1639 Recon Loss: 2.1601 
+[32m[09/02 06:09:59 TiTok]: [0mData (t): 0.0230, 58.29/s/gpu Batch (t): 1.0980 LR: 0.000100 Step: 27400 Total Loss: 2.1647 Recon Loss: 2.1608 
+[32m[09/02 06:13:39 TiTok]: [0mData (t): 0.0240, 58.13/s/gpu Batch (t): 1.1010 LR: 0.000100 Step: 27600 Total Loss: 2.1683 Recon Loss: 2.1645 
+[32m[09/02 06:17:20 TiTok]: [0mData (t): 0.0230, 58.19/s/gpu Batch (t): 1.0998 LR: 0.000100 Step: 27800 Total Loss: 2.1550 Recon Loss: 2.1511 
+[32m[09/02 06:21:00 TiTok]: [0mData (t): 0.0240, 53.24/s/gpu Batch (t): 1.2020 LR: 0.000100 Step: 28000 Total Loss: 2.1625 Recon Loss: 2.1586 
+[32m[09/02 06:24:41 TiTok]: [0mData (t): 0.0250, 58.12/s/gpu Batch (t): 1.1011 LR: 0.000100 Step: 28200 Total Loss: 2.1191 Recon Loss: 2.1153 
+[32m[09/02 06:28:21 TiTok]: [0mData (t): 0.0230, 58.18/s/gpu Batch (t): 1.1001 LR: 0.000100 Step: 28400 Total Loss: 2.1274 Recon Loss: 2.1236 
+[32m[09/02 06:32:02 TiTok]: [0mData (t): 0.0240, 58.14/s/gpu Batch (t): 1.1007 LR: 0.000100 Step: 28600 Total Loss: 2.1230 Recon Loss: 2.1191 
+[32m[09/02 06:35:42 TiTok]: [0mData (t): 0.0630, 56.12/s/gpu Batch (t): 1.1405 LR: 0.000100 Step: 28800 Total Loss: 2.1486 Recon Loss: 2.1448 
+[32m[09/02 06:39:23 TiTok]: [0mData (t): 0.0240, 58.08/s/gpu Batch (t): 1.1019 LR: 0.000100 Step: 29000 Total Loss: 2.0891 Recon Loss: 2.0852 
+[32m[09/02 06:43:03 TiTok]: [0mData (t): 0.0230, 58.26/s/gpu Batch (t): 1.0985 LR: 0.000100 Step: 29200 Total Loss: 2.1596 Recon Loss: 2.1558 
+[32m[09/02 06:46:43 TiTok]: [0mData (t): 0.0250, 58.12/s/gpu Batch (t): 1.1011 LR: 0.000100 Step: 29400 Total Loss: 2.1419 Recon Loss: 2.1381 
+[32m[09/02 06:50:24 TiTok]: [0mData (t): 0.0230, 58.29/s/gpu Batch (t): 1.0980 LR: 0.000100 Step: 29600 Total Loss: 2.2268 Recon Loss: 2.2230 
+[32m[09/02 06:54:04 TiTok]: [0mData (t): 0.0240, 58.25/s/gpu Batch (t): 1.0987 LR: 0.000100 Step: 29800 Total Loss: 2.1365 Recon Loss: 2.1326 
+[32m[09/02 06:57:45 TiTok]: [0mData (t): 0.0230, 58.23/s/gpu Batch (t): 1.0990 LR: 0.000100 Step: 30000 Total Loss: 2.0952 Recon Loss: 2.0913 
+[32m[09/02 06:57:45 TiTok]: [0mReconstructing images...
+[32m[09/02 07:01:25 TiTok]: [0mData (t): 0.0240, 58.29/s/gpu Batch (t): 1.0980 LR: 0.000100 Step: 30200 Total Loss: 2.1882 Recon Loss: 2.1843 
+[32m[09/02 07:05:05 TiTok]: [0mData (t): 0.0240, 58.36/s/gpu Batch (t): 1.0967 LR: 0.000100 Step: 30400 Total Loss: 2.0560 Recon Loss: 2.0522 
+[32m[09/02 07:08:45 TiTok]: [0mData (t): 0.0250, 58.23/s/gpu Batch (t): 1.0991 LR: 0.000100 Step: 30600 Total Loss: 2.1114 Recon Loss: 2.1076 
+[32m[09/02 07:12:25 TiTok]: [0mData (t): 0.0230, 58.39/s/gpu Batch (t): 1.0961 LR: 0.000100 Step: 30800 Total Loss: 2.0807 Recon Loss: 2.0769 
+[32m[09/02 07:16:05 TiTok]: [0mData (t): 0.0230, 58.41/s/gpu Batch (t): 1.0957 LR: 0.000100 Step: 31000 Total Loss: 2.1271 Recon Loss: 2.1232 
+[32m[09/02 07:19:44 TiTok]: [0mData (t): 0.0240, 58.29/s/gpu Batch (t): 1.0980 LR: 0.000100 Step: 31200 Total Loss: 2.1605 Recon Loss: 2.1567 
+[32m[09/02 07:23:24 TiTok]: [0mData (t): 0.0240, 58.43/s/gpu Batch (t): 1.0953 LR: 0.000100 Step: 31400 Total Loss: 2.0225 Recon Loss: 2.0187 
+[32m[09/02 07:27:04 TiTok]: [0mData (t): 0.0240, 58.37/s/gpu Batch (t): 1.0965 LR: 0.000100 Step: 31600 Total Loss: 2.0510 Recon Loss: 2.0473 
+[32m[09/02 07:30:44 TiTok]: [0mData (t): 0.0240, 58.32/s/gpu Batch (t): 1.0974 LR: 0.000100 Step: 31800 Total Loss: 2.0837 Recon Loss: 2.0799 
+[32m[09/02 07:34:23 TiTok]: [0mData (t): 0.0230, 55.55/s/gpu Batch (t): 1.1521 LR: 0.000100 Step: 32000 Total Loss: 2.0706 Recon Loss: 2.0668 
+[32m[09/02 07:38:03 TiTok]: [0mData (t): 0.0240, 58.40/s/gpu Batch (t): 1.0959 LR: 0.000100 Step: 32200 Total Loss: 2.1940 Recon Loss: 2.1902 
+[32m[09/02 07:41:42 TiTok]: [0mData (t): 0.0230, 58.34/s/gpu Batch (t): 1.0970 LR: 0.000100 Step: 32400 Total Loss: 2.0869 Recon Loss: 2.0830 
+[32m[09/02 07:45:22 TiTok]: [0mData (t): 0.0230, 58.40/s/gpu Batch (t): 1.0959 LR: 0.000100 Step: 32600 Total Loss: 2.1083 Recon Loss: 2.1045 
+[32m[09/02 07:49:02 TiTok]: [0mData (t): 0.0620, 56.48/s/gpu Batch (t): 1.1332 LR: 0.000100 Step: 32800 Total Loss: 1.9703 Recon Loss: 1.9665 
+[32m[09/02 07:52:42 TiTok]: [0mData (t): 0.0240, 58.35/s/gpu Batch (t): 1.0969 LR: 0.000100 Step: 33000 Total Loss: 2.0424 Recon Loss: 2.0386 
+[32m[09/02 07:56:22 TiTok]: [0mData (t): 0.0250, 58.29/s/gpu Batch (t): 1.0979 LR: 0.000100 Step: 33200 Total Loss: 2.0387 Recon Loss: 2.0348 
+[32m[09/02 08:00:01 TiTok]: [0mData (t): 0.0230, 58.33/s/gpu Batch (t): 1.0973 LR: 0.000099 Step: 33400 Total Loss: 2.0815 Recon Loss: 2.0777 
+[32m[09/02 08:03:42 TiTok]: [0mData (t): 0.0230, 58.34/s/gpu Batch (t): 1.0970 LR: 0.000099 Step: 33600 Total Loss: 2.0082 Recon Loss: 2.0044 
+[32m[09/02 08:07:21 TiTok]: [0mData (t): 0.0230, 58.37/s/gpu Batch (t): 1.0964 LR: 0.000099 Step: 33800 Total Loss: 2.0375 Recon Loss: 2.0337 
+[32m[09/02 08:11:01 TiTok]: [0mData (t): 0.0230, 58.42/s/gpu Batch (t): 1.0956 LR: 0.000099 Step: 34000 Total Loss: 2.0124 Recon Loss: 2.0087 
+[32m[09/02 08:14:40 TiTok]: [0mData (t): 0.0240, 58.35/s/gpu Batch (t): 1.0967 LR: 0.000099 Step: 34200 Total Loss: 1.9783 Recon Loss: 1.9744 
+[32m[09/02 08:18:20 TiTok]: [0mData (t): 0.0230, 58.39/s/gpu Batch (t): 1.0960 LR: 0.000099 Step: 34400 Total Loss: 1.9984 Recon Loss: 1.9947 
+[32m[09/02 08:22:00 TiTok]: [0mData (t): 0.0230, 58.45/s/gpu Batch (t): 1.0950 LR: 0.000099 Step: 34600 Total Loss: 1.9909 Recon Loss: 1.9872 
+[32m[09/02 08:25:40 TiTok]: [0mData (t): 0.0240, 58.29/s/gpu Batch (t): 1.0980 LR: 0.000099 Step: 34800 Total Loss: 2.0475 Recon Loss: 2.0437 
+[32m[09/02 08:29:20 TiTok]: [0mData (t): 0.0230, 58.33/s/gpu Batch (t): 1.0973 LR: 0.000099 Step: 35000 Total Loss: 2.0502 Recon Loss: 2.0464 
+[32m[09/02 08:29:20 TiTok]: [0mReconstructing images...
+[32m[09/02 08:33:00 TiTok]: [0mData (t): 0.0240, 58.34/s/gpu Batch (t): 1.0970 LR: 0.000099 Step: 35200 Total Loss: 2.0291 Recon Loss: 2.0253 
+[32m[09/02 08:36:40 TiTok]: [0mData (t): 0.0230, 58.34/s/gpu Batch (t): 1.0971 LR: 0.000099 Step: 35400 Total Loss: 2.0052 Recon Loss: 2.0014 
+[32m[09/02 08:40:20 TiTok]: [0mData (t): 0.0240, 58.39/s/gpu Batch (t): 1.0961 LR: 0.000099 Step: 35600 Total Loss: 2.0515 Recon Loss: 2.0477 
+[32m[09/02 08:44:00 TiTok]: [0mData (t): 0.0230, 58.49/s/gpu Batch (t): 1.0941 LR: 0.000099 Step: 35800 Total Loss: 2.0199 Recon Loss: 2.0161 
+[32m[09/02 08:47:39 TiTok]: [0mData (t): 0.0230, 53.41/s/gpu Batch (t): 1.1983 LR: 0.000099 Step: 36000 Total Loss: 1.9837 Recon Loss: 1.9799 
+[32m[09/02 08:51:19 TiTok]: [0mData (t): 0.0236, 58.37/s/gpu Batch (t): 1.0965 LR: 0.000099 Step: 36200 Total Loss: 1.9996 Recon Loss: 1.9958 
+[32m[09/02 08:54:59 TiTok]: [0mData (t): 0.0240, 58.36/s/gpu Batch (t): 1.0966 LR: 0.000099 Step: 36400 Total Loss: 1.9894 Recon Loss: 1.9856 
+[32m[09/02 08:58:46 TiTok]: [0mData (t): 0.0240, 56.61/s/gpu Batch (t): 1.1306 LR: 0.000099 Step: 36600 Total Loss: 2.0111 Recon Loss: 2.0073 
+[32m[09/02 09:02:32 TiTok]: [0mData (t): 0.0230, 56.78/s/gpu Batch (t): 1.1271 LR: 0.000099 Step: 36800 Total Loss: 2.0721 Recon Loss: 2.0683 
+[32m[09/02 09:06:19 TiTok]: [0mData (t): 0.0230, 54.01/s/gpu Batch (t): 1.1850 LR: 0.000099 Step: 37000 Total Loss: 2.0602 Recon Loss: 2.0563 
+[32m[09/02 09:10:00 TiTok]: [0mData (t): 0.0230, 58.07/s/gpu Batch (t): 1.1021 LR: 0.000099 Step: 37200 Total Loss: 1.9675 Recon Loss: 1.9638 
+[32m[09/02 09:13:43 TiTok]: [0mData (t): 0.0240, 57.34/s/gpu Batch (t): 1.1162 LR: 0.000099 Step: 37400 Total Loss: 2.0554 Recon Loss: 2.0516 
+[32m[09/02 09:17:27 TiTok]: [0mData (t): 0.0250, 57.24/s/gpu Batch (t): 1.1180 LR: 0.000099 Step: 37600 Total Loss: 2.0396 Recon Loss: 2.0359 
+[32m[09/02 09:21:10 TiTok]: [0mData (t): 0.0240, 57.37/s/gpu Batch (t): 1.1155 LR: 0.000099 Step: 37800 Total Loss: 1.9592 Recon Loss: 1.9555 
+[32m[09/02 09:24:54 TiTok]: [0mData (t): 0.0240, 57.24/s/gpu Batch (t): 1.1181 LR: 0.000099 Step: 38000 Total Loss: 1.8977 Recon Loss: 1.8939 
+[32m[09/02 09:28:37 TiTok]: [0mData (t): 0.0640, 55.41/s/gpu Batch (t): 1.1551 LR: 0.000099 Step: 38200 Total Loss: 2.0800 Recon Loss: 2.0762 
+[32m[09/02 09:32:21 TiTok]: [0mData (t): 0.0230, 57.40/s/gpu Batch (t): 1.1150 LR: 0.000099 Step: 38400 Total Loss: 1.9810 Recon Loss: 1.9772 
+[32m[09/02 09:36:57 TiTok]: [0mData (t): 0.0270, 57.87/s/gpu Batch (t): 1.1060 LR: 0.000099 Step: 38600 Total Loss: 1.9608 Recon Loss: 1.9571 
+[32m[09/02 09:40:42 TiTok]: [0mData (t): 0.0230, 57.50/s/gpu Batch (t): 1.1131 LR: 0.000099 Step: 38800 Total Loss: 2.0935 Recon Loss: 2.0897 
+[32m[09/02 09:44:26 TiTok]: [0mData (t): 0.0240, 57.42/s/gpu Batch (t): 1.1146 LR: 0.000099 Step: 39000 Total Loss: 1.9768 Recon Loss: 1.9730 
+[32m[09/02 09:48:09 TiTok]: [0mData (t): 0.0230, 57.52/s/gpu Batch (t): 1.1127 LR: 0.000099 Step: 39200 Total Loss: 2.0791 Recon Loss: 2.0753 
+[32m[09/02 09:51:55 TiTok]: [0mData (t): 0.0240, 57.66/s/gpu Batch (t): 1.1099 LR: 0.000099 Step: 39400 Total Loss: 1.9682 Recon Loss: 1.9644 
+[32m[09/02 09:55:41 TiTok]: [0mData (t): 0.0230, 56.46/s/gpu Batch (t): 1.1335 LR: 0.000099 Step: 39600 Total Loss: 2.0561 Recon Loss: 2.0524 
+[32m[09/02 09:59:32 TiTok]: [0mData (t): 0.0240, 55.75/s/gpu Batch (t): 1.1481 LR: 0.000099 Step: 39800 Total Loss: 2.0091 Recon Loss: 2.0053 
+[32m[09/02 10:03:27 TiTok]: [0mData (t): 0.0630, 48.52/s/gpu Batch (t): 1.3191 LR: 0.000099 Step: 40000 Total Loss: 1.9502 Recon Loss: 1.9464 
+[32m[09/02 10:03:27 TiTok]: [0mReconstructing images...
+[32m[09/02 10:07:17 TiTok]: [0mData (t): 0.0230, 54.70/s/gpu Batch (t): 1.1700 LR: 0.000099 Step: 40200 Total Loss: 1.9129 Recon Loss: 1.9091 
+[32m[09/02 10:11:04 TiTok]: [0mData (t): 0.0240, 57.19/s/gpu Batch (t): 1.1190 LR: 0.000099 Step: 40400 Total Loss: 1.9715 Recon Loss: 1.9678 
+[32m[09/02 10:14:48 TiTok]: [0mData (t): 0.0250, 57.20/s/gpu Batch (t): 1.1189 LR: 0.000099 Step: 40600 Total Loss: 1.9879 Recon Loss: 1.9841 
+[32m[09/02 10:18:37 TiTok]: [0mData (t): 0.0230, 57.24/s/gpu Batch (t): 1.1180 LR: 0.000099 Step: 40800 Total Loss: 2.0253 Recon Loss: 2.0215 
+[32m[09/02 10:22:29 TiTok]: [0mData (t): 0.0230, 56.49/s/gpu Batch (t): 1.1330 LR: 0.000099 Step: 41000 Total Loss: 1.8608 Recon Loss: 1.8571 
+[32m[09/02 10:26:17 TiTok]: [0mData (t): 0.0240, 56.46/s/gpu Batch (t): 1.1336 LR: 0.000099 Step: 41200 Total Loss: 1.9254 Recon Loss: 1.9217 
+[32m[09/02 10:30:04 TiTok]: [0mData (t): 0.0640, 54.55/s/gpu Batch (t): 1.1733 LR: 0.000099 Step: 41400 Total Loss: 1.9344 Recon Loss: 1.9307 
+[32m[09/02 10:33:52 TiTok]: [0mData (t): 0.0230, 56.39/s/gpu Batch (t): 1.1350 LR: 0.000099 Step: 41600 Total Loss: 2.0030 Recon Loss: 1.9992 
+[32m[09/02 10:37:39 TiTok]: [0mData (t): 0.0230, 56.41/s/gpu Batch (t): 1.1345 LR: 0.000099 Step: 41800 Total Loss: 1.8955 Recon Loss: 1.8917 
+[32m[09/02 10:41:26 TiTok]: [0mData (t): 0.0240, 56.33/s/gpu Batch (t): 1.1361 LR: 0.000099 Step: 42000 Total Loss: 1.9537 Recon Loss: 1.9499 
+[32m[09/02 10:45:14 TiTok]: [0mData (t): 0.0240, 56.34/s/gpu Batch (t): 1.1360 LR: 0.000099 Step: 42200 Total Loss: 1.9131 Recon Loss: 1.9094 
+[32m[09/02 10:49:01 TiTok]: [0mData (t): 0.0250, 56.28/s/gpu Batch (t): 1.1371 LR: 0.000099 Step: 42400 Total Loss: 1.9738 Recon Loss: 1.9701 
+[32m[09/02 10:52:49 TiTok]: [0mData (t): 0.0230, 56.41/s/gpu Batch (t): 1.1345 LR: 0.000099 Step: 42600 Total Loss: 1.9763 Recon Loss: 1.9725 
+[32m[09/02 10:56:37 TiTok]: [0mData (t): 0.0760, 53.86/s/gpu Batch (t): 1.1882 LR: 0.000099 Step: 42800 Total Loss: 1.9432 Recon Loss: 1.9394 
+[32m[09/02 11:00:24 TiTok]: [0mData (t): 0.0240, 56.21/s/gpu Batch (t): 1.1385 LR: 0.000099 Step: 43000 Total Loss: 2.0027 Recon Loss: 1.9990 
+[32m[09/02 11:04:12 TiTok]: [0mData (t): 0.0240, 56.41/s/gpu Batch (t): 1.1346 LR: 0.000099 Step: 43200 Total Loss: 1.9466 Recon Loss: 1.9429 
+[32m[09/02 11:07:59 TiTok]: [0mData (t): 0.0250, 56.34/s/gpu Batch (t): 1.1360 LR: 0.000099 Step: 43400 Total Loss: 1.9986 Recon Loss: 1.9948 
+[32m[09/02 11:11:47 TiTok]: [0mData (t): 0.0230, 56.46/s/gpu Batch (t): 1.1336 LR: 0.000099 Step: 43600 Total Loss: 2.0307 Recon Loss: 2.0268 
+[32m[09/02 11:15:35 TiTok]: [0mData (t): 0.0240, 56.34/s/gpu Batch (t): 1.1361 LR: 0.000099 Step: 43800 Total Loss: 2.0073 Recon Loss: 2.0035 
+[32m[09/02 11:19:23 TiTok]: [0mData (t): 0.0230, 51.59/s/gpu Batch (t): 1.2406 LR: 0.000099 Step: 44000 Total Loss: 1.9508 Recon Loss: 1.9470 
+[32m[09/02 11:23:11 TiTok]: [0mData (t): 0.0240, 56.33/s/gpu Batch (t): 1.1361 LR: 0.000099 Step: 44200 Total Loss: 1.9935 Recon Loss: 1.9897 
+[32m[09/02 11:26:58 TiTok]: [0mData (t): 0.0230, 56.31/s/gpu Batch (t): 1.1365 LR: 0.000099 Step: 44400 Total Loss: 1.9506 Recon Loss: 1.9469 
+[32m[09/02 11:30:50 TiTok]: [0mData (t): 0.0230, 56.33/s/gpu Batch (t): 1.1361 LR: 0.000099 Step: 44600 Total Loss: 1.9516 Recon Loss: 1.9478 
+[32m[09/02 11:34:37 TiTok]: [0mData (t): 0.0230, 56.15/s/gpu Batch (t): 1.1397 LR: 0.000099 Step: 44800 Total Loss: 1.9490 Recon Loss: 1.9452 
+[32m[09/02 11:38:26 TiTok]: [0mData (t): 0.0240, 56.31/s/gpu Batch (t): 1.1366 LR: 0.000099 Step: 45000 Total Loss: 1.9231 Recon Loss: 1.9193 
+[32m[09/02 11:38:26 TiTok]: [0mReconstructing images...
+[32m[09/02 11:42:13 TiTok]: [0mData (t): 0.0231, 56.33/s/gpu Batch (t): 1.1361 LR: 0.000099 Step: 45200 Total Loss: 1.9983 Recon Loss: 1.9945 
+[32m[09/02 11:46:01 TiTok]: [0mData (t): 0.0240, 56.28/s/gpu Batch (t): 1.1371 LR: 0.000099 Step: 45400 Total Loss: 1.9093 Recon Loss: 1.9055 
+[32m[09/02 11:49:49 TiTok]: [0mData (t): 0.0231, 56.26/s/gpu Batch (t): 1.1375 LR: 0.000099 Step: 45600 Total Loss: 1.9179 Recon Loss: 1.9141 
+[32m[09/02 11:53:37 TiTok]: [0mData (t): 0.0240, 56.23/s/gpu Batch (t): 1.1382 LR: 0.000099 Step: 45800 Total Loss: 1.9769 Recon Loss: 1.9732 
+[32m[09/02 11:57:25 TiTok]: [0mData (t): 0.0230, 56.39/s/gpu Batch (t): 1.1350 LR: 0.000099 Step: 46000 Total Loss: 1.8920 Recon Loss: 1.8883 
+[32m[09/02 12:01:12 TiTok]: [0mData (t): 0.0230, 56.31/s/gpu Batch (t): 1.1366 LR: 0.000099 Step: 46200 Total Loss: 1.9507 Recon Loss: 1.9470 
+[32m[09/02 12:05:06 TiTok]: [0mData (t): 0.0270, 55.31/s/gpu Batch (t): 1.1570 LR: 0.000099 Step: 46400 Total Loss: 1.9620 Recon Loss: 1.9582 
+[32m[09/02 12:08:56 TiTok]: [0mData (t): 0.0630, 54.33/s/gpu Batch (t): 1.1781 LR: 0.000099 Step: 46600 Total Loss: 1.9191 Recon Loss: 1.9153 
+[32m[09/02 12:12:43 TiTok]: [0mData (t): 0.0240, 56.66/s/gpu Batch (t): 1.1296 LR: 0.000099 Step: 46800 Total Loss: 2.0151 Recon Loss: 2.0113 
+[32m[09/02 12:16:33 TiTok]: [0mData (t): 0.0240, 55.97/s/gpu Batch (t): 1.1436 LR: 0.000099 Step: 47000 Total Loss: 1.8869 Recon Loss: 1.8832 
+[32m[09/02 12:20:22 TiTok]: [0mData (t): 0.0230, 55.92/s/gpu Batch (t): 1.1445 LR: 0.000099 Step: 47200 Total Loss: 1.9056 Recon Loss: 1.9018 
+[32m[09/02 12:24:12 TiTok]: [0mData (t): 0.0250, 55.84/s/gpu Batch (t): 1.1461 LR: 0.000099 Step: 47400 Total Loss: 1.9625 Recon Loss: 1.9587 
+[32m[09/02 12:28:01 TiTok]: [0mData (t): 0.0230, 55.89/s/gpu Batch (t): 1.1450 LR: 0.000099 Step: 47600 Total Loss: 1.8998 Recon Loss: 1.8960 
+[32m[09/02 12:31:51 TiTok]: [0mData (t): 0.0230, 55.99/s/gpu Batch (t): 1.1430 LR: 0.000099 Step: 47800 Total Loss: 1.9351 Recon Loss: 1.9313 
+[32m[09/02 12:35:41 TiTok]: [0mData (t): 0.0230, 51.22/s/gpu Batch (t): 1.2495 LR: 0.000099 Step: 48000 Total Loss: 1.8720 Recon Loss: 1.8683 
+[32m[09/02 12:39:31 TiTok]: [0mData (t): 0.0230, 55.70/s/gpu Batch (t): 1.1490 LR: 0.000099 Step: 48200 Total Loss: 1.9818 Recon Loss: 1.9781 
+[32m[09/02 12:43:21 TiTok]: [0mData (t): 0.0240, 55.89/s/gpu Batch (t): 1.1450 LR: 0.000099 Step: 48400 Total Loss: 1.9064 Recon Loss: 1.9026 
+[32m[09/02 12:47:10 TiTok]: [0mData (t): 0.0240, 55.89/s/gpu Batch (t): 1.1450 LR: 0.000099 Step: 48600 Total Loss: 1.9861 Recon Loss: 1.9823 
+[32m[09/02 12:51:00 TiTok]: [0mData (t): 0.0240, 55.85/s/gpu Batch (t): 1.1460 LR: 0.000099 Step: 48800 Total Loss: 1.8757 Recon Loss: 1.8720 
+[32m[09/02 12:54:49 TiTok]: [0mData (t): 0.0240, 55.89/s/gpu Batch (t): 1.1450 LR: 0.000099 Step: 49000 Total Loss: 1.8597 Recon Loss: 1.8559 
+[32m[09/02 12:58:39 TiTok]: [0mData (t): 0.0230, 55.89/s/gpu Batch (t): 1.1451 LR: 0.000099 Step: 49200 Total Loss: 1.9536 Recon Loss: 1.9498 
+[32m[09/02 13:02:29 TiTok]: [0mData (t): 0.0230, 55.89/s/gpu Batch (t): 1.1450 LR: 0.000099 Step: 49400 Total Loss: 1.9004 Recon Loss: 1.8966 
+[32m[09/02 13:06:18 TiTok]: [0mData (t): 0.0230, 55.84/s/gpu Batch (t): 1.1460 LR: 0.000099 Step: 49600 Total Loss: 1.9146 Recon Loss: 1.9109 
+[32m[09/02 13:10:08 TiTok]: [0mData (t): 0.0240, 55.86/s/gpu Batch (t): 1.1457 LR: 0.000099 Step: 49800 Total Loss: 1.9486 Recon Loss: 1.9448 
+[32m[09/02 13:13:58 TiTok]: [0mData (t): 0.0230, 55.89/s/gpu Batch (t): 1.1451 LR: 0.000099 Step: 50000 Total Loss: 1.9262 Recon Loss: 1.9225 
+[32m[09/02 13:13:58 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/02 13:14:01 TiTok]: [0mReconstructing images...
+[32m[09/02 13:14:02 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/02 17:58:43 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/02 17:58:43 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 5000
+  log_every: 200
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 10
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/02 17:58:44 TiTok]: [0mCreating model and loss module.
+[32m[09/02 17:58:45 TiTok]: [0mCreating optimizers.
+[32m[09/02 17:58:45 TiTok]: [0mCreating lr_schedulers.
+[32m[09/02 17:59:34 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/02 17:59:34 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 5000
+  log_every: 200
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 10
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/02 17:59:34 TiTok]: [0mCreating model and loss module.
+[32m[09/02 17:59:34 TiTok]: [0mCreating optimizers.
+[32m[09/02 17:59:34 TiTok]: [0mCreating lr_schedulers.
+[32m[09/02 18:05:27 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/02 18:05:27 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 5000
+  log_every: 200
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/02 18:05:27 TiTok]: [0mCreating model and loss module.
+[32m[09/02 18:05:28 TiTok]: [0mCreating optimizers.
+[32m[09/02 18:05:28 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/02 18:05:28 TiTok]: [0mCreating lr_schedulers.
+[32m[09/02 18:05:28 TiTok]: [0mCreating evaluator.
+[32m[09/02 18:05:29 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/02 18:05:29 TiTok]: [0m***** Running training *****
+[32m[09/02 18:05:29 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/02 18:05:29 TiTok]: [0mmixed precision = fp16
+[32m[09/02 18:05:29 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/02 18:05:29 TiTok]: [0maccelerator device: cuda
+[32m[09/02 18:05:29 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/02 18:05:29 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/02 18:05:30 TiTok]: [0mResuming at global_step 50000
+[32m[09/02 18:09:10 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/02 18:09:10 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 100
+  save_every: 100
+  log_every: 200
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/02 18:09:10 TiTok]: [0mCreating model and loss module.
+[32m[09/02 18:09:11 TiTok]: [0mCreating optimizers.
+[32m[09/02 18:09:11 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/02 18:09:11 TiTok]: [0mCreating lr_schedulers.
+[32m[09/02 18:09:11 TiTok]: [0mCreating evaluator.
+[32m[09/02 18:09:11 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/02 18:09:11 TiTok]: [0m***** Running training *****
+[32m[09/02 18:09:11 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/02 18:09:11 TiTok]: [0mmixed precision = fp16
+[32m[09/02 18:09:11 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/02 18:09:11 TiTok]: [0maccelerator device: cuda
+[32m[09/02 18:09:11 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/02 18:09:11 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/02 18:09:13 TiTok]: [0mResuming at global_step 50000
+[32m[09/02 18:10:16 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/02 18:10:16 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 100
+  save_every: 100
+  log_every: 200
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/02 18:10:16 TiTok]: [0mCreating model and loss module.
+[32m[09/02 18:10:17 TiTok]: [0mCreating optimizers.
+[32m[09/02 18:10:17 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/02 18:10:17 TiTok]: [0mCreating lr_schedulers.
+[32m[09/02 18:10:17 TiTok]: [0mCreating evaluator.
+[32m[09/02 18:10:17 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/02 18:10:17 TiTok]: [0m***** Running training *****
+[32m[09/02 18:10:17 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/02 18:10:17 TiTok]: [0mmixed precision = fp16
+[32m[09/02 18:10:17 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/02 18:10:17 TiTok]: [0maccelerator device: cuda
+[32m[09/02 18:10:17 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/02 18:10:17 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/02 18:10:19 TiTok]: [0mResuming at global_step 50000
+[32m[09/02 18:11:32 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/02 18:11:32 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 200
+  save_every: 200
+  log_every: 200
+  eval_every: 200
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/02 18:11:32 TiTok]: [0mCreating model and loss module.
+[32m[09/02 18:11:33 TiTok]: [0mCreating optimizers.
+[32m[09/02 18:11:33 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/02 18:11:33 TiTok]: [0mCreating lr_schedulers.
+[32m[09/02 18:11:33 TiTok]: [0mCreating evaluator.
+[32m[09/02 18:11:34 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/02 18:11:34 TiTok]: [0m***** Running training *****
+[32m[09/02 18:11:34 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/02 18:11:34 TiTok]: [0mmixed precision = fp16
+[32m[09/02 18:11:34 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/02 18:11:34 TiTok]: [0maccelerator device: cuda
+[32m[09/02 18:11:34 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/02 18:11:34 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/02 18:11:35 TiTok]: [0mResuming at global_step 50000
+[32m[09/02 18:13:50 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/02 18:13:50 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 200
+  save_every: 200
+  log_every: 200
+  eval_every: 200
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/02 18:13:50 TiTok]: [0mCreating model and loss module.
+[32m[09/02 18:13:51 TiTok]: [0mCreating optimizers.
+[32m[09/02 18:13:51 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/02 18:13:51 TiTok]: [0mCreating lr_schedulers.
+[32m[09/02 18:13:51 TiTok]: [0mCreating evaluator.
+[32m[09/02 18:13:51 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/02 18:13:51 TiTok]: [0m***** Running training *****
+[32m[09/02 18:13:51 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/02 18:13:51 TiTok]: [0mmixed precision = fp16
+[32m[09/02 18:13:51 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/02 18:13:51 TiTok]: [0maccelerator device: cuda
+[32m[09/02 18:13:51 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/02 18:13:51 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/02 18:13:53 TiTok]: [0mResuming at global_step 50000
+[32m[09/02 18:18:55 TiTok]: [0mData (t): 0.0310, 57.26/s/gpu Batch (t): 1.1177 LR: 0.000100 Step: 50200 Total Loss: 1.6809 Recon Loss: 1.6771 
+[32m[09/02 18:18:56 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-50200
+[32m[09/02 18:18:58 TiTok]: [0mReconstructing images...
+[32m[09/02 18:19:00 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/02 18:24:33 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/02 18:24:33 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 200
+  save_every: 200
+  log_every: 200
+  eval_every: 200
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/02 18:24:33 TiTok]: [0mCreating model and loss module.
+[32m[09/02 18:24:34 TiTok]: [0mCreating optimizers.
+[32m[09/02 18:24:34 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/02 18:24:34 TiTok]: [0mCreating lr_schedulers.
+[32m[09/02 18:24:34 TiTok]: [0mCreating evaluator.
+[32m[09/02 18:24:35 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/02 18:24:35 TiTok]: [0m***** Running training *****
+[32m[09/02 18:24:35 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/02 18:24:35 TiTok]: [0mmixed precision = fp16
+[32m[09/02 18:24:35 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/02 18:24:35 TiTok]: [0maccelerator device: cuda
+[32m[09/02 18:24:35 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000', 'titok_b_64_stage1_run1\\checkpoint-50200']
+[32m[09/02 18:24:35 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50200
+[32m[09/02 18:24:36 TiTok]: [0mResuming at global_step 50200
+[32m[09/02 18:29:40 TiTok]: [0mData (t): 0.0300, 57.05/s/gpu Batch (t): 1.1217 LR: 0.000100 Step: 50400 Total Loss: 1.4516 Recon Loss: 1.4478 
+[32m[09/02 18:29:41 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-50400
+[32m[09/02 18:29:43 TiTok]: [0mReconstructing images...
+[32m[09/02 18:29:45 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/02 18:32:39 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/02 18:32:39 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 100
+  save_every: 100
+  log_every: 100
+  eval_every: 100
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/02 18:32:39 TiTok]: [0mCreating model and loss module.
+[32m[09/02 18:32:40 TiTok]: [0mCreating optimizers.
+[32m[09/02 18:32:40 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/02 18:32:40 TiTok]: [0mCreating lr_schedulers.
+[32m[09/02 18:32:40 TiTok]: [0mCreating evaluator.
+[32m[09/02 18:32:40 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/02 18:32:40 TiTok]: [0m***** Running training *****
+[32m[09/02 18:32:40 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/02 18:32:40 TiTok]: [0mmixed precision = fp16
+[32m[09/02 18:32:40 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/02 18:32:40 TiTok]: [0maccelerator device: cuda
+[32m[09/02 18:32:40 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000', 'titok_b_64_stage1_run1\\checkpoint-50200', 'titok_b_64_stage1_run1\\checkpoint-50400']
+[32m[09/02 18:32:40 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50400
+[32m[09/02 18:32:42 TiTok]: [0mResuming at global_step 50400
+[32m[09/02 18:35:13 TiTok]: [0mData (t): 0.0290, 57.09/s/gpu Batch (t): 1.1211 LR: 0.000100 Step: 50500 Total Loss: 1.4630 Recon Loss: 1.4593 
+[32m[09/02 18:35:14 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-50500
+[32m[09/02 18:35:16 TiTok]: [0mReconstructing images...
+[32m[09/02 18:35:18 TiTok]: [0mComputing metrics on the validation set.
