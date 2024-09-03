@@ -234,11 +234,11 @@ def create_dataloader(config, logger, accelerator):
 ])
     root_dir = config.dataset.params.img_path
     train_dataset = SimpleImageDataset(root_dir=root_dir,phase ='train', transform=transform)
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),pin_memory=True,  num_workers=config.dataset.params.num_workers)
     dev_dataset = SimpleImageDataset(root_dir=root_dir,phase ='dev', transform=transform)
-    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),num_workers=config.dataset.params.num_workers)
+    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),pin_memory=True, num_workers=config.dataset.params.num_workers)
     test_dataset = SimpleImageDataset(root_dir= root_dir,phase ='test', transform=transform, )
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),pin_memory=True, num_workers=config.dataset.params.num_workers)
     return train_dataloader, dev_dataloader, test_dataloader
 
 
@@ -547,7 +547,7 @@ def eval_reconstruction(
     evaluator.reset_metrics()
     local_model = accelerator.unwrap_model(model)
 
-    for batch in eval_loader:
+    for i, batch in enumerate(tqdm(eval_loader, desc=f"Validation!")):
         images = batch.to(
             accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
         )
@@ -560,7 +560,13 @@ def eval_reconstruction(
         reconstructed_images = torch.round(reconstructed_images * 255.0) / 255.0
         original_images = torch.clamp(original_images, 0.0, 1.0)
         # For VQ model.
-        evaluator.update(original_images.float(), reconstructed_images.squeeze(2).float(), model_dict["min_encoding_indices"].float())
+        # print("original_images shape:", original_images.shape, "dtype:", original_images.dtype)
+        # print("reconstructed_images shape:", reconstructed_images.shape, "dtype:", reconstructed_images.dtype)
+        # print("min_encoding_indices shape:", model_dict["min_encoding_indices"].shape, "dtype:", model_dict["min_encoding_indices"].dtype)
+        # print("original_images device:", original_images.device)
+        # print("reconstructed_images device:", reconstructed_images.device)
+        # print("min_encoding_indices device:", model_dict["min_encoding_indices"].device)
+        evaluator.update(original_images, reconstructed_images.squeeze(2), model_dict["min_encoding_indices"])
     model.train()
     return evaluator.result()
 
@@ -646,11 +652,6 @@ def log_grad_norm(model, accelerator, global_step):
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
 
-
-
-
-
-
 class SimpleImageDataset(Dataset):
     def __init__(self, root_dir,phase,   transform=None):
         """
@@ -673,8 +674,8 @@ class SimpleImageDataset(Dataset):
                 if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')) and i%5==0:
                     image_paths.append(os.path.join(subdir, file))
                     
-                # for small run purposes
-            if len(image_paths)>10000: break 
+            ## for small run purposes
+            #if len(image_paths)>10000: break 
         return image_paths
 
     def __len__(self):

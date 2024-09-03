@@ -2,12 +2,11 @@ experiment:
   project: "titok_b_64_stage1"
   name: "titok_b_64_stage1_run1"
   output_dir: "titok_b_64_stage1_run1"
-  max_train_examples: 1_281_167
-  generate_every: 100
-  save_every: 100
-  log_every: 100
-  eval_every: 100
-  log_grad_norm_every: 4_000
+  generate_every: 3000
+  save_every: 3000
+  log_every: 3000
+  eval_every: 3000
+  log_grad_norm_every: 3_000
   resume: True
   init_weight: ""
 

@@ -176,7 +176,7 @@ class VQGANEvaluator:
 
         if self._enable_codebook_entropy_measure:
             entries, counts = torch.unique(codebook_indices, sorted=False, return_counts=True)
-            self._codebook_frequencies.index_add_(0, entries.int(), counts.double())
+            self._codebook_frequencies.index_add_(0, entries.int(), counts.float())
 
 
     def result(self) -> Mapping[Text, torch.Tensor]:

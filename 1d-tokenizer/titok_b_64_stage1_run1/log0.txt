@@ -2242,3 +2242,828 @@ config: configs/training/stage1/titok_b64_CSL.yaml
 [32m[09/02 18:35:14 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-50500
 [32m[09/02 18:35:16 TiTok]: [0mReconstructing images...
 [32m[09/02 18:35:18 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/03 00:29:58 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/03 00:29:58 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 100
+  save_every: 100
+  log_every: 100
+  eval_every: 100
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/03 00:29:58 TiTok]: [0mCreating model and loss module.
+[32m[09/03 00:30:00 TiTok]: [0mCreating optimizers.
+[32m[09/03 00:30:00 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/03 00:30:01 TiTok]: [0mCreating lr_schedulers.
+[32m[09/03 00:30:01 TiTok]: [0mCreating evaluator.
+[32m[09/03 00:30:01 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/03 00:30:01 TiTok]: [0m***** Running training *****
+[32m[09/03 00:30:01 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/03 00:30:01 TiTok]: [0mmixed precision = fp16
+[32m[09/03 00:30:01 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/03 00:30:01 TiTok]: [0maccelerator device: cuda
+[32m[09/03 00:30:01 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000', 'titok_b_64_stage1_run1\\checkpoint-50200', 'titok_b_64_stage1_run1\\checkpoint-50400', 'titok_b_64_stage1_run1\\checkpoint-50500']
+[32m[09/03 00:30:01 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50500
+[32m[09/03 00:30:04 TiTok]: [0mResuming at global_step 50500
+[32m[09/03 00:32:38 TiTok]: [0mData (t): 0.0290, 57.55/s/gpu Batch (t): 1.1120 LR: 0.000010 Step: 50600 Total Loss: 1.3522 Recon Loss: 1.3485 
+[32m[09/03 00:32:38 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-50600
+[32m[09/03 00:32:41 TiTok]: [0mReconstructing images...
+[32m[09/03 00:32:43 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/03 00:38:52 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/03 00:38:53 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 100
+  save_every: 100
+  log_every: 100
+  eval_every: 100
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/03 00:38:53 TiTok]: [0mCreating model and loss module.
+[32m[09/03 00:38:53 TiTok]: [0mCreating optimizers.
+[32m[09/03 00:38:53 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/03 00:38:54 TiTok]: [0mCreating lr_schedulers.
+[32m[09/03 00:38:54 TiTok]: [0mCreating evaluator.
+[32m[09/03 00:38:54 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/03 00:38:54 TiTok]: [0m***** Running training *****
+[32m[09/03 00:38:54 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/03 00:38:54 TiTok]: [0mmixed precision = fp16
+[32m[09/03 00:38:54 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/03 00:38:54 TiTok]: [0maccelerator device: cuda
+[32m[09/03 00:38:54 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000', 'titok_b_64_stage1_run1\\checkpoint-50200', 'titok_b_64_stage1_run1\\checkpoint-50400', 'titok_b_64_stage1_run1\\checkpoint-50500', 'titok_b_64_stage1_run1\\checkpoint-50600']
+[32m[09/03 00:38:54 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50600
+[32m[09/03 00:38:55 TiTok]: [0mResuming at global_step 50600
+[32m[09/03 00:41:25 TiTok]: [0mData (t): 0.0300, 57.75/s/gpu Batch (t): 1.1082 LR: 0.000010 Step: 50700 Total Loss: 1.2373 Recon Loss: 1.2335 
+[32m[09/03 00:41:26 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-50700
+[32m[09/03 00:41:28 TiTok]: [0mReconstructing images...
+[32m[09/03 00:41:30 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/03 00:44:28 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/03 00:44:28 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 100
+  save_every: 100
+  log_every: 100
+  eval_every: 100
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/03 00:44:28 TiTok]: [0mCreating model and loss module.
+[32m[09/03 00:44:29 TiTok]: [0mCreating optimizers.
+[32m[09/03 00:44:29 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/03 00:44:29 TiTok]: [0mCreating lr_schedulers.
+[32m[09/03 00:44:29 TiTok]: [0mCreating evaluator.
+[32m[09/03 00:44:29 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/03 00:44:29 TiTok]: [0m***** Running training *****
+[32m[09/03 00:44:29 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/03 00:44:29 TiTok]: [0mmixed precision = fp16
+[32m[09/03 00:44:29 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/03 00:44:29 TiTok]: [0maccelerator device: cuda
+[32m[09/03 00:44:29 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000', 'titok_b_64_stage1_run1\\checkpoint-50200', 'titok_b_64_stage1_run1\\checkpoint-50400', 'titok_b_64_stage1_run1\\checkpoint-50500', 'titok_b_64_stage1_run1\\checkpoint-50600', 'titok_b_64_stage1_run1\\checkpoint-50700']
+[32m[09/03 00:44:29 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50700
+[32m[09/03 00:44:30 TiTok]: [0mResuming at global_step 50700
+[32m[09/03 00:47:01 TiTok]: [0mData (t): 0.0290, 57.71/s/gpu Batch (t): 1.1090 LR: 0.000010 Step: 50800 Total Loss: 1.1311 Recon Loss: 1.1273 
+[32m[09/03 00:47:01 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-50800
+[32m[09/03 00:47:04 TiTok]: [0mReconstructing images...
+[32m[09/03 00:47:06 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/03 00:52:09 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/03 00:52:09 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 100
+  save_every: 100
+  log_every: 100
+  eval_every: 100
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/03 00:52:10 TiTok]: [0mCreating model and loss module.
+[32m[09/03 00:52:10 TiTok]: [0mCreating optimizers.
+[32m[09/03 00:52:10 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/03 00:52:10 TiTok]: [0mCreating lr_schedulers.
+[32m[09/03 00:52:10 TiTok]: [0mCreating evaluator.
+[32m[09/03 00:52:11 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/03 00:52:11 TiTok]: [0m***** Running training *****
+[32m[09/03 00:52:11 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/03 00:52:11 TiTok]: [0mmixed precision = fp16
+[32m[09/03 00:52:11 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/03 00:52:11 TiTok]: [0maccelerator device: cuda
+[32m[09/03 00:52:11 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/03 00:52:11 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/03 00:52:14 TiTok]: [0mResuming at global_step 50000
+[32m[09/03 00:53:15 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/03 00:53:15 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  max_train_examples: 1281167
+  generate_every: 100
+  save_every: 100
+  log_every: 100
+  eval_every: 100
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/03 00:53:15 TiTok]: [0mCreating model and loss module.
+[32m[09/03 00:53:15 TiTok]: [0mCreating optimizers.
+[32m[09/03 00:53:15 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/03 00:53:55 TiTok]: [0mCreating lr_schedulers.
+[32m[09/03 00:53:55 TiTok]: [0mCreating evaluator.
+[32m[09/03 00:53:55 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/03 00:53:55 TiTok]: [0m***** Running training *****
+[32m[09/03 00:53:55 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/03 00:53:55 TiTok]: [0mmixed precision = fp16
+[32m[09/03 00:53:55 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/03 00:53:55 TiTok]: [0maccelerator device: cuda
+[32m[09/03 00:53:55 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/03 00:53:55 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/03 00:53:57 TiTok]: [0mResuming at global_step 50000
+[32m[09/03 00:56:28 TiTok]: [0mData (t): 0.0290, 57.86/s/gpu Batch (t): 1.1061 LR: 0.000043 Step: 50100 Total Loss: 1.8625 Recon Loss: 1.8587 
+[32m[09/03 00:56:29 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-50100
+[32m[09/03 00:56:31 TiTok]: [0mReconstructing images...
+[32m[09/03 00:56:34 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/03 01:02:45 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/03 01:02:45 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 100
+  save_every: 300000
+  log_every: 300000
+  eval_every: 300000
+  log_grad_norm_every: 4000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/03 01:02:45 TiTok]: [0mCreating model and loss module.
+[32m[09/03 01:02:46 TiTok]: [0mCreating optimizers.
+[32m[09/03 01:02:46 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/03 01:02:58 TiTok]: [0mCreating lr_schedulers.
+[32m[09/03 01:02:58 TiTok]: [0mCreating evaluator.
+[32m[09/03 01:02:59 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/03 01:02:59 TiTok]: [0m***** Running training *****
+[32m[09/03 01:02:59 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/03 01:02:59 TiTok]: [0mmixed precision = fp16
+[32m[09/03 01:02:59 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/03 01:02:59 TiTok]: [0maccelerator device: cuda
+[32m[09/03 01:02:59 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000', 'titok_b_64_stage1_run1\\checkpoint-50100']
+[32m[09/03 01:02:59 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50100
+[32m[09/03 01:03:00 TiTok]: [0mResuming at global_step 50100
+[32m[09/03 01:05:31 TiTok]: [0mReconstructing images...
+[32m[09/03 01:07:25 TiTok]: [0mReconstructing images...
+[32m[09/03 01:09:17 TiTok]: [0mReconstructing images...
+[32m[09/03 01:11:10 TiTok]: [0mReconstructing images...
+[32m[09/03 01:13:24 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/03 01:13:24 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 3000
+  save_every: 3000
+  log_every: 3000
+  eval_every: 3000
+  log_grad_norm_every: 3000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 128
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/03 01:13:24 TiTok]: [0mCreating model and loss module.
+[32m[09/03 01:13:25 TiTok]: [0mCreating optimizers.
+[32m[09/03 01:13:25 TiTok]: [0mCreating dataloaders. Batch size = 128
+[32m[09/03 01:13:37 TiTok]: [0mCreating lr_schedulers.
+[32m[09/03 01:13:37 TiTok]: [0mCreating evaluator.
+[32m[09/03 01:13:38 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/03 01:13:38 TiTok]: [0m***** Running training *****
+[32m[09/03 01:13:38 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/03 01:13:38 TiTok]: [0mmixed precision = fp16
+[32m[09/03 01:13:38 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 128
+[32m[09/03 01:13:38 TiTok]: [0maccelerator device: cuda
+[32m[09/03 01:13:38 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/03 01:13:38 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/03 01:13:39 TiTok]: [0mResuming at global_step 50000
+[32m[09/03 01:16:47 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/03 01:16:47 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 3000
+  save_every: 3000
+  log_every: 3000
+  eval_every: 3000
+  log_grad_norm_every: 3000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/03 01:16:47 TiTok]: [0mCreating model and loss module.
+[32m[09/03 01:16:48 TiTok]: [0mCreating optimizers.
+[32m[09/03 01:16:48 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/03 01:17:00 TiTok]: [0mCreating lr_schedulers.
+[32m[09/03 01:17:00 TiTok]: [0mCreating evaluator.
+[32m[09/03 01:17:00 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/03 01:17:00 TiTok]: [0m***** Running training *****
+[32m[09/03 01:17:00 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/03 01:17:00 TiTok]: [0mmixed precision = fp16
+[32m[09/03 01:17:01 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/03 01:17:01 TiTok]: [0maccelerator device: cuda
+[32m[09/03 01:17:01 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/03 01:17:01 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/03 01:17:02 TiTok]: [0mResuming at global_step 50000
+[32m[09/03 01:35:43 TiTok]: [0mData (t): 0.0010, 54.70/s/gpu Batch (t): 1.1701 LR: 0.000041 Step: 51000 Total Loss: 1.7591 Recon Loss: 1.7554 
+[32m[09/03 01:35:44 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-51000
+[32m[09/03 01:35:46 TiTok]: [0mReconstructing images...
+[32m[09/03 01:35:48 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/03 01:40:27 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/03 01:40:27 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 3000
+  save_every: 3000
+  log_every: 3000
+  eval_every: 3000
+  log_grad_norm_every: 3000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/03 01:40:27 TiTok]: [0mCreating model and loss module.
+[32m[09/03 01:40:28 TiTok]: [0mCreating optimizers.
+[32m[09/03 01:40:28 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/03 01:40:40 TiTok]: [0mCreating lr_schedulers.
+[32m[09/03 01:40:40 TiTok]: [0mCreating evaluator.
+[32m[09/03 01:40:40 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/03 01:40:40 TiTok]: [0m***** Running training *****
+[32m[09/03 01:40:40 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/03 01:40:40 TiTok]: [0mmixed precision = fp16
+[32m[09/03 01:40:40 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/03 01:40:40 TiTok]: [0maccelerator device: cuda
+[32m[09/03 01:40:40 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000']
+[32m[09/03 01:40:40 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-50000
+[32m[09/03 01:40:42 TiTok]: [0mResuming at global_step 50000
+[32m[09/03 01:59:17 TiTok]: [0mData (t): 0.0010, 54.94/s/gpu Batch (t): 1.1649 LR: 0.000041 Step: 51000 Total Loss: 1.7584 Recon Loss: 1.7547 
+[32m[09/03 01:59:17 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-51000
+[32m[09/03 01:59:20 TiTok]: [0mReconstructing images...
+[32m[09/03 01:59:22 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/03 06:00:28 TiTok]: [0mEMA EVALUATION Step: 51000 
+[32m[09/03 06:00:28 TiTok]: [0m{'CodebookEntropy': tensor(10.9707, device='cuda:0'),
+ 'CodebookUsage': 0.496826171875,
+ 'InceptionScore': 2.324908494949341,
+ 'rFID': 15.939529418945312}
+[32m[09/03 06:53:18 TiTok]: [0mData (t): 0.0010, 54.96/s/gpu Batch (t): 1.1645 LR: 0.000035 Step: 54000 Total Loss: 1.7416 Recon Loss: 1.7378 
+[32m[09/03 06:53:18 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-54000
+[32m[09/03 06:53:21 TiTok]: [0mReconstructing images...
+[32m[09/03 06:53:22 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/03 08:53:04 TiTok]: [0mEMA EVALUATION Step: 54000 
+[32m[09/03 08:53:04 TiTok]: [0m{'CodebookEntropy': tensor(10.9716, device='cuda:0'),
+ 'CodebookUsage': 0.496826171875,
+ 'InceptionScore': 2.3288307189941406,
+ 'rFID': 15.8721923828125}
+[32m[09/03 09:45:51 TiTok]: [0mData (t): 0.0010, 54.92/s/gpu Batch (t): 1.1654 LR: 0.000030 Step: 57000 Total Loss: 1.7679 Recon Loss: 1.7641 
+[32m[09/03 09:45:52 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-57000
+[32m[09/03 09:45:54 TiTok]: [0mReconstructing images...
+[32m[09/03 09:45:55 TiTok]: [0mComputing metrics on the validation set.
