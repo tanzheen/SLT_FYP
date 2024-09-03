@@ -239,6 +239,9 @@ def create_dataloader(config, logger, accelerator):
     dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),pin_memory=True, num_workers=config.dataset.params.num_workers)
     test_dataset = SimpleImageDataset(root_dir= root_dir,phase ='test', transform=transform, )
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),pin_memory=True, num_workers=config.dataset.params.num_workers)
+
+    print(f"length of trainloader: {len(train_dataloader)}, devloader: {len(dev_dataloader)}, testloader: {len(test_dataloader)}")
+
     return train_dataloader, dev_dataloader, test_dataloader
 
 
@@ -660,9 +663,9 @@ class SimpleImageDataset(Dataset):
             transform (callable, optional): Optional transform to be applied
                 on a sample.
         """
-        self.root_dir = os.path.join(root_dir,phase) 
+        self.actl_dir = os.path.join(root_dir,phase) 
         self.transform = transform
-        self.image_paths = self._gather_image_paths(root_dir)
+        self.image_paths = self._gather_image_paths(self.actl_dir)
 
     def _gather_image_paths(self, root_dir):
         """
@@ -670,7 +673,7 @@ class SimpleImageDataset(Dataset):
         """
         image_paths = []
         for subdir, _, files in os.walk(root_dir):
-            for i, file in enumerate(sorted(files)) :
+            for i, file in enumerate(sorted(files)):
                 if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')) and i%5==0:
                     image_paths.append(os.path.join(subdir, file))
                     
