@@ -3153,3 +3153,660 @@ config: configs/training/stage1/titok_b64_CSL.yaml
 [32m[09/03 22:59:49 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000', 'titok_b_64_stage1_run1\\checkpoint-51000', 'titok_b_64_stage1_run1\\checkpoint-54000', 'titok_b_64_stage1_run1\\checkpoint-57000']
 [32m[09/03 22:59:49 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-57000
 [32m[09/03 22:59:52 TiTok]: [0mResuming at global_step 57000
+[32m[09/04 00:54:02 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/04 00:54:02 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 3000
+  save_every: 3000
+  log_every: 3000
+  eval_every: 3000
+  log_grad_norm_every: 3000
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/04 00:54:03 TiTok]: [0mCreating model and loss module.
+[32m[09/04 00:54:05 TiTok]: [0mCreating optimizers.
+[32m[09/04 00:54:05 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/04 00:54:21 TiTok]: [0mCreating lr_schedulers.
+[32m[09/04 00:54:21 TiTok]: [0mCreating evaluator.
+[32m[09/04 00:54:22 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/04 00:54:22 TiTok]: [0m***** Running training *****
+[32m[09/04 00:54:22 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/04 00:54:22 TiTok]: [0mmixed precision = fp16
+[32m[09/04 00:54:22 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/04 00:54:22 TiTok]: [0maccelerator device: cuda
+[32m[09/04 00:54:22 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000', 'titok_b_64_stage1_run1\\checkpoint-51000', 'titok_b_64_stage1_run1\\checkpoint-54000', 'titok_b_64_stage1_run1\\checkpoint-57000']
+[32m[09/04 00:54:22 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-57000
+[32m[09/04 00:54:25 TiTok]: [0mResuming at global_step 57000
+[32m[09/04 00:57:20 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/04 00:57:20 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 1
+  save_every: 1
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 1
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/04 00:57:21 TiTok]: [0mCreating model and loss module.
+[32m[09/04 00:57:21 TiTok]: [0mCreating optimizers.
+[32m[09/04 00:57:21 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/04 00:57:26 TiTok]: [0mCreating lr_schedulers.
+[32m[09/04 00:57:26 TiTok]: [0mCreating evaluator.
+[32m[09/04 00:57:26 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/04 00:57:26 TiTok]: [0m***** Running training *****
+[32m[09/04 00:57:26 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/04 00:57:26 TiTok]: [0mmixed precision = fp16
+[32m[09/04 00:57:26 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/04 00:57:26 TiTok]: [0maccelerator device: cuda
+[32m[09/04 00:57:26 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-50000', 'titok_b_64_stage1_run1\\checkpoint-51000', 'titok_b_64_stage1_run1\\checkpoint-54000', 'titok_b_64_stage1_run1\\checkpoint-57000']
+[32m[09/04 00:57:26 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-57000
+[32m[09/04 00:57:27 TiTok]: [0mResuming at global_step 57000
+[32m[09/04 00:58:11 TiTok]: [0mData (t): 38.4948, 1.47/s/gpu Batch (t): 43.5248 LR: 0.000019 Step: 57001 Total Loss: 1.6819 Recon Loss: 1.6782 
+[32m[09/04 00:58:12 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-57001
+[32m[09/04 00:58:14 TiTok]: [0mReconstructing images...
+[32m[09/04 00:58:17 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/04 00:59:52 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/04 00:59:52 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 1
+  save_every: 1
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 1
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/04 00:59:52 TiTok]: [0mCreating model and loss module.
+[32m[09/04 00:59:53 TiTok]: [0mCreating optimizers.
+[32m[09/04 00:59:53 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/04 00:59:57 TiTok]: [0mCreating lr_schedulers.
+[32m[09/04 00:59:57 TiTok]: [0mCreating evaluator.
+[32m[09/04 00:59:58 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/04 00:59:58 TiTok]: [0m***** Running training *****
+[32m[09/04 00:59:58 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/04 00:59:58 TiTok]: [0mmixed precision = fp16
+[32m[09/04 00:59:58 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/04 00:59:58 TiTok]: [0maccelerator device: cuda
+[32m[09/04 00:59:58 TiTok]: [0mAll globbed checkpoints are: []
+[32m[09/04 00:59:58 TiTok]: [0mTraining from scratch.
+[32m[09/04 01:00:40 TiTok]: [0mData (t): 37.9662, 1.51/s/gpu Batch (t): 42.4768 LR: 0.000000 Step: 1 Total Loss: 7.0358 Recon Loss: 7.0008 
+[32m[09/04 01:00:41 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-1
+[32m[09/04 01:00:43 TiTok]: [0mReconstructing images...
+[32m[09/04 01:00:45 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/04 01:05:53 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/04 01:05:53 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 1
+  save_every: 1
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 1
+  resume: true
+  init_weight: ''
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/04 01:05:54 TiTok]: [0mCreating model and loss module.
+[32m[09/04 01:05:54 TiTok]: [0mCreating optimizers.
+[32m[09/04 01:05:54 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/04 01:05:58 TiTok]: [0mCreating lr_schedulers.
+[32m[09/04 01:05:58 TiTok]: [0mCreating evaluator.
+[32m[09/04 01:05:59 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/04 01:05:59 TiTok]: [0m***** Running training *****
+[32m[09/04 01:05:59 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/04 01:05:59 TiTok]: [0mmixed precision = fp16
+[32m[09/04 01:05:59 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/04 01:05:59 TiTok]: [0maccelerator device: cuda
+[32m[09/04 01:05:59 TiTok]: [0mAll globbed checkpoints are: ['titok_b_64_stage1_run1\\checkpoint-1']
+[32m[09/04 01:05:59 TiTok]: [0mLoad checkpoint from titok_b_64_stage1_run1\checkpoint-1
+[32m[09/04 01:06:00 TiTok]: [0mResuming at global_step 1
+[32m[09/04 03:22:03 TiTok]: [0mData (t): 0.0020, 54.91/s/gpu Batch (t): 1.1655 LR: 0.000069 Step: 6945 Total Loss: 2.9430 Recon Loss: 2.9378 
+[32m[09/04 03:22:04 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-6945
+[32m[09/04 03:22:06 TiTok]: [0mReconstructing images...
+[32m[09/04 03:22:08 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/04 03:34:58 TiTok]: [0mEMA EVALUATION Step: 6945 
+[32m[09/04 03:34:58 TiTok]: [0m{'CodebookEntropy': tensor(10.4887, device='cuda:0'),
+ 'CodebookUsage': 0.38818359375,
+ 'InceptionScore': 2.220250368118286,
+ 'rFID': 26.5980224609375}
+[32m[09/04 05:50:21 TiTok]: [0mData (t): 0.0020, 54.89/s/gpu Batch (t): 1.1661 LR: 0.000099 Step: 13890 Total Loss: 2.4300 Recon Loss: 2.4257 
+[32m[09/04 05:50:22 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-13890
+[32m[09/04 05:50:25 TiTok]: [0mReconstructing images...
+[32m[09/04 05:50:26 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/04 05:57:42 TiTok]: [0mEMA EVALUATION Step: 13890 
+[32m[09/04 05:57:42 TiTok]: [0m{'CodebookEntropy': tensor(10.6460, device='cuda:0'),
+ 'CodebookUsage': 0.40673828125,
+ 'InceptionScore': 2.2554354667663574,
+ 'rFID': 18.950973510742188}
+[32m[09/04 08:13:04 TiTok]: [0mData (t): 0.0010, 53.57/s/gpu Batch (t): 1.1946 LR: 0.000093 Step: 20835 Total Loss: 2.2337 Recon Loss: 2.2295 
+[32m[09/04 08:13:04 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-20835
+[32m[09/04 08:13:07 TiTok]: [0mReconstructing images...
+[32m[09/04 08:13:08 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/04 08:20:29 TiTok]: [0mEMA EVALUATION Step: 20835 
+[32m[09/04 08:20:29 TiTok]: [0m{'CodebookEntropy': tensor(10.6576, device='cuda:0'),
+ 'CodebookUsage': 0.405029296875,
+ 'InceptionScore': 2.262692451477051,
+ 'rFID': 17.653366088867188}
+[32m[09/04 10:35:39 TiTok]: [0mData (t): 0.0010, 55.18/s/gpu Batch (t): 1.1598 LR: 0.000082 Step: 27780 Total Loss: 2.0816 Recon Loss: 2.0774 
+[32m[09/04 10:35:40 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-27780
+[32m[09/04 10:35:42 TiTok]: [0mReconstructing images...
+[32m[09/04 10:35:44 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/04 10:43:01 TiTok]: [0mEMA EVALUATION Step: 27780 
+[32m[09/04 10:43:01 TiTok]: [0m{'CodebookEntropy': tensor(10.6635, device='cuda:0'),
+ 'CodebookUsage': 0.40478515625,
+ 'InceptionScore': 2.2768032550811768,
+ 'rFID': 17.15594482421875}
+[32m[09/04 12:58:39 TiTok]: [0mData (t): 0.0020, 55.04/s/gpu Batch (t): 1.1628 LR: 0.000067 Step: 34725 Total Loss: 1.9201 Recon Loss: 1.9159 
+[32m[09/04 12:58:39 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-34725
+[32m[09/04 12:58:42 TiTok]: [0mReconstructing images...
+[32m[09/04 12:58:43 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/04 13:06:01 TiTok]: [0mEMA EVALUATION Step: 34725 
+[32m[09/04 13:06:01 TiTok]: [0m{'CodebookEntropy': tensor(10.6684, device='cuda:0'),
+ 'CodebookUsage': 0.40478515625,
+ 'InceptionScore': 2.2826449871063232,
+ 'rFID': 16.873947143554688}
+[32m[09/04 15:21:19 TiTok]: [0mData (t): 0.0010, 55.03/s/gpu Batch (t): 1.1630 LR: 0.000050 Step: 41670 Total Loss: 1.8950 Recon Loss: 1.8908 
+[32m[09/04 15:21:19 TiTok]: [0mSaved state to titok_b_64_stage1_run1\checkpoint-41670
+[32m[09/04 15:21:23 TiTok]: [0mReconstructing images...
+[32m[09/04 15:21:24 TiTok]: [0mComputing metrics on the validation set.
+[32m[09/04 15:28:40 TiTok]: [0mEMA EVALUATION Step: 41670 
+[32m[09/04 15:28:40 TiTok]: [0m{'CodebookEntropy': tensor(10.6729, device='cuda:0'),
+ 'CodebookUsage': 0.4052734375,
+ 'InceptionScore': 2.284855604171753,
+ 'rFID': 16.634552001953125}
+[32m[09/04 16:52:39 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/04 16:52:39 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 1
+  save_every: 1
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 1
+  resume: false
+  init_weight: tokenizer_titok_b64.bin
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/04 16:52:40 TiTok]: [0mCreating model and loss module.
+[32m[09/04 16:52:41 TiTok]: [0mloading weight from tokenizer_titok_b64.bin, msg: _IncompatibleKeys(missing_keys=[], unexpected_keys=['pixel_quantize.embedding.weight', 'pixel_decoder.conv_in.weight', 'pixel_decoder.conv_in.bias', 'pixel_decoder.mid.0.norm1.weight', 'pixel_decoder.mid.0.norm1.bias', 'pixel_decoder.mid.0.conv1.weight', 'pixel_decoder.mid.0.norm2.weight', 'pixel_decoder.mid.0.norm2.bias', 'pixel_decoder.mid.0.conv2.weight', 'pixel_decoder.mid.1.norm1.weight', 'pixel_decoder.mid.1.norm1.bias', 'pixel_decoder.mid.1.conv1.weight', 'pixel_decoder.mid.1.norm2.weight', 'pixel_decoder.mid.1.norm2.bias', 'pixel_decoder.mid.1.conv2.weight', 'pixel_decoder.up.0.block.0.norm1.weight', 'pixel_decoder.up.0.block.0.norm1.bias', 'pixel_decoder.up.0.block.0.conv1.weight', 'pixel_decoder.up.0.block.0.norm2.weight', 'pixel_decoder.up.0.block.0.norm2.bias', 'pixel_decoder.up.0.block.0.conv2.weight', 'pixel_decoder.up.0.block.1.norm1.weight', 'pixel_decoder.up.0.block.1.norm1.bias', 'pixel_decoder.up.0.block.1.conv1.weight', 'pixel_decoder.up.0.block.1.norm2.weight', 'pixel_decoder.up.0.block.1.norm2.bias', 'pixel_decoder.up.0.block.1.conv2.weight', 'pixel_decoder.up.1.block.0.norm1.weight', 'pixel_decoder.up.1.block.0.norm1.bias', 'pixel_decoder.up.1.block.0.conv1.weight', 'pixel_decoder.up.1.block.0.norm2.weight', 'pixel_decoder.up.1.block.0.norm2.bias', 'pixel_decoder.up.1.block.0.conv2.weight', 'pixel_decoder.up.1.block.0.nin_shortcut.weight', 'pixel_decoder.up.1.block.1.norm1.weight', 'pixel_decoder.up.1.block.1.norm1.bias', 'pixel_decoder.up.1.block.1.conv1.weight', 'pixel_decoder.up.1.block.1.norm2.weight', 'pixel_decoder.up.1.block.1.norm2.bias', 'pixel_decoder.up.1.block.1.conv2.weight', 'pixel_decoder.up.1.upsample_conv.weight', 'pixel_decoder.up.1.upsample_conv.bias', 'pixel_decoder.up.2.block.0.norm1.weight', 'pixel_decoder.up.2.block.0.norm1.bias', 'pixel_decoder.up.2.block.0.conv1.weight', 'pixel_decoder.up.2.block.0.norm2.weight', 'pixel_decoder.up.2.block.0.norm2.bias', 'pixel_decoder.up.2.block.0.conv2.weight', 'pixel_decoder.up.2.block.1.norm1.weight', 'pixel_decoder.up.2.block.1.norm1.bias', 'pixel_decoder.up.2.block.1.conv1.weight', 'pixel_decoder.up.2.block.1.norm2.weight', 'pixel_decoder.up.2.block.1.norm2.bias', 'pixel_decoder.up.2.block.1.conv2.weight', 'pixel_decoder.up.2.upsample_conv.weight', 'pixel_decoder.up.2.upsample_conv.bias', 'pixel_decoder.up.3.block.0.norm1.weight', 'pixel_decoder.up.3.block.0.norm1.bias', 'pixel_decoder.up.3.block.0.conv1.weight', 'pixel_decoder.up.3.block.0.norm2.weight', 'pixel_decoder.up.3.block.0.norm2.bias', 'pixel_decoder.up.3.block.0.conv2.weight', 'pixel_decoder.up.3.block.0.nin_shortcut.weight', 'pixel_decoder.up.3.block.1.norm1.weight', 'pixel_decoder.up.3.block.1.norm1.bias', 'pixel_decoder.up.3.block.1.conv1.weight', 'pixel_decoder.up.3.block.1.norm2.weight', 'pixel_decoder.up.3.block.1.norm2.bias', 'pixel_decoder.up.3.block.1.conv2.weight', 'pixel_decoder.up.3.upsample_conv.weight', 'pixel_decoder.up.3.upsample_conv.bias', 'pixel_decoder.up.4.block.0.norm1.weight', 'pixel_decoder.up.4.block.0.norm1.bias', 'pixel_decoder.up.4.block.0.conv1.weight', 'pixel_decoder.up.4.block.0.norm2.weight', 'pixel_decoder.up.4.block.0.norm2.bias', 'pixel_decoder.up.4.block.0.conv2.weight', 'pixel_decoder.up.4.block.1.norm1.weight', 'pixel_decoder.up.4.block.1.norm1.bias', 'pixel_decoder.up.4.block.1.conv1.weight', 'pixel_decoder.up.4.block.1.norm2.weight', 'pixel_decoder.up.4.block.1.norm2.bias', 'pixel_decoder.up.4.block.1.conv2.weight', 'pixel_decoder.up.4.upsample_conv.weight', 'pixel_decoder.up.4.upsample_conv.bias', 'pixel_decoder.norm_out.weight', 'pixel_decoder.norm_out.bias', 'pixel_decoder.conv_out.weight', 'pixel_decoder.conv_out.bias'])
+[32m[09/04 16:52:42 TiTok]: [0mCreating optimizers.
+[32m[09/04 16:52:42 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/04 16:52:48 TiTok]: [0mCreating lr_schedulers.
+[32m[09/04 16:52:48 TiTok]: [0mCreating evaluator.
+[32m[09/04 16:52:49 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/04 16:52:49 TiTok]: [0m***** Running training *****
+[32m[09/04 16:52:49 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/04 16:52:49 TiTok]: [0mmixed precision = fp16
+[32m[09/04 16:52:49 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/04 16:52:49 TiTok]: [0maccelerator device: cuda
+[32m[09/04 16:59:22 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/04 16:59:22 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 1
+  save_every: 1
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 1
+  resume: false
+  init_weight: tokenizer_titok_b64.bin
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/04 16:59:22 TiTok]: [0mCreating model and loss module.
+[32m[09/04 16:59:23 TiTok]: [0mloading weight from tokenizer_titok_b64.bin, msg: _IncompatibleKeys(missing_keys=[], unexpected_keys=['pixel_quantize.embedding.weight', 'pixel_decoder.conv_in.weight', 'pixel_decoder.conv_in.bias', 'pixel_decoder.mid.0.norm1.weight', 'pixel_decoder.mid.0.norm1.bias', 'pixel_decoder.mid.0.conv1.weight', 'pixel_decoder.mid.0.norm2.weight', 'pixel_decoder.mid.0.norm2.bias', 'pixel_decoder.mid.0.conv2.weight', 'pixel_decoder.mid.1.norm1.weight', 'pixel_decoder.mid.1.norm1.bias', 'pixel_decoder.mid.1.conv1.weight', 'pixel_decoder.mid.1.norm2.weight', 'pixel_decoder.mid.1.norm2.bias', 'pixel_decoder.mid.1.conv2.weight', 'pixel_decoder.up.0.block.0.norm1.weight', 'pixel_decoder.up.0.block.0.norm1.bias', 'pixel_decoder.up.0.block.0.conv1.weight', 'pixel_decoder.up.0.block.0.norm2.weight', 'pixel_decoder.up.0.block.0.norm2.bias', 'pixel_decoder.up.0.block.0.conv2.weight', 'pixel_decoder.up.0.block.1.norm1.weight', 'pixel_decoder.up.0.block.1.norm1.bias', 'pixel_decoder.up.0.block.1.conv1.weight', 'pixel_decoder.up.0.block.1.norm2.weight', 'pixel_decoder.up.0.block.1.norm2.bias', 'pixel_decoder.up.0.block.1.conv2.weight', 'pixel_decoder.up.1.block.0.norm1.weight', 'pixel_decoder.up.1.block.0.norm1.bias', 'pixel_decoder.up.1.block.0.conv1.weight', 'pixel_decoder.up.1.block.0.norm2.weight', 'pixel_decoder.up.1.block.0.norm2.bias', 'pixel_decoder.up.1.block.0.conv2.weight', 'pixel_decoder.up.1.block.0.nin_shortcut.weight', 'pixel_decoder.up.1.block.1.norm1.weight', 'pixel_decoder.up.1.block.1.norm1.bias', 'pixel_decoder.up.1.block.1.conv1.weight', 'pixel_decoder.up.1.block.1.norm2.weight', 'pixel_decoder.up.1.block.1.norm2.bias', 'pixel_decoder.up.1.block.1.conv2.weight', 'pixel_decoder.up.1.upsample_conv.weight', 'pixel_decoder.up.1.upsample_conv.bias', 'pixel_decoder.up.2.block.0.norm1.weight', 'pixel_decoder.up.2.block.0.norm1.bias', 'pixel_decoder.up.2.block.0.conv1.weight', 'pixel_decoder.up.2.block.0.norm2.weight', 'pixel_decoder.up.2.block.0.norm2.bias', 'pixel_decoder.up.2.block.0.conv2.weight', 'pixel_decoder.up.2.block.1.norm1.weight', 'pixel_decoder.up.2.block.1.norm1.bias', 'pixel_decoder.up.2.block.1.conv1.weight', 'pixel_decoder.up.2.block.1.norm2.weight', 'pixel_decoder.up.2.block.1.norm2.bias', 'pixel_decoder.up.2.block.1.conv2.weight', 'pixel_decoder.up.2.upsample_conv.weight', 'pixel_decoder.up.2.upsample_conv.bias', 'pixel_decoder.up.3.block.0.norm1.weight', 'pixel_decoder.up.3.block.0.norm1.bias', 'pixel_decoder.up.3.block.0.conv1.weight', 'pixel_decoder.up.3.block.0.norm2.weight', 'pixel_decoder.up.3.block.0.norm2.bias', 'pixel_decoder.up.3.block.0.conv2.weight', 'pixel_decoder.up.3.block.0.nin_shortcut.weight', 'pixel_decoder.up.3.block.1.norm1.weight', 'pixel_decoder.up.3.block.1.norm1.bias', 'pixel_decoder.up.3.block.1.conv1.weight', 'pixel_decoder.up.3.block.1.norm2.weight', 'pixel_decoder.up.3.block.1.norm2.bias', 'pixel_decoder.up.3.block.1.conv2.weight', 'pixel_decoder.up.3.upsample_conv.weight', 'pixel_decoder.up.3.upsample_conv.bias', 'pixel_decoder.up.4.block.0.norm1.weight', 'pixel_decoder.up.4.block.0.norm1.bias', 'pixel_decoder.up.4.block.0.conv1.weight', 'pixel_decoder.up.4.block.0.norm2.weight', 'pixel_decoder.up.4.block.0.norm2.bias', 'pixel_decoder.up.4.block.0.conv2.weight', 'pixel_decoder.up.4.block.1.norm1.weight', 'pixel_decoder.up.4.block.1.norm1.bias', 'pixel_decoder.up.4.block.1.conv1.weight', 'pixel_decoder.up.4.block.1.norm2.weight', 'pixel_decoder.up.4.block.1.norm2.bias', 'pixel_decoder.up.4.block.1.conv2.weight', 'pixel_decoder.up.4.upsample_conv.weight', 'pixel_decoder.up.4.upsample_conv.bias', 'pixel_decoder.norm_out.weight', 'pixel_decoder.norm_out.bias', 'pixel_decoder.conv_out.weight', 'pixel_decoder.conv_out.bias'])
+[32m[09/04 16:59:24 TiTok]: [0mCreating optimizers.
+[32m[09/04 16:59:24 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/04 16:59:27 TiTok]: [0mCreating lr_schedulers.
+[32m[09/04 16:59:28 TiTok]: [0mCreating evaluator.
+[32m[09/04 16:59:28 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/04 16:59:28 TiTok]: [0m***** Running training *****
+[32m[09/04 16:59:28 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/04 16:59:28 TiTok]: [0mmixed precision = fp16
+[32m[09/04 16:59:28 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/04 16:59:28 TiTok]: [0maccelerator device: cuda
+[32m[09/04 17:00:06 TiTok]: [0mSaving config to titok_b_64_stage1_run1\config.yaml
+[32m[09/04 17:00:06 TiTok]: [0mConfig:
+experiment:
+  project: titok_b_64_stage1
+  name: titok_b_64_stage1_run1
+  output_dir: titok_b_64_stage1_run1
+  generate_every: 1
+  save_every: 1
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 1
+  resume: false
+  init_weight: tokenizer_titok_b64.bin
+  logging_dir: titok_b_64_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: base
+    vit_dec_model_size: base
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 64
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    params: null
+    img_path: ../../CSL-Daily/sentence/frames_512x512/
+    num_workers: 10
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 64
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_b64_CSL.yaml
+--experiment:
+  project: titok_b64_CSL_stage1
+  name: titok_b64_CSL_stage1_run1
+  output_dir: titok_b64_CSL_stage1_run1
+--training:
+  per_gpu_batch_size: 32
+
+[32m[09/04 17:00:06 TiTok]: [0mCreating model and loss module.
+[32m[09/04 17:00:07 TiTok]: [0mloading weight from tokenizer_titok_b64.bin, msg: _IncompatibleKeys(missing_keys=[], unexpected_keys=['pixel_quantize.embedding.weight', 'pixel_decoder.conv_in.weight', 'pixel_decoder.conv_in.bias', 'pixel_decoder.mid.0.norm1.weight', 'pixel_decoder.mid.0.norm1.bias', 'pixel_decoder.mid.0.conv1.weight', 'pixel_decoder.mid.0.norm2.weight', 'pixel_decoder.mid.0.norm2.bias', 'pixel_decoder.mid.0.conv2.weight', 'pixel_decoder.mid.1.norm1.weight', 'pixel_decoder.mid.1.norm1.bias', 'pixel_decoder.mid.1.conv1.weight', 'pixel_decoder.mid.1.norm2.weight', 'pixel_decoder.mid.1.norm2.bias', 'pixel_decoder.mid.1.conv2.weight', 'pixel_decoder.up.0.block.0.norm1.weight', 'pixel_decoder.up.0.block.0.norm1.bias', 'pixel_decoder.up.0.block.0.conv1.weight', 'pixel_decoder.up.0.block.0.norm2.weight', 'pixel_decoder.up.0.block.0.norm2.bias', 'pixel_decoder.up.0.block.0.conv2.weight', 'pixel_decoder.up.0.block.1.norm1.weight', 'pixel_decoder.up.0.block.1.norm1.bias', 'pixel_decoder.up.0.block.1.conv1.weight', 'pixel_decoder.up.0.block.1.norm2.weight', 'pixel_decoder.up.0.block.1.norm2.bias', 'pixel_decoder.up.0.block.1.conv2.weight', 'pixel_decoder.up.1.block.0.norm1.weight', 'pixel_decoder.up.1.block.0.norm1.bias', 'pixel_decoder.up.1.block.0.conv1.weight', 'pixel_decoder.up.1.block.0.norm2.weight', 'pixel_decoder.up.1.block.0.norm2.bias', 'pixel_decoder.up.1.block.0.conv2.weight', 'pixel_decoder.up.1.block.0.nin_shortcut.weight', 'pixel_decoder.up.1.block.1.norm1.weight', 'pixel_decoder.up.1.block.1.norm1.bias', 'pixel_decoder.up.1.block.1.conv1.weight', 'pixel_decoder.up.1.block.1.norm2.weight', 'pixel_decoder.up.1.block.1.norm2.bias', 'pixel_decoder.up.1.block.1.conv2.weight', 'pixel_decoder.up.1.upsample_conv.weight', 'pixel_decoder.up.1.upsample_conv.bias', 'pixel_decoder.up.2.block.0.norm1.weight', 'pixel_decoder.up.2.block.0.norm1.bias', 'pixel_decoder.up.2.block.0.conv1.weight', 'pixel_decoder.up.2.block.0.norm2.weight', 'pixel_decoder.up.2.block.0.norm2.bias', 'pixel_decoder.up.2.block.0.conv2.weight', 'pixel_decoder.up.2.block.1.norm1.weight', 'pixel_decoder.up.2.block.1.norm1.bias', 'pixel_decoder.up.2.block.1.conv1.weight', 'pixel_decoder.up.2.block.1.norm2.weight', 'pixel_decoder.up.2.block.1.norm2.bias', 'pixel_decoder.up.2.block.1.conv2.weight', 'pixel_decoder.up.2.upsample_conv.weight', 'pixel_decoder.up.2.upsample_conv.bias', 'pixel_decoder.up.3.block.0.norm1.weight', 'pixel_decoder.up.3.block.0.norm1.bias', 'pixel_decoder.up.3.block.0.conv1.weight', 'pixel_decoder.up.3.block.0.norm2.weight', 'pixel_decoder.up.3.block.0.norm2.bias', 'pixel_decoder.up.3.block.0.conv2.weight', 'pixel_decoder.up.3.block.0.nin_shortcut.weight', 'pixel_decoder.up.3.block.1.norm1.weight', 'pixel_decoder.up.3.block.1.norm1.bias', 'pixel_decoder.up.3.block.1.conv1.weight', 'pixel_decoder.up.3.block.1.norm2.weight', 'pixel_decoder.up.3.block.1.norm2.bias', 'pixel_decoder.up.3.block.1.conv2.weight', 'pixel_decoder.up.3.upsample_conv.weight', 'pixel_decoder.up.3.upsample_conv.bias', 'pixel_decoder.up.4.block.0.norm1.weight', 'pixel_decoder.up.4.block.0.norm1.bias', 'pixel_decoder.up.4.block.0.conv1.weight', 'pixel_decoder.up.4.block.0.norm2.weight', 'pixel_decoder.up.4.block.0.norm2.bias', 'pixel_decoder.up.4.block.0.conv2.weight', 'pixel_decoder.up.4.block.1.norm1.weight', 'pixel_decoder.up.4.block.1.norm1.bias', 'pixel_decoder.up.4.block.1.conv1.weight', 'pixel_decoder.up.4.block.1.norm2.weight', 'pixel_decoder.up.4.block.1.norm2.bias', 'pixel_decoder.up.4.block.1.conv2.weight', 'pixel_decoder.up.4.upsample_conv.weight', 'pixel_decoder.up.4.upsample_conv.bias', 'pixel_decoder.norm_out.weight', 'pixel_decoder.norm_out.bias', 'pixel_decoder.conv_out.weight', 'pixel_decoder.conv_out.bias'])
+[32m[09/04 17:00:15 TiTok]: [0mCreating optimizers.
+[32m[09/04 17:00:15 TiTok]: [0mCreating dataloaders. Batch size = 64
+[32m[09/04 17:00:19 TiTok]: [0mCreating lr_schedulers.
+[32m[09/04 17:00:19 TiTok]: [0mCreating evaluator.
+[32m[09/04 17:00:20 TiTok]: [0mPreparing model, optimizer and dataloaders
+[32m[09/04 17:00:20 TiTok]: [0m***** Running training *****
+[32m[09/04 17:00:20 TiTok]: [0m  Gradient Accumulation steps = 1
+[32m[09/04 17:00:20 TiTok]: [0mmixed precision = fp16
+[32m[09/04 17:00:20 TiTok]: [0m  Total train batch size (w. parallel, distributed & accumulation) = 64
+[32m[09/04 17:00:20 TiTok]: [0maccelerator device: cuda

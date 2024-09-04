@@ -2,13 +2,13 @@ experiment:
   project: "titok_b_64_stage1"
   name: "titok_b_64_stage1_run1"
   output_dir: "titok_b_64_stage1_run1"
-  generate_every: 3000
-  save_every: 3000
-  log_every: 3000
-  eval_every: 3000
-  log_grad_norm_every: 3_000
-  resume: True
-  init_weight: ""
+  generate_every: 1
+  save_every: 1
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 1
+  resume: False
+  init_weight: "tokenizer_titok_b64.bin"
 
 model:
   vq_model:

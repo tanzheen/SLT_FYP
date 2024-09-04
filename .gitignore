@@ -5,3 +5,4 @@
 1d-tokenizer/maskgit-vqgan-imagenet-f16-256.bin
 /1d-tokenizer/wandb
 /1d-tokenizer/titok_b_64_stage1_run1
+1d-tokenizer/tokenizer_titok_b64.bin
