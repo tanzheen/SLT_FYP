@@ -1,7 +1,7 @@
 experiment:
-  project: titok_b_64_stage1
-  name: titok_b_64_stage1_run1
-  output_dir: titok_b_64_stage1_run1
+  project: titok_l_32_stage1
+  name: titok_l_32_stage1_run1
+  output_dir: titok_l_32_stage1_run1
   generate_every: 1
   save_every: 1
   log_every: 1
@@ -9,15 +9,15 @@ experiment:
   log_grad_norm_every: 1
   resume: true
   init_weight: tokenizer_titok_l32.bin
-  logging_dir: titok_b_64_stage1_run1\logs
+  logging_dir: titok_l_32_stage1_run1\logs
 model:
   vq_model:
     codebook_size: 4096
     token_size: 12
     use_l2_norm: true
     commitment_cost: 0.25
-    vit_enc_model_size: base
-    vit_dec_model_size: base
+    vit_enc_model_size: large
+    vit_dec_model_size: large
     vit_enc_patch_size: 16
     vit_dec_patch_size: 16
     num_latent_tokens: 32
@@ -37,7 +37,7 @@ dataset:
 optimizer:
   name: adamw
   params:
-    learning_rate: 0.001
+    learning_rate: 1.0e-05
     beta1: 0.9
     beta2: 0.99
     weight_decay: 0.0001
@@ -49,9 +49,9 @@ lr_scheduler:
     end_lr: 1.0e-05
 training:
   gradient_accumulation_steps: 1
-  per_gpu_batch_size: 64
+  per_gpu_batch_size: 16
   mixed_precision: fp16
-  enable_tf32: true
+  enable_tf32: Trues
   enable_wandb: true
   use_ema: true
   seed: 42

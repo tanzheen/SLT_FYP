@@ -1,37 +1,45 @@
 experiment:
-  project: "titok_b_64_stage1"
-  name: "titok_b_64_stage1_run1"
-  output_dir: "titok_b_64_stage1_run1"
-  generate_every: 1
-  save_every: 1
-  log_every: 1
-  eval_every: 1
-  log_grad_norm_every: 1
+  project: "titok_b_64_stage2"
+  name: "titok_b_64_stage2_run1"
+  output_dir: "titok_b_64_stage2_run1"
+  save_every: 50_000
+  eval_every: 50_000
+  generate_every: 5_000
+  log_every: 50
+  log_grad_norm_every: 1_000
   resume: True
-  init_weight: "tokenizer_titok_b64.bin"
+  init_weight: "titok_b_64_stage1.bin"
 
 model:
   vq_model:
     codebook_size: 4096
     token_size: 12
     use_l2_norm: True
-    commitment_cost: 0.25
+    commitment_cost: 0.0
     # vit arch
     vit_enc_model_size: "base"
     vit_dec_model_size: "base"
     vit_enc_patch_size: 16
     vit_dec_patch_size: 16
     num_latent_tokens: 64
-    finetune_decoder: False
+    finetune_decoder: True
     pretrained_tokenizer_weight: "maskgit-vqgan-imagenet-f16-256.bin"
 
 losses:
-  quantizer_weight: 1.0
+  discriminator_start: 20_000
+  quantizer_weight: 0.0
+  discriminator_factor: 1.0
+  discriminator_weight: 0.01
+  perceptual_loss: "convnext_s"
+  perceptual_weight: 0.1
+  reconstruction_loss: "l2"
+  reconstruction_weight: 1.0
+  lecam_regularization_weight: 0.001
 
 dataset:
   params:
     img_path: ../../CSL-Daily/sentence/frames_512x512/ # might need to resize
-    num_workers: 10
+    num_workers_per_gpu: 10
   preprocessing:
     resize_shorter_edge: 256
     crop_size: 256
@@ -42,26 +50,26 @@ optimizer:
   name: adamw
   params:
     learning_rate: 1e-4
+    discriminator_learning_rate: 1e-4
     beta1: 0.9
-    beta2: 0.99
+    beta2: 0.999
     weight_decay: 1e-4
 
 lr_scheduler:
   scheduler: "cosine"
   params:
     learning_rate: ${optimizer.params.learning_rate}
-    warmup_steps: 10_000
+    warmup_steps: 5_000
     end_lr: 1e-5
 
 training:
   gradient_accumulation_steps: 1
-  per_gpu_batch_size: 64
+  per_gpu_batch_size: 32
   mixed_precision: "fp16"
   enable_tf32: True
   enable_wandb: True
   use_ema: True
   seed: 42
+  num_epochs: 10
   num_generated_images: 4
   max_grad_norm: 1.0
-  num_epochs: 10
-  frame_every: 5

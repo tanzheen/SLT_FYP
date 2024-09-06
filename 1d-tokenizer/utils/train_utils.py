@@ -100,7 +100,7 @@ def create_model_and_loss_module(config, logger, accelerator,
     if config.experiment.init_weight:
         # If loading a pretrained weight
         model_weight = torch.load(config.experiment.init_weight, map_location="cpu")
-        print("Loaded pretrained weights!!")
+        print(f"Loaded pretrained weights!! {config.experiment.init_weight}")
         if config.model.vq_model.finetune_decoder:
             # Add the MaskGIT-VQGAN's quantizer/decoder weight as well
             pretrained_tokenizer_weight = torch.load(
