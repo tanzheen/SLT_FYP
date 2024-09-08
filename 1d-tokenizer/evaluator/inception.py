@@ -34,8 +34,7 @@ except ImportError:
 
 
 # Note: Compared shasum and models should be the same.
-FID_WEIGHTS_URL = 'https://github.com/mseitzer/pytorch-fid/releases/download/fid_weights/pt_inception-2015-12-05-6726825d.pth'
-
+FID_WEIGHTS_URL = "pt_inception-2015-12-05-6726825d.pth"
 class FeatureExtractorInceptionV3(FeatureExtractorBase):
     INPUT_IMAGE_SIZE = 299
 
@@ -92,7 +91,7 @@ class FeatureExtractorInceptionV3(FeatureExtractorBase):
 
         self.fc = torch.nn.Linear(2048, 1008)
 
-        state_dict = load_state_dict_from_url(FID_WEIGHTS_URL, progress=True)
+        state_dict = torch.load(FID_WEIGHTS_URL, map_location="cpu" )
         #state_dict = torch.load(FID_WEIGHTS_URL, map_location='cpu')
         self.load_state_dict(state_dict)
 
