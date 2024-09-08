@@ -1,21 +1,23 @@
 #!/bin/bash
-#PBS -P project_name
+#PBS -P volta_pilot
 #PBS -j oe
-#PBS -N tensorflow or PyTorch
+#PBS -N Titok
 #PBS -q volta_gpu
-#PBS -l select=1:ncpus=10:mem=80gb:ngpus=1
-#PBS -l walltime=24:00:00
+#PBS -l select=1:ncpus=5:mem=50gb:ngpus=1
+#PBS -l walltime=72:00:00
 
-cd $PBS_O_WORKDIR
-np=$(cat ${PBS_NODEFILE} | wc -l)
-
-image="/app1/common/singularity-img/3.0.0/tensorflow_1.12_nvcr_19.01-py3.simg"
+cd $PBS_O_WORKDIR; 
+np=$(cat ${PBS_NODEFILE} | wc -l);
+mkdir -p /scratch/e0724993
+rsync -hav /hpctmp/e0724993/CSL-Daily /scratch/e0724993
+image="/app1/common/singularity-img/hopper/pytorch/pytorch_2.3.0_cuda_12.4_ngc_24.04.sif"
 
 singularity exec $image bash << EOF > stdout.$PBS_JOBID 2> stderr.$PBS_JOBID
+export PATH=/home/svu/e0724993/.local/bin
+export PYTHONPATH=$PYTHONPATH:/home/svu/e0724993/.local/lib/python3.10/site-packages
+$env:WANDB_MODE="offline:
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network 1d-tokenizer/scripts/train_titok.py config=configs/training/stage1/titok_l32_CSL.yaml --experiment.project="titok_l32_CSL_stage1" --experiment.name="titok_l32_CSL_stage1_run1" --experiment.output_dir="titok_l32_CSL_stage1_run1" --training.per_gpu_batch_size=32
 
-python train_titok.py
-
-# You can put more commands here
-# echo "Hello World"
 
 EOF
+

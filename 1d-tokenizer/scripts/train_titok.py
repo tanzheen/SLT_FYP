@@ -21,7 +21,7 @@ import math
 import os
 import sys
 from pathlib import Path
-
+import wandb 
 from accelerate.utils import set_seed
 from accelerate import Accelerator
 

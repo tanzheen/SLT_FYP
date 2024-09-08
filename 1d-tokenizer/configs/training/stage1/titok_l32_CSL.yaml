@@ -41,7 +41,7 @@ dataset:
 optimizer:
   name: adamw
   params:
-    learning_rate: 1e-5
+    learning_rate: 1e-4
     beta1: 0.9
     beta2: 0.99
     weight_decay: 1e-4
@@ -55,10 +55,10 @@ lr_scheduler:
 
 training:
   gradient_accumulation_steps: 1
-  per_gpu_batch_size: 16
+  per_gpu_batch_size: 32
   mixed_precision: "fp16"
-  enable_tf32: Trues
-  enable_wandb: True
+  enable_tf32: True
+  enable_wandb: False
   use_ema: True
   seed: 42
   num_generated_images: 4

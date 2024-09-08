@@ -42,4 +42,4 @@ dataset:
         
         img_path: ../../PHOENIX-2014-T-release-v3/features/fullFrame-210x260px/ # might need to expand
          
-            img_path: ../../CSL-Daily/sentence/frames_512x512/ # might need to resize
+    
