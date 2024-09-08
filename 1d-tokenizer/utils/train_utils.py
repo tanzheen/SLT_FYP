@@ -665,8 +665,8 @@ class SimpleImageDataset(Dataset):
         self.root_dir = os.path.join(root_dir, phase)
         self.transform = transform
         self.image_paths = self._gather_image_paths(self.root_dir)
-        self.crop_width = person_size[0]
-        self.crop_height = person_size[1]
+        self.crop_width = int(person_size[0]) 
+        self.crop_height = int(person_size[1]) 
 
     def _gather_image_paths(self, root_dir):
         """
