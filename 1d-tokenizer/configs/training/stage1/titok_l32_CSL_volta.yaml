@@ -30,7 +30,7 @@ losses:
 
 dataset:
   params:
-    img_path: ../../CSL-Daily/sentence/frames_512x512/ # might need to resize
+    img_path: /scratch2/e0724993/CSL-Daily/sentence/frames_512x512/ # might need to resize
     num_workers: 10
   preprocessing:
     resize_shorter_edge: 256

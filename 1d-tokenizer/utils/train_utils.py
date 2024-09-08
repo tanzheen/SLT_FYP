@@ -233,11 +233,11 @@ def create_dataloader(config, logger, accelerator):
     transforms.Normalize(norm_mean, norm_std)
 ])
     root_dir = config.dataset.params.img_path
-    train_dataset = SimpleImageDataset(root_dir=root_dir,phase ='train', transform=transform)
+    train_dataset = SimpleImageDataset(root_dir=root_dir,phase ='train',person_size = config.dataset.preprocessing.person_size, transform=transform)
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),  num_workers=config.dataset.params.num_workers)
-    dev_dataset = SimpleImageDataset(root_dir=root_dir,phase ='dev', transform=transform)
+    dev_dataset = SimpleImageDataset(root_dir=root_dir,phase ='dev',person_size = config.dataset.preprocessing.person_size, transform=transform)
     dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
-    test_dataset = SimpleImageDataset(root_dir= root_dir,phase ='test', transform=transform, )
+    test_dataset = SimpleImageDataset(root_dir= root_dir,phase ='test', person_size = config.dataset.preprocessing.person_size, transform=transform, )
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
     print(f"trainloader: {len(train_dataloader)},  devloader: {len(dev_dataloader)}, testloader: {len(test_dataloader)}")
     return train_dataloader, dev_dataloader, test_dataloader
@@ -404,7 +404,7 @@ def train_one_epoch(config, logger, accelerator,
                 # Log gradient norm before zeroing it.
                 if (
                     accelerator.sync_gradients
-                    and (global_step + 1) % config.experiment.log_grad_norm_every == 0
+                    and (global_step + 1) % int(config.experiment.log_grad_norm_every * len(train_dataloader)) == 0
                     and accelerator.is_main_process
                 ):
                     log_grad_norm(loss_module, accelerator, global_step + 1)
@@ -418,7 +418,7 @@ def train_one_epoch(config, logger, accelerator,
             batch_time_meter.update(time.time() - end)
             end = time.time()
 
-            if (global_step + 1) % config.experiment.log_every == 0:
+            if (global_step + 1) % int(config.experiment.log_every * len(train_dataloader))  == 0:
                 samples_per_second_per_gpu = (
                     config.training.gradient_accumulation_steps * config.training.per_gpu_batch_size / batch_time_meter.val
                 )
@@ -448,14 +448,13 @@ def train_one_epoch(config, logger, accelerator,
                 data_time_meter.reset()
 
             # Save model checkpoint.
-            if (global_step + 1) % config.experiment.save_every * len(train_dataloader) == 0:
+            if (global_step + 1) % int(config.experiment.save_every * len(train_dataloader)) == 0:
                 save_path = save_checkpoint(
                     model, config.experiment.output_dir, accelerator, global_step + 1, logger=logger)
                 # Wait for everyone to save their checkpoint.
                 accelerator.wait_for_everyone()
-
             # Generate images.
-            if (global_step + 1) % config.experiment.generate_every * len(train_dataloader)== 0 and accelerator.is_main_process:
+            if (global_step + 1) % int(config.experiment.generate_every * len(train_dataloader))== 0 and accelerator.is_main_process:
                 # Store the model parameters temporarily and load the EMA parameters to perform inference.
                 if config.training.get("use_ema", False):
                     ema_model.store(model.parameters())
@@ -479,7 +478,7 @@ def train_one_epoch(config, logger, accelerator,
 
 
             # Evaluate reconstruction.
-            if eval_dataloader is not None and (global_step + 1) % config.experiment.eval_every* len(train_dataloader) == 0:
+            if eval_dataloader is not None and (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)) == 0:
                 logger.info(f"Computing metrics on the validation set.")
                 if config.training.get("use_ema", False):
                     ema_model.store(model.parameters())
@@ -654,7 +653,7 @@ def log_grad_norm(model, accelerator, global_step):
 
 
 class SimpleImageDataset(Dataset):
-    def __init__(self, root_dir,phase,   transform=None):
+    def __init__(self, root_dir,phase, person_size = (410,410) ,transform=None):
         """
         Args:
             root_dir (string): Directory with all the images orsganized in subfolders.
@@ -664,6 +663,8 @@ class SimpleImageDataset(Dataset):
         self.root_dir = os.path.join(root_dir,phase) 
         self.transform = transform
         self.image_paths = self._gather_image_paths(self.root_dir)
+        self.width = person_size[0]
+        self.height = person_size[1]
 
     def _gather_image_paths(self, root_dir):
         """
@@ -693,9 +694,16 @@ class SimpleImageDataset(Dataset):
             image: The image corresponding to the given index.
             path: The path of the image.
         """
+
         img_path = self.image_paths[idx]
         image = Image.open(img_path).convert("RGB")
+        x_start = int((image.size[0]-self.width)//2)
+        x_end = int(x_start + self.width)
+        y_start = int((image.size[0]-self.width)//2)
+        y_end = int(y_start + self.height)
 
+        # Crop the image
+        image = image[y_start:y_end, x_start:x_end]
         if self.transform:
             image = self.transform(image)
 
@@ -718,5 +726,4 @@ class SimpleImageDataset(Dataset):
         plt.title(f"Image {idx}")
         plt.axis('off')
         plt.show()
-
 
