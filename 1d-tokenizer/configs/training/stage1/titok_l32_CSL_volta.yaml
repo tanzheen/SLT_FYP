@@ -2,9 +2,9 @@ experiment:
   project: "titok_l_32_stage1"
   name: "titok_l_32_stage1_run1"
   output_dir: "titok_l_32_stage1_run1"
-  generate_every: 0.25
-  save_every: 0.25
-  log_every: 1
+  generate_every: 0.1
+  save_every: 0.0001
+  log_every: 0.01
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True

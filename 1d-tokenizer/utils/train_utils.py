@@ -652,19 +652,21 @@ def log_grad_norm(model, accelerator, global_step):
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
 
+
 class SimpleImageDataset(Dataset):
-    def __init__(self, root_dir,phase, person_size = (410,410) ,transform=None):
+    def __init__(self, root_dir, phase, person_size=(410, 410), transform=None):
         """
         Args:
-            root_dir (string): Directory with all the images orsganized in subfolders.
-            transform (callable, optional): Optional transform to be applied
-                on a sample.
+            root_dir (string): Directory with all the images organized in subfolders.
+            phase (string): 'train', 'dev', or 'test' phase.
+            person_size (tuple): Crop size of the person (width, height).
+            transform (callable, optional): Optional transform to be applied on a sample.
         """
-        self.root_dir = os.path.join(root_dir,phase) 
+        self.root_dir = os.path.join(root_dir, phase)
         self.transform = transform
         self.image_paths = self._gather_image_paths(self.root_dir)
-        self.width = person_size[0]
-        self.height = person_size[1]
+        self.crop_width = person_size[0]
+        self.crop_height = person_size[1]
 
     def _gather_image_paths(self, root_dir):
         """
@@ -673,13 +675,9 @@ class SimpleImageDataset(Dataset):
         print(f"Getting files from {self.root_dir}")
         image_paths = []
         for subdir, _, files in os.walk(root_dir):
-            for i, file in enumerate(sorted(files)) :
+            for file in sorted(files):
                 if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
                     image_paths.append(os.path.join(subdir, file))
-                    
-            ## for small run purposes
-            #if len(image_paths)>10000: break 
-
         return image_paths
 
     def __len__(self):
@@ -692,18 +690,25 @@ class SimpleImageDataset(Dataset):
 
         Returns:
             image: The image corresponding to the given index.
-            path: The path of the image.
         """
 
         img_path = self.image_paths[idx]
         image = Image.open(img_path).convert("RGB")
-        x_start = int((image.size[0]-self.width)//2)
-        x_end = int(x_start + self.width)
-        y_start = int((image.size[0]-self.width)//2)
-        y_end = int(y_start + self.height)
 
-        # Crop the image
-        image = image[y_start:y_end, x_start:x_end]
+        # Calculate the center horizontal crop and lower vertical crop
+        x_start = int((image.size[0] - self.crop_width) // 2)  # Center horizontally
+        x_end = x_start + self.crop_width
+        y_start = image.size[1] - self.crop_height  # Crop the lower vertical section
+        y_end = image.size[1]
+
+        # Crop the image (keeping center horizontal and lower vertical)
+        image = image.crop((x_start, y_start, x_end, y_end))
+
+        # Resize the cropped image to (256, 256)
+        resize_transform = transforms.Resize((256, 256))
+        image = resize_transform(image)
+
+        # Apply additional transformations if provided
         if self.transform:
             image = self.transform(image)
 
