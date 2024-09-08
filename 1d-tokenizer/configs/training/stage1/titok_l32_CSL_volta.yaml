@@ -37,7 +37,7 @@ dataset:
     crop_size: 256
     random_crop: True
     random_flip: True
-    person_size : (410,410)
+    person_size : 410
 
 optimizer:
   name: adamw

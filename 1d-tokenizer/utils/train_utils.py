@@ -654,7 +654,7 @@ def log_grad_norm(model, accelerator, global_step):
 
 
 class SimpleImageDataset(Dataset):
-    def __init__(self, root_dir, phase, person_size=(410, 410), transform=None):
+    def __init__(self, root_dir, phase, person_size= 410 , transform=None):
         """
         Args:
             root_dir (string): Directory with all the images organized in subfolders.
@@ -665,8 +665,8 @@ class SimpleImageDataset(Dataset):
         self.root_dir = os.path.join(root_dir, phase)
         self.transform = transform
         self.image_paths = self._gather_image_paths(self.root_dir)
-        self.crop_width = int(person_size[0]) 
-        self.crop_height = int(person_size[1]) 
+        self.crop_width = person_size  
+        self.crop_height = person_size 
 
     def _gather_image_paths(self, root_dir):
         """
