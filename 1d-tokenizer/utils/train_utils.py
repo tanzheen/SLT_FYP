@@ -235,10 +235,17 @@ def create_dataloader(config, logger, accelerator):
     root_dir = config.dataset.params.img_path
     train_dataset = SimpleImageDataset(root_dir=root_dir,phase ='train',person_size = config.dataset.preprocessing.person_size, transform=transform)
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),  num_workers=config.dataset.params.num_workers)
+    train_dataloader = accelerator.prepare(train_dataloader)
+    print("train dataloader done!")
     dev_dataset = SimpleImageDataset(root_dir=root_dir,phase ='dev',person_size = config.dataset.preprocessing.person_size, transform=transform)
     dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
+    dev_dataloader = accelerator.prepare(dev_dataloader)
+    print("dev dataloader done!")
     test_dataset = SimpleImageDataset(root_dir= root_dir,phase ='test', person_size = config.dataset.preprocessing.person_size, transform=transform, )
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
+    test_dataloader = accelerator.prepare(test_dataloader)
+    
+    print("test dataloader done!")
     print(f"trainloader: {len(train_dataloader)},  devloader: {len(dev_dataloader)}, testloader: {len(test_dataloader)}")
     return train_dataloader, dev_dataloader, test_dataloader
 
@@ -652,9 +659,8 @@ def log_grad_norm(model, accelerator, global_step):
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
 
-
 class SimpleImageDataset(Dataset):
-    def __init__(self, root_dir, phase, person_size= 410 , transform=None):
+    def __init__(self, root_dir, phase, person_size=410, transform=None):
         """
         Args:
             root_dir (string): Directory with all the images organized in subfolders.
@@ -665,20 +671,32 @@ class SimpleImageDataset(Dataset):
         self.root_dir = os.path.join(root_dir, phase)
         self.transform = transform
         self.image_paths = self._gather_image_paths(self.root_dir)
-        self.crop_width = person_size  
-        self.crop_height = person_size 
+        self.crop_width = person_size
+        self.crop_height = person_size
 
     def _gather_image_paths(self, root_dir):
         """
-        Recursively collects all image file paths from the root directory.
+        Recursively collects all image file paths from the root directory and checks if they are valid.
         """
         print(f"Getting files from {self.root_dir}")
         image_paths = []
         for subdir, _, files in os.walk(root_dir):
             for file in sorted(files):
+                file_path = os.path.join(subdir, file)
                 if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
-                    image_paths.append(os.path.join(subdir, file))
+                    image_paths.append(file_path)
         return image_paths
+
+    def is_valid_file(self, file_path):
+        """
+        Check if a file is a valid image file by attempting to open it with PIL.
+        """
+        try:
+            with Image.open(file_path) as img:
+                img.verify()  # Verifies if the file can be opened as an image
+            return True
+        except (IOError, SyntaxError, ValueError):
+            return False
 
     def __len__(self):
         return len(self.image_paths)
@@ -731,4 +749,3 @@ class SimpleImageDataset(Dataset):
         plt.title(f"Image {idx}")
         plt.axis('off')
         plt.show()
-

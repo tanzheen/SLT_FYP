@@ -30,8 +30,8 @@ losses:
 
 dataset:
   params:
-    img_path: /scratch2/e0724993/CSL-Daily/sentence/frames_512x512/ # might need to resize
-    num_workers: 10
+    img_path: /hpctmp/e0724993/CSL-Daily/sentence/frames_512x512/ # might need to resize
+    num_workers: 4
   preprocessing:
     resize_shorter_edge: 256
     crop_size: 256
@@ -56,7 +56,7 @@ lr_scheduler:
 
 training:
   gradient_accumulation_steps: 1
-  per_gpu_batch_size: 32
+  per_gpu_batch_size: 16
   mixed_precision: "fp16"
   enable_tf32: True
   enable_wandb: False

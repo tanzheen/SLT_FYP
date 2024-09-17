@@ -58,13 +58,14 @@ def main():
     tracker = "tensorboard"
     if config.training.enable_wandb:
         tracker = "wandb"
-
+    torch.distributed.init_process_group(backend='nccl')
     accelerator = Accelerator(
         gradient_accumulation_steps=config.training.gradient_accumulation_steps,
         mixed_precision=config.training.mixed_precision,
         log_with=tracker,
         project_dir=config.experiment.logging_dir,
         split_batches=False,
+        deepspeed_plugin=True
     )
 
     logger = setup_logger(name="TiTok", log_level="INFO",
@@ -106,12 +107,12 @@ def main():
     logger.info("Preparing model, optimizer and dataloaders")
     # The dataloader are already aware of distributed training, so we don't need to prepare them.
     if config.model.vq_model.finetune_decoder:
-        model, loss_module, optimizer, discriminator_optimizer, lr_scheduler, discriminator_lr_scheduler = accelerator.prepare(
+        model, loss_module, optimizer, discriminator_optimizer, lr_scheduler, discriminator_lr_scheduler= accelerator.prepare(
             model, loss_module, optimizer, discriminator_optimizer, lr_scheduler, discriminator_lr_scheduler
         )
     else:
         model, optimizer, lr_scheduler = accelerator.prepare(
-            model, optimizer, lr_scheduler
+            model, optimizer, lr_scheduler, 
         )
     if config.training.use_ema:
         ema_model.to(accelerator.device)
