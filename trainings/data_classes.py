@@ -29,6 +29,7 @@ def load_annot_file(file_path):
 
 class S2T_Dataset(Dataset.Dataset):
     def __init__ (self, tokenizer, config, args, phase, training_refurbish = False):
+        
         self.config = config # this is the config file that will contain paths 
         self.args = args 
         self.training_refurbish = training_refurbish
@@ -39,7 +40,7 @@ class S2T_Dataset(Dataset.Dataset):
         self.tokenizer.tgt_lang = config['training']['tgt_lang']
         self.max_length = self.raw_data['max_length']
         self.img_path = os.path.join(config['data']['img_path'], phase)
-        self.data_list = self.raw_data['info']
+        self.data_list = self.raw_data['info']  #video index names 
         
         # the following parameters are for data augmentation which is proven to improve the training process
         sometimes = lambda aug: va.Sometimes(0.5, aug)  # Used to apply augmentor with 50% probability

@@ -722,10 +722,6 @@ class SimpleImageDataset(Dataset):
         # Crop the image (keeping center horizontal and lower vertical)
         image = image.crop((x_start, y_start, x_end, y_end))
 
-        # Resize the cropped image to (256, 256)
-        resize_transform = transforms.Resize((256, 256))
-        image = resize_transform(image)
-
         # Apply additional transformations if provided
         if self.transform:
             image = self.transform(image)

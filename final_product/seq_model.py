@@ -12,12 +12,13 @@ class SignModel(nn.Module):
     def __init__(self, Titok_config): 
         super(SignModel, self).__init__()
         self.Titok = Titok(Titok_config)
-        self.Adapted_Mbart = Adapted_Mbart(Mbart_config)
+        self.Adapted_Mbart = Adapted_Mbart().from_pretrained("facebook/mbart-large-50")
     
-    def forward(self, input_frames): 
+    def forward(self, input_frames, tgt_input): 
         encoded_tokens = Titok.encode(input_frames)[1]["min_encoding_indices"]
+        sign_translation = Adapted_Mbart(encoded_tokens, tgt_input)
 
-
+        return sign_translation
 
 
 class LLMAdapter(nn.Module):
@@ -51,19 +52,16 @@ class LLMAdapter(nn.Module):
 
 
 class Adapted_Mbart(MBartForConditionalGeneration):
-    def __init__(self, num_vq_tokens = 32, hidden_size= 1024 , *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, num_vq_tokens = 32, hidden_size= 1024 ):
+        super().__init__()
         # initiate the LLM Adaptor 
         self.adapter = LLMAdapter(num_vq_tokens, hidden_size)
         # Replace the embedding layer in the encoder
         self.model.encoder.embed_tokens = self.adapter
     
-    def forward(self, input_tokens, **kwargs):
+    def forward(self, input_tokens, tgt_input,  **kwargs):
         # Forward pass using the modified MBart with custom adapter
-        return super().forward(input_ids=None, inputs_embeds=self.adapter(input_tokens), **kwargs)
+        return super().forward(input_ids=None, inputs_embeds=self.adapter(input_tokens), labels= tgt_input)
 
 
-# Load the MBart model and replace the word embedding with the LLM adapter
-model_name = "facebook/mbart-large-50"
-mbart_model = Adapted_Mbart().from_pretrained(model_name)
 

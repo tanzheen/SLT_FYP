@@ -70,7 +70,7 @@ class PretrainedTokenizer(nn.Module):
 
 
 class TiTok(BaseModel, PyTorchModelHubMixin, tags=["arxiv:2304.12244", "image-tokenization"], license="mit"):
-    def __init__(self, config):
+    def __init__(self, config): ## takes in config 
 
         if isinstance(config, dict):
             config = OmegaConf.create(config)
