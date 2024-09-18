@@ -44,7 +44,6 @@ class SignTransDataset(Dataset):
     
     Attributes:
         config (dict): Configuration dictionary containing paths, settings, and model details.
-        args: Arguments related to dataset and training such as input size and noise settings.
         training_refurbish (bool): Flag indicating whether to add noise for data augmentation.
         phase (str): Current phase ('train', 'dev', or 'test').
         raw_data (dict): Contains information about the dataset, including max length and file paths.
@@ -55,19 +54,18 @@ class SignTransDataset(Dataset):
         crop_height (int): Desired height for cropping the image.
     """
 
-    def __init__(self, tokenizer, config, args, phase):
+    def __init__(self, tokenizer, config,  phase):
         """
         Initialize the SignTrans_Dataset with the necessary parameters.
         
         Args:
             tokenizer: Tokenizer for text data (used for embedding the text labels).
             config (dict): Configuration for the dataset and models.
-            args: Additional arguments for dataset specifics (e.g., image size).
             phase (str): The current phase ('train', 'dev', 'test') to determine which split to load.
             training_refurbish (bool): Whether to apply data augmentation like adding noise to training data.
         """
         self.config = config  # Config contains paths, settings, and model details.
-        self.args = args  # Additional arguments related to dataset and training.
+
         self.phase = phase  # Can be 'train', 'dev', or 'test'.
 
         # Load the annotations (e.g., translations) from the annotation file corresponding to the current phase.
@@ -149,7 +147,7 @@ class SignTransDataset(Dataset):
             paths = [paths[i] for i in sampled_indices]
 
         # Create an empty tensor to store the images.
-        imgs = torch.zeros(len(paths), 3, self.args.input_size, self.args.input_size)
+        imgs = torch.zeros(len(paths), 3, self.config.training.input_size, self.config.training.input_size)
         batch_image = []
 
         # Load each image, apply transformations, and crop if necessary.
