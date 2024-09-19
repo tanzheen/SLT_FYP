@@ -26,7 +26,7 @@ class SignModel(nn.Module):
         for param in self.titok.parameters():
             param.requires_grad = False
 
-    def forward(self, src_input, tgt_input, src_length): 
+    def forward(self, src_input,input_attn,  tgt_input, src_length): 
         '''
         Shape of: 
             src_input: (batch_size, sequence_len, embedding_dim)
@@ -34,10 +34,10 @@ class SignModel(nn.Module):
         '''
         encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices']
         print(f"encoded tokens: {encoded_tokens.float()}")
-        print(encoded_tokens.shape)
+        print("encoded tokens shape: " , encoded_tokens.shape)
         hidden_values = self.adapter(encoded_tokens.float(), src_length).squeeze()
-        print(hidden_values.shape)
-        sign_translation = self.Mbart(inputs_embeds = hidden_values, labels= tgt_input)
+        print("hidden values shape" ,hidden_values.shape)
+        sign_translation = self.Mbart(inputs_embeds = hidden_values,  labels= tgt_input)
               
         
 

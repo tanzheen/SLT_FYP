@@ -235,7 +235,8 @@ class SignTransDataset(Dataset):
         img_padding_mask = (mask_gen != PAD_IDX).long()
 
         # Tokenize the text labels.
-        tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
+        with self.tokenizer.as_target_tokenizer():
+            tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
         
         # Pack everything into a dictionary to return.
         src_input = {

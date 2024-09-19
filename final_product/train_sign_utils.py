@@ -541,18 +541,28 @@ if __name__ == "__main__":
         print(f"Source video: {src['input_ids'].shape}")
         print(f"Source length: {src['src_length_batch']}")
         print(f"New Source length: {src['new_src_length_batch']}")
+        print(f"Input attentions: {src['attention_mask']}")
         print(f"Target tokens: {len(tgt['input_ids'])}")
         batch = src['input_ids']
         src_length = src['src_length_batch']
+        
         images = batch.to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
         tgt_input = tgt['input_ids'].to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
-        print("tgt ", tgt_input.shape)
-        
-        output = model(images,tgt_input, src_length)
+        tgt_attn = tgt.attention_mask
+        tgt_input[tgt_attn== 0] = -100
+        print("tgt values : ", tgt_input)
+        print("tgt attention: ",tgt.attention_mask)
+        input_attn = src['attention_mask']
+        print("input_attn", input_attn)
+        input_attn = input_attn.to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+        output = model(images, input_attn ,tgt_input, src_length)
+        print(f"outputs: {output}")
         print(f"loss: {output.loss}")
         logits = output['logits']
         print("logits: " , logits.shape)
@@ -560,9 +570,10 @@ if __name__ == "__main__":
         print(f"probs: {probs.shape}")
         values, predictions = torch.topk(probs,k=1, dim = -1)
         predictions = predictions.reshape(4,-1).squeeze()
-        print(predictions.shape)
+        print(predictions)
         print(tokenizer.tgt_lang)
-        sentence = [tokenizer.decode(pred, skip_special_tokens = True) for pred in predictions]
+        with tokenizer.as_target_tokenizer():
+            sentence = tokenizer.batch_decode(predictions, skip_special_tokens = True )
         print(sentence)
         if i == 1:  # To limit the number of batches displayed for testing
             break
