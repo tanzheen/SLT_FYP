@@ -528,7 +528,9 @@ if __name__ == "__main__":
 
 
     accelerator = Accelerator()
-
+    tokenizer = MBart50Tokenizer.from_pretrained('facebook/mbart-large-50',
+                                               src_lang=config.dataset.lang,
+                                                 tgt_lang= config.dataset.lang)
     # Test the create_signloader  and the create_model function
     train_loader, dev_loader, test_loader = create_signloader(config, logger, accelerator)
     model, ema_model = create_model(config, logger, accelerator, model_type="Sign2Text")
@@ -548,9 +550,19 @@ if __name__ == "__main__":
         tgt_input = tgt['input_ids'].to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
-        print(tgt_input.shape)
+        print("tgt ", tgt_input.shape)
         
         output = model(images,tgt_input, src_length)
-        print(output)
+        print(f"loss: {output.loss}")
+        logits = output['logits']
+        print("logits: " , logits.shape)
+        probs = logits.softmax(dim = -1 )
+        print(f"probs: {probs.shape}")
+        values, predictions = torch.topk(probs,k=1, dim = -1)
+        predictions = predictions.reshape(4,-1).squeeze()
+        print(predictions.shape)
+        print(tokenizer.tgt_lang)
+        sentence = [tokenizer.decode(pred, skip_special_tokens = True) for pred in predictions]
+        print(sentence)
         if i == 1:  # To limit the number of batches displayed for testing
             break

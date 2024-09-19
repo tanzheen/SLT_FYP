@@ -6,7 +6,7 @@
 '''
 import torch
 import torch.nn as nn
-from transformers import MBartForConditionalGeneration, MBartTokenizer, MBartConfig
+from transformers import MBartForConditionalGeneration
 from vis_tokenizer.modeling.titok import TiTok
 from torch.nn.utils.rnn import pad_sequence
 from definition import * 
