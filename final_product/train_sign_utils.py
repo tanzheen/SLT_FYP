@@ -92,39 +92,10 @@ def create_model(config, logger, accelerator,
         accelerator.register_load_state_pre_hook(load_model_hook)
         accelerator.register_save_state_pre_hook(save_model_hook)
 
-
-    # Print Model for sanity check.
-    '''Need to test this later'''
-    # if accelerator.is_main_process:
-    #     if model_type in ['Sign2Text']:
-    #         input_size = (1, 3, config.dataset.preprocessing.crop_size, config.dataset.preprocessing.crop_size)  
-    #         model_summary_str = summary(model, input_size=input_size, depth=5,
-    #         col_names=("input_size", "output_size", "num_params", "params_percent", "kernel_size", "mult_adds"))
-    #         logger.info(model_summary_str)
-    #     else:
-    #         raise NotImplementedError
         
     model = accelerator.prepare(model)
     return model, ema_model
 
-'''Testing the create_model function'''
-# # Initialize the accelerator (using HuggingFace's accelerate library)
-# accelerator = Accelerator()
-
-# # Now call your create_model function
-# config = OmegaConf.load("./configs/Sign2Text_CSL_config.yaml")
-# logger = setup_logger(name="Sign2Text", log_level="INFO",
-#         output_file=f"./log{accelerator.process_index}.txt")
-    
-# # Test the function
-# model, ema_model = create_model(config, logger, accelerator, model_type="Sign2Text")
-
-# # Print model summary for testing (optional)
-# print("Model created:", model)
-# if ema_model:
-#     print("EMA model created:", ema_model)
-# else:
-#     print("EMA model not created.")
 
 
 def create_optimizer(config, logger, model, loss_module):
@@ -253,7 +224,7 @@ def log_grad_norm(model, accelerator, global_step):
             grad_norm = (grads.norm(p=2) / grads.numel()).item()
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
-def translate_images(model, images,tgt_labels ,config, accelerator, global_step, output_dir, logger, tokenizer): 
+def translate_images(model, images,tgt_labels,src_length ,config, accelerator, global_step, output_dir, logger, tokenizer): 
     logger.info("Translating images...")
     images = torch.clone(images)
     dtype = torch.float32
@@ -263,7 +234,7 @@ def translate_images(model, images,tgt_labels ,config, accelerator, global_step,
         dtype = torch.bfloat16
 
     with torch.autocast("cuda", dtype=dtype, enabled=accelerator.mixed_precision != "no"):
-        output = model(images, tgt_labels)
+        output = model(images, tgt_labels, src_length)
         # Output logits (predictions before softmax) from the decoder
         logits = output.logits 
         # Get the predicted token IDs by taking the argmax of the logits along the vocabulary dimension
@@ -311,7 +282,7 @@ def translate_images(model, images,tgt_labels ,config, accelerator, global_step,
 
 
 
-def eval_translation(config, model,dev_dataloader,accelerator, tokenizer): 
+def eval_translation(model,dev_dataloader,accelerator, tokenizer): 
     '''
     translate images in the dev_loader 
     Calculate metrics using BLEU
@@ -332,7 +303,7 @@ def eval_translation(config, model,dev_dataloader,accelerator, tokenizer):
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
         original_images = torch.clone(images)
-        output = local_model(original_images, tgt_input)
+        output = local_model(original_images, tgt_input, src_length)
         
         #must decode the output and tgt_input 
         # Output logits (predictions before softmax) from the decoder
@@ -369,8 +340,7 @@ def create_lr_scheduler(config, logger, accelerator, optimizer, len_data):
     return lr_scheduler
 
 def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_scheduler,
-                     train_dataloader, dev_dataloader, test_dataloader, 
-                     evaluator, global_step): 
+                     train_dataloader, dev_dataloader, test_dataloader, tokenizer, global_step): 
     
     batch_time_meter = AverageMeter()
     data_time_meter = AverageMeter()
@@ -478,11 +448,14 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                 translate_images(
                     model,
                     images[:config.training.num_translated_images],
+                    tgt_input[:config.training.num_translated_images],
+                    src_length[:config.training.num_translated_images],
                     accelerator,
                     global_step + 1,
                     config.experiment.output_dir,
-                    logger=logger,
-                    config=config
+                    logger,
+                    config, 
+                    tokenizer
                 )
 
                 if config.training.get("use_ema", False):
@@ -500,7 +473,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                         model,
                         dev_dataloader,
                         accelerator,
-                        evaluator
+                        tokenizer
                     )
 
                     logger.info(
@@ -522,7 +495,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                         model,
                         dev_dataloader,
                         accelerator,
-                        evaluator
+                        tokenizer 
                     )
 
                     logger.info(
@@ -555,7 +528,6 @@ if __name__ == "__main__":
 
 
     accelerator = Accelerator()
-
 
     # Test the create_signloader  and the create_model function
     train_loader, dev_loader, test_loader = create_signloader(config, logger, accelerator)
