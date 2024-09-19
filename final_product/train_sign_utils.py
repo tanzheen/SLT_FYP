@@ -6,7 +6,7 @@ from ema_model import EMAModel
 import os 
 from torch.optim import AdamW
 from signdata import SignTransDataset
-from transformers import MBartTokenizer
+from transformers import MBart50Tokenizer
 from torch.utils.data import DataLoader
 import json 
 from pathlib import Path
@@ -14,11 +14,11 @@ import time
 from collections import defaultdict
 import pprint
 from tqdm import tqdm 
-import nltk
-from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
-from rouge_score import rouge_scorer
+from accelerate import Accelerator
 import glob
 import sacrebleu
+from logger import setup_logger
+from lr_schedulers import get_scheduler
 
 
 def get_config():
@@ -95,17 +95,36 @@ def create_model(config, logger, accelerator,
 
     # Print Model for sanity check.
     '''Need to test this later'''
-    if accelerator.is_main_process:
-        if model_type in ['Sign2Text']:
-            input_size = (1, 3, config.dataset.preprocessing.crop_size, config.dataset.preprocessing.crop_size)  
-            model_summary_str = summary(model, input_size=input_size, depth=5,
-            col_names=("input_size", "output_size", "num_params", "params_percent", "kernel_size", "mult_adds"))
-            logger.info(model_summary_str)
-        else:
-            raise NotImplementedError
+    # if accelerator.is_main_process:
+    #     if model_type in ['Sign2Text']:
+    #         input_size = (1, 3, config.dataset.preprocessing.crop_size, config.dataset.preprocessing.crop_size)  
+    #         model_summary_str = summary(model, input_size=input_size, depth=5,
+    #         col_names=("input_size", "output_size", "num_params", "params_percent", "kernel_size", "mult_adds"))
+    #         logger.info(model_summary_str)
+    #     else:
+    #         raise NotImplementedError
         
-
+    model = accelerator.prepare(model)
     return model, ema_model
+
+'''Testing the create_model function'''
+# # Initialize the accelerator (using HuggingFace's accelerate library)
+# accelerator = Accelerator()
+
+# # Now call your create_model function
+# config = OmegaConf.load("./configs/Sign2Text_CSL_config.yaml")
+# logger = setup_logger(name="Sign2Text", log_level="INFO",
+#         output_file=f"./log{accelerator.process_index}.txt")
+    
+# # Test the function
+# model, ema_model = create_model(config, logger, accelerator, model_type="Sign2Text")
+
+# # Print model summary for testing (optional)
+# print("Model created:", model)
+# if ema_model:
+#     print("EMA model created:", ema_model)
+# else:
+#     print("EMA model not created.")
 
 
 def create_optimizer(config, logger, model, loss_module):
@@ -142,28 +161,28 @@ def create_optimizer(config, logger, model, loss_module):
 
     return optimizer
 
-def create_signloader(config, logger,args, accelerator): 
+def create_signloader(config, logger,accelerator): 
     batch_size = config.training.per_gpu_batch_size 
     logger.info(f"Creating Signloaders. Batch_size = {batch_size}")
-    tokenizer = MBartTokenizer.from_pretrained('facebook/mbart-large-50')
-
-    train_dataset = SignTransDataset(tokenizer, config, args, 'train')
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),  num_workers=config.dataset.params.num_workers)
+    tokenizer = MBart50Tokenizer.from_pretrained('facebook/mbart-large-50',
+                                               src_lang=config.dataset.lang,
+                                                 tgt_lang= config.dataset.lang)
+    train_dataset = SignTransDataset(tokenizer, config,  'train')
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=config.dataset.params.num_workers, collate_fn=train_dataset.collate_fn)
     train_dataloader = accelerator.prepare(train_dataloader)
     print("train dataloader done!")
 
-    dev_dataset = SignTransDataset(tokenizer, config, args, 'dev')
-    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),  num_workers=config.dataset.params.num_workers)
+    dev_dataset = SignTransDataset(tokenizer, config,  'dev')
+    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, num_workers=config.dataset.params.num_workers, collate_fn=dev_dataset.collate_fn)
     dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
 
-    test_dataset = SignTransDataset(tokenizer, config, args, 'test')
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),  num_workers=config.dataset.params.num_workers)
+    test_dataset = SignTransDataset(tokenizer, config, 'test')
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, num_workers=config.dataset.params.num_workers, collate_fn=test_dataset.collate_fn)
     test_dataloader = accelerator.prepare(test_dataloader)
     print("train dataloader done!")
 
-
-
+    return train_dataloader, dev_dataloader, test_dataloader
 
 
 def auto_resume(config, logger, accelerator, ema_model, 
@@ -303,14 +322,17 @@ def eval_translation(config, model,dev_dataloader,accelerator, tokenizer):
     local_model = accelerator.unwrap_model(model)
     predictions = [] # this is just a list 
     references = [] # this will be a list of a list
-    for i, (src_input,tgt_input) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
-        batch = src_input['input_ids']
+    for i, (src,tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
+        batch = src['input_ids']
+        src_length = src['src_length_batch']
         images = batch.to(
-            accelerator.device, memory_format= torch.contiguous_format, non_blocking = True 
-        )
-
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+        tgt_input = tgt['input_ids'].to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
         original_images = torch.clone(images)
-        output = local_model(original_images, tgt_input['input_ids'])
+        output = local_model(original_images, tgt_input)
         
         #must decode the output and tgt_input 
         # Output logits (predictions before softmax) from the decoder
@@ -333,6 +355,18 @@ def eval_translation(config, model,dev_dataloader,accelerator, tokenizer):
 
     return bleu_score
 
+def create_lr_scheduler(config, logger, accelerator, optimizer, len_data):
+    """Creates learning rate scheduler for Sign2Text."""
+    logger.info("Creating lr_schedulers.")
+    lr_scheduler = get_scheduler(
+        config.lr_scheduler.scheduler,
+        optimizer=optimizer,
+        num_training_steps=config.training.num_epochs * len_data/config.training.gradient_accumulation_steps ,
+        num_warmup_steps=config.lr_scheduler.params.warmup_steps * accelerator.num_processes,
+        base_lr=config.lr_scheduler.params.learning_rate,
+        end_lr=config.lr_scheduler.params.end_lr,
+    )
+    return lr_scheduler
 
 def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_scheduler,
                      train_dataloader, dev_dataloader, test_dataloader, 
@@ -346,25 +380,24 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
     total_loss = 0
     transformer_logs = defaultdict(float)
 
-    for i, (src_input, tgt_input) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
+    for i, (src, tgt) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
         model.train()
         # print(f"batch len: {len(batch)}")
         # print("batch shape: " ,batch.shape)
 
-        '''
-        Need to figure out how the batch size here works, 
-        together with the attention mask and what not
-        '''
-        batch = src_input['input_ids']
-
+        batch = src['input_ids']
+        src_length = src['src_length_batch']
         images = batch.to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+        tgt_input = tgt['input_ids'].to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
         
         data_time_meter.update(time.time() - end)
 
         with accelerator.accumulate([model]):
-            output = model(images, tgt_input['input_ids'])
+            output = model(images, tgt_input, src_length)
 
             loss = output.loss 
             total_loss += loss 
@@ -508,3 +541,44 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
     return global_step
 
 
+if __name__ == "__main__":
+    # Initialize necessary components
+    
+    '''Testing the create_signloader here'''
+    # Initialize the accelerator (using HuggingFace's accelerate library)
+    accelerator = Accelerator()
+
+    # Now call your create_model function
+    config = OmegaConf.load("./configs/Sign2Text_CSL_config.yaml")
+    logger = setup_logger(name="Sign2Text", log_level="INFO",
+            output_file=f"./log{accelerator.process_index}.txt")
+
+
+    accelerator = Accelerator()
+
+
+    # Test the create_signloader  and the create_model function
+    train_loader, dev_loader, test_loader = create_signloader(config, logger, accelerator)
+    model, ema_model = create_model(config, logger, accelerator, model_type="Sign2Text")
+    # Now iterate through the train loader
+    for i, (src, tgt) in enumerate(train_loader):
+        print(f"Batch {i}:")
+        print(f"Name batch: {src['name_batch']}")
+        print(f"Source video: {src['input_ids'].shape}")
+        print(f"Source length: {src['src_length_batch']}")
+        print(f"New Source length: {src['new_src_length_batch']}")
+        print(f"Target tokens: {len(tgt['input_ids'])}")
+        batch = src['input_ids']
+        src_length = src['src_length_batch']
+        images = batch.to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+        tgt_input = tgt['input_ids'].to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+        print(tgt_input.shape)
+        
+        output = model(images,tgt_input, src_length)
+        print(output)
+        if i == 1:  # To limit the number of batches displayed for testing
+            break

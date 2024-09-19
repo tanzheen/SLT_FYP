@@ -1,8 +1,7 @@
 from ctypes import util
 from cv2 import IMREAD_GRAYSCALE
 import torch
-import utils as utils
-import torch.utils.data.dataset as Dataset
+from torch.utils.data import Dataset
 from torch.nn.utils.rnn import pad_sequence
 import math
 from torchvision import transforms
@@ -62,25 +61,23 @@ class SignTransDataset(Dataset):
             tokenizer: Tokenizer for text data (used for embedding the text labels).
             config (dict): Configuration for the dataset and models.
             phase (str): The current phase ('train', 'dev', 'test') to determine which split to load.
-            training_refurbish (bool): Whether to apply data augmentation like adding noise to training data.
         """
         self.config = config  # Config contains paths, settings, and model details.
 
         self.phase = phase  # Can be 'train', 'dev', or 'test'.
 
         # Load the annotations (e.g., translations) from the annotation file corresponding to the current phase.
-        self.raw_data = load_annot_file(config['data'][phase])
+        self.raw_data = load_annot_file(config['dataset'][phase])
         
         # Setup tokenizer and set the target language from config.
         self.tokenizer = tokenizer
-        self.tokenizer.tgt_lang = config['training']['tgt_lang']
         
         self.max_length = self.raw_data['max_length']  # Maximum sequence length.
-        self.img_path = os.path.join(config['data']['img_path'], phase)  # Path to the images directory for the phase.
+        self.img_path = os.path.join(config['dataset']['img_path'], phase)  # Path to the images directory for the phase.
         self.data_list = self.raw_data['info']  # List of all data samples (videos).
-        self.dataset_name = config['training']['dataset_name']  # The dataset type (used to apply specific transformations).
-        self.crop_width = config.training.person_size  # Image crop width.
-        self.crop_height = config.training.person_size  # Image crop height.
+        self.dataset_name = config['dataset']['name']  # The dataset type (used to apply specific transformations).
+        self.crop_width = config.dataset.preprocessing.person_size  # Image crop width.
+        self.crop_height = config.dataset.preprocessing.person_size  # Image crop height.
     
     def __len__(self):
         """
@@ -122,22 +119,16 @@ class SignTransDataset(Dataset):
             torch.Tensor: A tensor containing the video frames, padded to the required size.
         """
         # Set up dataset-specific transformations.
-        if self.dataset_name == "CSL-Daily": 
-            # No normalization applied (all values remain between 0 and 1).
-            norm_mean = [0., 0., 0.]
-            norm_std = [1., 1., 1.]
-            data_transform = transforms.Compose([
-                transforms.Resize((256, 256)),
-                transforms.ToTensor(),
-                transforms.Normalize(norm_mean, norm_std)
-            ])
-        elif self.dataset_name == "PHOENIX": 
-            # Use ImageNet mean and standard deviation values for normalization.
-            data_transform = transforms.Compose([
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ])
-
+        # No normalization applied (all values remain between 0 and 1).
+        norm_mean = [0., 0., 0.]
+        norm_std = [1., 1., 1.]
+        data_transform = transforms.Compose([
+            transforms.Resize((self.config.dataset.preprocessing.resize_shorter_edge, 
+                                self.config.dataset.preprocessing.resize_shorter_edge)),
+            transforms.ToTensor(),
+            transforms.Normalize(norm_mean, norm_std)
+        ])
+     
         # Sort the frame paths to maintain the order.
         paths = sorted(os.listdir(dir_path)) 
         
@@ -147,7 +138,9 @@ class SignTransDataset(Dataset):
             paths = [paths[i] for i in sampled_indices]
 
         # Create an empty tensor to store the images.
-        imgs = torch.zeros(len(paths), 3, self.config.training.input_size, self.config.training.input_size)
+        imgs = torch.zeros(len(paths), 3, 
+                           self.config.dataset.preprocessing.resize_shorter_edge, 
+                           self.config.dataset.preprocessing.resize_shorter_edge)
         batch_image = []
 
         # Load each image, apply transformations, and crop if necessary.
@@ -242,8 +235,7 @@ class SignTransDataset(Dataset):
         img_padding_mask = (mask_gen != PAD_IDX).long()
 
         # Tokenize the text labels.
-        with self.tokenizer.as_target_tokenizer():
-            tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
+        tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
         
         # Pack everything into a dictionary to return.
         src_input = {

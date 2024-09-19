@@ -1,14 +1,14 @@
-Wexperiment:
-  project: "titok_l_32_stage1"
-  name: "titok_l_32_stage1_run1"
-  output_dir: "titok_l_32_stage1_run1"
-  generate_every: 0.1
+experiment:
+  project: "Sign2Text"
+  name: "Sign2Text_run1"
+  output_dir: "Sign2Text"
+  translate_every: 0.1
   save_every: 0.0001
   log_every: 0.01
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True
-  init_weight: "tokenizer_titok_l32.bin"
+  init_weight: ""
 
 model:
   vq_model:
@@ -25,16 +25,25 @@ model:
     finetune_decoder: False
     pretrained_tokenizer_weight: "maskgit-vqgan-imagenet-f16-256.bin"
 
+  MBart_model:
+    init_weight: facebook/mbart-large-50
+
 losses:
   quantizer_weight: 1.0
 
 dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/ # + <train/dev/test> + <video_name>
+  max_length: 300
   params:
-    img_path: /hpctmp/e0724993/CSL-Daily/sentence/frames_512x512/ # might need to resize
     num_workers: 4
   preprocessing:
-    resize_shorter_edge: 256
     crop_size: 256
+    resize_shorter_edge: 256
     random_crop: True
     random_flip: True
     person_size: 410
@@ -42,7 +51,7 @@ dataset:
 optimizer:
   name: adamw
   params:
-    learning_rate: 1e-4
+    learning_rate: 1e-5
     beta1: 0.9
     beta2: 0.99
     weight_decay: 1e-4
@@ -56,13 +65,13 @@ lr_scheduler:
 
 training:
   gradient_accumulation_steps: 1
-  per_gpu_batch_size: 16
+  per_gpu_batch_size: 4
   mixed_precision: "fp16"
   enable_tf32: True
   enable_wandb: False
   use_ema: True
   seed: 42
-  num_generated_images: 4
+  num_translated_images: 4
   max_grad_norm: 1.0
   num_epochs: 10
   frame_every: 5

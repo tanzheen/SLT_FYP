@@ -1,4 +1,4 @@
-Wexperiment:
+experiment:
   project: "titok_l_32_stage1"
   name: "titok_l_32_stage1_run1"
   output_dir: "titok_l_32_stage1_run1"
@@ -37,7 +37,7 @@ dataset:
     crop_size: 256
     random_crop: True
     random_flip: True
-    person_size: 410
+    person_size : 410
 
 optimizer:
   name: adamw

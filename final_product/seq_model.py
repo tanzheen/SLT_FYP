@@ -6,17 +6,40 @@
 '''
 import torch
 import torch.nn as nn
-from transformers import MBartForConditionalGeneration, MBartTokenizer
+from transformers import MBartForConditionalGeneration, MBartTokenizer, MBartConfig
+from vis_tokenizer.modeling.titok import TiTok
+from torch.nn.utils.rnn import pad_sequence
+from definition import * 
 
 class SignModel(nn.Module): 
-    def __init__(self, Titok_config): 
-        super(SignModel, self).__init__()
-        self.Titok = Titok(Titok_config)
-        self.Adapted_Mbart = Adapted_Mbart().from_pretrained("facebook/mbart-large-50")
-    
-    def forward(self, input_frames, tgt_input): 
-        encoded_tokens = Titok.encode(input_frames)[1]["min_encoding_indices"]
-        sign_translation = Adapted_Mbart(encoded_tokens, tgt_input)
+    def __init__(self, Config): 
+        super().__init__()
+        self.titok = TiTok(Config)
+        self.freeze_Titok_weights()  # Freeze Titok weights here
+        self.Mbart = MBartForConditionalGeneration.from_pretrained(Config.model.MBart_model.init_weight)
+        self.adapter = LLMAdapter(Config.model.vq_model.num_latent_tokens, hidden_dim= 1024)
+        # Replace the embedding layer in the encoder
+     
+
+    def freeze_Titok_weights(self):
+        # Freeze the weights of the Titok model
+        for param in self.titok.parameters():
+            param.requires_grad = False
+
+    def forward(self, src_input, tgt_input, src_length): 
+        '''
+        Shape of: 
+            src_input: (batch_size, sequence_len, embedding_dim)
+            tgt_input: (batch_size, sequence_length)
+        '''
+        encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices']
+        print(f"encoded tokens: {encoded_tokens.float()}")
+        print(encoded_tokens.shape)
+        hidden_values = self.adapter(encoded_tokens.float(), src_length).squeeze()
+        print(hidden_values.shape)
+        sign_translation = self.Mbart(inputs_embeds = hidden_values, labels= tgt_input)
+              
+        
 
         return sign_translation
 
@@ -27,7 +50,7 @@ class LLMAdapter(nn.Module):
     32 tokens per frame will be transformed into 1024 tokens for the LLM to take in 
     At the same time, information about temporal relations will be understood
     '''
-    def __init__(self, num_tokens= 32, hidden_dim= 1024, kernel_size=3):
+    def __init__(self, num_tokens= 32, hidden_dim= 1024, kernel_size=5):
         super(LLMAdapter, self).__init__()
         # Temporal convolution over the time dimension
         self.temporal_conv = nn.Conv1d(
@@ -40,28 +63,24 @@ class LLMAdapter(nn.Module):
         self.batch_norm = nn.BatchNorm1d(hidden_dim)
         self.relu = nn.ReLU()
 
-    def forward(self, x):
+    def forward(self, x, src_length):
         # Input shape: (batch_size, num_frames, num_tokens)
         # We need to apply Conv1d over the temporal dimension, so we transpose to (batch_size, num_tokens, num_frames)
-        x = x.transpose(1, 2)
+        x = x.permute(0,2,1)
         x = self.temporal_conv(x)  # Shape: (batch_size, hidden_dim, num_frames)
         x = self.batch_norm(x)
         x = self.relu(x)
-        x = x.transpose(1, 2)  # Convert back to (batch_size, num_frames, hidden_dim)
+        x = x.permute(0,2,1 )  # Convert back to (batch_size, num_frames, hidden_dim)
+
+        start=0 
+        x_batch = []
+        for length in src_length: 
+            end = start + length 
+            x_batch.append(x[start:end])
+            start = end 
+        x = pad_sequence(x_batch, padding_value = PAD_IDX, batch_first = True)
+
         return x
-
-
-class Adapted_Mbart(MBartForConditionalGeneration):
-    def __init__(self, num_vq_tokens = 32, hidden_size= 1024 ):
-        super().__init__()
-        # initiate the LLM Adaptor 
-        self.adapter = LLMAdapter(num_vq_tokens, hidden_size)
-        # Replace the embedding layer in the encoder
-        self.model.encoder.embed_tokens = self.adapter
-    
-    def forward(self, input_tokens, tgt_input,  **kwargs):
-        # Forward pass using the modified MBart with custom adapter
-        return super().forward(input_ids=None, inputs_embeds=self.adapter(input_tokens), labels= tgt_input)
 
 
 
