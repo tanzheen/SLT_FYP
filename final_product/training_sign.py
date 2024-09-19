@@ -4,6 +4,7 @@ from accelerate import Accelerator
 from logger import setup_logger
 from accelerate.utils import set_seed
 import sys 
+from transformers import MBart50Tokenizer
 
 def main(): 
     workspace = os.environ.get('WORKSPACE', '')
@@ -56,7 +57,7 @@ def main():
     # Create model 
     model, ema_model = create_model(config, logger, accelerator)
     # Create signloaders 
-    tokenizer = MBartTokenizer.from_pretrained(config.training.tokenizer)
+    tokenizer = MBart50Tokenizer.from_pretrained(config.training.tokenizer)
     train_dataloader, dev_dataloader, test_dataloader = create_signloader(config, logger, accelerator, tokenizer)
     # Create optimizer
     optimizer = create_optimizer(config, logger, model)
