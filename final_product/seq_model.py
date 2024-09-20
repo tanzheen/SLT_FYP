@@ -42,10 +42,7 @@ class SignModel(nn.Module):
             tgt_input: (batch_size, sequence_length)
         '''
         encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze()
-        print(f"encoded tokens: {encoded_tokens.float()}")
-        print("encoded tokens shape: " , encoded_tokens.shape)
         hidden_values = self.adapter(encoded_tokens.float(), src_length).squeeze()
-        print("hidden values shape" ,hidden_values.shape)
         sign_translation = self.Mbart(inputs_embeds = hidden_values, attention_mask = src_attn, 
                                       decoder_attention_mask = tgt_attn,  labels= tgt_input)
 

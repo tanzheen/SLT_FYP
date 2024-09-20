@@ -129,17 +129,23 @@ def create_signloader(config, logger,accelerator, tokenizer):
     logger.info(f"Creating Signloaders. Batch_size = {batch_size}")
 
     train_dataset = SignTransDataset(tokenizer, config,  'train')
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=config.dataset.params.num_workers, collate_fn=train_dataset.collate_fn)
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, 
+                                  num_workers=config.dataset.params.num_workers, collate_fn=train_dataset.collate_fn,
+                                   generator=torch.Generator(device=accelerator.device) )
     train_dataloader = accelerator.prepare(train_dataloader)
     print("train dataloader done!")
 
     dev_dataset = SignTransDataset(tokenizer, config,  'dev')
-    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, num_workers=config.dataset.params.num_workers, collate_fn=dev_dataset.collate_fn)
+    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, 
+                                num_workers=config.dataset.params.num_workers, collate_fn=dev_dataset.collate_fn, 
+                                 generator=torch.Generator(device=accelerator.device) )
     dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
 
     test_dataset = SignTransDataset(tokenizer, config, 'test')
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, num_workers=config.dataset.params.num_workers, collate_fn=test_dataset.collate_fn)
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True,
+                                  num_workers=config.dataset.params.num_workers, collate_fn=test_dataset.collate_fn, 
+                                  generator=torch.Generator(device=accelerator.device))
     test_dataloader = accelerator.prepare(test_dataloader)
     print("train dataloader done!")
 
@@ -365,6 +371,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
         batch = src['input_ids']
         src_length = src['src_length_batch']
         tgt_attn = tgt.attention_mask
+        tgt_input = tgt['input_ids']
         tgt_input[tgt_attn== 0] = -100
         input_attn = src['attention_mask']
         
@@ -456,7 +463,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                 accelerator.wait_for_everyone()
 
             ## Generate some examples
-            if (global_step + 1) % int(config.experiment.generate_every * len(train_dataloader))== 0 and accelerator.is_main_process:
+            if (global_step + 1) % int(config.experiment.translate_every * len(train_dataloader))== 0 and accelerator.is_main_process:
                 # Store the model parameters temporarily and load the EMA parameters to perform inference.
                 if config.training.get("use_ema", False):
                     ema_model.store(model.parameters())

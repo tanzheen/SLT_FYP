@@ -87,7 +87,7 @@ def main():
     
     # Freeze both model's weights just in case
     model.freeze_Titok_weights()
-    ema_model.freeze_Titok_weights()
+    
     num_train_epochs = config.training.num_epochs
     for current_epoch in range(first_epoch, num_train_epochs):
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
