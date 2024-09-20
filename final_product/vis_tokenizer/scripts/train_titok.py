@@ -137,7 +137,7 @@ def main():
     global_step, first_epoch = auto_resume(
         config, logger, accelerator, ema_model,
         strict=True)
-
+    
     for current_epoch in range(first_epoch, num_train_epochs):
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
         global_step = train_one_epoch(config, logger, accelerator,

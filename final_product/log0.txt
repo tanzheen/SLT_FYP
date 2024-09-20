@@ -128,3 +128,15 @@
 [32m[09/19 23:47:34 Sign2Text]: [0mCreating model and loss module.
 [32m[09/19 23:51:12 Sign2Text]: [0mCreating Signloaders. Batch_size = 4
 [32m[09/19 23:51:15 Sign2Text]: [0mCreating model and loss module.
+[32m[09/20 11:17:00 Sign2Text]: [0mCreating Signloaders. Batch_size = 4
+[32m[09/20 11:17:01 Sign2Text]: [0mCreating model and loss module.
+[32m[09/20 11:19:44 Sign2Text]: [0mCreating Signloaders. Batch_size = 4
+[32m[09/20 11:19:45 Sign2Text]: [0mCreating model and loss module.
+[32m[09/20 11:21:15 Sign2Text]: [0mCreating Signloaders. Batch_size = 4
+[32m[09/20 11:21:17 Sign2Text]: [0mCreating model and loss module.
+[32m[09/20 11:25:09 Sign2Text]: [0mCreating Signloaders. Batch_size = 4
+[32m[09/20 11:25:11 Sign2Text]: [0mCreating model and loss module.
+[32m[09/20 11:28:49 Sign2Text]: [0mCreating Signloaders. Batch_size = 4
+[32m[09/20 11:28:50 Sign2Text]: [0mCreating model and loss module.
+[32m[09/20 11:30:19 Sign2Text]: [0mCreating Signloaders. Batch_size = 4
+[32m[09/20 11:30:20 Sign2Text]: [0mCreating model and loss module.

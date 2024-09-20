@@ -28,14 +28,13 @@ def main():
     tracker = "tensorboard"
     if config.training.enable_wandb:
         tracker = "wandb"
-    torch.distributed.init_process_group(backend='nccl')
+  
     accelerator = Accelerator(
         gradient_accumulation_steps=config.training.gradient_accumulation_steps,
         mixed_precision=config.training.mixed_precision,
         log_with=tracker,
         project_dir=config.experiment.logging_dir,
-        split_batches=False,
-        deepspeed_plugin=True
+        split_batches=False
     )
 
     logger = setup_logger(name="Sign2Text", log_level="INFO",
@@ -57,7 +56,9 @@ def main():
     # Create model 
     model, ema_model = create_model(config, logger, accelerator)
     # Create signloaders 
-    tokenizer = MBart50Tokenizer.from_pretrained(config.training.tokenizer)
+    tokenizer = MBart50Tokenizer.from_pretrained('facebook/mbart-large-50',
+                                               src_lang=config.dataset.lang,
+                                                 tgt_lang= config.dataset.lang)
     train_dataloader, dev_dataloader, test_dataloader = create_signloader(config, logger, accelerator, tokenizer)
     # Create optimizer
     optimizer = create_optimizer(config, logger, model)
@@ -83,6 +84,10 @@ def main():
     global_step, first_epoch = auto_resume(
         config, logger, accelerator, ema_model,
         strict=True)
+    
+    # Freeze both model's weights just in case
+    model.freeze_Titok_weights()
+    ema_model.freeze_Titok_weights()
     num_train_epochs = config.training.num_epochs
     for current_epoch in range(first_epoch, num_train_epochs):
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
@@ -116,6 +121,14 @@ if __name__ == "__main__":
     torch.cuda.empty_cache()
     main()
 
-
+'''
+# Training for Sign2Text
+# Stage 1
+$env:WANDB_MODE="offline"
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network training_sign.py config=configs/Sign2Text_CSL_config.yaml `
+    --experiment.project="Sign2Text_CSL" `
+    --experiment.name="Sign2Text_CSL_run1" `
+    --experiment.output_dir="Sign2Text_CSL_run1" 
+'''
     
 

@@ -54,8 +54,7 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 
-def create_model(config, logger, accelerator,
-                                 model_type="Sign2Text"):
+def create_model(config, logger, accelerator, model_type="Sign2Text"):
     """Creates Sign2Text model and loss module."""
     logger.info("Creating model and loss module.")
     if model_type == "Sign2Text":
@@ -67,8 +66,6 @@ def create_model(config, logger, accelerator,
     if config.experiment.init_weight:
         # If loading a pretrained weight
         model_weight = torch.load(config.experiment.init_weight, map_location="cpu")
-
-        
         msg = model.load_state_dict(model_weight, strict=False)
         logger.info(f"loading weight from {config.experiment.init_weight}, msg: {msg}")
 
@@ -98,23 +95,17 @@ def create_model(config, logger, accelerator,
 
 
 
-def create_optimizer(config, logger, model, loss_module):
+def create_optimizer(config, logger, model):
     """Creates optimizer for Sign2Text model."""
     logger.info("Creating optimizers.")
     optimizer_config = config.optimizer.params
     learning_rate = optimizer_config.learning_rate
-
     optimizer_type = config.optimizer.name
     if optimizer_type == "adamw":
         optimizer_cls = AdamW
     else:
         raise ValueError(f"Optimizer {optimizer_type} not supported")
 
-    
-    '''
-    Exclude terms we may not want to apply weight decay.
-    Have to also understand the betas 
-    '''
     exclude = (lambda n, p: p.ndim < 2 or "ln" in n or "bias" in n or 'latent_tokens' in n 
                or 'mask_token' in n or 'embedding' in n or 'norm' in n or 'gamma' in n)
     include = lambda n, p: not exclude(n, p)
@@ -132,12 +123,11 @@ def create_optimizer(config, logger, model, loss_module):
 
     return optimizer
 
-def create_signloader(config, logger,accelerator): 
+
+def create_signloader(config, logger,accelerator, tokenizer): 
     batch_size = config.training.per_gpu_batch_size 
     logger.info(f"Creating Signloaders. Batch_size = {batch_size}")
-    tokenizer = MBart50Tokenizer.from_pretrained('facebook/mbart-large-50',
-                                               src_lang=config.dataset.lang,
-                                                 tgt_lang= config.dataset.lang)
+
     train_dataset = SignTransDataset(tokenizer, config,  'train')
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=config.dataset.params.num_workers, collate_fn=train_dataset.collate_fn)
     train_dataloader = accelerator.prepare(train_dataloader)
@@ -224,7 +214,7 @@ def log_grad_norm(model, accelerator, global_step):
             grad_norm = (grads.norm(p=2) / grads.numel()).item()
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
-def translate_images(model, images,tgt_labels,src_length ,config, accelerator, global_step, output_dir, logger, tokenizer): 
+def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,config, accelerator, global_step, output_dir, logger, tokenizer): 
     logger.info("Translating images...")
     images = torch.clone(images)
     dtype = torch.float32
@@ -234,14 +224,17 @@ def translate_images(model, images,tgt_labels,src_length ,config, accelerator, g
         dtype = torch.bfloat16
 
     with torch.autocast("cuda", dtype=dtype, enabled=accelerator.mixed_precision != "no"):
-        output = model(images, tgt_labels, src_length)
+        output = model(images, tgt_labels,input_attn, tgt_attn, src_length)
         # Output logits (predictions before softmax) from the decoder
-        logits = output.logits 
         # Get the predicted token IDs by taking the argmax of the logits along the vocabulary dimension
-        predicted_token_ids = torch.argmax(logits, dim=-1)
+        logits = output['logits']
+        probs = logits.softmax(dim=-1)
+        values, predictions = torch.topk(probs,k=1, dim = -1)
+        predictions = predictions.reshape(len(images).batch_size,-1).squeeze()
+        with tokenizer.as_target_tokenizer():
+            pred_translations  = tokenizer.batch_decode(predictions, skip_special_tokens = True)
 
         # Decode the predicted token IDs into sentences
-        pred_translations = tokenizer.batch_decode(predicted_token_ids, skip_special_tokens= True)
         gt_translations = tokenizer.batch_decode(tgt_labels['input_ids'], skip_special_tokens = True)
 
 
@@ -296,27 +289,41 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer):
     for i, (src,tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
         batch = src['input_ids']
         src_length = src['src_length_batch']
+        tgt_attn = tgt.attention_mask
+        tgt_input[tgt_attn== 0] = -100
+        input_attn = src['attention_mask']
+        
         images = batch.to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
         tgt_input = tgt['input_ids'].to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
+        input_attn = input_attn.to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+        tgt_attn = tgt_attn.to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+
         original_images = torch.clone(images)
-        output = local_model(original_images, tgt_input, src_length)
-        
+        output = local_model(original_images, tgt_input, input_attn , tgt_attn, src_length)
         #must decode the output and tgt_input 
         # Output logits (predictions before softmax) from the decoder
-        logits = output.logits 
-        # Get the predicted token IDs by taking the argmax of the logits along the vocabulary dimension
-        predicted_token_ids = torch.argmax(logits, dim=-1)
+        '''
+        Help
+        '''
+        logits = output['logits']
+        probs = logits.softmax(dim=-1)
+        values, predictions = torch.topk(probs,k=1, dim = -1)
+        predictions = predictions.reshape(len(images),-1).squeeze()
+        with tokenizer.as_target_tokenizer():
+            sentence = tokenizer.batch_decode(predictions, skip_special_tokens = True )
 
-        # Decode the predicted token IDs into sentences
-        pred_translation = tokenizer.batch_decode(predicted_token_ids, skip_special_tokens=True)
 
         gt_translation = tokenizer.batch_decode(tgt_input['input_ids'], skip_special_tokens=True)
         
-        predictions.extend(pred_translation)
+        predictions.extend(sentence)
         references.append(gt_translation)
 
 
@@ -357,18 +364,29 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
 
         batch = src['input_ids']
         src_length = src['src_length_batch']
+        tgt_attn = tgt.attention_mask
+        tgt_input[tgt_attn== 0] = -100
+        input_attn = src['attention_mask']
+        
         images = batch.to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
         tgt_input = tgt['input_ids'].to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
+        input_attn = input_attn.to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+        tgt_attn = tgt_attn.to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+
+        
         
         data_time_meter.update(time.time() - end)
 
         with accelerator.accumulate([model]):
-            output = model(images, tgt_input, src_length)
-
+            output = model(images, tgt_input, input_attn , tgt_attn, src_length)
             loss = output.loss 
             total_loss += loss 
             # Gather the losses across all processes for logging.
@@ -450,6 +468,8 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                     images[:config.training.num_translated_images],
                     tgt_input[:config.training.num_translated_images],
                     src_length[:config.training.num_translated_images],
+                    input_attn[:config.training.num_translated_images], 
+                    tgt_attn[:config.training.num_translated_images], 
                     accelerator,
                     global_step + 1,
                     config.experiment.output_dir,
@@ -514,66 +534,3 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
     return global_step
 
 
-if __name__ == "__main__":
-    # Initialize necessary components
-    
-    '''Testing the create_signloader here'''
-    # Initialize the accelerator (using HuggingFace's accelerate library)
-    accelerator = Accelerator()
-
-    # Now call your create_model function
-    config = OmegaConf.load("./configs/Sign2Text_CSL_config.yaml")
-    logger = setup_logger(name="Sign2Text", log_level="INFO",
-            output_file=f"./log{accelerator.process_index}.txt")
-
-
-    accelerator = Accelerator()
-    tokenizer = MBart50Tokenizer.from_pretrained('facebook/mbart-large-50',
-                                               src_lang=config.dataset.lang,
-                                                 tgt_lang= config.dataset.lang)
-    # Test the create_signloader  and the create_model function
-    train_loader, dev_loader, test_loader = create_signloader(config, logger, accelerator)
-    model, ema_model = create_model(config, logger, accelerator, model_type="Sign2Text")
-    # Now iterate through the train loader
-    for i, (src, tgt) in enumerate(train_loader):
-        print(f"Batch {i}:")
-        print(f"Name batch: {src['name_batch']}")
-        print(f"Source video: {src['input_ids'].shape}")
-        print(f"Source length: {src['src_length_batch']}")
-        print(f"New Source length: {src['new_src_length_batch']}")
-        print(f"Input attentions: {src['attention_mask']}")
-        print(f"Target tokens: {len(tgt['input_ids'])}")
-        batch = src['input_ids']
-        src_length = src['src_length_batch']
-        
-        images = batch.to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        tgt_input = tgt['input_ids'].to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        tgt_attn = tgt.attention_mask
-        tgt_input[tgt_attn== 0] = -100
-        print("tgt values : ", tgt_input)
-        print("tgt attention: ",tgt.attention_mask)
-        input_attn = src['attention_mask']
-        print("input_attn", input_attn)
-        input_attn = input_attn.to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        output = model(images, input_attn ,tgt_input, src_length)
-        print(f"outputs: {output}")
-        print(f"loss: {output.loss}")
-        logits = output['logits']
-        print("logits: " , logits.shape)
-        probs = logits.softmax(dim = -1 )
-        print(f"probs: {probs.shape}")
-        values, predictions = torch.topk(probs,k=1, dim = -1)
-        predictions = predictions.reshape(4,-1).squeeze()
-        print(predictions)
-        print(tokenizer.tgt_lang)
-        with tokenizer.as_target_tokenizer():
-            sentence = tokenizer.batch_decode(predictions, skip_special_tokens = True )
-        print(sentence)
-        if i == 1:  # To limit the number of batches displayed for testing
-            break
