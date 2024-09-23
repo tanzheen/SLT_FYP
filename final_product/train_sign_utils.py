@@ -89,8 +89,6 @@ def create_model(config, logger, accelerator, model_type="Sign2Text"):
         accelerator.register_load_state_pre_hook(load_model_hook)
         accelerator.register_save_state_pre_hook(save_model_hook)
 
-        
-    model = accelerator.prepare(model)
     return model, ema_model
 
 
@@ -242,7 +240,6 @@ def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,
 
         # Decode the predicted token IDs into sentences
         gt_translations = tokenizer.batch_decode(tgt_labels['input_ids'], skip_special_tokens = True)
-
 
     
     # Log translations using wandb or tensorboard, if enabled
@@ -469,20 +466,20 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                     ema_model.store(model.parameters())
                     ema_model.copy_to(model.parameters())
 
-                # save a sample of translated images to check by reading
+                # Save a batch of translated images to check by reading
                 translate_images(
-                    model,
-                    images[:config.training.num_translated_images],
-                    tgt_input[:config.training.num_translated_images],
-                    src_length[:config.training.num_translated_images],
-                    input_attn[:config.training.num_translated_images], 
-                    tgt_attn[:config.training.num_translated_images], 
-                    accelerator,
-                    global_step + 1,
-                    config.experiment.output_dir,
-                    logger,
-                    config, 
-                    tokenizer
+                    model=model,
+                    images=images,
+                    tgt_labels=tgt_input,
+                    input_attn=input_attn, 
+                    tgt_attn=tgt_attn, 
+                    src_length=src_length,
+                    config=config,
+                    accelerator=accelerator,
+                    global_step=global_step + 1,
+                    output_dir=config.experiment.output_dir,
+                    logger=logger, 
+                    tokenizer=tokenizer
                 )
 
                 if config.training.get("use_ema", False):
@@ -497,10 +494,10 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                     ema_model.copy_to(model.parameters())
                     # Eval for EMA.
                     eval_scores = eval_translation(
-                        model,
-                        dev_dataloader,
-                        accelerator,
-                        tokenizer
+                        model=model,
+                        dev_dataloader=dev_dataloader,
+                        accelerator=accelerator,
+                        tokenizer=tokenizer
                     )
 
                     logger.info(
@@ -519,10 +516,10 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                      
                     # Eval for non-EMA.
                     eval_scores = eval_translation(
-                        model,
-                        dev_dataloader,
-                        accelerator,
-                        tokenizer 
+                        model=model,
+                        dev_dataloader=dev_dataloader,
+                        accelerator=accelerator,
+                        tokenizer=tokenizer 
                     )
 
                     logger.info(

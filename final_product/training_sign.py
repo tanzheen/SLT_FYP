@@ -5,6 +5,7 @@ from logger import setup_logger
 from accelerate.utils import set_seed
 import sys 
 from transformers import MBart50Tokenizer
+import torch.multiprocessing as mp
 
 def main(): 
     workspace = os.environ.get('WORKSPACE', '')
@@ -56,7 +57,7 @@ def main():
     # Create model 
     model, ema_model = create_model(config, logger, accelerator)
     # Create signloaders 
-    tokenizer = MBart50Tokenizer.from_pretrained('facebook/mbart-large-50',
+    tokenizer = MBart50Tokenizer.from_pretrained(config.training.tokenizer,
                                                src_lang=config.dataset.lang,
                                                  tgt_lang= config.dataset.lang)
     train_dataloader, dev_dataloader, test_dataloader = create_signloader(config, logger, accelerator, tokenizer)
@@ -104,7 +105,7 @@ def main():
             if config.training.use_ema:
                 ema_model.copy_to(model.parameters())
             model.save_pretrained_weight(output_dir)
-        accelerator.end_training() 
+        accelerator.end_training()
 
 
 if __name__ == "__main__":
@@ -115,6 +116,8 @@ if __name__ == "__main__":
         current_device = torch.cuda.current_device()
         torch.set_default_device('cuda')
         print(f"Current CUDA device: {torch.cuda.get_device_name(current_device)}")
+
+        mp.set_start_method('spawn', force=True)
     else:
         torch.set_default_device('mps')
         print("CUDA is not available. Using CPU.")

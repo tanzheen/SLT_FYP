@@ -9,3 +9,11 @@
 1d-tokenizer/tokenizer_titok_l32.bin
 1d-tokenizer/generator_titok_l32.bin
 /final_product/TiTok_weights
+/checkpoint-640350
+/mbart_model
+/mbart_model
+/mbart_model
+/mbart_model
+/mbart_model
+mbart_model/generation_config.json
+/mbart_model

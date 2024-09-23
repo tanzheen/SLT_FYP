@@ -68,7 +68,6 @@ class PretrainedTokenizer(nn.Module):
         rec_images = torch.clamp(rec_images, 0.0, 1.0)
         return rec_images.detach()
 
-
 class TiTok(BaseModel, PyTorchModelHubMixin, tags=["arxiv:2304.12244", "image-tokenization"], license="mit"):
     def __init__(self, config): ## takes in config 
 

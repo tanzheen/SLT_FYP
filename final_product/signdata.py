@@ -1,5 +1,5 @@
-from ctypes import util
-from cv2 import IMREAD_GRAYSCALE
+
+
 import torch
 from torch.utils.data import Dataset
 from torch.nn.utils.rnn import pad_sequence
@@ -10,11 +10,6 @@ import cv2
 import os
 import random
 import numpy as np
-import lmdb
-import io
-import time
-from vidaug import augmentors as va
-from loguru import logger
 from augmentation import *
 from definition import *
 import pickle
@@ -226,7 +221,7 @@ class SignTransDataset(Dataset):
         new_src_lengths = (((src_length_batch - 5 + 1) / 2) - 5 + 1) / 2
         new_src_lengths = new_src_lengths.long()
 
-        # Create a mask for padding.
+        # Create a mask for padding. These will be for the sequences into the MBart model
         mask_gen = []
         for i in new_src_lengths:
             tmp = torch.ones([i]) + 7

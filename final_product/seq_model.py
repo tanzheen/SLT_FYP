@@ -10,16 +10,48 @@ from transformers import MBartForConditionalGeneration
 from vis_tokenizer.modeling.titok import TiTok
 from torch.nn.utils.rnn import pad_sequence
 from definition import * 
+from omegaconf import OmegaConf
+from pathlib import Path
+import json 
+from base_model import BaseModel
+from huggingface_hub import PyTorchModelHubMixin
 
-class SignModel(nn.Module): 
-    def __init__(self, Config):
+
+class SignModel(BaseModel, PyTorchModelHubMixin): 
+    def __init__(self, config):
         super().__init__()
-        self.titok = TiTok(Config)
-        self.load_Titok_weights(Config.model.vq_model.init_weight)  # Load pretrained weights for the Titok model
+        self.titok = TiTok(config)
+        self.load_Titok_weights(config.model.vq_model.init_weight)  # Load pretrained weights for the Titok model
         self.freeze_Titok_weights()  # Freeze Titok weights here
-        self.Mbart = MBartForConditionalGeneration.from_pretrained(Config.model.MBart_model.init_weight)
-        self.adapter = LLMAdapter(Config.model.vq_model.num_latent_tokens, hidden_dim= 1024)
+        self.Mbart = MBartForConditionalGeneration.from_pretrained(config.model.MBart_model.init_weight)
+        self.adapter = LLMAdapter(config.model.vq_model.num_latent_tokens, hidden_dim= 1024)
         # Replace the embedding layer in the encoder
+
+    def _save_pretrained(self, save_directory: Path) -> None:
+        """Save weights and config to a local directory."""
+        # Assume 'self.config' is your DictConfig object
+        # Convert to a regular dictionary
+        dict_config = OmegaConf.to_container(self.config)
+        # Save as JSON
+        file_path = Path(save_directory) / "config.json"
+        with open(file_path, 'w') as json_file:
+            json.dump(dict_config, json_file, indent=4)
+        super()._save_pretrained(save_directory)
+
+    def _init_weights(self, module):
+        """ Initialize the weights.
+            :param:
+                module -> torch.nn.Module: module to initialize
+        """
+        if isinstance(module, nn.Linear) or isinstance(module, nn.Conv1d) or isinstance(module, nn.Conv2d):
+            module.weight.data = nn.init.trunc_normal_(module.weight.data, mean=0.0, std=0.02)
+            if module.bias is not None:
+                module.bias.data.zero_()
+        elif isinstance(module, nn.Embedding):
+            module.weight.data = nn.init.trunc_normal_(module.weight.data, mean=0.0, std=0.02)
+        elif isinstance(module, nn.LayerNorm):
+            module.bias.data.zero_()
+            module.weight.data.fill_(1.0)
     
     def load_Titok_weights(self, titok_weight_path): 
         """
@@ -79,7 +111,7 @@ class LLMAdapter(nn.Module):
             start = end 
         x = pad_sequence(x_batch, padding_value = PAD_IDX, batch_first = True)
         # We need to apply Conv1d over the temporal dimension, so we transpose to (batch_size, num_tokens, num_frames)
-        print(f"after padded sequence: {x.shape}")
+        # sequence: {x.shape}")
         x = x.permute(0,2,1)
         x = self.temporal_conv(x)  # Shape: (batch_size, hidden_dim, num_frames)
         x = x.permute(0,2,1 )  # Convert back to (batch_size, num_frames, hidden_dim)
