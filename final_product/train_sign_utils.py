@@ -240,11 +240,11 @@ def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,
             pred_translations  = tokenizer.batch_decode(predictions, skip_special_tokens = True)
 
         # Decode the predicted token IDs into sentences
-        print(f"target labels: {tgt_labels}")
+        #print(f"target labels: {tgt_labels}")
         tgt_labels[tgt_labels== -100] = 0 
-        print(tgt_labels)
+        #print(tgt_labels)
         gt_translations = tokenizer.batch_decode(tgt_labels, skip_special_tokens = True)
-        print(gt_translations)
+        #print(gt_translations)
 
     
     # Log translations using wandb or tensorboard, if enabled
@@ -316,10 +316,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 
         original_images = torch.clone(images)
         output = local_model(original_images, tgt_input, input_attn , tgt_attn, src_length)
         #must decode the output and tgt_input 
-        # Output logits (predictions before softmax) from the decoder
-        '''
-        Help
-        '''
+
         logits = output['logits']
         probs = logits.softmax(dim=-1)
         values, prediction = torch.topk(probs,k=1, dim = -1)
@@ -331,10 +328,10 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 
         gt_translation = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
         
         predictions.extend(sentence)
-        references.append(gt_translation)
+        references.extend(gt_translation)
 
 
-    bleu_score = sacrebleu.corpus_bleu(predictions, references)
+    bleu_score = sacrebleu.corpus_bleu(predictions, [references])
     print(f" BLEU scores: {bleu_score}")
     model.train()
 
