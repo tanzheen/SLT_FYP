@@ -322,12 +322,12 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 
         '''
         logits = output['logits']
         probs = logits.softmax(dim=-1)
-        values, predictions = torch.topk(probs,k=1, dim = -1)
-        predictions = predictions.reshape(batch_size,-1).squeeze()
+        values, prediction = torch.topk(probs,k=1, dim = -1)
+        prediction = prediction.reshape(batch_size,-1).squeeze()
         with tokenizer.as_target_tokenizer():
-            sentence = tokenizer.batch_decode(predictions, skip_special_tokens = True )
+            sentence = tokenizer.batch_decode(prediction, skip_special_tokens = True)
 
-        tgt_input[tgt_input== -100] = 0 
+        tgt_input[tgt_input==-100] = 0 
         gt_translation = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
         
         predictions.extend(sentence)
