@@ -2,11 +2,11 @@ experiment:
   project: "Sign2Text"
   name: "Sign2Text_run1"
   output_dir: "Sign2Text"
-  translate_every: 0.1
-  save_every: 0.1
-  log_every: 0.1
-  eval_every: 1
-  log_grad_norm_every: 0.1
+  translate_every: 0.001
+  save_every: 0.001
+  log_every: 0.001
+  eval_every: 0.001
+  log_grad_norm_every: 0.001
   resume: True
   init_weight: ""
 

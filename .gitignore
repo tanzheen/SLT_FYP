@@ -17,3 +17,6 @@
 /mbart_model
 mbart_model/generation_config.json
 /mbart_model
+/final_product/Sign2Text/checkpoint-12
+/final_product/Sign2Text/checkpoint-16
+/final_product/Sign2Text

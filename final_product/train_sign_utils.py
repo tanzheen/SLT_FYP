@@ -234,12 +234,17 @@ def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,
         logits = output['logits']
         probs = logits.softmax(dim=-1)
         values, predictions = torch.topk(probs,k=1, dim = -1)
-        predictions = predictions.reshape(len(images).batch_size,-1).squeeze()
+        #print(f"output shape: {output.shape}")
+        predictions = predictions.reshape(config.training.per_gpu_batch_size,-1).squeeze()
         with tokenizer.as_target_tokenizer():
             pred_translations  = tokenizer.batch_decode(predictions, skip_special_tokens = True)
 
         # Decode the predicted token IDs into sentences
-        gt_translations = tokenizer.batch_decode(tgt_labels['input_ids'], skip_special_tokens = True)
+        print(f"target labels: {tgt_labels}")
+        tgt_labels[tgt_labels== -100] = 0 
+        print(tgt_labels)
+        gt_translations = tokenizer.batch_decode(tgt_labels, skip_special_tokens = True)
+        print(gt_translations)
 
     
     # Log translations using wandb or tensorboard, if enabled
@@ -278,7 +283,7 @@ def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,
 
 
 
-def eval_translation(model,dev_dataloader,accelerator, tokenizer): 
+def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 ): 
     '''
     translate images in the dev_loader 
     Calculate metrics using BLEU
@@ -293,8 +298,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer):
         batch = src['input_ids']
         src_length = src['src_length_batch']
         tgt_attn = tgt.attention_mask
-        tgt_input[tgt_attn== 0] = -100
-        input_attn = src['attention_mask']
+        
         
         images = batch.to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
@@ -302,13 +306,13 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer):
         tgt_input = tgt['input_ids'].to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
-        input_attn = input_attn.to(
+        input_attn = src['attention_mask'].to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
         tgt_attn = tgt_attn.to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
-
+        tgt_input[tgt_attn== 0] = -100
         original_images = torch.clone(images)
         output = local_model(original_images, tgt_input, input_attn , tgt_attn, src_length)
         #must decode the output and tgt_input 
@@ -319,19 +323,19 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer):
         logits = output['logits']
         probs = logits.softmax(dim=-1)
         values, predictions = torch.topk(probs,k=1, dim = -1)
-        predictions = predictions.reshape(len(images),-1).squeeze()
+        predictions = predictions.reshape(batch_size,-1).squeeze()
         with tokenizer.as_target_tokenizer():
             sentence = tokenizer.batch_decode(predictions, skip_special_tokens = True )
 
-
-        gt_translation = tokenizer.batch_decode(tgt_input['input_ids'], skip_special_tokens=True)
+        tgt_input[tgt_input== -100] = 0 
+        gt_translation = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
         
         predictions.extend(sentence)
         references.append(gt_translation)
 
 
     bleu_score = sacrebleu.corpus_bleu(predictions, references)
-
+    print(f" BLEU scores: {bleu_score}")
     model.train()
 
     return bleu_score
@@ -342,7 +346,7 @@ def create_lr_scheduler(config, logger, accelerator, optimizer, len_data):
     lr_scheduler = get_scheduler(
         config.lr_scheduler.scheduler,
         optimizer=optimizer,
-        num_training_steps=config.training.num_epochs * len_data/config.training.gradient_accumulation_steps ,
+        num_training_steps=config.training.num_epochs * len_data/config.training.gradient_accumulation_steps,
         num_warmup_steps=config.lr_scheduler.params.warmup_steps * accelerator.num_processes,
         base_lr=config.lr_scheduler.params.learning_rate,
         end_lr=config.lr_scheduler.params.end_lr,
@@ -396,7 +400,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
             # Gather the losses across all processes for logging.
             transformer_logs = {}
             transformer_logs ['train current loss'] = loss 
-            transformer_logs ['train total_loss'] = total_loss
+            transformer_logs ['train total_loss'] = total_loss # Total loss does not really matter until towards the end
 
             accelerator.backward(loss)
 
