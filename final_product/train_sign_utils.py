@@ -19,7 +19,7 @@ import glob
 import sacrebleu
 from logger import setup_logger
 from lr_schedulers import get_scheduler
-
+from sacrebleu.metrics import BLEU 
 
 def get_config():
     """Reads configs from a yaml file and terminal."""
@@ -299,7 +299,6 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 
         src_length = src['src_length_batch']
         tgt_attn = tgt.attention_mask
         
-        
         images = batch.to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
@@ -319,10 +318,10 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 
 
         logits = output['logits']
         probs = logits.softmax(dim=-1)
-        values, prediction = torch.topk(probs,k=1, dim = -1)
-        prediction = prediction.reshape(batch_size,-1).squeeze()
+        values, pred = torch.topk(probs,k=1, dim = -1)
+        pred = pred.reshape(batch_size,-1).squeeze()
         with tokenizer.as_target_tokenizer():
-            sentence = tokenizer.batch_decode(prediction, skip_special_tokens = True)
+            sentence = tokenizer.batch_decode(pred, skip_special_tokens = True)
 
         tgt_input[tgt_input==-100] = 0 
         gt_translation = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
@@ -330,8 +329,8 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 
         predictions.extend(sentence)
         references.extend(gt_translation)
 
-
-    bleu_score = sacrebleu.corpus_bleu(predictions, [references])
+    bleu = BLEU()
+    bleu_score = bleu.corpus_score(predictions, [references])
     print(f" BLEU scores: {bleu_score}")
     model.train()
 
