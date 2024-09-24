@@ -282,7 +282,6 @@ def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,
 
 
 
-
 def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 ): 
     '''
     translate images in the dev_loader 
@@ -454,8 +453,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
             
             # Save model checkpoint.
             if (global_step + 1) % int(config.experiment.save_every * len(train_dataloader)) == 0:
-                save_path = save_checkpoint(
-                    model, config.experiment.output_dir, accelerator, global_step + 1, logger=logger)
+                save_path = save_checkpoint(model=model,output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
                 # Wait for everyone to save their checkpoint.
                 accelerator.wait_for_everyone()
 

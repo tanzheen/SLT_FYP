@@ -73,12 +73,23 @@ def main():
 
     # Prepare modules with accelerator
     model, optimizer, lr_scheduler = accelerator.prepare(
-            model, optimizer, lr_scheduler, 
+            model, optimizer, lr_scheduler
         )
     if config.training.use_ema:
         ema_model.to(accelerator.device)
 
-
+    # Start training.
+    logger.info("***** Running training *****")
+    #logger.info(f"  Num training steps = {config.training.max_train_steps}")
+    logger.info(f"  Gradient Accumulation steps = {config.training.gradient_accumulation_steps}")
+    logger.info(f"mixed precision = {config.training.mixed_precision}")
+    logger.info(f"""  Total train batch size (w. parallel, distributed & accumulation) = {(
+        config.training.per_gpu_batch_size *
+        accelerator.num_processes *
+        config.training.gradient_accumulation_steps)}""")
+    logger.info(f"accelerator device: {accelerator.device}")
+    global_step = 0
+    first_epoch = 0
     global_step = 0
     first_epoch = 0
 
@@ -92,9 +103,16 @@ def main():
     num_train_epochs = config.training.num_epochs
     for current_epoch in range(first_epoch, num_train_epochs):
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
-        global_step = train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_scheduler,
-                     train_dataloader, dev_dataloader, test_dataloader, 
-                     tokenizer, global_step)
+        global_step = train_one_epoch(config=config,
+                                      logger= logger,
+                                      accelerator= accelerator,model= model,
+                                       ema_model= ema_model,optimizer= optimizer,
+                                       lr_scheduler=lr_scheduler,
+                                       train_dataloader=train_dataloader,
+                                        dev_dataloader= dev_dataloader,
+                                         test_dataloader= test_dataloader, 
+                                         tokenizer=tokenizer,
+                                         global_step= global_step)
         
         accelerator.wait_for_everyone()
         # Save checkpoint at the end of training.

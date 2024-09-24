@@ -1,12 +1,12 @@
 experiment:
   project: "titok_l_32_stage1"
   name: "titok_l_32_stage1_run1"
-  output_dir: "titok_l_32_stage1_run1"
-  generate_every: 0.1
-  save_every: 0.0001
-  log_every: 0.01
+  output_dir: "/scratch2/e0724993/titok_l_32_stage1_run1"
+  generate_every: 0.25
+  save_every: 0.25
+  log_every: 0.25
   eval_every: 1
-  log_grad_norm_every: 0.1
+  log_grad_norm_every: 0.25
   resume: True
   init_weight: "tokenizer_titok_l32.bin"
 
@@ -31,7 +31,7 @@ losses:
 dataset:
   params:
     img_path: /hpctmp/e0724993/CSL-Daily/sentence/frames_512x512/ # might need to resize
-    num_workers: 4
+    num_workers: 8
   preprocessing:
     resize_shorter_edge: 256
     crop_size: 256
@@ -51,7 +51,7 @@ lr_scheduler:
   scheduler: "cosine"
   params:
     learning_rate: ${optimizer.params.learning_rate}
-    warmup_steps: 10_000
+    warmup_steps: 100
     end_lr: 1e-5
 
 training:
