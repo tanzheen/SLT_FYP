@@ -134,14 +134,14 @@ def create_signloader(config, logger,accelerator, tokenizer):
     print("train dataloader done!")
 
     dev_dataset = SignTransDataset(tokenizer, config,  'dev')
-    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, 
+    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size//2, shuffle=True, 
                                 num_workers=config.dataset.params.num_workers, collate_fn=dev_dataset.collate_fn, 
                                  generator=torch.Generator(device=accelerator.device) )
     dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
 
     test_dataset = SignTransDataset(tokenizer, config, 'test')
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True,
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size//2, shuffle=True,
                                   num_workers=config.dataset.params.num_workers, collate_fn=test_dataset.collate_fn, 
                                   generator=torch.Generator(device=accelerator.device))
     test_dataloader = accelerator.prepare(test_dataloader)
@@ -282,7 +282,7 @@ def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,
 
 
 
-def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 ): 
+def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ): 
     '''
     translate images in the dev_loader 
     Calculate metrics using BLEU
@@ -318,7 +318,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer, batch_size =4 
         logits = output['logits']
         probs = logits.softmax(dim=-1)
         values, pred = torch.topk(probs,k=1, dim = -1)
-        pred = pred.reshape(batch_size,-1).squeeze()
+        pred = pred.reshape(config.training.per_gpu_batch_size//2,-1).squeeze()
         with tokenizer.as_target_tokenizer():
             sentence = tokenizer.batch_decode(pred, skip_special_tokens = True)
 
@@ -495,7 +495,8 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                         model=model,
                         dev_dataloader=dev_dataloader,
                         accelerator=accelerator,
-                        tokenizer=tokenizer
+                        tokenizer=tokenizer, 
+                        config = config 
                     )
 
                     logger.info(
@@ -517,7 +518,8 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                         model=model,
                         dev_dataloader=dev_dataloader,
                         accelerator=accelerator,
-                        tokenizer=tokenizer 
+                        tokenizer=tokenizer , 
+                        config = config 
                     )
 
                     logger.info(

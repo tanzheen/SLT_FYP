@@ -98,7 +98,11 @@ def main():
         strict=True)
     
     # Freeze both model's weights just in case
-    model.freeze_Titok_weights()
+    # Assuming 'model' is your original model wrapped in DDP
+    if isinstance(model, torch.nn.parallel.DistributedDataParallel):
+        model.module.freeze_Titok_weights()
+    else:
+        model.freeze_Titok_weights()
     
     num_train_epochs = config.training.num_epochs
     for current_epoch in range(first_epoch, num_train_epochs):

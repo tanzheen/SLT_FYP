@@ -141,10 +141,8 @@ class SignTransDataset(Dataset):
         # Load each image, apply transformations, and crop if necessary.
         for i, img_path in enumerate(paths):
             img_path = os.path.join(dir_path, img_path)
-            img = cv2.imread(img_path)
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)  # Convert from BGR to RGB.
-            img = Image.fromarray(img)
-
+            img = Image.open(img_path).convert("RGB")
+            
             # Crop the image based on the provided config (center horizontal, lower vertical crop).
             x_start = int((img.size[0] - self.crop_width) // 2)
             x_end = x_start + self.crop_width
