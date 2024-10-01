@@ -20,3 +20,4 @@ mbart_model/generation_config.json
 /final_product/Sign2Text/checkpoint-12
 /final_product/Sign2Text/checkpoint-16
 /final_product/Sign2Text
+/SIgn2Text_weights

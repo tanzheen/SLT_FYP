@@ -49,7 +49,7 @@ def main():
         torch.backends.cudnn.allow_tf32 = True
     torch.backends.cudnn.benchmark = True
     torch.backends.cudnn.deterministic = False
-
+    torch.distributed.init_process_group(backend="nccl")  # Or "gloo" if you are using CPU
     output_dir = config.experiment.output_dir
     os.makedirs(output_dir, exist_ok=True)
     config.experiment.logging_dir = os.path.join(output_dir, "logs")

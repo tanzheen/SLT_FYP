@@ -1,3 +1,4 @@
+import torch.distributed
 from train_sign_utils import * 
 import os 
 from accelerate import Accelerator
@@ -14,13 +15,14 @@ def main():
 
     config = get_config()
 
+
     # Enable TF32 on Ampere GPUs.
     if config.training.enable_tf32:
         torch.backends.cuda.matmul.allow_tf32 = True
         torch.backends.cudnn.allow_tf32 = True
     torch.backends.cudnn.benchmark = True
     torch.backends.cudnn.deterministic = False
-
+    
     output_dir = config.experiment.output_dir
     os.makedirs(output_dir, exist_ok=True)
     config.experiment.logging_dir = os.path.join(output_dir, "logs")
@@ -71,10 +73,7 @@ def main():
     #Prepare everything with accelerator.
     logger.info("Preparing model, optimizer and dataloaders")
 
-    # Prepare modules with accelerator
-    model, optimizer, lr_scheduler = accelerator.prepare(
-            model, optimizer, lr_scheduler
-        )
+    
     if config.training.use_ema:
         ema_model.to(accelerator.device)
 
@@ -92,20 +91,25 @@ def main():
     first_epoch = 0
     global_step = 0
     first_epoch = 0
-
-    global_step, first_epoch = auto_resume(
-        config, logger, accelerator, ema_model,
-        strict=True)
     
-    # Freeze both model's weights just in case
+    # Freeze both model's weights again just in case
     # Assuming 'model' is your original model wrapped in DDP
     if isinstance(model, torch.nn.parallel.DistributedDataParallel):
         model.module.freeze_Titok_weights()
     else:
         model.freeze_Titok_weights()
     
+    # Prepare modules with accelerator
+    model, optimizer, lr_scheduler = accelerator.prepare(
+            model, optimizer, lr_scheduler
+        )
+    global_step, first_epoch = auto_resume(
+        config, logger, accelerator, ema_model,
+        strict=True)
+
     num_train_epochs = config.training.num_epochs
     for current_epoch in range(first_epoch, num_train_epochs):
+
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
         global_step = train_one_epoch(config=config,
                                       logger= logger,
@@ -118,16 +122,16 @@ def main():
                                          tokenizer=tokenizer,
                                          global_step= global_step)
         
-        accelerator.wait_for_everyone()
-        # Save checkpoint at the end of training.
-        save_checkpoint(model, output_dir, accelerator, global_step, logger=logger)
-        # Save the final trained checkpoint
-        if accelerator.is_main_process:
-            model = accelerator.unwrap_model(model)
-            if config.training.use_ema:
-                ema_model.copy_to(model.parameters())
-            model.save_pretrained_weight(output_dir)
-        accelerator.end_training()
+    accelerator.wait_for_everyone()
+    # Save checkpoint at the end of training.
+    save_checkpoint(model, output_dir, accelerator, global_step, logger=logger)
+    # Save the final trained checkpoint
+    if accelerator.is_main_process:
+        model = accelerator.unwrap_model(model)
+        if config.training.use_ema:
+            ema_model.copy_to(model.parameters())
+        model.save_pretrained_weight(output_dir)
+    accelerator.end_training()
 
 
 if __name__ == "__main__":
@@ -150,7 +154,7 @@ if __name__ == "__main__":
 # Training for Sign2Text
 # Stage 1
 $env:WANDB_MODE="offline"
-accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network training_sign.py config=configs/Sign2Text_CSL_config.yaml `
+accelerate launch --num_machines=1 --num_processes=2 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network training_sign.py config=configs/Sign2Text_CSL_config.yaml `
     --experiment.project="Sign2Text_CSL" `
     --experiment.name="Sign2Text_CSL_run1" `
     --experiment.output_dir="Sign2Text_CSL_run1" 

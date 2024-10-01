@@ -117,6 +117,3 @@ class LLMAdapter(nn.Module):
         x = x.permute(0,2,1 )  # Convert back to (batch_size, num_frames, hidden_dim)
 
         return x
-
-
-

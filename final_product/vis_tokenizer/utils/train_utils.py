@@ -313,7 +313,7 @@ def train_one_epoch(config, logger, accelerator,
     autoencoder_logs = defaultdict(float)
     discriminator_logs = defaultdict(float)
 
-    for i, batch in enumerate(tqdm(train_dataloader, desc=f"Training!")):
+    for i, (batch,name) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
         model.train()
         # print(f"batch len: {len(batch)}")
         # print("batch shape: " ,batch.shape)
@@ -554,7 +554,7 @@ def eval_reconstruction(
     evaluator.reset_metrics()
     local_model = accelerator.unwrap_model(model)
 
-    for i, batch in enumerate(tqdm(eval_loader, desc=f"Validation!")):
+    for i, (batch,name) in enumerate(tqdm(eval_loader, desc=f"Validation!")):
         images = batch.to(
             accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
         )
@@ -726,7 +726,7 @@ class SimpleImageDataset(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        return image
+        return image, img_path
     
     def plot_image(self, idx):
         """

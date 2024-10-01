@@ -129,19 +129,19 @@ def create_signloader(config, logger,accelerator, tokenizer):
     train_dataset = SignTransDataset(tokenizer, config,  'train')
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, 
                                   num_workers=config.dataset.params.num_workers, collate_fn=train_dataset.collate_fn,
-                                   generator=torch.Generator(device=accelerator.device) )
+                                   generator=torch.Generator(device=accelerator.device))
     train_dataloader = accelerator.prepare(train_dataloader)
     print("train dataloader done!")
 
     dev_dataset = SignTransDataset(tokenizer, config,  'dev')
-    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size//2, shuffle=True, 
+    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, 
                                 num_workers=config.dataset.params.num_workers, collate_fn=dev_dataset.collate_fn, 
                                  generator=torch.Generator(device=accelerator.device) )
     dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
 
     test_dataset = SignTransDataset(tokenizer, config, 'test')
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size//2, shuffle=True,
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True,
                                   num_workers=config.dataset.params.num_workers, collate_fn=test_dataset.collate_fn, 
                                   generator=torch.Generator(device=accelerator.device))
     test_dataloader = accelerator.prepare(test_dataloader)
@@ -383,8 +383,6 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
         tgt_attn = tgt_attn.to(
                 accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
             )
-
-        
         
         data_time_meter.update(time.time() - end)
 
