@@ -21,7 +21,7 @@ from logger import setup_logger
 from sacrebleu.metrics import BLEU 
 import numpy as np 
 from torch.optim.lr_scheduler import CosineAnnealingLR, LinearLR
-
+from lr_schedulers import get_scheduler
 
 def get_config():
     """Reads configs from a yaml file and terminal."""
@@ -361,13 +361,16 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
 def create_scheduler(config, logger, accelerator, optimizer, len_data):
     """Creates learning rate scheduler for the optimizer."""
     logger.info("Creating lr_schedulers.")
-    # Create a scheduler for each parameter group
-    linear_warmup = LinearLR(optimizer, start_factor=0.0001, end_factor=1.0, total_iters=config.lr_scheduler.params.warmup_steps * accelerator.num_processes)
-    cos_scheduler = CosineAnnealingLR(
-        optimizer,
-        T_max=config.training.num_epochs * len_data/config.training.gradient_accumulation_steps - config.lr_scheduler.params.warmup_steps * accelerator.num_processes# Total training steps - warmup 
+    lr_scheduler = get_scheduler(
+        config.lr_scheduler.scheduler,
+        optimizer=optimizer,
+        num_training_steps=config.training.max_train_steps * accelerator.num_processes,
+        num_warmup_steps=config.lr_scheduler.params.warmup_steps * accelerator.num_processes,
+        base_lr=config.lr_scheduler.params.learning_rate,
+        end_lr=config.lr_scheduler.params.end_lr,
     )
-    return linear_warmup, cos_scheduler
+ 
+    return lr_scheduler
 
 
 def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,linear_warmup,cos_scheduler,
@@ -437,8 +440,8 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lin
                 log_grad_norm(model, accelerator, global_step + 1)
             
             # Gather the losses across all processes for logging.
-            loss = accelerator.gather(loss)
-            loss = loss.mean().item()
+            # loss = accelerator.gather(loss)
+            # loss = loss.mean().item()
             total_loss += loss 
             transformer_logs = {}
             transformer_logs ['train current loss'] = loss 
@@ -501,6 +504,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lin
                     logger=logger, 
                     tokenizer=tokenizer
                 )
+                accelerator.wait_for_everyone()
 
                 if config.training.get("use_ema", False):
                     # Switch back to the original model parameters for training.
@@ -562,6 +566,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lin
 
                 if early_stop(total_val_loss): # save only if lower validation loss and this function will return True 
                     save_path = save_checkpoint(model=model,output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
+            
                     # Wait for everyone to save their checkpoint.
                     accelerator.wait_for_everyone()
 

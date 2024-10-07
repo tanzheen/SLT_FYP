@@ -66,6 +66,7 @@ lr_scheduler:
   params:
     learning_rate: ${optimizer.params.learning_rate}
     warmup_steps: 4000
+    end_lr: 1e-6
 
 training:
   gradient_accumulation_steps: 1

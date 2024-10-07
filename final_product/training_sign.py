@@ -66,7 +66,7 @@ def main():
     # Create optimizer
     optimizer = create_optimizer(config, logger, model)
     # Create lr_scheduler 
-    LR_warmup, cos_scheduler= create_scheduler(
+    scheduler= create_scheduler(
         config, logger, accelerator, optimizer,len(train_dataloader))
 
 
@@ -106,8 +106,8 @@ def main():
             model.freeze_MBart_weights()
     
     # Prepare modules with accelerator
-    model, optimizer,  LR_warmup, cos_scheduler= accelerator.prepare(
-            model, optimizer,LR_warmup, cos_scheduler 
+    model, optimizer,  scheduler= accelerator.prepare(
+            model, optimizer,scheduler 
         )
     global_step, first_epoch = auto_resume(
         config, logger, accelerator, ema_model,
@@ -131,7 +131,7 @@ def main():
                                          global_step= global_step, 
                                          early_stop = early_stopping) # the early stopping will be passed back in again 
         
-    accelerator.wait_for_everyone()
+    #accelerator.wait_for_everyone()
     # Save checkpoint at the end of training.
     save_checkpoint(model, output_dir, accelerator, global_step, logger=logger)
     # Save the final trained checkpoint
