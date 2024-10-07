@@ -60,10 +60,17 @@ def save_results(video_info_dict, output_path):
     with open(output_path, 'wb') as pkl_file:
         pickle.dump(video_info_dict, pkl_file)
 
+def find_entry_by_name(data, name):
+    # Iterate through the list of dictionaries in 'info'
+    for entry in data['info']:
+        if entry['name'] == name:
+            return entry
+    return None
+
 def split_and_move_data(CSL_annot_path, split_txt_path, img_path, output_label_path):
     # initialise the dictionary for label saving later on
 
-    info = read_CSL_annotations(CSL_annot_path)['info']
+    info = read_CSL_annotations(CSL_annot_path)
 
     # read text file as a dataframe
     split_df = pd.read_csv(split_txt_path, delimiter='|')  # Adjust 'delimiter' as needed
@@ -85,9 +92,9 @@ def split_and_move_data(CSL_annot_path, split_txt_path, img_path, output_label_p
     print(train_dir)
     # Iterate over each row in the DataFrame
     for index, row in split_df.iterrows():
-        row_info = info[index]
         folder_name = row['name']
         set_type = row['split']
+        row_info = find_entry_by_name(info, folder_name) ## might have been wrong here to assume index which led me to the wrong translation
         text =''.join(row_info['label_char']) 
         # Determine the target directory based on the set type
         if set_type == 'train':
@@ -99,7 +106,7 @@ def split_and_move_data(CSL_annot_path, split_txt_path, img_path, output_label_p
         else:
             #print(f"Unknown set type: {set_type} for folder {folder_name}")
             continue
-
+        
         # move the folder accordingly 
         # Construct full paths
         src_path = os.path.join(img_path, folder_name)
@@ -114,7 +121,7 @@ def split_and_move_data(CSL_annot_path, split_txt_path, img_path, output_label_p
 
             print(f"Folder {folder_name} does not exist in {img_path}")
 
-        # Count the number of frames (png files) in the video folder
+        #Count the number of frames (png files) in the video folder
         try:
             frame_count = len([f for f in os.listdir(dest_path) if f.endswith('.jpg')]) # note that the CSL daily dataset is in jpg
             
@@ -123,7 +130,7 @@ def split_and_move_data(CSL_annot_path, split_txt_path, img_path, output_label_p
 
             all_info_dict[set_type]['info'].append({'name': folder_name, 
                                                 'translation': text, 
-                                                'length':frame_count})
+                                                'length':frame_count}) # frame count is 
         except FileNotFoundError:
             print(f"file {folder_name} not found")   # In case the folder doesn't exist
         
@@ -137,7 +144,7 @@ def split_and_move_data(CSL_annot_path, split_txt_path, img_path, output_label_p
 
 def main():
     output_label_path= '../../CSL-Daily/sentence_label/processed'
-    os.makedirs(output_label_path, exist_ok=True)
+    # os.makedirs(output_label_path, exist_ok=True)
     img_path = '../../CSL-Daily/sentence/frames_512x512'
     CSL_annot_path = '../../CSL-Daily/sentence_label/csl2020ct_v2.pkl'
     split_txt_path= '../../CSL-Daily/sentence_label/split_1.txt'

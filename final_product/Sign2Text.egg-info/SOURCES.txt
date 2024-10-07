@@ -4,6 +4,7 @@ Sign2Text.egg-info/SOURCES.txt
 Sign2Text.egg-info/dependency_links.txt
 Sign2Text.egg-info/top_level.txt
 vis_tokenizer/__init__.py
+vis_tokenizer/base_model.py
 vis_tokenizer/convert_to_tar.py
 vis_tokenizer/datasets.py
 vis_tokenizer/demo_util.py

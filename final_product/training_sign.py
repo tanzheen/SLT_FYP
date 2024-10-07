@@ -66,7 +66,7 @@ def main():
     # Create optimizer
     optimizer = create_optimizer(config, logger, model)
     # Create lr_scheduler 
-    lr_scheduler = create_lr_scheduler(
+    LR_warmup, cos_scheduler= create_scheduler(
         config, logger, accelerator, optimizer,len(train_dataloader))
 
 
@@ -98,29 +98,38 @@ def main():
         model.module.freeze_Titok_weights()
     else:
         model.freeze_Titok_weights()
+
+    if config.model.MBart_model.freeze_MBart: 
+        if isinstance(model, torch.nn.parallel.DistributedDataParallel):
+            model.module.freeze_MBart_weights()
+        else:
+            model.freeze_MBart_weights()
     
     # Prepare modules with accelerator
-    model, optimizer, lr_scheduler = accelerator.prepare(
-            model, optimizer, lr_scheduler
+    model, optimizer,  LR_warmup, cos_scheduler= accelerator.prepare(
+            model, optimizer,LR_warmup, cos_scheduler 
         )
     global_step, first_epoch = auto_resume(
         config, logger, accelerator, ema_model,
         strict=True)
 
     num_train_epochs = config.training.num_epochs
+    early_stopping = EarlyStopping(verbose=True)
     for current_epoch in range(first_epoch, num_train_epochs):
 
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
-        global_step = train_one_epoch(config=config,
+        global_step, early_stopping = train_one_epoch(config=config,
                                       logger= logger,
                                       accelerator= accelerator,model= model,
                                        ema_model= ema_model,optimizer= optimizer,
-                                       lr_scheduler=lr_scheduler,
+                                        linear_warmup=LR_warmup, 
+                                        cos_scheduler=cos_scheduler,
                                        train_dataloader=train_dataloader,
                                         dev_dataloader= dev_dataloader,
                                          test_dataloader= test_dataloader, 
                                          tokenizer=tokenizer,
-                                         global_step= global_step)
+                                         global_step= global_step, 
+                                         early_stop = early_stopping) # the early stopping will be passed back in again 
         
     accelerator.wait_for_everyone()
     # Save checkpoint at the end of training.

@@ -1,7 +1,7 @@
 from transformers import MBartForConditionalGeneration, MBart50Tokenizer
 
 # Define the model and tokenizer you want to download
-model_name = "facebook/mbart-large-50"
+model_name = "facebook/mbart-large-50-many-to-many-mmt"
 
 # Download the model and tokenizer
 model = MBartForConditionalGeneration.from_pretrained(model_name)

@@ -222,33 +222,50 @@ def create_lr_scheduler(config, logger, accelerator, optimizer, len_data, discri
 
 
 def create_dataloader(config, logger, accelerator):
-    """Creates data loader for training and testing."""
-    batch_size  = config.training.per_gpu_batch_size * accelerator.num_processes
+    """Creates data loader for training, validation, and testing with augmentations for the training set."""
+    batch_size = config.training.per_gpu_batch_size * accelerator.num_processes
     logger.info(f"Creating dataloaders. Batch size = {batch_size}")
-    norm_mean = [0.,0.,0.]
-    norm_std = [1.,1.,1.]
-    transform = transforms.Compose([
-    transforms.Resize((256, 256)),
-    transforms.ToTensor(),
-    transforms.Normalize(norm_mean, norm_std)
-])
+
+    # Normalization values for ImageNet
+    norm_mean = [0.485, 0.456, 0.406]
+    norm_std = [0.229, 0.224, 0.225]
+
+    # Data augmentations for training set
+    train_transform = transforms.Compose([
+        transforms.RandomResizedCrop(256, scale=(0.8, 1.0)),  # Randomly resize and crop
+        transforms.RandomHorizontalFlip(),  # Randomly flip the image horizontally
+        transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.05),  # Random color jitter
+        transforms.RandomRotation(degrees=15),  # Random rotation of the image by 15 degrees
+        transforms.ToTensor(),  # Convert image to tensor
+        transforms.Normalize(norm_mean, norm_std)  # Normalize using ImageNet statistics
+    ])
+
+    # Data transformations for validation and test sets (no augmentation)
+    eval_transform = transforms.Compose([
+        transforms.Resize((256, 256)),  # Resize to fixed size
+        transforms.ToTensor(),  # Convert image to tensor
+        transforms.Normalize(norm_mean, norm_std)  # Normalize using ImageNet statistics
+    ])
+
+    # Load datasets
     root_dir = config.dataset.params.img_path
-    train_dataset = SimpleImageDataset(root_dir=root_dir,phase ='train',person_size = config.dataset.preprocessing.person_size, transform=transform)
-    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device),  num_workers=config.dataset.params.num_workers)
+    train_dataset = SimpleImageDataset(root_dir=root_dir, phase='train', person_size=config.dataset.preprocessing.person_size, transform=train_transform)
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
     train_dataloader = accelerator.prepare(train_dataloader)
     print("train dataloader done!")
-    dev_dataset = SimpleImageDataset(root_dir=root_dir,phase ='dev',person_size = config.dataset.preprocessing.person_size, transform=transform)
-    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
+
+    dev_dataset = SimpleImageDataset(root_dir=root_dir, phase='dev', person_size=config.dataset.preprocessing.person_size, transform=eval_transform)
+    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
     dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
-    test_dataset = SimpleImageDataset(root_dir= root_dir,phase ='test', person_size = config.dataset.preprocessing.person_size, transform=transform, )
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
+
+    test_dataset = SimpleImageDataset(root_dir=root_dir, phase='test', person_size=config.dataset.preprocessing.person_size, transform=eval_transform)
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
     test_dataloader = accelerator.prepare(test_dataloader)
-    
     print("test dataloader done!")
+
     print(f"trainloader: {len(train_dataloader)},  devloader: {len(dev_dataloader)}, testloader: {len(test_dataloader)}")
     return train_dataloader, dev_dataloader, test_dataloader
-
 
 def create_evaluator(config, logger, accelerator):
     """Creates evaluator."""
@@ -302,7 +319,9 @@ def train_one_epoch(config, logger, accelerator,
                     train_dataloader, eval_dataloader,
                     evaluator,
                     global_step,
-                    pretrained_tokenizer=None):
+                    early_stop ,
+                    pretrained_tokenizer=None
+                    ):
     """One epoch training."""
     batch_time_meter = AverageMeter()
     data_time_meter = AverageMeter()
@@ -312,7 +331,6 @@ def train_one_epoch(config, logger, accelerator,
 
     autoencoder_logs = defaultdict(float)
     discriminator_logs = defaultdict(float)
-
     for i, (batch,name) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
         model.train()
         # print(f"batch len: {len(batch)}")
@@ -347,7 +365,7 @@ def train_one_epoch(config, logger, accelerator,
                     proxy_codes,
                     reconstructed_images,
                     extra_results_dict
-                )      
+                )
 
             # Gather the losses across all processes for logging.
             autoencoder_logs = {}
@@ -454,12 +472,13 @@ def train_one_epoch(config, logger, accelerator,
                 batch_time_meter.reset()
                 data_time_meter.reset()
 
-            # Save model checkpoint.
-            if (global_step + 1) % int(config.experiment.save_every * len(train_dataloader)) == 0:
-                save_path = save_checkpoint(
-                    model, config.experiment.output_dir, accelerator, global_step + 1, logger=logger)
-                # Wait for everyone to save their checkpoint.
-                accelerator.wait_for_everyone()
+            # # Save model checkpoint.
+            # if (global_step + 1) % int(config.experiment.save_every * len(train_dataloader)) == 0:
+            #     save_path = save_checkpoint(
+            #         model, config.experiment.output_dir, accelerator, global_step + 1, logger=logger)
+            #     # Wait for everyone to save their checkpoint.
+            #     accelerator.wait_for_everyone()
+
             # Generate images.
             if (global_step + 1) % int(config.experiment.generate_every * len(train_dataloader))== 0 and accelerator.is_main_process:
                 # Store the model parameters temporarily and load the EMA parameters to perform inference.
@@ -491,11 +510,14 @@ def train_one_epoch(config, logger, accelerator,
                     ema_model.store(model.parameters())
                     ema_model.copy_to(model.parameters())
                     # Eval for EMA.
-                    eval_scores = eval_reconstruction(
-                        model,
-                        eval_dataloader,
-                        accelerator,
-                        evaluator,
+                    eval_scores, total_val_loss = eval_reconstruction(
+                        model=model,
+                        eval_loader=eval_dataloader,
+                        accelerator=accelerator,
+                        evaluator=evaluator,
+                        loss_module= loss_module,
+                        config=config, 
+                        logger=logger,
                         pretrained_tokenizer=pretrained_tokenizer
                     )
                     logger.info(
@@ -511,11 +533,14 @@ def train_one_epoch(config, logger, accelerator,
                         ema_model.restore(model.parameters())
                 else:
                     # Eval for non-EMA.
-                    eval_scores = eval_reconstruction(
-                        model,
-                        eval_dataloader,
-                        accelerator,
-                        evaluator,
+                    eval_scores, total_val_loss = eval_reconstruction(
+                        model=model,
+                        eval_loader=eval_dataloader,
+                        accelerator=accelerator,
+                        evaluator=evaluator,
+                        loss_module= loss_module,
+                        config=config, 
+                        logger=logger,
                         pretrained_tokenizer=pretrained_tokenizer
                     )
 
@@ -529,6 +554,11 @@ def train_one_epoch(config, logger, accelerator,
                         accelerator.log(eval_log, step=global_step + 1)
 
                 accelerator.wait_for_everyone()
+                total_val_loss = accelerator.gather(total_val_loss).mean()
+                if early_stop(total_val_loss): # save only if lower validation loss and this function will return True 
+                    save_path = save_checkpoint(model=model,output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
+                    # Wait for everyone to save their checkpoint.
+                    accelerator.wait_for_everyone()
 
             global_step += 1
 
@@ -548,12 +578,16 @@ def eval_reconstruction(
     eval_loader,
     accelerator,
     evaluator,
+    loss_module, 
+    config, 
+    logger, 
     pretrained_tokenizer=None
 ):
+    
     model.eval()
     evaluator.reset_metrics()
     local_model = accelerator.unwrap_model(model)
-
+    total_val_loss = 0 
     for i, (batch,name) in enumerate(tqdm(eval_loader, desc=f"Validation!")):
         images = batch.to(
             accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
@@ -562,6 +596,30 @@ def eval_reconstruction(
         reconstructed_images, model_dict = local_model(images)
         if pretrained_tokenizer is not None:
             reconstructed_images = pretrained_tokenizer.decode(reconstructed_images.argmax(1))
+        with accelerator.accumulate([model, loss_module]):
+            reconstructed_images, extra_results_dict = model(images)
+            
+            autoencoder_loss, loss_dict = loss_module(
+                    images,
+                    reconstructed_images,
+                    extra_results_dict,
+                    i,
+                    mode="generator",
+                )
+            total_val_loss += autoencoder_loss
+        # save a sample of reconstructed images to check by eye
+        if i==0: 
+            reconstruct_images(
+                model,
+                images[:config.training.num_generated_images],
+                accelerator=accelerator,
+                global_step=i,
+                output_dir=config.experiment.output_dir,
+                logger=logger,
+                config=config,
+                pretrained_tokenizer=pretrained_tokenizer
+            )
+
         reconstructed_images = torch.clamp(reconstructed_images, 0.0, 1.0)
         # Quantize to uint8
         reconstructed_images = torch.round(reconstructed_images * 255.0) / 255.0
@@ -575,7 +633,7 @@ def eval_reconstruction(
         # print("min_encoding_indices device:", model_dict["min_encoding_indices"].device)
         evaluator.update(original_images, reconstructed_images.squeeze(2), model_dict["min_encoding_indices"])
     model.train()
-    return evaluator.result()
+    return evaluator.result(), total_val_loss
 
 
 @torch.no_grad()
@@ -683,7 +741,7 @@ class SimpleImageDataset(Dataset):
         for subdir, _, files in os.walk(root_dir):
             for file in sorted(files):
                 file_path = os.path.join(subdir, file)
-                if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+                if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')): 
                     image_paths.append(file_path)
         return image_paths
 
@@ -745,3 +803,5 @@ class SimpleImageDataset(Dataset):
         plt.title(f"Image {idx}")
         plt.axis('off')
         plt.show()
+
+

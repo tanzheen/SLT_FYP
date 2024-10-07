@@ -28,6 +28,7 @@ from accelerate import Accelerator
 import torch
 from omegaconf import OmegaConf
 from utils.logger import setup_logger
+import numpy as np
 
 from utils.train_utils import (
     get_config, create_pretrained_tokenizer, 
@@ -36,7 +37,57 @@ from utils.train_utils import (
     create_evaluator, auto_resume, save_checkpoint, 
     train_one_epoch)
 
+class EarlyStopping:
+    '''
+    This class helps to keep track of the validation losses so far
+    This class will also stop the training if the validation loss did not decrease at all for the past 10 epochs
+    This will prevent overfitting to training data and allow easy initialization of the best weights for the model
+    '''
+    def __init__(self, patience=10, verbose=True ):
+        """
+        Args:
+            patience (int): How many epochs to wait after last time validation loss improved.
+                            Here it means how many previous epochs to consider.
+                            Default: 10
+            verbose (bool): If True, prints a message for each validation loss improvement. 
+                            Default: False
+        """
+        self.patience = patience
+        self.verbose = verbose
+        self.val_loss_min = np.Inf
+        self.val_loss_history = []
+        self.early_stop = False
+        self.counter = 0 
 
+    def __call__(self, val_loss):
+        """
+        Call method to update the early stopping status based on the validation loss.
+
+        Args:
+            val_loss (float): Current epoch's validation loss.
+        """
+        self.val_loss_history.append(val_loss)
+        print (f"Validation loss: {val_loss}")
+        # Ensure we only keep the last 'patience' number of validation losses
+        if len(self.val_loss_history) > self.patience:
+            self.val_loss_history.pop(0)
+        
+        # Check if the current validation loss is higher than the last 'patience' number of validation losses
+        if len(self.val_loss_history) == self.patience and all(val_loss > loss for loss in self.val_loss_history[:-1]):
+            self.counter += 1
+            if self.counter == self.patience:
+                self.early_stop = True
+                if self.verbose:
+                    print(f"Early stopping triggered. Validation loss {val_loss} is higher than the last {self.patience} validation losses: {self.val_loss_history[:-1]}")
+        
+        save_boo = val_loss < self.val_loss_min # true if new validation loss is smaller (to be returned)
+
+        if self.verbose and save_boo:
+            print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}). Saving model ...')
+            self.val_loss_min = val_loss # updating the minimum validation loss 
+        
+        return save_boo
+    
 def main():
     workspace = os.environ.get('WORKSPACE', '')
     if workspace:
@@ -137,7 +188,7 @@ def main():
     global_step, first_epoch = auto_resume(
         config, logger, accelerator, ema_model,
         strict=True)
-    
+    early_stop = EarlyStopping(verbose = True )
     for current_epoch in range(first_epoch, num_train_epochs):
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
         global_step = train_one_epoch(config, logger, accelerator,
@@ -147,6 +198,7 @@ def main():
                             train_dataloader, eval_dataloader,
                             evaluator,
                             global_step,
+                            early_stop=early_stop,
                             pretrained_tokenizer=pretrained_tokenizer)
         
 
@@ -177,6 +229,8 @@ if __name__ == "__main__":
         current_device = torch.cuda.current_device()
         torch.set_default_device('cuda')
         print(f"Current CUDA device: {torch.cuda.get_device_name(current_device)}")
+        import torch.multiprocessing as mp
+        mp.set_start_method('spawn')
     else:
         torch.set_default_device('mps')
         print("CUDA is not available. Using CPU.")

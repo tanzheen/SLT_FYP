@@ -4,8 +4,8 @@ experiment:
   output_dir: "/scratch2/e0724993/Sign2Text_run1"
   translate_every: 0.5
   save_every: 1
-  log_every: 0.25
-  eval_every: 4
+  log_every: 1
+  eval_every: 1
   log_grad_norm_every: 0.1
   resume: True
   init_weight: ""
@@ -28,6 +28,7 @@ model:
 
   MBart_model:
     init_weight: /hpctmp/e0724993/mbart_model # need to find the model weights
+    freeze_MBart: False
 
 losses:
   quantizer_weight: 1.0
@@ -56,13 +57,14 @@ optimizer:
     beta1: 0.9
     beta2: 0.99
     weight_decay: 1e-4
+    lr_diff: True 
+    adapt_lr: 1e-3
 
 lr_scheduler:
   scheduler: cosine
   params:
     learning_rate: ${optimizer.params.learning_rate}
-    warmup_steps: 10_000
-    end_lr: 1e-5
+    warmup_steps: 4000
 
 training:
   gradient_accumulation_steps: 1

@@ -24,6 +24,8 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         self.load_Titok_weights(config.model.vq_model.init_weight)  # Load pretrained weights for the Titok model
         self.freeze_Titok_weights()  # Freeze Titok weights here
         self.Mbart = MBartForConditionalGeneration.from_pretrained(config.model.MBart_model.init_weight)
+        if config.model.MBart_model.freeze_MBart: 
+            self.freeze_MBart_weights()
         self.adapter = LLMAdapter(config.model.vq_model.num_latent_tokens, hidden_dim= 1024)
         # Replace the embedding layer in the encoder
 
@@ -61,11 +63,19 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         self.titok.load_state_dict(state_dict)
         print("Titok weights loaded successfully from:", titok_weight_path)
 
+    
+    def freeze_MBart_weights(self):
+        """ Freeze the weights of the MBart model. """
+        for param in self.Mbart.parameters():
+            param.requires_grad = False
+        print("MBart weights are frozen!")
+
 
     def freeze_Titok_weights(self):
         # Freeze the weights of the Titok model
         for param in self.titok.parameters():
             param.requires_grad = False
+        print("TiTok weights are frozen chowwww!")
 
     def forward(self, src_input,tgt_input, src_attn, tgt_attn, src_length): 
         '''
@@ -92,14 +102,17 @@ class LLMAdapter(nn.Module):
         # Temporal convolution over the time dimension
         self.num_tokens = num_tokens
         self.hidden_dim = hidden_dim
-        self.temporal_conv= nn.Sequential(nn.Conv1d(self.num_tokens, self.hidden_dim//4, kernel_size= 5, stride = 1 , padding = 0), 
-                                     nn.BatchNorm1d(self.hidden_dim//4), 
+        self.proj = nn.Linear(self.num_tokens, self.hidden_dim//2)
+        self.temporal_conv= nn.Sequential(
+                                    nn.Conv1d(self.hidden_dim//2, self.hidden_dim, kernel_size= 5, stride = 1 , padding = 0), 
+                                     nn.BatchNorm1d(self.hidden_dim), 
                                      nn.ReLU(inplace = True), 
-                                     nn.MaxPool1d(kernel_size=2, ceil_mode=False), 
-                                     nn.Conv1d(self.hidden_dim//4,self.hidden_dim, kernel_size=5, stride = 1, padding =0), 
+                                     nn.AvgPool1d(kernel_size=2, ceil_mode=False), 
+                                     nn.Conv1d(self.hidden_dim,self.hidden_dim, kernel_size=5, stride = 1, padding =0), 
                                      nn.BatchNorm1d(self.hidden_dim), 
                                      nn.ReLU(inplace=True), 
-                                     nn.MaxPool1d(kernel_size=2, ceil_mode=False))
+                                     nn.AvgPool1d(kernel_size=2, ceil_mode=False))
+        self.apply(self.initialize_weights())
 
     def forward(self, x, src_length):
         # Input shape: (batch_size, num_frames, num_tokens)
@@ -112,8 +125,10 @@ class LLMAdapter(nn.Module):
         x = pad_sequence(x_batch, padding_value = PAD_IDX, batch_first = True)
         # We need to apply Conv1d over the temporal dimension, so we transpose to (batch_size, num_tokens, num_frames)
         # sequence: {x.shape}")
+        x = self.proj(x)
         x = x.permute(0,2,1)
         x = self.temporal_conv(x)  # Shape: (batch_size, hidden_dim, num_frames)
         x = x.permute(0,2,1 )  # Convert back to (batch_size, num_frames, hidden_dim)
 
         return x
+    

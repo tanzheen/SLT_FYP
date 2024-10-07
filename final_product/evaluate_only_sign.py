@@ -61,7 +61,7 @@ def main():
     tokenizer = MBart50Tokenizer.from_pretrained(config.training.tokenizer,
                                                  src_lang=config.dataset.lang,
                                                  tgt_lang=config.dataset.lang)
-    _, dev_dataloader, _ = create_signloader(config, logger, accelerator, tokenizer)
+    _, dev_dataloader, test_dataloader = create_signloader(config, logger, accelerator, tokenizer)
 
     # Prepare everything with the accelerator.
     logger.info("Preparing model and dataloaders for evaluation")
@@ -73,8 +73,13 @@ def main():
 
     # Call evaluation function
     logger.info("***** Running evaluation *****")
-    eval_translation(model=model, dev_dataloader=dev_dataloader, accelerator=accelerator, tokenizer=tokenizer, config=config)
-
+    print("Checking Dev set")
+    _, _ , dev_pred, dev_ref = eval_translation(model=model, dev_dataloader=dev_dataloader, accelerator=accelerator, tokenizer=tokenizer, config=config)
+    save_predictions_and_references(dev_pred, dev_ref, output_dir, filename="dev_predictions.txt")
+    print("Checking Test set")
+    _, _, test_pred, test_ref = eval_translation(model=model, dev_dataloader=test_dataloader, accelerator=accelerator, tokenizer=tokenizer, config=config)
+    
+    save_predictions_and_references(test_pred, test_ref, output_dir, filename="test_predictions.txt")
     accelerator.end_training()
 
 

@@ -124,8 +124,15 @@ class SignTransDataset(Dataset):
             transforms.Normalize(norm_mean, norm_std)
         ])
      
-        # Sort the frame paths to maintain the order.
+        # Filter the frames to ensure only photos are loaded
+        filtered_paths  = []
+        
+        #Sort the frame paths to maintain the order.
         paths = sorted(os.listdir(dir_path)) 
+        for path in paths:
+            if path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')): 
+                    filtered_paths.append(path)
+        paths = filtered_paths
         
         # If the video contains more frames than the max length, sample randomly up to max_length.
         if len(paths) > self.max_length:

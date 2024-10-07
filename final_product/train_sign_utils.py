@@ -18,8 +18,10 @@ from accelerate import Accelerator
 import glob
 import sacrebleu
 from logger import setup_logger
-from lr_schedulers import get_scheduler
 from sacrebleu.metrics import BLEU 
+import numpy as np 
+from torch.optim.lr_scheduler import CosineAnnealingLR, LinearLR
+
 
 def get_config():
     """Reads configs from a yaml file and terminal."""
@@ -98,25 +100,38 @@ def create_optimizer(config, logger, model):
     logger.info("Creating optimizers.")
     optimizer_config = config.optimizer.params
     learning_rate = optimizer_config.learning_rate
+
+    # Condition to set a different learning rate when to train the MBart and LLM adaptor with different learning rates
+    if optimizer_config.lr_diff:
+        # set adapter lr to specified value from config file 
+        lr_adapt = optimizer_config.adapt_lr 
+    else: 
+        # else just follow the same learning rate as LLM
+        lr_adapt = learning_rate 
+
     optimizer_type = config.optimizer.name
     if optimizer_type == "adamw":
         optimizer_cls = AdamW
     else:
         raise ValueError(f"Optimizer {optimizer_type} not supported")
 
-    exclude = (lambda n, p: p.ndim < 2 or "ln" in n or "bias" in n or 'latent_tokens' in n 
-               or 'mask_token' in n or 'embedding' in n or 'norm' in n or 'gamma' in n)
-    include = lambda n, p: not exclude(n, p)
-    named_parameters = list(model.named_parameters())
-    gain_or_bias_params = [p for n, p in named_parameters if exclude(n, p) and p.requires_grad]
-    rest_params = [p for n, p in named_parameters if include(n, p) and p.requires_grad]
+
+    # Separate the parameters for MBart, LLMAdapter and the Titok visial encoder
+    mbart_params = [p for n, p in model.Mbart.named_parameters() if p.requires_grad] #self.Mbart
+    titok_params = [p for n, p in model.titok.named_parameters() if p.requires_grad]
+    llm_adaptor_params = [p for n, p in model.adapter.named_parameters() if p.requires_grad] #self.adapter
+
+    # Create optimizer with different learning rates and weight decay settings
+    combined_params = mbart_params + titok_params
     optimizer = optimizer_cls(
         [
-            {"params": gain_or_bias_params, "weight_decay": 0.},
-            {"params": rest_params, "weight_decay": optimizer_config.weight_decay},
+    # Combined MBart and TiTok parameters with their respective learning rate
+            {"params": combined_params, "lr": learning_rate, "weight_decay": optimizer_config.weight_decay},
+            # LLM Adapter parameters with its own learning rate
+            {"params": llm_adaptor_params, "lr": lr_adapt, "weight_decay": optimizer_config.weight_decay},
         ],
-        lr=learning_rate,
-        betas=(optimizer_config.beta1, optimizer_config.beta2)
+        lr=config.optimizer.params.learning_rate,  # Default learning rate, not used as we set per group
+        betas=(config.optimizer.params.beta1, config.optimizer.params.beta2)
     )
 
     return optimizer
@@ -241,7 +256,7 @@ def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,
 
         # Decode the predicted token IDs into sentences
         #print(f"target labels: {tgt_labels}")
-        tgt_labels[tgt_labels== -100] = 0 
+        #tgt_labels[tgt_labels== -100] = 0 
         #print(tgt_labels)
         gt_translations = tokenizer.batch_decode(tgt_labels, skip_special_tokens = True)
         #print(gt_translations)
@@ -293,63 +308,70 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
     local_model = accelerator.unwrap_model(model)
     predictions = [] # this is just a list 
     references = [] # this will be a list of a list
-    for i, (src,tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
-        batch = src['input_ids']
-        src_length = src['src_length_batch']
-        tgt_attn = tgt.attention_mask
-        
-        images = batch.to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        tgt_input = tgt['input_ids'].to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        input_attn = src['attention_mask'].to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        tgt_attn = tgt_attn.to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        tgt_input[tgt_attn== 0] = -100
-        original_images = torch.clone(images)
-        output = local_model(original_images, tgt_input, input_attn , tgt_attn, src_length)
-        #must decode the output and tgt_input 
+    total_val_loss = 0 
+    with torch.no_grad(): 
+        for i, (src,tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
+            batch = src['input_ids']
+            src_length = src['src_length_batch']
+            tgt_attn = tgt.attention_mask
+            
+            images = batch.to(
+                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+                )
+            tgt_input = tgt['input_ids'].to(
+                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+                )
+            input_attn = src['attention_mask'].to(
+                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+                )
+            tgt_attn = tgt_attn.to(
+                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+                )
+            #tgt_input[tgt_attn== 0] = -100
+            original_images = torch.clone(images)
+            output = local_model(original_images, tgt_input, input_attn , tgt_attn, src_length) ## is the tgt_attn for the loss calculation?
+            #must decode the output and tgt_input 
+            val_loss = output.loss
+            logits = output['logits']
+            probs = logits.softmax(dim=-1)
+            values, pred = torch.topk(probs,k=1, dim = -1)
+            pred = pred.reshape(config.training.per_gpu_batch_size,-1).squeeze()
+            with tokenizer.as_target_tokenizer():
+                sentence = tokenizer.batch_decode(pred, skip_special_tokens = True)
 
-        logits = output['logits']
-        probs = logits.softmax(dim=-1)
-        values, pred = torch.topk(probs,k=1, dim = -1)
-        pred = pred.reshape(config.training.per_gpu_batch_size//2,-1).squeeze()
-        with tokenizer.as_target_tokenizer():
-            sentence = tokenizer.batch_decode(pred, skip_special_tokens = True)
-
-        tgt_input[tgt_input==-100] = 0 
-        gt_translation = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
-        
-        predictions.extend(sentence)
-        references.extend(gt_translation)
-
+            #tgt_input[tgt_input==-100] = 0 
+            gt_translation = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
+            
+            predictions.extend(sentence)
+            references.extend(gt_translation)
+            val_loss = accelerator.gather(val_loss) 
+            val_loss = val_loss.mean().item()
+            total_val_loss += val_loss
+    ## Compare the score 
     bleu = BLEU()
     bleu_score = bleu.corpus_score(predictions, [references])
     print(f" BLEU scores: {bleu_score}")
     model.train()
 
-    return bleu_score
+    return bleu_score, total_val_loss, predictions, references
 
-def create_lr_scheduler(config, logger, accelerator, optimizer, len_data):
-    """Creates learning rate scheduler for Sign2Text."""
+
+
+
+def create_scheduler(config, logger, accelerator, optimizer, len_data):
+    """Creates learning rate scheduler for the optimizer."""
     logger.info("Creating lr_schedulers.")
-    lr_scheduler = get_scheduler(
-        config.lr_scheduler.scheduler,
-        optimizer=optimizer,
-        num_training_steps=config.training.num_epochs * len_data/config.training.gradient_accumulation_steps,
-        num_warmup_steps=config.lr_scheduler.params.warmup_steps * accelerator.num_processes,
-        base_lr=config.lr_scheduler.params.learning_rate,
-        end_lr=config.lr_scheduler.params.end_lr,
+    # Create a scheduler for each parameter group
+    linear_warmup = LinearLR(optimizer, start_factor=0.0001, end_factor=1.0, total_iters=config.lr_scheduler.params.warmup_steps * accelerator.num_processes)
+    cos_scheduler = CosineAnnealingLR(
+        optimizer,
+        T_max=config.training.num_epochs * len_data/config.training.gradient_accumulation_steps - config.lr_scheduler.params.warmup_steps * accelerator.num_processes# Total training steps - warmup 
     )
-    return lr_scheduler
+    return linear_warmup, cos_scheduler
 
-def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_scheduler,
-                     train_dataloader, dev_dataloader, test_dataloader, tokenizer, global_step): 
+
+def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,linear_warmup,cos_scheduler,
+                     train_dataloader, dev_dataloader, test_dataloader, tokenizer, global_step, early_stop): 
     
     batch_time_meter = AverageMeter()
     data_time_meter = AverageMeter()
@@ -368,7 +390,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
         src_length = src['src_length_batch']
         tgt_attn = tgt.attention_mask
         tgt_input = tgt['input_ids']
-        tgt_input[tgt_attn== 0] = -100
+        #tgt_input[tgt_attn== 0] = -100
         input_attn = src['attention_mask']
         
         images = batch.to(
@@ -389,19 +411,22 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
         with accelerator.accumulate([model]):
             output = model(images, tgt_input, input_attn , tgt_attn, src_length)
             loss = output.loss 
-            total_loss += loss 
-            # Gather the losses across all processes for logging.
-            transformer_logs = {}
-            transformer_logs ['train current loss'] = loss 
-            transformer_logs ['train total_loss'] = total_loss # Total loss does not really matter until towards the end
-
+            
+            
+            optimizer.zero_grad(set_to_none=True)
+    
             accelerator.backward(loss)
 
             if config.training.max_grad_norm is not None and accelerator.sync_gradients:
                 accelerator.clip_grad_norm_(model.parameters(), config.training.max_grad_norm)
-
+            
             optimizer.step()
-            lr_scheduler.step()
+            
+            # Adjust learning rate based on linear warmup
+            if global_step < config.lr_scheduler.params.warmup_steps * accelerator.num_processes:
+                linear_warmup.step()
+            else:
+                cos_scheduler.step()
 
             # Log gradient norm before zeroing it.
             if (
@@ -410,8 +435,16 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                 and accelerator.is_main_process
             ):
                 log_grad_norm(model, accelerator, global_step + 1)
+            
+            # Gather the losses across all processes for logging.
+            loss = accelerator.gather(loss)
+            loss = loss.mean().item()
+            total_loss += loss 
+            transformer_logs = {}
+            transformer_logs ['train current loss'] = loss 
+            transformer_logs ['train total_loss'] = total_loss # Total loss does not really matter until towards the end
 
-            optimizer.zero_grad(set_to_none=True)
+            
 
         # not train_generator specifies we finish both a generator step and a discriminator step
         if accelerator.sync_gradients:
@@ -425,18 +458,14 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                     config.training.gradient_accumulation_steps * config.training.per_gpu_batch_size / batch_time_meter.val
                 )
 
-                lr = lr_scheduler.get_last_lr()[0]
                 logger.info(
                     f"Data (t): {data_time_meter.val:0.4f}, {samples_per_second_per_gpu:0.2f}/s/gpu "
                     f"Batch (t): {batch_time_meter.val:0.4f} "
-                    f"LR: {lr:0.6f} "
                     f"Step: {global_step + 1} "
                     f"Total Loss: {transformer_logs['train total_loss']:0.4f} "
                     f"Recon Loss: {transformer_logs['train current loss']:0.4f} "
                 )
                 logs = {
-                    "lr": lr,
-                    "lr/generator": lr,
                     "samples/sec/gpu": samples_per_second_per_gpu,
                     "time/data_time": data_time_meter.val,
                     "time/batch_time": batch_time_meter.val,
@@ -448,12 +477,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                 # Reset batch / data time meters per log window.
                 batch_time_meter.reset()
                 data_time_meter.reset()
-            
-            # Save model checkpoint.
-            if (global_step + 1) % int(config.experiment.save_every * len(train_dataloader)) == 0:
-                save_path = save_checkpoint(model=model,output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
-                # Wait for everyone to save their checkpoint.
-                accelerator.wait_for_everyone()
+                
 
             ## Generate some examples
             if (global_step + 1) % int(config.experiment.translate_every * len(train_dataloader))== 0 and accelerator.is_main_process:
@@ -489,7 +513,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                     ema_model.store(model.parameters())
                     ema_model.copy_to(model.parameters())
                     # Eval for EMA.
-                    eval_scores = eval_translation(
+                    eval_scores, total_val_loss, dev_pred, dev_ref  = eval_translation(
                         model=model,
                         dev_dataloader=dev_dataloader,
                         accelerator=accelerator,
@@ -512,7 +536,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                 else:
                      
                     # Eval for non-EMA.
-                    eval_scores = eval_translation(
+                    eval_scores, total_val_loss, dev_pred, dev_ref = eval_translation(
                         model=model,
                         dev_dataloader=dev_dataloader,
                         accelerator=accelerator,
@@ -528,11 +552,95 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lr_
                     if accelerator.is_main_process:
                         eval_log = {f'ema_eval/BLEU': eval_scores}
                         accelerator.log(eval_log, step=global_step + 1)
-
                 accelerator.wait_for_everyone()
+                # save dev prediction and dev references in a txt file regardless if validation loss decreased
+                save_predictions_and_references(pred = dev_pred,ref =  dev_ref,
+                                                output_dir= config.experiment.output_dir,
+                                                filename= "dev_pred.txt")
+
+                
+
+                if early_stop(total_val_loss): # save only if lower validation loss and this function will return True 
+                    save_path = save_checkpoint(model=model,output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
+                    # Wait for everyone to save their checkpoint.
+                    accelerator.wait_for_everyone()
 
             global_step += 1
 
-    return global_step
+    return global_step, early_stop
 
 
+
+class EarlyStopping:
+    '''
+    This class helps to keep track of the validation losses so far
+    This class will also stop the training if the validation loss did not decrease at all for the past 10 epochs
+    This will prevent overfitting to training data and allow easy initialization of the best weights for the model
+    '''
+    def __init__(self, patience=10, verbose=True ):
+        """
+        Args:
+            patience (int): How many epochs to wait after last time validation loss improved.
+                            Here it means how many previous epochs to consider.
+                            Default: 10
+            verbose (bool): If True, prints a message for each validation loss improvement. 
+                            Default: False
+        """
+        self.patience = patience
+        self.verbose = verbose
+        self.val_loss_min = np.Inf
+        self.val_loss_history = []
+        self.early_stop = False
+        self.counter = 0 
+
+    def __call__(self, val_loss):
+        """
+        Call method to update the early stopping status based on the validation loss.
+
+        Args:
+            val_loss (float): Current epoch's validation loss.
+        """
+        self.val_loss_history.append(val_loss)
+        print (f"Validation loss: {val_loss}")
+        # Ensure we only keep the last 'patience' number of validation losses
+        if len(self.val_loss_history) > self.patience:
+            self.val_loss_history.pop(0)
+        
+        # Check if the current validation loss is higher than the last 'patience' number of validation losses
+        if len(self.val_loss_history) == self.patience and all(val_loss > loss for loss in self.val_loss_history[:-1]):
+            self.counter += 1
+            if self.counter == self.patience:
+                self.early_stop = True
+                if self.verbose:
+                    print(f"Early stopping triggered. Validation loss {val_loss} is higher than the last {self.patience} validation losses: {self.val_loss_history[:-1]}")
+        
+        save_boo = val_loss < self.val_loss_min # true if new validation loss is smaller (to be returned)
+
+        if self.verbose and save_boo:
+            print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}). Saving model ...')
+            self.val_loss_min = val_loss # updating the minimum validation loss 
+        
+        return save_boo
+    
+
+def save_predictions_and_references(pred, ref, output_dir, filename="predictions.txt"):
+    """
+    Save predictions and references to a text file for later inspection.
+    
+    Args:
+        pred (list): List of predicted sentences.
+        ref (list): List of reference sentences.
+        output_dir (str): Directory where the file will be saved.
+        filename (str): Name of the file to save the predictions and references.
+    """
+    # Ensure the output directory exists
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    
+    output_file = Path(output_dir) / filename
+    
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write("Prediction\tReference\n")  # Header row (optional)
+        for p, r in zip(pred, ref):
+            f.write(f"{p}\t{r}\n")  # Tab-separated values
+    
+    print(f"Predictions and references saved to {output_file}")

@@ -31,7 +31,8 @@ def main():
         torch.backends.cudnn.allow_tf32 = True
     torch.backends.cudnn.benchmark = True
     torch.backends.cudnn.deterministic = False
-    torch.distributed.init_process_group(backend="nccl")  # Or "gloo" if you are using CPU
+     
+    #torch.distributed.init_process_group(backend="nccl")  # Or "gloo" if you are using CPU
     output_dir = config.experiment.output_dir
     os.makedirs(output_dir, exist_ok=True)
     config.experiment.logging_dir = os.path.join(output_dir, "logs")
@@ -72,10 +73,13 @@ def main():
     model, ema_model, loss_module = create_model_and_loss_module(
         config, logger, accelerator, model_type="titok")
     train_dataloader, eval_dataloader, test_dataloader = create_dataloader(config, logger, accelerator)
+    # Check on dataloader 
+    print(train_dataloader.dataset[0])
+    
     # Set up evaluator.
     evaluator = create_evaluator(config, logger, accelerator)
-    model, optimizer, lr_scheduler = accelerator.prepare(
-            model, optimizer, lr_scheduler)
+    model= accelerator.prepare(
+            model)
     if config.training.use_ema:
         ema_model.to(accelerator.device)
 
@@ -84,49 +88,53 @@ def main():
         strict=True)
     model.eval()
     # Using the same weights, tokenize train set, dev set and test set
-    for i, (batch, name) in enumerate(tqdm(train_dataloader), desc=f"Tokenisation!"): 
-        images = batch.to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        with accelerator.accumulate([model]): 
-            encoded_tokens = model.encode(images)[1]['min_encoding_indices'].squeeze()
-            # for loop to also save the encoded tokens with a modified name
-            for token, name in zip(encoded_tokens, name): 
-                # save token with the name  
-                # Save the token tensor as a .pt file
-                output_file = output_file = f"{name}_tokens.pt"
-                torch.save(token.cpu(), output_file)
-                print(f"Saved tokens for {name} to {output_file}")
+    with torch.no_grad():
+        for i, (batch, name) in enumerate(tqdm(train_dataloader, desc=f"Tokenisation!")): 
+            images = batch.to(
+                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+                )
+            with accelerator.accumulate([model]): 
+                encoded_tokens = model.encode(images)[1]['min_encoding_indices'].squeeze()
+                # for loop to also save the encoded tokens with a modified name
+                for token, fname in zip(encoded_tokens, name): 
+                    emb_name = os.path.splitext(fname)[0]
+                    emb_name = f"{emb_name}.pt" # change the filename from jpeg to .pt for saving later
+                    # save token with the name  
+                    # Save the token tensor as a .pt file
+                    torch.save(token.cpu(), emb_name)
+                    print(f"Saved tokens for {fname} to {emb_name}")
 
-    # Using the same weights, tokenize train set, dev set and test set
-    for i, (batch, name) in enumerate(tqdm(eval_dataloader), desc=f"Tokenisation!"): 
-        images = batch.to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        with accelerator.accumulate([model]): 
-            encoded_tokens = model.encode(images)[1]['min_encoding_indices'].squeeze()
-            # for loop to also save the encoded tokens with a modified name
-            for token, name in zip(encoded_tokens, name): 
-                # save token with the name  
-                # Save the token tensor as a .pt file
-                output_file = output_file = f"{name}_tokens.pt"
-                torch.save(token.cpu(), output_file)
-                print(f"Saved tokens for {name} to {output_file}")
+        # Using the same weights, tokenize train set, dev set and test set
+        for i, (batch, name) in enumerate(tqdm(eval_dataloader, desc=f"Tokenisation!")): 
+            images = batch.to(
+                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+                )
+            with accelerator.accumulate([model]): 
+                encoded_tokens = model.encode(images)[1]['min_encoding_indices'].squeeze()
+                # for loop to also save the encoded tokens with a modified name
+                for token, fname in zip(encoded_tokens, name): 
+                    emb_name = os.path.splitext(fname)[0]
+                    emb_name = f"{emb_name}.pt" # change the filename from jpeg to .pt for saving later
+                    # save token with the name  
+                    # Save the token tensor as a .pt file
+                    torch.save(token.cpu(), emb_name)
+                    print(f"Saved tokens for {fname} to {emb_name}")
 
-    # Using the same weights, tokenize train set, dev set and test set
-    for i, (batch, name) in enumerate(tqdm(test_dataloader), desc=f"Tokenisation!"): 
-        images = batch.to(
-                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-            )
-        with accelerator.accumulate([model]): 
-            encoded_tokens = model.encode(images)[1]['min_encoding_indices'].squeeze()
-            # for loop to also save the encoded tokens with a modified name
-            for token, name in zip(encoded_tokens, name): 
-                # save token with the name  
-                # Save the token tensor as a .pt file
-                output_file = output_file = f"{name}_tokens.pt"
-                torch.save(token.cpu(), output_file)
-                print(f"Saved tokens for {name} to {output_file}")
+        # Using the same weights, tokenize train set, dev set and test set
+        for i, (batch, name) in enumerate(tqdm(test_dataloader, desc=f"Tokenisation!")): 
+            images = batch.to(
+                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+                )
+            with accelerator.accumulate([model]): 
+                encoded_tokens = model.encode(images)[1]['min_encoding_indices'].squeeze()
+                # for loop to also save the encoded tokens with a modified name
+                for token, fname in zip(encoded_tokens, name): 
+                    emb_name = os.path.splitext(fname)[0]
+                    emb_name = f"{emb_name}.pt" # change the filename from jpeg to .pt for saving later
+                    # save token with the name  
+                    # Save the token tensor as a .pt file
+                    torch.save(token.cpu(), emb_name)
+                    print(f"Saved tokens for {fname} to {emb_name}")
 
 
 if __name__ == "__main__":
@@ -139,6 +147,13 @@ if __name__ == "__main__":
         print(f"Current CUDA device: {torch.cuda.get_device_name(current_device)}")
     else:
         torch.set_default_device('mps')
-        print("CUDA is not available. Using CPU.")
+        print("CUDA is not available. Using MPS.")
     torch.cuda.empty_cache()
     main()
+
+'''
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network tokenise_and_save.py config=configs/training/stage1/titok_l32_CSL.yaml
+    --experiment.project="tokenise_titok" 
+    --experiment.name="tokenise_titok" 
+    --experiment.output_dir="titok_l32_CSL_tokenise"
+'''
