@@ -557,7 +557,9 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                                                 output_dir= config.experiment.output_dir,
                                                 filename= "dev_pred.txt")
 
-                
+                # gather all val losses to synchronise across all processes
+                total_val_loss = accelerator.gather(total_val_loss)
+                total_val_loss = total_val_loss.mean().item()
 
                 if early_stop(total_val_loss): # save only if lower validation loss and this function will return True 
                     save_path = save_checkpoint(model=model,output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
