@@ -4,7 +4,7 @@ experiment:
   output_dir: "/scratch2/e0724993/Sign2Text_run1"
   translate_every: 0.5
   save_every: 1
-  log_every: 1
+  log_every: 0.1 
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True

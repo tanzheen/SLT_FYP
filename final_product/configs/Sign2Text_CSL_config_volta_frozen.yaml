@@ -4,7 +4,7 @@ experiment:
   output_dir: "/scratch2/e0724993/Sign2Text_run_frozen"
   translate_every: 0.5
   save_every: 1
-  log_every: 1
+  log_every: 0.1
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True
@@ -53,12 +53,12 @@ dataset:
 optimizer:
   name: adamw
   params:
-    learning_rate: 1e-5
+    learning_rate: 1e-6
     beta1: 0.9
     beta2: 0.99
     weight_decay: 1e-4
     lr_diff: True 
-    adapt_lr: 1e-4
+    adapt_lr: 1e-6
 
 
 lr_scheduler:
@@ -66,7 +66,7 @@ lr_scheduler:
   params:
     learning_rate: ${optimizer.params.learning_rate}
     warmup_steps: 4000
-    end_lr: 1e-6
+    end_lr: 1e-7
 
 training:
   gradient_accumulation_steps: 1

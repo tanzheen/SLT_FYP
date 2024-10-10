@@ -132,7 +132,7 @@ class SignTransDataset(Dataset):
         for path in paths:
             if path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')): 
                     filtered_paths.append(path)
-        paths = filtered_paths
+        paths = sorted(filtered_paths) 
         
         # If the video contains more frames than the max length, sample randomly up to max_length.
         if len(paths) > self.max_length:

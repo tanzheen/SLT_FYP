@@ -122,8 +122,7 @@ def main():
                                       logger= logger,
                                       accelerator= accelerator,model= model,
                                        ema_model= ema_model,optimizer= optimizer,
-                                        linear_warmup=LR_warmup, 
-                                        cos_scheduler=cos_scheduler,
+                                        scheduler = scheduler,
                                        train_dataloader=train_dataloader,
                                         dev_dataloader= dev_dataloader,
                                          test_dataloader= test_dataloader, 
@@ -163,10 +162,7 @@ if __name__ == "__main__":
 # Training for Sign2Text
 # Stage 1
 $env:WANDB_MODE="offline"
-accelerate launch --num_machines=1 --num_processes=2 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network training_sign.py config=configs/Sign2Text_CSL_config.yaml `
-    --experiment.project="Sign2Text_CSL" `
-    --experiment.name="Sign2Text_CSL_run1" `
-    --experiment.output_dir="Sign2Text_CSL_run1" 
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network training_sign.py config=configs/Sign2Text_CSL_config.yaml --experiment.project="Sign2Text_CSL" --experiment.name="Sign2Text_CSL_run1" --experiment.output_dir="Sign2Text_CSL_run1" 
 '''
     
 

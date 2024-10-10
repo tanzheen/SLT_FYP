@@ -149,14 +149,14 @@ def create_signloader(config, logger,accelerator, tokenizer):
     print("train dataloader done!")
 
     dev_dataset = SignTransDataset(tokenizer, config,  'dev')
-    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=True, 
+    dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False, 
                                 num_workers=config.dataset.params.num_workers, collate_fn=dev_dataset.collate_fn, 
                                  generator=torch.Generator(device=accelerator.device) )
     dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
 
     test_dataset = SignTransDataset(tokenizer, config, 'test')
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True,
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False,
                                   num_workers=config.dataset.params.num_workers, collate_fn=test_dataset.collate_fn, 
                                   generator=torch.Generator(device=accelerator.device))
     test_dataloader = accelerator.prepare(test_dataloader)
@@ -339,13 +339,13 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
             with tokenizer.as_target_tokenizer():
                 sentence = tokenizer.batch_decode(pred, skip_special_tokens = True)
 
-            #tgt_input[tgt_input==-100] = 0 
+            #tgt_input[tgt_input==-100] = 1
             gt_translation = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
             
             predictions.extend(sentence)
             references.extend(gt_translation)
-            val_loss = accelerator.gather(val_loss) 
-            val_loss = val_loss.mean().item()
+            # val_loss = accelerator.gather(val_loss) 
+            # val_loss = val_loss.mean().item()
             total_val_loss += val_loss
     ## Compare the score 
     bleu = BLEU()
@@ -357,14 +357,13 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
 
 
 
-
 def create_scheduler(config, logger, accelerator, optimizer, len_data):
     """Creates learning rate scheduler for the optimizer."""
     logger.info("Creating lr_schedulers.")
     lr_scheduler = get_scheduler(
         config.lr_scheduler.scheduler,
         optimizer=optimizer,
-        num_training_steps=config.training.max_train_steps * accelerator.num_processes,
+        num_training_steps=config.training.num_epochs*len_data * accelerator.num_processes,
         num_warmup_steps=config.lr_scheduler.params.warmup_steps * accelerator.num_processes,
         base_lr=config.lr_scheduler.params.learning_rate,
         end_lr=config.lr_scheduler.params.end_lr,
@@ -373,7 +372,7 @@ def create_scheduler(config, logger, accelerator, optimizer, len_data):
     return lr_scheduler
 
 
-def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,linear_warmup,cos_scheduler,
+def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,scheduler,
                      train_dataloader, dev_dataloader, test_dataloader, tokenizer, global_step, early_stop): 
     
     batch_time_meter = AverageMeter()
@@ -425,11 +424,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lin
             
             optimizer.step()
             
-            # Adjust learning rate based on linear warmup
-            if global_step < config.lr_scheduler.params.warmup_steps * accelerator.num_processes:
-                linear_warmup.step()
-            else:
-                cos_scheduler.step()
+            scheduler.step()
 
             # Log gradient norm before zeroing it.
             if (
@@ -504,7 +499,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,lin
                     logger=logger, 
                     tokenizer=tokenizer
                 )
-                accelerator.wait_for_everyone()
+
 
                 if config.training.get("use_ema", False):
                     # Switch back to the original model parameters for training.
