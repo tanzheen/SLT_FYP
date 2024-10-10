@@ -24,3 +24,7 @@ mbart_model/generation_config.json
 final_product/vis_tokenizer/generator_titok_l32.bin
 final_product/vis_tokenizer/maskgit-vqgan-imagenet-f16-256.bin
 final_product/vis_tokenizer/tokenizer_titok_l32.bin
+/final_product/vis_tokenizer/titok_l_32_stage1_run1
+/final_product/vis_tokenizer/titok_l_32_stage1_run1
+/final_product/vis_tokenizer/titok_l_32_stage1_run1
+/final_product/vis_tokenizer/titok_l_32_stage1_run1
