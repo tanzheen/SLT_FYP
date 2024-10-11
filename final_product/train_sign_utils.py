@@ -22,7 +22,7 @@ from sacrebleu.metrics import BLEU
 import numpy as np 
 from torch.optim.lr_scheduler import CosineAnnealingLR, LinearLR
 from lr_schedulers import get_scheduler
-
+from torch.distributed import broadcast
 def get_config():
     """Reads configs from a yaml file and terminal."""
     cli_conf = OmegaConf.from_cli()
@@ -308,10 +308,12 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
     local_model = accelerator.unwrap_model(model)
     predictions = [] # this is just a list 
     references = [] # this will be a list of a list
+    name_lst = [] 
     total_val_loss = 0 
     with torch.no_grad(): 
         for i, (src,tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
             batch = src['input_ids']
+            names = src['name_batch']
             src_length = src['src_length_batch']
             tgt_attn = tgt.attention_mask
             
@@ -341,7 +343,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
 
             #tgt_input[tgt_input==-100] = 1
             gt_translation = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
-            
+            name_lst.extend(names)
             predictions.extend(sentence)
             references.extend(gt_translation)
             # val_loss = accelerator.gather(val_loss) 
@@ -353,7 +355,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
     print(f" BLEU scores: {bleu_score}")
     model.train()
 
-    return bleu_score, total_val_loss, predictions, references
+    return bleu_score, total_val_loss, predictions, references, names 
 
 
 
@@ -512,7 +514,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                     ema_model.store(model.parameters())
                     ema_model.copy_to(model.parameters())
                     # Eval for EMA.
-                    eval_scores, total_val_loss, dev_pred, dev_ref  = eval_translation(
+                    eval_scores, total_val_loss, dev_pred, dev_ref , names  = eval_translation(
                         model=model,
                         dev_dataloader=dev_dataloader,
                         accelerator=accelerator,
@@ -535,7 +537,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                 else:
                      
                     # Eval for non-EMA.
-                    eval_scores, total_val_loss, dev_pred, dev_ref = eval_translation(
+                    eval_scores, total_val_loss, dev_pred, dev_ref, names = eval_translation(
                         model=model,
                         dev_dataloader=dev_dataloader,
                         accelerator=accelerator,
@@ -553,15 +555,19 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                         accelerator.log(eval_log, step=global_step + 1)
                 accelerator.wait_for_everyone()
                 # save dev prediction and dev references in a txt file regardless if validation loss decreased
-                save_predictions_and_references(pred = dev_pred,ref =  dev_ref,
+                save_predictions_and_references(pred = dev_pred,ref =  dev_ref,names=names,
                                                 output_dir= config.experiment.output_dir,
                                                 filename= "dev_pred.txt")
 
                 # gather all val losses to synchronise across all processes
                 total_val_loss = accelerator.gather(total_val_loss)
                 total_val_loss = total_val_loss.mean().item()
-
-                if early_stop(total_val_loss): # save only if lower validation loss and this function will return True 
+                if accelerator.is_main_process:
+                    should_save = early_stop(total_val_loss)
+                else: should_save = False
+                should_save = torch.tensor([int(should_save)], dtype=torch.int, device=accelerator.device)
+                broadcast(should_save, src=0)
+                if bool(should_save.item()): # save only if lower validation loss and this function will return True 
                     save_path = save_checkpoint(model=model,output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
             
                     # Wait for everyone to save their checkpoint.
@@ -625,7 +631,7 @@ class EarlyStopping:
         return save_boo
     
 
-def save_predictions_and_references(pred, ref, output_dir, filename="predictions.txt"):
+def save_predictions_and_references(pred, ref,names,  output_dir, filename="predictions.txt"):
     """
     Save predictions and references to a text file for later inspection.
     
@@ -641,8 +647,8 @@ def save_predictions_and_references(pred, ref, output_dir, filename="predictions
     output_file = Path(output_dir) / filename
     
     with open(output_file, "w", encoding="utf-8") as f:
-        f.write("Prediction\tReference\n")  # Header row (optional)
-        for p, r in zip(pred, ref):
-            f.write(f"{p}\t{r}\n")  # Tab-separated values
+        f.write("Names\tPrediction\tReference\n")  # Header row (optional)
+        for n ,p, r in zip(names, pred, ref):
+            f.write(f"{n}\t{p}\t{r}\n")  # Tab-separated values
     
     print(f"Predictions and references saved to {output_file}")

@@ -42,6 +42,8 @@ from utils.viz_utils import make_viz_from_samples
 from torchinfo import summary
 from torch.utils.data import DataLoader
 from tqdm import tqdm 
+from demo_util import get_titok_tokenizer, sample_fn
+from utils.viz_utils import make_viz_from_samples, make_viz_from_samples_generation
 
 def get_config():
     """Reads configs from a yaml file and terminal."""
@@ -581,7 +583,7 @@ def eval_reconstruction(
     loss_module, 
     config, 
     logger, 
-    pretrained_tokenizer=None
+    pretrained_tokenizer
 ):
     
     model.eval()
@@ -594,18 +596,30 @@ def eval_reconstruction(
         )
         original_images = torch.clone(images)
         reconstructed_images, model_dict = local_model(images)
+        # Obtain proxy codes
         if pretrained_tokenizer is not None:
-            reconstructed_images = pretrained_tokenizer.decode(reconstructed_images.argmax(1))
+            pretrained_tokenizer.eval()
+            proxy_codes = pretrained_tokenizer.encode(images)
+        else:
+            proxy_codes = None
+
         with accelerator.accumulate([model, loss_module]):
             reconstructed_images, extra_results_dict = model(images)
-            
-            autoencoder_loss, loss_dict = loss_module(
+            if proxy_codes is None:
+                autoencoder_loss, loss_dict = loss_module(
                     images,
                     reconstructed_images,
                     extra_results_dict,
                     i,
                     mode="generator",
                 )
+            else:
+                autoencoder_loss, loss_dict = loss_module(
+                    proxy_codes,
+                    reconstructed_images,
+                    extra_results_dict
+                )      
+             
             total_val_loss += autoencoder_loss
         # save a sample of reconstructed images to check by eye
         if i==0: 
@@ -805,3 +819,187 @@ class SimpleImageDataset(Dataset):
         plt.show()
 
 
+'''
+This function is for training maskgit
+'''
+
+
+def train_one_epoch_generator(
+                    config, logger, accelerator,
+                    model, ema_model, loss_module,
+                    optimizer,
+                    lr_scheduler,
+                    train_dataloader,
+                    tokenizer,
+                    global_step,):
+    """One epoch training."""
+    batch_time_meter = AverageMeter()
+    data_time_meter = AverageMeter()
+    end = time.time()
+
+    model.train()
+
+    for i, batch in enumerate(train_dataloader):
+        model.train()
+        if "image" in batch:
+            images = batch["image"].to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+            conditions = batch["class_id"].to(
+                accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
+            )
+
+            # Encode images on the flight.
+            with torch.no_grad():
+                tokenizer.eval()
+                input_tokens = tokenizer.encode(images)[1]["min_encoding_indices"].reshape(images.shape[0], -1)
+        else:
+            raise ValueError(f"Not found valid keys: {batch.keys()}")
+
+        fnames = batch["__key__"]
+        data_time_meter.update(time.time() - end)
+
+        unwrap_model = accelerator.unwrap_model(model)
+
+        # Randomly masking out input tokens.
+        masked_tokens, masks = unwrap_model.masking_input_tokens(
+            input_tokens)
+            
+
+        with accelerator.accumulate([model]):
+            logits = model(masked_tokens, conditions,
+                           cond_drop_prob=config.model.generator.class_label_dropout)
+            loss, loss_dict= loss_module(logits, input_tokens, weights=masks)
+            # Gather the losses across all processes for logging.
+            mlm_logs = {}
+            for k, v in loss_dict.items():
+                mlm_logs["train/" + k] = accelerator.gather(v).mean().item()
+            accelerator.backward(loss)
+
+            if config.training.max_grad_norm is not None and accelerator.sync_gradients:
+                accelerator.clip_grad_norm_(model.parameters(), config.training.max_grad_norm)
+
+            optimizer.step()
+            lr_scheduler.step()
+
+            # Log gradient norm before zeroing it.
+            if (
+                accelerator.sync_gradients
+                and (global_step + 1) % config.experiment.log_grad_norm_every == 0
+                and accelerator.is_main_process
+            ):
+                log_grad_norm(model, accelerator, global_step + 1)
+
+            optimizer.zero_grad(set_to_none=True)
+
+        if accelerator.sync_gradients:
+            if config.training.use_ema:
+                ema_model.step(model.parameters())
+            batch_time_meter.update(time.time() - end)
+            end = time.time()
+
+            if (global_step + 1) % config.experiment.log_every == 0:
+                samples_per_second_per_gpu = (
+                    config.training.gradient_accumulation_steps * config.training.per_gpu_batch_size / batch_time_meter.val
+                )
+
+                lr = lr_scheduler.get_last_lr()[0]
+                logger.info(
+                    f"Data (t): {data_time_meter.val:0.4f}, {samples_per_second_per_gpu:0.2f}/s/gpu "
+                    f"Batch (t): {batch_time_meter.val:0.4f} "
+                    f"LR: {lr:0.6f} "
+                    f"Step: {global_step + 1} "
+                    f"Loss: {mlm_logs['train/loss']:0.4f} "
+                    f"Accuracy: {mlm_logs['train/correct_tokens']:0.4f} "
+                )
+                logs = {
+                    "lr": lr,
+                    "lr/generator": lr,
+                    "samples/sec/gpu": samples_per_second_per_gpu,
+                    "time/data_time": data_time_meter.val,
+                    "time/batch_time": batch_time_meter.val,
+                }
+                logs.update(mlm_logs)
+                accelerator.log(logs, step=global_step + 1)
+
+                # Reset batch / data time meters per log window.
+                batch_time_meter.reset()
+                data_time_meter.reset()
+
+            # Save model checkpoint.
+            if (global_step + 1) % config.experiment.save_every == 0:
+                save_path = save_checkpoint(
+                    model, config.experiment.output_dir, accelerator, global_step + 1, logger=logger)
+                # Wait for everyone to save their checkpoint.
+                accelerator.wait_for_everyone()
+
+            # Generate images.
+            if (global_step + 1) % config.experiment.generate_every == 0 and accelerator.is_main_process:
+                # Store the model parameters temporarily and load the EMA parameters to perform inference.
+                if config.training.get("use_ema", False):
+                    ema_model.store(model.parameters())
+                    ema_model.copy_to(model.parameters())
+
+                generate_images(
+                    model,
+                    tokenizer,
+                    accelerator,
+                    global_step + 1,
+                    config.experiment.output_dir,
+                    logger=logger,
+                    config=config
+                )
+
+                if config.training.get("use_ema", False):
+                    # Switch back to the original model parameters for training.
+                    ema_model.restore(model.parameters())
+
+            global_step += 1
+
+            if global_step >= config.training.max_train_steps:
+                accelerator.print(
+                    f"Finishing training: Global step is >= Max train steps: {global_step} >= {config.training.max_train_steps}"
+                )
+                break
+
+
+    return global_step
+
+def generate_images(model, tokenizer, accelerator, 
+                    global_step, output_dir, logger, config=None):
+    model.eval()
+    tokenizer.eval()
+    logger.info("Generating images...")
+    generated_image = sample_fn(
+        accelerator.unwrap_model(model),
+        tokenizer,
+        guidance_scale=config.model.generator.get("guidance_scale", 3.0),
+        guidance_decay=config.model.generator.get("guidance_decay", "constant"),
+        guidance_scale_pow=config.model.generator.get("guidance_scale_pow", 3.0),
+        randomize_temperature=config.model.generator.get("randomize_temperature", 2.0),
+        softmax_temperature_annealing=config.model.generator.get("softmax_temperature_annealing", False),
+        num_sample_steps=config.model.generator.get("num_steps", 8),
+        device=accelerator.device,
+        return_tensor=True
+    )
+    images_for_saving, images_for_logging = make_viz_from_samples_generation(
+        generated_image)
+
+    # Log images.
+    if config.training.enable_wandb:
+        accelerator.get_tracker("wandb").log_images(
+            {"Train Generated": [images_for_saving]}, step=global_step
+        )
+    else:
+        accelerator.get_tracker("tensorboard").log_images(
+            {"Train Generated": images_for_logging}, step=global_step
+        )
+    # Log locally.
+    root = Path(output_dir) / "train_generated_images"
+    os.makedirs(root, exist_ok=True)
+    filename = f"{global_step:08}_s-generated.png"
+    path = os.path.join(root, filename)
+    images_for_saving.save(path)
+
+    model.train()
+    return
