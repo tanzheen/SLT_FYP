@@ -44,7 +44,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm 
 from demo_util import get_titok_tokenizer, sample_fn
 from utils.viz_utils import make_viz_from_samples, make_viz_from_samples_generation
-
+from torch.distributed import broadcast
 def get_config():
     """Reads configs from a yaml file and terminal."""
     cli_conf = OmegaConf.from_cli()
@@ -556,6 +556,16 @@ def train_one_epoch(config, logger, accelerator,
                         accelerator.log(eval_log, step=global_step + 1)
 
                 accelerator.wait_for_everyone()
+                # gather all val losses to synchronise across all processes
+                total_val_loss = accelerator.gather(total_val_loss)
+                total_val_loss = total_val_loss.mean().item()
+                if accelerator.is_main_process:
+                    should_save = early_stop(total_val_loss)
+                else: should_save = False
+                should_save = torch.tensor([int(should_save)], dtype=torch.int, device=accelerator.device)
+                broadcast(should_save, src=0)
+
+
                 total_val_loss = accelerator.gather(total_val_loss).mean()
                 if early_stop(total_val_loss): # save only if lower validation loss and this function will return True 
                     save_path = save_checkpoint(model=model,output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)

@@ -329,6 +329,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
             tgt_attn = tgt_attn.to(
                     accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
                 )
+            
             #tgt_input[tgt_attn== 0] = -100
             original_images = torch.clone(images)
             output = local_model(original_images, tgt_input, input_attn , tgt_attn, src_length) ## is the tgt_attn for the loss calculation?
@@ -355,7 +356,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
     print(f" BLEU scores: {bleu_score}")
     model.train()
 
-    return bleu_score, total_val_loss, predictions, references, names 
+    return bleu_score, total_val_loss, predictions, references, name_lst
 
 
 
@@ -457,15 +458,19 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                 samples_per_second_per_gpu = (
                     config.training.gradient_accumulation_steps * config.training.per_gpu_batch_size / batch_time_meter.val
                 )
+                lr = scheduler.get_last_lr()[0]
 
                 logger.info(
                     f"Data (t): {data_time_meter.val:0.4f}, {samples_per_second_per_gpu:0.2f}/s/gpu "
                     f"Batch (t): {batch_time_meter.val:0.4f} "
+                    f"LR: {lr:0.6f} "
                     f"Step: {global_step + 1} "
                     f"Total Loss: {transformer_logs['train total_loss']:0.4f} "
                     f"Recon Loss: {transformer_logs['train current loss']:0.4f} "
                 )
                 logs = {
+                    "lr": lr,
+                    "lr/generator": lr,
                     "samples/sec/gpu": samples_per_second_per_gpu,
                     "time/data_time": data_time_meter.val,
                     "time/batch_time": batch_time_meter.val,
@@ -537,7 +542,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                 else:
                      
                     # Eval for non-EMA.
-                    eval_scores, total_val_loss, dev_pred, dev_ref, names = eval_translation(
+                    eval_scores, total_val_loss, dev_pred, dev_ref, name_lst = eval_translation(
                         model=model,
                         dev_dataloader=dev_dataloader,
                         accelerator=accelerator,
@@ -555,7 +560,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                         accelerator.log(eval_log, step=global_step + 1)
                 accelerator.wait_for_everyone()
                 # save dev prediction and dev references in a txt file regardless if validation loss decreased
-                save_predictions_and_references(pred = dev_pred,ref =  dev_ref,names=names,
+                save_predictions_and_references(pred = dev_pred,ref =  dev_ref,names=name_lst,
                                                 output_dir= config.experiment.output_dir,
                                                 filename= "dev_pred.txt")
 
