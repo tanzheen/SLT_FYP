@@ -23,6 +23,10 @@ import numpy as np
 from torch.optim.lr_scheduler import CosineAnnealingLR, LinearLR
 from lr_schedulers import get_scheduler
 from torch.distributed import broadcast
+from torch.nn.utils.rnn import pad_sequence
+from definition import *
+import torch.nn as nn
+
 def get_config():
     """Reads configs from a yaml file and terminal."""
     cli_conf = OmegaConf.from_cli()
@@ -233,8 +237,9 @@ def log_grad_norm(model, accelerator, global_step):
             grad_norm = (grads.norm(p=2) / grads.numel()).item()
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
-def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,config, accelerator, global_step, output_dir, logger, tokenizer): 
+def translate_images(model, images,tgt_labels,input_attn, src_length ,config, accelerator, global_step, output_dir, logger, tokenizer): 
     logger.info("Translating images...")
+    model = accelerator.unwrap_model(model)
     images = torch.clone(images)
     dtype = torch.float32
     if accelerator.mixed_precision == "fp16":
@@ -243,16 +248,21 @@ def translate_images(model, images,tgt_labels,input_attn, tgt_attn, src_length ,
         dtype = torch.bfloat16
 
     with torch.autocast("cuda", dtype=dtype, enabled=accelerator.mixed_precision != "no"):
-        output = model(images, tgt_labels,input_attn, tgt_attn, src_length)
+        output = model.generate(src_input = images, src_attn = input_attn,src_length= src_length,
+                                      max_new_tokens=150, num_beams=4, 
+                                      decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang])
         # Output logits (predictions before softmax) from the decoder
         # Get the predicted token IDs by taking the argmax of the logits along the vocabulary dimension
-        logits = output['logits']
-        probs = logits.softmax(dim=-1)
-        values, predictions = torch.topk(probs,k=1, dim = -1)
-        #print(f"output shape: {output.shape}")
-        predictions = predictions.reshape(config.training.per_gpu_batch_size,-1).squeeze()
-        with tokenizer.as_target_tokenizer():
-            pred_translations  = tokenizer.batch_decode(predictions, skip_special_tokens = True)
+        predictions = [] 
+        for i in range(len(output)): 
+            predictions.append(output[i, :])
+
+        pad_tensor = torch.ones(200-len(predictions[0])).to(accelerator.device)
+        predictions[0] = torch.cat((predictions[0],pad_tensor.long()),dim = 0)
+        predictions = pad_sequence(predictions,batch_first=True,padding_value=PAD_IDX)
+
+        
+        pred_translations  = tokenizer.batch_decode(predictions, skip_special_tokens = True)
 
         # Decode the predicted token IDs into sentences
         #print(f"target labels: {tgt_labels}")
@@ -303,7 +313,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
     Calculate metrics using BLEU
     Output BLEU and Rouge values
     '''
-
+    loss_fct = nn.CrossEntropyLoss(ignore_index=PAD_IDX)
     model.eval()
     local_model = accelerator.unwrap_model(model)
     predictions = [] # this is just a list 
@@ -333,23 +343,32 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
             #tgt_input[tgt_attn== 0] = -100
             original_images = torch.clone(images)
             output = local_model(original_images, tgt_input, input_attn , tgt_attn, src_length) ## is the tgt_attn for the loss calculation?
-            #must decode the output and tgt_input 
-            val_loss = output.loss
-            logits = output['logits']
-            probs = logits.softmax(dim=-1)
-            values, pred = torch.topk(probs,k=1, dim = -1)
-            pred = pred.reshape(config.training.per_gpu_batch_size,-1).squeeze()
-            with tokenizer.as_target_tokenizer():
-                sentence = tokenizer.batch_decode(pred, skip_special_tokens = True)
-
-            #tgt_input[tgt_input==-100] = 1
-            gt_translation = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
-            name_lst.extend(names)
-            predictions.extend(sentence)
-            references.extend(gt_translation)
-            # val_loss = accelerator.gather(val_loss) 
-            # val_loss = val_loss.mean().item()
+            label = tgt_input.reshape(-1)
+            logits = output.logits.reshape(-1,output.logits.shape[-1])
+            val_loss = loss_fct(logits, label)
             total_val_loss += val_loss
+
+            ## Should use generated output to calculate the bleu score
+            generated = local_model.generate(src_input = original_images, src_attn = input_attn, 
+                                       src_length= src_length, 
+                                       max_new_tokens=150, num_beams=4, 
+                                       decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang])
+            tgt_input = tgt_input.to(accelerator.device)
+            for i in range(len(generated)): 
+                predictions.append(generated[i, :])
+                references.append(tgt_input[i, :])
+
+    pad_tensor = torch.ones(200-len(predictions[0])).to(accelerator.device)
+    predictions[0] = torch.cat((predictions[0],pad_tensor.long()),dim = 0)
+    predictions = pad_sequence(predictions,batch_first=True,padding_value=PAD_IDX)
+
+    pad_tensor = torch.ones(200-len(references[0])).to(accelerator.device)
+    references[0] = torch.cat((references[0],pad_tensor.long()),dim = 0)
+    references = pad_sequence(references,batch_first=True,padding_value=PAD_IDX)
+
+    predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+    references = tokenizer.batch_decode(references, skip_special_tokens=True)
+
     ## Compare the score 
     bleu = BLEU()
     bleu_score = bleu.corpus_score(predictions, [references])
@@ -385,6 +404,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
     model.train()
     total_loss = 0
     transformer_logs = defaultdict(float)
+    loss_fct = nn.CrossEntropyLoss(ignore_index=PAD_IDX)
 
     for i, (src, tgt) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
         model.train()
@@ -395,7 +415,6 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
         src_length = src['src_length_batch']
         tgt_attn = tgt.attention_mask
         tgt_input = tgt['input_ids']
-        #tgt_input[tgt_attn== 0] = -100
         input_attn = src['attention_mask']
         
         images = batch.to(
@@ -414,8 +433,12 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
         data_time_meter.update(time.time() - end)
 
         with accelerator.accumulate([model]):
+     
             output = model(images, tgt_input, input_attn , tgt_attn, src_length)
-            loss = output.loss 
+     
+            label = tgt_input.reshape(-1)
+            logits = output.logits.reshape(-1,output.logits.shape[-1])
+            loss = loss_fct(logits, label)
             
             
             optimizer.zero_grad(set_to_none=True)
@@ -426,13 +449,12 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                 accelerator.clip_grad_norm_(model.parameters(), config.training.max_grad_norm)
             
             optimizer.step()
-            
             scheduler.step()
 
             # Log gradient norm before zeroing it.
             if (
                 accelerator.sync_gradients
-                and (global_step + 1) % config.experiment.log_grad_norm_every == 0
+                and (global_step + 1) % (config.experiment.log_grad_norm_every * len(train_dataloader)/config.training.gradient_accumulation_steps) == 0
                 and accelerator.is_main_process
             ):
                 log_grad_norm(model, accelerator, global_step + 1)
@@ -454,7 +476,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
             batch_time_meter.update(time.time() - end)
             end = time.time()
 
-            if (global_step + 1) % int(config.experiment.log_every * len(train_dataloader))  == 0:
+            if (global_step + 1) % int(config.experiment.log_every * len(train_dataloader)/config.training.gradient_accumulation_steps)  == 0:
                 samples_per_second_per_gpu = (
                     config.training.gradient_accumulation_steps * config.training.per_gpu_batch_size / batch_time_meter.val
                 )
@@ -485,7 +507,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                 
 
             ## Generate some examples
-            if (global_step + 1) % int(config.experiment.translate_every * len(train_dataloader))== 0 and accelerator.is_main_process:
+            if (global_step + 1) % int(config.experiment.translate_every * len(train_dataloader)/config.training.gradient_accumulation_steps)== 0 and accelerator.is_main_process:
                 # Store the model parameters temporarily and load the EMA parameters to perform inference.
                 if config.training.get("use_ema", False):
                     ema_model.store(model.parameters())
@@ -497,7 +519,6 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                     images=images,
                     tgt_labels=tgt_input,
                     input_attn=input_attn, 
-                    tgt_attn=tgt_attn, 
                     src_length=src_length,
                     config=config,
                     accelerator=accelerator,
@@ -513,13 +534,13 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                     ema_model.restore(model.parameters())
             
             # Evaluate reconstruction.
-            if dev_dataloader is not None and (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)) == 0:
+            if dev_dataloader is not None and (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)/config.training.gradient_accumulation_steps) == 0:
                 logger.info(f"Computing metrics on the validation set.")
                 if config.training.get("use_ema", False):
                     ema_model.store(model.parameters())
                     ema_model.copy_to(model.parameters())
                     # Eval for EMA.
-                    eval_scores, total_val_loss, dev_pred, dev_ref , names  = eval_translation(
+                    eval_scores, total_val_loss, dev_pred, dev_ref , name_lst  = eval_translation(
                         model=model,
                         dev_dataloader=dev_dataloader,
                         accelerator=accelerator,
@@ -558,6 +579,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                     if accelerator.is_main_process:
                         eval_log = {f'ema_eval/BLEU': eval_scores}
                         accelerator.log(eval_log, step=global_step + 1)
+                        
                 accelerator.wait_for_everyone()
                 # save dev prediction and dev references in a txt file regardless if validation loss decreased
                 save_predictions_and_references(pred = dev_pred,ref =  dev_ref,names=name_lst,

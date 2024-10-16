@@ -1,13 +1,12 @@
 #!/bin/bash
 #PBS -P volta_pilot
 #PBS -j oe
-#PBS -N Sign2Text2
+#PBS -N Titok1
 #PBS -q volta_gpu
 #PBS -l select=1:ncpus=15:mem=50gb:ngpus=2
 #PBS -l walltime=72:00:00
 
 cd $PBS_O_WORKDIR; 
-cd final_product
 np=$(cat ${PBS_NODEFILE} | wc -l);
 
 image="/app1/common/singularity-img/hopper/pytorch/pytorch_2.3.0_cuda_12.4_ngc_24.04.sif"
@@ -15,8 +14,9 @@ image="/app1/common/singularity-img/hopper/pytorch/pytorch_2.3.0_cuda_12.4_ngc_2
 singularity exec $image bash << EOF > stdout.$PBS_JOBID 2> stderr.$PBS_JOBID
 export PATH=/home/svu/e0724993/.local/bin
 export PYTHONPATH=$PYTHONPATH:/home/svu/e0724993/.local/lib/python3.10/site-packages
-$env:WANDB_MODE=offline
-accelerate launch --num_machines=1 --num_processes=2 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network training_sign.py config=configs/Sign2Text_CSL_config_volta_v2.yaml 
+$env:WANDB_MODE="offline"
+accelerate launch --num_machines=1 --num_processes=2 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network scripts/train_titok.py config=configs/training/stage1/titok_l32_CSL_volta.yaml --experiment.project="titok_l32_CSL_stage1" --experiment.name="titok_l32_CSL_stage1_run1" --experiment.output_dir="titok_l32_CSL_stage1_run1" --training.per_gpu_batch_size=16
+
 
 EOF
 

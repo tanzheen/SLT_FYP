@@ -1,8 +1,8 @@
 experiment:
-  project: "Sign2TextF"
-  name: "Sign2Text_run_frozen"
-  output_dir: "/scratch2/e0724993/Sign2Text_run_frozen"
-  translate_every: 0.5
+  project: "Sign2TextF2"
+  name: "Sign2Text_run_frozen2"
+  output_dir: "/scratch2/e0724993/Sign2Text_run_frozen2"
+  translate_every: 0.1
   save_every: 1
   log_every: 0.1
   eval_every: 1
@@ -27,6 +27,7 @@ model:
     init_weight: "/hpctmp/e0724993/TiTok_weights/ema_model/pytorch_model.bin"
 
   MBart_model:
+    adapt_type: 2 # 1 or 2 
     init_weight: /hpctmp/e0724993/mbart_model # need to find the model weights
     freeze_MBart: True
 
@@ -58,17 +59,17 @@ optimizer:
     beta2: 0.99
     weight_decay: 1e-4
     lr_diff: True
-    adapt_lr: 1e-6
+    adapt_lr: 5e-6
 
 lr_scheduler:
   scheduler: cosine
   params:
     learning_rate: ${optimizer.params.learning_rate}
     warmup_steps: 4000
-    end_lr: 1e-7
+    end_lr: 1e-6
 
 training:
-  gradient_accumulation_steps: 1
+  gradient_accumulation_steps: 4
   per_gpu_batch_size: 4
   mixed_precision: fp16
   enable_tf32: True

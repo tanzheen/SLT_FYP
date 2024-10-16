@@ -38,7 +38,13 @@ class PerceptualLoss(torch.nn.Module):
         if "convnext_s" not in model_name:
             raise ValueError(f"Unsupported Perceptual Loss model name {model_name}")
 
-        self.convnext = models.convnext_small(weights=models.ConvNeXt_Small_Weights.IMAGENET1K_V1).eval()
+        self.convnext = models.convnext_small(weights=None).eval()
+        # Load the custom weights from a local file
+        checkpoint_path = "convnext_small-0c510722.pth"
+        state_dict = torch.load(checkpoint_path)
+        # Load the weights into the model
+        self.convnext.load_state_dict(state_dict)
+        self.convnext.eval()
         self.register_buffer("imagenet_mean", torch.Tensor(_IMAGENET_MEAN)[None, :, None, None])
         self.register_buffer("imagenet_std", torch.Tensor(_IMAGENET_STD)[None, :, None, None])
 
