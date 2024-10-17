@@ -251,7 +251,7 @@ def create_dataloader(config, logger, accelerator):
 
     # Load datasets
     root_dir = config.dataset.params.img_path
-    train_dataset = SimpleImageDataset(root_dir=root_dir, phase='train', person_size=config.dataset.preprocessing.person_size, transform=train_transform)
+    train_dataset = SimpleImageDataset(root_dir=root_dir, phase='train', person_size=config.dataset.preprocessing.person_size, transform=eval_transform)
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, generator=torch.Generator(device=accelerator.device), num_workers=config.dataset.params.num_workers)
     train_dataloader = accelerator.prepare(train_dataloader)
     print("train dataloader done!")

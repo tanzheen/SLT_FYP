@@ -237,7 +237,7 @@ def log_grad_norm(model, accelerator, global_step):
             grad_norm = (grads.norm(p=2) / grads.numel()).item()
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
-def translate_images(model, images,tgt_labels,input_attn, src_length ,config, accelerator, global_step, output_dir, logger, tokenizer): 
+def translate_images(model, images,tgt_labels,input_attn,tgt_attn,  src_length ,config, accelerator, global_step, output_dir, logger, tokenizer): 
     logger.info("Translating images...")
     model = accelerator.unwrap_model(model)
     images = torch.clone(images)
@@ -248,14 +248,14 @@ def translate_images(model, images,tgt_labels,input_attn, src_length ,config, ac
         dtype = torch.bfloat16
 
     with torch.autocast("cuda", dtype=dtype, enabled=accelerator.mixed_precision != "no"):
-        output = model.generate(src_input = images, src_attn = input_attn,src_length= src_length,
-                                      max_new_tokens=150, num_beams=4, 
-                                      decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang])
+        output = model(src_input = images,tgt_input = tgt_labels, src_attn = input_attn, tgt_attn = tgt_attn, src_length = src_length)
         # Output logits (predictions before softmax) from the decoder
         # Get the predicted token IDs by taking the argmax of the logits along the vocabulary dimension
-        predictions = [] 
-        for i in range(len(output)): 
-            predictions.append(output[i, :])
+        logits = output['logits']
+        probs = logits.softmax(dim=-1)
+        values, pred = torch.topk(probs,k=1, dim = -1)
+        predictions = pred.reshape(config.training.per_gpu_batch_size,-1).squeeze()
+        
 
         pad_tensor = torch.ones(200-len(predictions[0])).to(accelerator.device)
         predictions[0] = torch.cat((predictions[0],pad_tensor.long()),dim = 0)
@@ -264,10 +264,6 @@ def translate_images(model, images,tgt_labels,input_attn, src_length ,config, ac
         
         pred_translations  = tokenizer.batch_decode(predictions, skip_special_tokens = True)
 
-        # Decode the predicted token IDs into sentences
-        #print(f"target labels: {tgt_labels}")
-        #tgt_labels[tgt_labels== -100] = 0 
-        #print(tgt_labels)
         gt_translations = tokenizer.batch_decode(tgt_labels, skip_special_tokens = True)
         #print(gt_translations)
 
@@ -344,11 +340,13 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
             original_images = torch.clone(images)
             output = local_model(original_images, tgt_input, input_attn , tgt_attn, src_length) ## is the tgt_attn for the loss calculation?
             label = tgt_input.reshape(-1)
-            logits = output.logits.reshape(-1,output.logits.shape[-1])
+
+            logits = output['logits']
+    
             val_loss = loss_fct(logits, label)
             total_val_loss += val_loss
 
-            ## Should use generated output to calculate the bleu score
+            # ## Should use generated output to calculate the bleu score
             generated = local_model.generate(src_input = original_images, src_attn = input_attn, 
                                        src_length= src_length, 
                                        max_new_tokens=150, num_beams=4, 
@@ -519,6 +517,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
                     images=images,
                     tgt_labels=tgt_input,
                     input_attn=input_attn, 
+                    tgt_attn=tgt_attn,
                     src_length=src_length,
                     config=config,
                     accelerator=accelerator,
