@@ -229,8 +229,8 @@ def create_dataloader(config, logger, accelerator):
     logger.info(f"Creating dataloaders. Batch size = {batch_size}")
 
     # Normalization values for ImageNet
-    norm_mean = [0.485, 0.456, 0.406]
-    norm_std = [0.229, 0.224, 0.225]
+    norm_mean = [0,0,0]
+    norm_std = [1,1,1]
 
     # Data augmentations for training set
     train_transform = transforms.Compose([
