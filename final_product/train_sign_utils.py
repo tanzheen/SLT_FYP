@@ -168,6 +168,35 @@ def create_signloader(config, logger,accelerator, tokenizer):
 
     return train_dataloader, dev_dataloader, test_dataloader
 
+def continue_from_frozen(config, logger, accelerator, ema_model, strict = True): 
+    '''Continue training from a frozen model'''
+    global_step = 0
+    first_epoch = 0
+    if config.experiment.previous_frozen: 
+        accelerator.wait_for_everyone()
+        local_ckpt_list = list(glob.glob(os.path.join(
+            config.experiment.previous_frozen, "checkpoint*")))
+        logger.info(f"Taking the weights from the frozen runs. All globbed checkpoints are: {local_ckpt_list}")
+        if len(local_ckpt_list) >= 1:
+            if len(local_ckpt_list) > 1:
+                fn = lambda x: int(x.split('/')[-1].split('-')[-1])
+                checkpoint_paths = sorted(local_ckpt_list, key=fn, reverse=True)
+            else:
+                checkpoint_paths = local_ckpt_list
+            global_step = load_checkpoint(
+                Path(checkpoint_paths[0]),
+                accelerator,
+                logger=logger,
+                strict=strict
+            )
+            if config.training.use_ema:
+                ema_model.set_step(global_step)
+            first_epoch = 1
+        else:
+            logger.info("Training from scratch.")
+    return global_step, first_epoch
+
+
 
 def auto_resume(config, logger, accelerator, ema_model, 
              strict=True):
@@ -257,9 +286,9 @@ def translate_images(model, images,tgt_labels,input_attn,tgt_attn,  src_length ,
         predictions = pred.reshape(config.training.per_gpu_batch_size,-1).squeeze()
         
 
-        pad_tensor = torch.ones(200-len(predictions[0])).to(accelerator.device)
-        predictions[0] = torch.cat((predictions[0],pad_tensor.long()),dim = 0)
-        predictions = pad_sequence(predictions,batch_first=True,padding_value=PAD_IDX)
+        # pad_tensor = torch.ones(200-len(predictions[0])).to(accelerator.device)
+        # predictions[0] = torch.cat((predictions[0],pad_tensor.long()),dim = 0)
+        # predictions = pad_sequence(predictions,batch_first=True,padding_value=PAD_IDX)
 
         
         pred_translations  = tokenizer.batch_decode(predictions, skip_special_tokens = True)
@@ -339,9 +368,12 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
             #tgt_input[tgt_attn== 0] = -100
             original_images = torch.clone(images)
             output = local_model(original_images, tgt_input, input_attn , tgt_attn, src_length) ## is the tgt_attn for the loss calculation?
-            label = tgt_input.reshape(-1)
 
-            logits = output['logits']
+        
+            label = tgt_input.reshape(-1)
+            logits = output.logits.reshape(-1,output.logits.shape[-1])
+            #print(f"Logits shape: {logits.shape}, Label shape: {label.shape}")
+
     
             val_loss = loss_fct(logits, label)
             total_val_loss += val_loss
@@ -402,7 +434,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
     model.train()
     total_loss = 0
     transformer_logs = defaultdict(float)
-    loss_fct = nn.CrossEntropyLoss(ignore_index=PAD_IDX)
+    loss_fct = nn.CrossEntropyLoss(ignore_index=PAD_IDX ,label_smoothing=0.1)
 
     for i, (src, tgt) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
         model.train()
@@ -436,6 +468,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
      
             label = tgt_input.reshape(-1)
             logits = output.logits.reshape(-1,output.logits.shape[-1])
+            #print(f"Logits shape: {logits.shape}, Label shape: {label.shape}")
             loss = loss_fct(logits, label)
             
             

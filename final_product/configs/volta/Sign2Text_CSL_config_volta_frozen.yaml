@@ -9,6 +9,7 @@ experiment:
   log_grad_norm_every: 0.1
   resume: True
   init_weight: ""
+  previous_frozen: ""
 
 model:
   vq_model:

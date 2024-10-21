@@ -8,6 +8,7 @@ experiment:
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True
+  previous_frozen: "/scratch2/e0724993/Sign2Text_run_frozen"
   init_weight: "/scratch2/e0724993/Sign2Text_run1/stage_1_frozen/pytorch_model.bin"
 
 model:

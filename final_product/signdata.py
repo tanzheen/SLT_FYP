@@ -96,9 +96,12 @@ class SignTransDataset(Dataset):
         file = self.data_list[index]  # Get the data entry for the specified index.
         name = file['name']  # Name of the video file.
         text_label = file['translation']  # Corresponding translation (text label).
+        length = file['length']  # Number of frames in the video.
         
         # Load the images for the video and pad as necessary.
         img_sample = self.load_imgs(os.path.join(self.img_path, name))
+        if img_sample.shape[0] != length: 
+            f"Name: {name}, Length mismatch: Retrieved {img_sample.shape[0]} vs Recorded {length}"
         
         return name, img_sample, text_label
     

@@ -89,8 +89,7 @@ def main():
     logger.info(f"accelerator device: {accelerator.device}")
     global_step = 0
     first_epoch = 0
-    global_step = 0
-    first_epoch = 0
+   
     
     # Freeze both model's weights again just in case
     # Assuming 'model' is your original model wrapped in DDP
@@ -109,6 +108,12 @@ def main():
     model, optimizer,  scheduler= accelerator.prepare(
             model, optimizer,scheduler 
         )
+    
+    # Continue from frozen training
+    if config.experiment.previous_frozen: 
+        global_step, first_epoch = continue_from_frozen(config, logger, accelerator, ema_model)
+    
+    # Auto resume from training 
     global_step, first_epoch = auto_resume(
         config, logger, accelerator, ema_model,
         strict=True)

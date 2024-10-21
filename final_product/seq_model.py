@@ -240,12 +240,12 @@ class LLMAdapter3(nn.Module):
             nn.BatchNorm1d(self.num_tokens * 2),  # Channels must match Conv1d output channels
             nn.ReLU(inplace=True),
             # Reduce kernel size for pooling to avoid sequence collapse
-            nn.AvgPool1d(kernel_size=1, ceil_mode=False),  
+            nn.AvgPool1d(kernel_size=2, ceil_mode=False),  
 
             nn.Conv1d(self.num_tokens * 2, self.num_tokens * 4, kernel_size=5, stride=1, padding=0),
             nn.BatchNorm1d(self.num_tokens * 4),  # Channels must match Conv1d output channels
             nn.ReLU(inplace=True),
-            nn.AvgPool1d(kernel_size=1, ceil_mode=False)  # Adjusted pooling to avoid reducing size to zero
+            nn.AvgPool1d(kernel_size=2, ceil_mode=False)  # Adjusted pooling to avoid reducing size to zero
         )
         
         # Final projection layer

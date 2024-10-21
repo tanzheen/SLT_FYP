@@ -41,7 +41,7 @@ dataset:
   img_path: ../../CSL-Daily/sentence/frames_512x512/ # + <train/dev/test> + <video_name>
   max_length: 300
   params:
-    num_workers: 4
+    num_workers: 0
   preprocessing:
     crop_size: 256
     resize_shorter_edge: 256
