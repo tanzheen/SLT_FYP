@@ -9,7 +9,7 @@ experiment:
   log_grad_norm_every: 0.1
   resume: True
   previous_frozen: "/scratch2/e0724993/Sign2Text_run_frozen3"
-  init_weight: "/scratch2/e0724993/Sign2Text_run3/stage_1_frozen_v3/pytorch_model.bin"
+  init_weight: ""
 
 model:
   vq_model:
@@ -28,9 +28,19 @@ model:
     init_weight: "/hpctmp/e0724993/TiTok_weights/ema_model/pytorch_model.bin"
 
   MBart_model:
-    adapt_type: 2 # 1 or 2 
+    adapt_type: 3 # 1 or 2 or 3
     init_weight: /hpctmp/e0724993/mbart_model # need to find the model weights
     freeze_MBart: False
+
+  lora: 
+    use_lora: False
+    lora_head: False 
+    lora_attn: True 
+    lora_encoder: True 
+    lora_decoder: False 
+    lora_rank: 4
+    lora_alpha: 8
+    lora_dropout: 0.0 
 
 losses:
   quantizer_weight: 1.0
@@ -60,7 +70,7 @@ optimizer:
     beta2: 0.99
     weight_decay: 1e-4
     lr_diff: True 
-    adapt_lr: 1e-4
+    adapt_lr: 1e-5
 
 lr_scheduler:
   scheduler: cosine

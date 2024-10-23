@@ -99,9 +99,11 @@ class SignTransDataset(Dataset):
         length = file['length']  # Number of frames in the video.
         
         # Load the images for the video and pad as necessary.
-        img_sample = self.load_imgs(os.path.join(self.img_path, name))
+        img_sample, path_lst= self.load_imgs(os.path.join(self.img_path, name))
         if img_sample.shape[0] != length: 
-            f"Name: {name}, Length mismatch: Retrieved {img_sample.shape[0]} vs Recorded {length}"
+            print(f"Name: {name}, Length mismatch: Retrieved {img_sample.shape[0]} vs Recorded {length}") 
+        # else: 
+        #     print(f"Name list: {path_lst}, Name: {name}, Length: {length}") 
         
         return name, img_sample, text_label
     
@@ -136,7 +138,7 @@ class SignTransDataset(Dataset):
             if path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')): 
                     filtered_paths.append(path)
         paths = sorted(filtered_paths) 
-        
+        #print (paths)
         # If the video contains more frames than the max length, sample randomly up to max_length.
         if len(paths) > self.max_length:
             sampled_indices = sorted(random.sample(range(len(paths)), k=self.max_length))
@@ -167,7 +169,7 @@ class SignTransDataset(Dataset):
             img = data_transform(img).unsqueeze(0)  # Apply the dataset-specific transformation.
             imgs[i, :, :, :] = img
         
-        return imgs  # Return the tensor (frames, RGB channels, height, width).
+        return imgs, paths  # Return the tensor (frames, RGB channels, height, width).
     
     def __str__(self):
         """

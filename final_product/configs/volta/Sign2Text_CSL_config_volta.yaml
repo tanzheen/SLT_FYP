@@ -25,12 +25,23 @@ model:
     num_latent_tokens: 32
     finetune_decoder: False
     pretrained_tokenizer_weight: "maskgit-vqgan-imagenet-f16-256.bin"
-    init_weight: "/hpctmp/e0724993/TiTok_weights/ema_model/pytorch_model.bin"
+    previous_frozen: "/scratch2/e0724993/Sign2Text_run_frozen"
+    init_weight: ""
 
   MBart_model:
     adapt_type: 1 # 1 or 2 
     init_weight: /hpctmp/e0724993/mbart_model # need to find the model weights
     freeze_MBart: False
+
+  lora: 
+    use_lora: False
+    lora_head: False 
+    lora_attn: True 
+    lora_encoder: True 
+    lora_decoder: False 
+    lora_rank: 4
+    lora_alpha: 8
+    lora_dropout: 0.0 
 
 losses:
   quantizer_weight: 1.0

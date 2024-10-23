@@ -26,6 +26,7 @@ from torch.distributed import broadcast
 from torch.nn.utils.rnn import pad_sequence
 from definition import *
 import torch.nn as nn
+import torch.nn.functional as F
 
 def get_config():
     """Reads configs from a yaml file and terminal."""
@@ -341,7 +342,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
     loss_fct = nn.CrossEntropyLoss(ignore_index=PAD_IDX)
     model.eval()
     local_model = accelerator.unwrap_model(model)
-    predictions = [] # this is just a list 
+    prediction_lst = [] # this is just a list 
     references = [] # this will be a list of a list
     name_lst = [] 
     total_val_loss = 0 
@@ -378,26 +379,32 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
             val_loss = loss_fct(logits, label)
             total_val_loss += val_loss
 
-            # ## Should use generated output to calculate the bleu score
-            generated = local_model.generate(src_input = original_images, src_attn = input_attn, 
-                                       src_length= src_length, 
-                                       max_new_tokens=150, num_beams=4, 
-                                       decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang])
+            logits = output['logits']
+            probs = logits.softmax(dim=-1)
+            values, pred = torch.topk(probs,k=1, dim = -1)
+            generated = pred.reshape(config.training.per_gpu_batch_size,-1).squeeze()
+            
+
+            # pad_tensor = torch.ones(200-len(predictions[0])).to(accelerator.device)
+            # predictions[0] = torch.cat((predictions[0],pad_tensor.long()),dim = 0)
+            # predictions = pad_sequence(predictions,batch_first=True,padding_value=PAD_IDX)
+
+            
+
+            # # ## Should use generated output to calculate the bleu score
+            # generated = local_model.generate(src_input = original_images, src_attn = input_attn, 
+            #                            src_length= src_length, 
+            #                            max_new_tokens=150, num_beams=4, 
+            #                            decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang])
             tgt_input = tgt_input.to(accelerator.device)
             for i in range(len(generated)): 
-                predictions.append(generated[i, :])
+                prediction_lst.append(generated[i, :])
                 references.append(tgt_input[i, :])
 
-    pad_tensor = torch.ones(200-len(predictions[0])).to(accelerator.device)
-    predictions[0] = torch.cat((predictions[0],pad_tensor.long()),dim = 0)
-    predictions = pad_sequence(predictions,batch_first=True,padding_value=PAD_IDX)
+   
 
-    pad_tensor = torch.ones(200-len(references[0])).to(accelerator.device)
-    references[0] = torch.cat((references[0],pad_tensor.long()),dim = 0)
-    references = pad_sequence(references,batch_first=True,padding_value=PAD_IDX)
-
-    predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
     references = tokenizer.batch_decode(references, skip_special_tokens=True)
+    predictions = tokenizer.batch_decode(prediction_lst, skip_special_tokens=True)
 
     ## Compare the score 
     bleu = BLEU()
@@ -463,15 +470,35 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
         data_time_meter.update(time.time() - end)
 
         with accelerator.accumulate([model]):
-     
-            output = model(images, tgt_input, input_attn , tgt_attn, src_length)
-     
+            tgt_input_clone = torch.clone(tgt_input)
+            tgt_input_clone[tgt_attn== 0] = -100
+
+            output = model(images, tgt_input_clone, input_attn , tgt_attn, src_length)
+
             label = tgt_input.reshape(-1)
             logits = output.logits.reshape(-1,output.logits.shape[-1])
             #print(f"Logits shape: {logits.shape}, Label shape: {label.shape}")
-            loss = loss_fct(logits, label)
+
+            # Cross Entropy loss 
+            loss = loss_fct(logits, label) 
             
+            # Try Seq2Seq loss 
+            idx = tgt_input
+            logits = F.log_softmax(output["logits"], dim=-1)
+            mask = tgt_attn 
+
+            # shift things
+            output_logits = logits[:,:-1,:]
+            label_tokens = idx[:, 1:].unsqueeze(-1)
+            output_mask = mask[:,1:]
+
+            # gather the logits and mask
+            select_logits = torch.gather(output_logits, -1, label_tokens).squeeze()
+            #-select_logits[output_mask==1].mean(), output["loss"]
+            seq_loss = (select_logits * output_mask).sum(dim=-1, keepdims=True) / output_mask.sum(dim=-1, keepdims=True)
             
+            # Print both loss for comparison 
+            print(f"Cross Entropy Loss: {loss}, Seq2Seq Loss: {seq_loss.mean()}")
             optimizer.zero_grad(set_to_none=True)
     
             accelerator.backward(loss)
