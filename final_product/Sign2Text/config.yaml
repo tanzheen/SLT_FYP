@@ -23,9 +23,9 @@ model:
     num_latent_tokens: 32
     finetune_decoder: false
     pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
-    init_weight: TiTok_weights/ema_model/pytorch_model.bin
+    init_weight: null
   MBart_model:
-    init_weight: facebook/mbart-large-50
+    init_weight: facebook/mbart-large-50-many-to-many-mmt
 losses:
   quantizer_weight: 1.0
 dataset:
@@ -37,7 +37,7 @@ dataset:
   img_path: ../../CSL-Daily/sentence/frames_512x512/
   max_length: 300
   params:
-    num_workers: 4
+    num_workers: 0
   preprocessing:
     crop_size: 256
     resize_shorter_edge: 256
@@ -69,7 +69,7 @@ training:
   max_grad_norm: 1.0
   num_epochs: 10
   frame_every: 5
-  tokenizer: facebook/mbart-large-50
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt
 config: configs/Sign2Text_CSL_config.yaml
 --experiment:
   project: Sign2Text_CSL

@@ -1,0 +1,86 @@
+test
+Digi pot level: 0
+Bus Voltage 1:   0.05600 V,   Bus Voltage 2:   2.24800 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 2.35000 mV
+Load Voltage 1:  0.05600 V,  Load Voltage 2:  2.25035 V
+Current 1:       0.00000 mA,  Current 2:       23.50000 mA
+
+Digi pot level: 1
+Bus Voltage 1:   0.10400 V,   Bus Voltage 2:   2.29200 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 2.71000 mV
+Load Voltage 1:  0.10400 V,  Load Voltage 2:  2.29471 V
+Current 1:       0.00000 mA,  Current 2:       27.00000 mA
+
+Digi pot level: 2
+Bus Voltage 1:   0.15200 V,   Bus Voltage 2:   2.33200 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.06000 mV
+Load Voltage 1:  0.15200 V,  Load Voltage 2:  2.33506 V
+Current 1:       0.00000 mA,  Current 2:       30.50000 mA
+
+Digi pot level: 3
+Bus Voltage 1:   0.20000 V,   Bus Voltage 2:   2.34000 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.08000 mV
+Load Voltage 1:  0.20000 V,  Load Voltage 2:  2.34308 V
+Current 1:       0.00000 mA,  Current 2:       30.80000 mA
+
+Digi pot level: 4
+Bus Voltage 1:   0.24800 V,   Bus Voltage 2:   2.34000 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.08000 mV
+Load Voltage 1:  0.24800 V,  Load Voltage 2:  2.34308 V
+Current 1:       0.00000 mA,  Current 2:       30.80000 mA
+
+Digi pot level: 5
+Bus Voltage 1:   0.29600 V,   Bus Voltage 2:   2.33600 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.08000 mV
+Load Voltage 1:  0.29600 V,  Load Voltage 2:  2.33908 V
+Current 1:       0.00000 mA,  Current 2:       30.80000 mA
+
+Digi pot level: 6
+Bus Voltage 1:   0.34800 V,   Bus Voltage 2:   2.33600 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.08000 mV
+Load Voltage 1:  0.34800 V,  Load Voltage 2:  2.33908 V
+Current 1:       -0.10000 mA,  Current 2:       30.90000 mA
+
+Digi pot level: 7
+Bus Voltage 1:   0.39600 V,   Bus Voltage 2:   2.33600 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.08000 mV
+Load Voltage 1:  0.39600 V,  Load Voltage 2:  2.33908 V
+Current 1:       0.00000 mA,  Current 2:       30.80000 mA
+
+Digi pot level: 8
+Bus Voltage 1:   0.44400 V,   Bus Voltage 2:   2.33600 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.08000 mV
+Load Voltage 1:  0.44400 V,  Load Voltage 2:  2.33908 V
+Current 1:       0.00000 mA,  Current 2:       30.80000 mA
+
+Digi pot level: 9
+Bus Voltage 1:   0.49600 V,   Bus Voltage 2:   2.33600 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.09000 mV
+Load Voltage 1:  0.49600 V,  Load Voltage 2:  2.33909 V
+Current 1:       0.00000 mA,  Current 2:       30.80000 mA
+
+Digi pot level: 10
+Bus Voltage 1:   0.54400 V,   Bus Voltage 2:   2.33600 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.09000 mV
+Load Voltage 1:  0.54400 V,  Load Voltage 2:  2.33909 V
+Current 1:       0.00000 mA,  Current 2:       30.90000 mA
+
+Digi pot level: 11
+Bus Voltage 1:   0.58800 V,   Bus Voltage 2:   2.33600 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.09000 mV
+Load Voltage 1:  0.58800 V,  Load Voltage 2:  2.33909 V
+Current 1:       0.00000 mA,  Current 2:       30.80000 mA
+
+Digi pot level: 12
+Bus Voltage 1:   0.64000 V,   Bus Voltage 2:   2.33200 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.09000 mV
+Load Voltage 1:  0.64000 V,  Load Voltage 2:  2.33509 V
+Current 1:       0.00000 mA,  Current 2:       30.80000 mA
+
+Digi pot level: 13
+Bus Voltage 1:   0.68800 V,   Bus Voltage 2:   2.33200 V
+Shunt Voltage 1: 0.00000 mV,  Shunt Voltage 2: 3.09000 mV
+Load Voltage 1:  0.68800 V,  Load Voltage 2:  2.33509 V
+Current 1:       0.00000 mA,  Current 2:       30.90000 mA
+
+Digi pot level: 14

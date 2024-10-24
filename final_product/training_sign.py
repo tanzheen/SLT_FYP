@@ -72,7 +72,7 @@ def main():
 
     #Prepare everything with accelerator.
     logger.info("Preparing model, optimizer and dataloaders")
-
+    
     
     if config.training.use_ema:
         ema_model.to(accelerator.device)
@@ -89,8 +89,7 @@ def main():
     logger.info(f"accelerator device: {accelerator.device}")
     global_step = 0
     first_epoch = 0
-    global_step = 0
-    first_epoch = 0
+   
     
     # Freeze both model's weights again just in case
     # Assuming 'model' is your original model wrapped in DDP
@@ -109,6 +108,9 @@ def main():
     model, optimizer,  scheduler= accelerator.prepare(
             model, optimizer,scheduler 
         )
+    
+    
+    # Auto resume from training 
     global_step, first_epoch = auto_resume(
         config, logger, accelerator, ema_model,
         strict=True)

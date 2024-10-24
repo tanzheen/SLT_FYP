@@ -15,6 +15,7 @@ from pathlib import Path
 import json 
 from base_model import BaseModel
 from huggingface_hub import PyTorchModelHubMixin
+from torch.nn import functional as F
 
 
 class SignModel(BaseModel, PyTorchModelHubMixin):
@@ -25,8 +26,27 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         self.load_Titok_weights(config.model.vq_model.init_weight)  # Load pretrained weights for the Titok model
         self.freeze_Titok_weights()  # Freeze Titok weights here
         self.Mbart = MBartForConditionalGeneration.from_pretrained(config.model.MBart_model.init_weight)
-        if config.model.MBart_model.freeze_MBart: 
+        if config.model.MBart_model.freeze_MBart: # no training for mbart at all 
             self.freeze_MBart_weights()
+
+        elif config.model.lora.use_lora: 
+            freeze_linear_layers(self.Mbart) # freeze linear layers first
+            self.Mbart = replace_linear_with_lora_recursive(self.Mbart, config)
+
+        else: 
+            self.grad_MBart_encoder_weights()
+            self.freeze_MBart_decoder_weights()
+
+        # Print number of trainable parameters
+        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        print(f"Number of trainable parameters: {trainable_params}")
+
+        
+
+            
+
+        
+
         
         # Can add adapter type next time
         if config.model.MBart_model.adapt_type == 1:
@@ -71,12 +91,26 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         self.titok.load_state_dict(state_dict)
         print("Titok weights loaded successfully from:", titok_weight_path)
 
+
+
     
     def freeze_MBart_weights(self):
         """ Freeze the weights of the MBart model. """
         for param in self.Mbart.parameters():
             param.requires_grad = False
         print("MBart weights are frozen!")
+
+    def freeze_MBart_decoder_weights(self):
+        """ Freeze the weights of the decoder of the MBart model. """
+        for param in self.Mbart.model.decoder.parameters():
+            param.requires_grad = False
+        print("MBart decoder weights are frozen!")
+
+    def grad_MBart_encoder_weights(self):
+        """ Enable grad for the weights of the encoder of the MBart model. """
+        for param in self.Mbart.model.encoder.parameters():
+            param.requires_grad = True 
+        print("MBart encoder weights are graded!")
 
 
     def freeze_Titok_weights(self):
@@ -92,19 +126,23 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
             tgt_input: (batch_size, sequence_length)
         '''
         encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze()
-        hidden_values = self.adapter(encoded_tokens.float(), src_length).squeeze()
+        hidden_values = self.adapter(encoded_tokens.float(), src_length)
+        #print(f"Hidden values shape: {hidden_values.shape}")
+        hidden_values= hidden_values.squeeze(1)
         sign_translation = self.Mbart(inputs_embeds = hidden_values, attention_mask = src_attn, 
                                       decoder_attention_mask = tgt_attn,  labels= tgt_input)
 
         return sign_translation
     
     def generate(self, src_input, src_attn, src_length, max_new_tokens=150, num_beams=4, decoder_start_token_id=None): 
-        encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze()
+        encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze(1)
         hidden_values = self.adapter(encoded_tokens.float(), src_length).squeeze()
         generated_tokens = self.Mbart.generate(inputs_embeds = hidden_values, attention_mask = src_attn,
                                                max_new_tokens = max_new_tokens, num_beams = num_beams, decoder_start_token_id = decoder_start_token_id, forced_bos_token_id= decoder_start_token_id)
         
         return generated_tokens
+    
+    
         
 
 
@@ -289,6 +327,79 @@ class LLMAdapter3(nn.Module):
         return x
 
 
+'''Define LoRA layer'''
+class LoRALayer(nn.Module):
+    def __init__(self, in_dim, out_dim, rank, alpha, lora_dropout=0.0):
+        super().__init__()
+        std_dev = 1 / torch.sqrt(torch.tensor(rank).float())
+        self.A = nn.Parameter(torch.randn(in_dim, rank) * std_dev)
+        self.B = nn.Parameter(torch.zeros(rank, out_dim))
+        self.alpha = alpha
+        self.lora_dropout = nn.Dropout(lora_dropout) # Add dropout layer
+
+    def forward(self, x):
+        lora_output = self.alpha * (x @ self.A @ self.B)
+        lora_output = self.lora_dropout(lora_output) # Apply dropout to the LoRA output
+        return lora_output
+
+class LinearWithLoRAMerged(nn.Module):
+    def __init__(self, linear, rank, alpha, lora_dropout=0.0):
+        super().__init__()
+        self.linear = linear
+        self.lora = LoRALayer(
+            linear.in_features, linear.out_features, rank, alpha, lora_dropout
+        )
+    def forward(self, x):
+        lora = self.lora.A @ self.lora.B
+        combined_weight = self.linear.weight + self.lora.alpha*lora.T
+        return F.linear(x, combined_weight, self.linear.bias)
+    
+## Freeze linear layers first
+def freeze_linear_layers(model):
+    for child in model.children():
+        if isinstance(child, nn.Linear):
+            for param in child.parameters():
+                param.requires_grad = False
+        else:
+            # Recursively freeze linear layers in children modules
+            freeze_linear_layers(child)
+
+## Replace linear layers with LoRA layers after freezing linear layers 
+def replace_linear_with_lora_recursive(model, config):
+    lora_config = config.model.lora 
+    rank = lora_config.lora_rank
+    alpha = lora_config.lora_alpha
+    dropout = lora_config.lora_dropout
+    if lora_config.lora_encoder:
+        for layer in model.model.encoder.layers:
+            if lora_config.lora_attn: 
+                
+                layer.self_attn.q_proj = LinearWithLoRAMerged(layer.self_attn.q_proj,rank,alpha,dropout)
+                layer.self_attn.k_proj = LinearWithLoRAMerged(layer.self_attn.k_proj,rank,alpha,dropout)
+                layer.self_attn.v_proj = LinearWithLoRAMerged(layer.self_attn.v_proj,rank,alpha,dropout)
+                layer.self_attn.out_proj = LinearWithLoRAMerged(layer.self_attn.out_proj,rank,alpha,dropout)
+            layer.fc1 = LinearWithLoRAMerged(layer.fc1,rank,alpha,dropout)
+            layer.fc2 = LinearWithLoRAMerged(layer.fc2,rank,alpha,dropout)
+    if lora_config.lora_encoder:
+        for layer in model.model.decoder.layers:
+            if lora_config.lora_attn:
+                
+                layer.self_attn.q_proj = LinearWithLoRAMerged(layer.self_attn.q_proj,rank,alpha,dropout)
+                layer.self_attn.k_proj = LinearWithLoRAMerged(layer.self_attn.k_proj,rank,alpha,dropout)
+                layer.self_attn.v_proj = LinearWithLoRAMerged(layer.self_attn.v_proj,rank,alpha,dropout)
+                layer.self_attn.out_proj = LinearWithLoRAMerged(layer.self_attn.out_proj,rank,alpha,dropout)
+                layer.encoder_attn.q_proj = LinearWithLoRAMerged(layer.encoder_attn.q_proj,rank,alpha,dropout)
+                layer.encoder_attn.k_proj = LinearWithLoRAMerged(layer.encoder_attn.k_proj,rank,alpha,dropout)
+                layer.encoder_attn.v_proj = LinearWithLoRAMerged(layer.encoder_attn.v_proj,rank,alpha,dropout)
+                layer.encoder_attn.out_proj = LinearWithLoRAMerged(layer.encoder_attn.out_proj,rank,alpha,dropout)
+            layer.fc1 = LinearWithLoRAMerged(layer.fc1,rank,alpha,dropout)
+            layer.fc2 = LinearWithLoRAMerged(layer.fc2,rank,alpha,dropout)
+    if lora_config.lora_head:
+        model.lm_head = LinearWithLoRAMerged(model.lm_head,rank,alpha,dropout)
+    
+    return model
+
+        
 
         
         
