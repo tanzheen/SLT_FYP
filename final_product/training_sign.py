@@ -72,7 +72,7 @@ def main():
 
     #Prepare everything with accelerator.
     logger.info("Preparing model, optimizer and dataloaders")
-
+    
     
     if config.training.use_ema:
         ema_model.to(accelerator.device)
@@ -109,9 +109,6 @@ def main():
             model, optimizer,scheduler 
         )
     
-    # Continue from frozen training
-    if config.experiment.previous_frozen: 
-        global_step, first_epoch = continue_from_frozen(config, logger, accelerator, ema_model)
     
     # Auto resume from training 
     global_step, first_epoch = auto_resume(

@@ -75,6 +75,9 @@ def create_model(config, logger, accelerator, model_type="Sign2Text"):
         model_weight = torch.load(config.experiment.init_weight, map_location="cpu")
         msg = model.load_state_dict(model_weight, strict=False)
         logger.info(f"loading weight from {config.experiment.init_weight}, msg: {msg}")
+        
+    if config.experiment.previous_frozen: 
+        model = continue_from_frozen(config, logger, model)
 
     # Create the EMA model.
     ema_model = None
@@ -169,33 +172,25 @@ def create_signloader(config, logger,accelerator, tokenizer):
 
     return train_dataloader, dev_dataloader, test_dataloader
 
-def continue_from_frozen(config, logger, accelerator, ema_model, strict = True): 
+def continue_from_frozen(config, logger, model, strict = True): 
     '''Continue training from a frozen model'''
-    global_step = 0
-    first_epoch = 0
-    if config.experiment.previous_frozen: 
-        accelerator.wait_for_everyone()
-        local_ckpt_list = list(glob.glob(os.path.join(
-            config.experiment.previous_frozen, "checkpoint*")))
-        logger.info(f"Taking the weights from the frozen runs. All globbed checkpoints are: {local_ckpt_list}")
-        if len(local_ckpt_list) >= 1:
-            if len(local_ckpt_list) > 1:
-                fn = lambda x: int(x.split('/')[-1].split('-')[-1])
-                checkpoint_paths = sorted(local_ckpt_list, key=fn, reverse=True)
-            else:
-                checkpoint_paths = local_ckpt_list
-            global_step = load_checkpoint(
-                Path(checkpoint_paths[0]),
-                accelerator,
-                logger=logger,
-                strict=strict
-            )
-            if config.training.use_ema:
-                ema_model.set_step(global_step)
-            first_epoch = 1
+    
+
+    local_ckpt_list = list(glob.glob(os.path.join(
+        config.experiment.previous_frozen, "checkpoint*")))
+    logger.info(f"Taking the weights from the frozen runs. All globbed checkpoints are: {local_ckpt_list}")
+    if len(local_ckpt_list) >= 1:
+        if len(local_ckpt_list) > 1:
+            fn = lambda x: int(x.split('/')[-1].split('-')[-1])
+            checkpoint_paths = sorted(local_ckpt_list, key=fn, reverse=True)
         else:
-            logger.info("Training from scratch.")
-    return global_step, first_epoch
+            checkpoint_paths = local_ckpt_list
+        print(f"Latest checkpoint from {checkpoint_paths[0]}")
+        ## load the file from checkpoint_paths[0]
+        model_weight = torch.load(os.path.join(checkpoint_paths[0], "ema_model/pytorch_model.bin"), map_location="cpu")
+        msg = model.load_state_dict(model_weight, strict=strict)
+        logger.info(f"loading weight from {config.experiment.init_weight}, msg: {msg}")
+    return model
 
 
 
@@ -482,23 +477,23 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
             # Cross Entropy loss 
             loss = loss_fct(logits, label) 
             
-            # Try Seq2Seq loss 
-            idx = tgt_input
-            logits = F.log_softmax(output["logits"], dim=-1)
-            mask = tgt_attn 
+            # # Try Seq2Seq loss 
+            # idx = tgt_input
+            # logits = F.log_softmax(output["logits"], dim=-1)
+            # mask = tgt_attn 
 
-            # shift things
-            output_logits = logits[:,:-1,:]
-            label_tokens = idx[:, 1:].unsqueeze(-1)
-            output_mask = mask[:,1:]
+            # # shift things
+            # output_logits = logits[:,:-1,:]
+            # label_tokens = idx[:, 1:].unsqueeze(-1)
+            # output_mask = mask[:,1:]
 
             # gather the logits and mask
-            select_logits = torch.gather(output_logits, -1, label_tokens).squeeze()
+            #select_logits = torch.gather(output_logits, -1, label_tokens).squeeze()
             #-select_logits[output_mask==1].mean(), output["loss"]
-            seq_loss = (select_logits * output_mask).sum(dim=-1, keepdims=True) / output_mask.sum(dim=-1, keepdims=True)
+            #seq_loss = (select_logits * output_mask).sum(dim=-1, keepdims=True) / output_mask.sum(dim=-1, keepdims=True)
             
             # Print both loss for comparison 
-            print(f"Cross Entropy Loss: {loss}, Seq2Seq Loss: {seq_loss.mean()}")
+            #print(f"Cross Entropy Loss: {loss}, Seq2Seq Loss: {seq_loss.mean()}")
             optimizer.zero_grad(set_to_none=True)
     
             accelerator.backward(loss)

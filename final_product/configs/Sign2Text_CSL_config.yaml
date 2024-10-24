@@ -27,7 +27,7 @@ model:
     init_weight: "TiTok_weights/ema_model/pytorch_model.bin"
 
   MBart_model:
-    init_weight: facebook/mbart-large-50
+    init_weight: facebook/mbart-large-50-many-to-many-mmt
 
 losses:
   quantizer_weight: 1.0
@@ -76,4 +76,4 @@ training:
   max_grad_norm: 1.0
   num_epochs: 10
   frame_every: 5
-  tokenizer: facebook/mbart-large-50
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt

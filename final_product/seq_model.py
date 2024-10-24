@@ -32,10 +32,20 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         elif config.model.lora.use_lora: 
             freeze_linear_layers(self.Mbart) # freeze linear layers first
             self.Mbart = replace_linear_with_lora_recursive(self.Mbart, config)
+
+        else: 
+            self.grad_MBart_encoder_weights()
+            self.freeze_MBart_decoder_weights()
+
+        # Print number of trainable parameters
+        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
+        print(f"Number of trainable parameters: {trainable_params}")
+
+        
+
             
 
-        else: # freeze decoder only, train 
-            self.freeze_MBart_decoder_weights()
+        
 
         
         # Can add adapter type next time
@@ -81,6 +91,8 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         self.titok.load_state_dict(state_dict)
         print("Titok weights loaded successfully from:", titok_weight_path)
 
+
+
     
     def freeze_MBart_weights(self):
         """ Freeze the weights of the MBart model. """
@@ -93,6 +105,12 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         for param in self.Mbart.model.decoder.parameters():
             param.requires_grad = False
         print("MBart decoder weights are frozen!")
+
+    def grad_MBart_encoder_weights(self):
+        """ Enable grad for the weights of the encoder of the MBart model. """
+        for param in self.Mbart.model.encoder.parameters():
+            param.requires_grad = True 
+        print("MBart encoder weights are graded!")
 
 
     def freeze_Titok_weights(self):
@@ -108,14 +126,16 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
             tgt_input: (batch_size, sequence_length)
         '''
         encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze()
-        hidden_values = self.adapter(encoded_tokens.float(), src_length).squeeze()
+        hidden_values = self.adapter(encoded_tokens.float(), src_length)
+        #print(f"Hidden values shape: {hidden_values.shape}")
+        hidden_values= hidden_values.squeeze(1)
         sign_translation = self.Mbart(inputs_embeds = hidden_values, attention_mask = src_attn, 
                                       decoder_attention_mask = tgt_attn,  labels= tgt_input)
 
         return sign_translation
     
     def generate(self, src_input, src_attn, src_length, max_new_tokens=150, num_beams=4, decoder_start_token_id=None): 
-        encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze()
+        encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze(1)
         hidden_values = self.adapter(encoded_tokens.float(), src_length).squeeze()
         generated_tokens = self.Mbart.generate(inputs_embeds = hidden_values, attention_mask = src_attn,
                                                max_new_tokens = max_new_tokens, num_beams = num_beams, decoder_start_token_id = decoder_start_token_id)
