@@ -8,6 +8,7 @@ experiment:
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True
+  previous_frozen: ""
   init_weight: "./frozen_sign2text/ema_model/pytorch_model.bin"
 
 model:
@@ -30,6 +31,16 @@ model:
     adapt_type: 3 # 1 or 2
     init_weight: facebook/mbart-large-50-many-to-many-mmt # need to find the model weights
     freeze_MBart: False
+
+  lora:
+    use_lora: False
+    lora_head: False
+    lora_attn: True
+    lora_encoder: True
+    lora_decoder: False
+    lora_rank: 4
+    lora_alpha: 8
+    lora_dropout: 0.0
 
 losses:
   quantizer_weight: 1.0
@@ -70,7 +81,7 @@ lr_scheduler:
 
 training:
   gradient_accumulation_steps: 4
-  per_gpu_batch_size: 2
+  per_gpu_batch_size: 1
   mixed_precision: fp16
   enable_tf32: True
   enable_wandb: False
