@@ -219,9 +219,10 @@ class SignTransDataset(Dataset):
             src_length_batch.append(len(img_tmp[i]))
         src_length_batch = torch.tensor(src_length_batch)
         
+        #print("img tmp", img_tmp[0].shape)
         # Stack all images into a single tensor.
         img_batch = torch.cat(img_tmp, 0)
-        
+        #print("imgbatch", img_batch.shape)
         # Compute the new source lengths after some processing.
         new_src_lengths = (((src_length_batch - 5 + 1) / 2) - 5 + 1) / 2
         new_src_lengths = new_src_lengths.long()

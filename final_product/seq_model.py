@@ -102,7 +102,7 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze()
         hidden_values = self.adapter(encoded_tokens.float(), src_length).squeeze()
         generated_tokens = self.Mbart.generate(inputs_embeds = hidden_values, attention_mask = src_attn,
-                                               max_new_tokens = max_new_tokens, num_beams = num_beams, decoder_start_token_id = decoder_start_token_id)
+                                               max_new_tokens = max_new_tokens, num_beams = num_beams, decoder_start_token_id = decoder_start_token_id, forced_bos_token_id= decoder_start_token_id)
         
         return generated_tokens
         
@@ -240,12 +240,12 @@ class LLMAdapter3(nn.Module):
             nn.BatchNorm1d(self.num_tokens * 2),  # Channels must match Conv1d output channels
             nn.ReLU(inplace=True),
             # Reduce kernel size for pooling to avoid sequence collapse
-            nn.AvgPool1d(kernel_size=1, ceil_mode=False),  
+            nn.AvgPool1d(kernel_size=2, ceil_mode=False),  
 
             nn.Conv1d(self.num_tokens * 2, self.num_tokens * 4, kernel_size=5, stride=1, padding=0),
             nn.BatchNorm1d(self.num_tokens * 4),  # Channels must match Conv1d output channels
             nn.ReLU(inplace=True),
-            nn.AvgPool1d(kernel_size=1, ceil_mode=False)  # Adjusted pooling to avoid reducing size to zero
+            nn.AvgPool1d(kernel_size=2, ceil_mode=False)  # Adjusted pooling to avoid reducing size to zero
         )
         
         # Final projection layer

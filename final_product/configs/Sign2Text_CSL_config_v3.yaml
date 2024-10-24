@@ -4,11 +4,11 @@ experiment:
   output_dir: "/scratch2/e0724993/Sign2Text_run3"
   translate_every: 0.5
   save_every: 1
-  log_every: 0.1 
+  log_every: 0.1
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True
-  init_weight: "/scratch2/e0724993/Sign2Text_run3/stage_1_frozen_v3/pytorch_model.bin"
+  init_weight: "./frozen_sign2text/ema_model/pytorch_model.bin"
 
 model:
   vq_model:
@@ -24,11 +24,11 @@ model:
     num_latent_tokens: 32
     finetune_decoder: False
     pretrained_tokenizer_weight: "maskgit-vqgan-imagenet-f16-256.bin"
-    init_weight: "/hpctmp/e0724993/TiTok_weights/ema_model/pytorch_model.bin"
+    init_weight: "TiTok_weights/ema_model/pytorch_model.bin"
 
   MBart_model:
-    adapt_type: 2 # 1 or 2 
-    init_weight: /hpctmp/e0724993/mbart_model # need to find the model weights
+    adapt_type: 3 # 1 or 2
+    init_weight: facebook/mbart-large-50-many-to-many-mmt # need to find the model weights
     freeze_MBart: False
 
 losses:
@@ -37,10 +37,10 @@ losses:
 dataset:
   name: CSL-Daily
   lang: zh_CN
-  train: /hpctmp/e0724993/CSL-Daily/sentence_label/processed/labels_train.pkl
-  dev: /hpctmp/e0724993/CSL-Daily/sentence_label/processed/labels_dev.pkl
-  test: /hpctmp/e0724993/CSL-Daily/sentence_label/processed/labels_test.pkl
-  img_path: /hpctmp/e0724993/CSL-Daily/sentence/frames_512x512/ # + <train/dev/test> + <video_name>
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/ # + <train/dev/test> + <video_name>
   max_length: 300
   params:
     num_workers: 4
@@ -54,11 +54,11 @@ dataset:
 optimizer:
   name: adamw
   params:
-    learning_rate: 1e-5
+    learning_rate: 1e-4
     beta1: 0.9
     beta2: 0.99
     weight_decay: 1e-4
-    lr_diff: True 
+    lr_diff: True
     adapt_lr: 1e-4
 
 lr_scheduler:
@@ -80,4 +80,4 @@ training:
   max_grad_norm: 1.0
   num_epochs: 32
   frame_every: 5
-  tokenizer: /hpctmp/e0724993/mbart_model # volta server cannot download
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt # volta server cannot download

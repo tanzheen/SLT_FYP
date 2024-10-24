@@ -28,3 +28,4 @@ final_product/vis_tokenizer/tokenizer_titok_l32.bin
 /final_product/vis_tokenizer/titok_l_32_stage1_run1
 /final_product/vis_tokenizer/titok_l_32_stage1_run1
 /final_product/vis_tokenizer/titok_l_32_stage1_run1
+final_product/frozen_sign2text/ema_model/pytorch_model.bin

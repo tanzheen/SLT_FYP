@@ -27,7 +27,7 @@ model:
     init_weight: "TiTok_weights/ema_model/pytorch_model.bin"
 
   MBart_model:
-    init_weight: facebook/mbart-large-50
+    init_weight: facebook/mbart-large-50-many-to-many-mmt
 
 losses:
   quantizer_weight: 1.0
@@ -52,7 +52,7 @@ dataset:
 optimizer:
   name: adamw
   params:
-    learning_rate: 1e-5
+    learning_rate: 1e-4
     beta1: 0.9
     beta2: 0.99
     weight_decay: 1e-4
@@ -62,11 +62,11 @@ lr_scheduler:
   params:
     learning_rate: ${optimizer.params.learning_rate}
     warmup_steps: 10_000
-    end_lr: 1e-6 
+    end_lr: 1e-6
 
 training:
   gradient_accumulation_steps: 1
-  per_gpu_batch_size: 4
+  per_gpu_batch_size: 2
   mixed_precision: "no"
   enable_tf32: True
   enable_wandb: False
@@ -76,4 +76,4 @@ training:
   max_grad_norm: 1.0
   num_epochs: 10
   frame_every: 5
-  tokenizer: facebook/mbart-large-50
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt

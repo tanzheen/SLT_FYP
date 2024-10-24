@@ -141,28 +141,30 @@ def create_optimizer(config, logger, model):
     return optimizer
 
 
-def create_signloader(config, logger,accelerator, tokenizer): 
+def create_signloader(config, logger,accelerator, tokenizer, device =  None): 
+    if device is None: 
+        device = accelerator.device
     batch_size = config.training.per_gpu_batch_size 
     logger.info(f"Creating Signloaders. Batch_size = {batch_size}")
 
     train_dataset = SignTransDataset(tokenizer, config,  'train')
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, 
                                   num_workers=config.dataset.params.num_workers, collate_fn=train_dataset.collate_fn,
-                                   generator=torch.Generator(device=accelerator.device))
+                                   generator=torch.Generator(device=device))
     train_dataloader = accelerator.prepare(train_dataloader)
     print("train dataloader done!")
 
     dev_dataset = SignTransDataset(tokenizer, config,  'dev')
     dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False, 
                                 num_workers=config.dataset.params.num_workers, collate_fn=dev_dataset.collate_fn, 
-                                 generator=torch.Generator(device=accelerator.device) )
+                                 generator=torch.Generator(device=device) )
     dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
 
     test_dataset = SignTransDataset(tokenizer, config, 'test')
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False,
                                   num_workers=config.dataset.params.num_workers, collate_fn=test_dataset.collate_fn, 
-                                  generator=torch.Generator(device=accelerator.device))
+                                  generator=torch.Generator(device=device))
     test_dataloader = accelerator.prepare(test_dataloader)
     print("train dataloader done!")
 
@@ -303,7 +305,7 @@ def translate_images(model, images,tgt_labels,input_attn, src_length ,config, ac
     print(f"Translations saved locally in {root}")
 
 
-    return pred_translations
+    return pred_translations,gt_translations
 
 
 
