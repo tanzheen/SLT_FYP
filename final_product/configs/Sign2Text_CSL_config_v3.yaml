@@ -81,8 +81,8 @@ lr_scheduler:
     end_lr: 1e-6
 
 training:
-  gradient_accumulation_steps: 4
-  per_gpu_batch_size: 2
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 8
   mixed_precision: fp16
   enable_tf32: True
   enable_wandb: False

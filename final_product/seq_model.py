@@ -125,8 +125,9 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
             src_input: (batch_size, sequence_len, embedding_dim)
             tgt_input: (batch_size, sequence_length)
         '''
-        encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze()
-        hidden_values = self.adapter(encoded_tokens.float(), src_length)
+        if self.config.experiment.tokenised is False: 
+            src_input = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze()
+        hidden_values = self.adapter(src_input.float(), src_length)
         #print(f"Hidden values shape: {hidden_values.shape}")
         hidden_values= hidden_values.squeeze(1)
         sign_translation = self.Mbart(inputs_embeds = hidden_values, attention_mask = src_attn, 
@@ -135,8 +136,9 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         return sign_translation
     
     def generate(self, src_input, src_attn, src_length, max_new_tokens=150, num_beams=4, decoder_start_token_id=None): 
-        encoded_tokens = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze(1)
-        hidden_values = self.adapter(encoded_tokens.float(), src_length).squeeze()
+        if self.config.experiment.tokenized is False : 
+            src_input = self.titok.encode(x=src_input)[1]['min_encoding_indices'].squeeze()
+        hidden_values = self.adapter(src_input.float(), src_length).squeeze()
         generated_tokens = self.Mbart.generate(inputs_embeds = hidden_values, attention_mask = src_attn,
                                                max_new_tokens = max_new_tokens, num_beams = num_beams, decoder_start_token_id = decoder_start_token_id, forced_bos_token_id= decoder_start_token_id)
         

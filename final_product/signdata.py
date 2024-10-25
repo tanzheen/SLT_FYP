@@ -257,6 +257,7 @@ class SignTransDataset(Dataset):
             
             # Ensure each video has the same length.
             img_tmp = [padded_video[i][0:video_length[i], :, :, :] for i in range(len(padded_video))]
+            
         elif self.config.experiment.tokenised is True:
             padded_video = [torch.cat(
                 (
