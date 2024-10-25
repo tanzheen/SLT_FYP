@@ -339,7 +339,7 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
     loss_fct = nn.CrossEntropyLoss(ignore_index=PAD_IDX)
     model.eval()
     local_model = accelerator.unwrap_model(model)
-    prediction_lst = [] # this is just a list 
+    predictions = [] # this is just a list 
     references = [] # this will be a list of a list
     name_lst = [] 
     total_val_loss = 0 
@@ -376,32 +376,20 @@ def eval_translation(model,dev_dataloader,accelerator, tokenizer , config ):
             val_loss = loss_fct(logits, label)
             total_val_loss += val_loss
 
-            logits = output['logits']
-            probs = logits.softmax(dim=-1)
-            values, pred = torch.topk(probs,k=1, dim = -1)
-            generated = pred.reshape(config.training.per_gpu_batch_size,-1).squeeze()
-            
+            generated =  local_model.generate(
+            src_input=images, 
+            src_attn=input_attn, 
+            src_length=src_length,
+            max_new_tokens=150, 
+            num_beams=4, 
+            decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang]
+        )
+            generated = tokenizer.batch_decode(generated, skip_special_tokens=True)
+            tgt = tokenizer.batch_decode(tgt_input, skip_special_tokens=True)
 
-            # pad_tensor = torch.ones(200-len(predictions[0])).to(accelerator.device)
-            # predictions[0] = torch.cat((predictions[0],pad_tensor.long()),dim = 0)
-            # predictions = pad_sequence(predictions,batch_first=True,padding_value=PAD_IDX)
-
-            
-
-            # # ## Should use generated output to calculate the bleu score
-            # generated = local_model.generate(src_input = original_images, src_attn = input_attn, 
-            #                            src_length= src_length, 
-            #                            max_new_tokens=150, num_beams=4, 
-            #                            decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang])
-            tgt_input = tgt_input.to(accelerator.device)
-            for i in range(len(generated)): 
-                prediction_lst.append(generated[i, :])
-                references.append(tgt_input[i, :])
-
-   
-
-    references = tokenizer.batch_decode(references, skip_special_tokens=True)
-    predictions = tokenizer.batch_decode(prediction_lst, skip_special_tokens=True)
+            predictions.extend(generated)
+            references.extend(tgt)
+    
 
     ## Compare the score 
     bleu = BLEU()
@@ -440,6 +428,7 @@ def train_one_epoch(config, logger, accelerator, model, ema_model, optimizer,sch
     transformer_logs = defaultdict(float)
     loss_fct = nn.CrossEntropyLoss(ignore_index=PAD_IDX ,label_smoothing=0.1)
 
+    
     for i, (src, tgt) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
         model.train()
         # print(f"batch len: {len(batch)}")
