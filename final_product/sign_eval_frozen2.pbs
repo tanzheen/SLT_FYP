@@ -3,7 +3,7 @@
 #PBS -j oe
 #PBS -N S2T_F3
 #PBS -q volta_gpu
-#PBS -l select=1:ncpus=15:mem=50gb:ngpus=1
+#PBS -l select=1:ncpus=5:mem=50gb:ngpus=1
 #PBS -l walltime=72:00:00
 
 cd $PBS_O_WORKDIR; 

@@ -72,10 +72,10 @@ def main():
         strict=True)
     
     # Call evaluation function
-    logger.info("***** Running evaluation *****")
-    print("Checking Dev set")
-    _, _ , train_pred, train_ref = eval_translation(model=model, dev_dataloader=train_dataloader, accelerator=accelerator, tokenizer=tokenizer, config=config)
-    save_predictions_and_references(dev_pred, dev_ref, output_dir, filename="dev_predictions.txt")
+    #logger.info("***** Running evaluation *****")
+    # print("Checking Train set")
+    # _, _ , train_pred, train_ref = eval_translation(model=model, dev_dataloader=train_dataloader, accelerator=accelerator, tokenizer=tokenizer, config=config)
+    # save_predictions_and_references(dev_pred, dev_ref, output_dir, filename="dev_predictions.txt")
 
     # Call evaluation function
     logger.info("***** Running evaluation *****")
