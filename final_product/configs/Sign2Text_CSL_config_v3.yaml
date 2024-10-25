@@ -9,6 +9,7 @@ experiment:
   log_grad_norm_every: 0.1
   resume: True
   previous_frozen: ""
+  tokenised: True
   init_weight: "./frozen_sign2text/ema_model/pytorch_model.bin"
 
 model:
@@ -81,7 +82,7 @@ lr_scheduler:
 
 training:
   gradient_accumulation_steps: 4
-  per_gpu_batch_size: 1
+  per_gpu_batch_size: 2
   mixed_precision: fp16
   enable_tf32: True
   enable_wandb: False

@@ -4,10 +4,11 @@ experiment:
   output_dir: "/scratch2/e0724993/Sign2Text_run3"
   translate_every: 0.5
   save_every: 1
-  log_every: 0.1 
+  log_every: 0.1
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True
+  tokenised: True
   previous_frozen: "/scratch2/e0724993/Sign2Text_run_frozen3"
   init_weight: ""
 
@@ -32,15 +33,15 @@ model:
     init_weight: /hpctmp/e0724993/mbart_model # need to find the model weights
     freeze_MBart: False
 
-  lora: 
+  lora:
     use_lora: False
-    lora_head: False 
-    lora_attn: True 
-    lora_encoder: True 
-    lora_decoder: False 
+    lora_head: False
+    lora_attn: True
+    lora_encoder: True
+    lora_decoder: False
     lora_rank: 4
     lora_alpha: 8
-    lora_dropout: 0.0 
+    lora_dropout: 0.0
 
 losses:
   quantizer_weight: 1.0
@@ -69,7 +70,7 @@ optimizer:
     beta1: 0.9
     beta2: 0.99
     weight_decay: 1e-4
-    lr_diff: True 
+    lr_diff: True
     adapt_lr: 1e-5
 
 lr_scheduler:

@@ -120,56 +120,94 @@ class SignTransDataset(Dataset):
         """
         # Set up dataset-specific transformations.
         # No normalization applied (all values remain between 0 and 1).
-        norm_mean = [0., 0., 0.]
-        norm_std = [1., 1., 1.]
-        data_transform = transforms.Compose([
-            transforms.Resize((self.config.dataset.preprocessing.resize_shorter_edge, 
-                                self.config.dataset.preprocessing.resize_shorter_edge)),
-            transforms.ToTensor(),
-            transforms.Normalize(norm_mean, norm_std)
-        ])
-     
-        # Filter the frames to ensure only photos are loaded
-        filtered_paths  = []
+        if self.config.experiment.tokenised is False: 
+            norm_mean = [0., 0., 0.]
+            norm_std = [1., 1., 1.]
+            data_transform = transforms.Compose([
+                transforms.Resize((self.config.dataset.preprocessing.resize_shorter_edge, 
+                                    self.config.dataset.preprocessing.resize_shorter_edge)),
+                transforms.ToTensor(),
+                transforms.Normalize(norm_mean, norm_std)
+            ])
         
-        #Sort the frame paths to maintain the order.
-        paths = sorted(os.listdir(dir_path)) 
-        for path in paths:
-            if path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')): 
-                    filtered_paths.append(path)
-        paths = sorted(filtered_paths) 
-        #print (paths)
-        # If the video contains more frames than the max length, sample randomly up to max_length.
-        if len(paths) > self.max_length:
-            sampled_indices = sorted(random.sample(range(len(paths)), k=self.max_length))
-            paths = [paths[i] for i in sampled_indices]
-
-        # Create an empty tensor to store the images.
-        imgs = torch.zeros(len(paths), 3, 
-                           self.config.dataset.preprocessing.resize_shorter_edge, 
-                           self.config.dataset.preprocessing.resize_shorter_edge)
-        batch_image = []
-
-        # Load each image, apply transformations, and crop if necessary.
-        for i, img_path in enumerate(paths):
-            img_path = os.path.join(dir_path, img_path)
-            img = Image.open(img_path).convert("RGB")
+            # Filter the frames to ensure only photos are loaded
+            filtered_paths  = []
             
-            # Crop the image based on the provided config (center horizontal, lower vertical crop).
-            x_start = int((img.size[0] - self.crop_width) // 2)
-            x_end = x_start + self.crop_width
-            y_start = img.size[1] - self.crop_height
-            y_end = img.size[1]
-            img = img.crop((x_start, y_start, x_end, y_end))
+            #Sort the frame paths to maintain the order.
+            paths = sorted(os.listdir(dir_path)) 
+            for path in paths:
+                if path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')): 
+                        filtered_paths.append(path)
+            paths = sorted(filtered_paths) 
+            #print (paths)
+            # If the video contains more frames than the max length, sample randomly up to max_length.
+            if len(paths) > self.max_length:
+                sampled_indices = sorted(random.sample(range(len(paths)), k=self.max_length))
+                paths = [paths[i] for i in sampled_indices]
 
-            batch_image.append(img)
+            # Create an empty tensor to store the images.
+            imgs = torch.zeros(len(paths), 3, 
+                            self.config.dataset.preprocessing.resize_shorter_edge, 
+                            self.config.dataset.preprocessing.resize_shorter_edge)
+            batch_image = []
 
-        # Apply transformations and stack the images into a tensor.
-        for i, img in enumerate(batch_image):
-            img = data_transform(img).unsqueeze(0)  # Apply the dataset-specific transformation.
-            imgs[i, :, :, :] = img
+            # Load each image, apply transformations, and crop if necessary.
+            for i, img_path in enumerate(paths):
+                img_path = os.path.join(dir_path, img_path)
+                img = Image.open(img_path).convert("RGB")
+                
+                # Crop the image based on the provided config (center horizontal, lower vertical crop).
+                x_start = int((img.size[0] - self.crop_width) // 2)
+                x_end = x_start + self.crop_width
+                y_start = img.size[1] - self.crop_height
+                y_end = img.size[1]
+                img = img.crop((x_start, y_start, x_end, y_end))
+
+                batch_image.append(img)
+
+            # Apply transformations and stack the images into a tensor.
+            for i, img in enumerate(batch_image):
+                img = data_transform(img).unsqueeze(0)  # Apply the dataset-specific transformation.
+                imgs[i, :, :, :] = img
+            
+            return imgs, paths  # Return the tensor (frames, RGB channels, height, width).
         
-        return imgs, paths  # Return the tensor (frames, RGB channels, height, width).
+        elif self.config.experiment.tokenised is True:
+            # Filter the frames to ensure only tokens are loaded
+            filtered_paths  = []
+            
+            #Sort the frame paths to maintain the order.
+            paths = sorted(os.listdir(dir_path)) 
+            for path in paths:
+                if path.lower().endswith(('.pt')): 
+                        filtered_paths.append(path)
+            paths = sorted(filtered_paths) 
+
+            # If the video contains more frames than the max length, sample randomly up to max_length.
+            if len(paths) > self.max_length:
+                sampled_indices = sorted(random.sample(range(len(paths)), k=self.max_length))
+                paths = [paths[i] for i in sampled_indices]
+
+            # Create an empty tensor to store the images.
+            tokens = torch.zeros(len(paths),self.config.model.vq_model.num_latent_tokens)
+            batch_token = []
+
+            # Load each image, apply transformations, and crop if necessary.
+            for i, token_path in enumerate(paths):
+                token = torch.load(os.path.join(dir_path, token_path))
+
+                batch_token.append(token)
+
+            # Apply transformations and stack the images into a tensor.
+            for i, token in enumerate(batch_token):
+                
+                tokens[i, :] = token
+            
+            return tokens , paths  # Return the tensor (frames, RGB channels, height, width).
+
+            
+
+
     
     def __str__(self):
         """
@@ -207,17 +245,28 @@ class SignTransDataset(Dataset):
         right_pad = int(np.ceil(max_len / 4.0)) * 4 - max_len + 8
         max_len = max_len + left_pad + right_pad
         
-        # Pad the videos to match the length of the longest video in the batch.
-        # Although the transfomer can indeed take in varying lengths of video, we need to still make their length uniform in the batch 
-        padded_video = [torch.cat(
-            (
-                vid[0][None].expand(left_pad, -1, -1, -1),  # Padding at the start with the first frame.
-                vid,
-                vid[-1][None].expand(max_len - len(vid) - left_pad, -1, -1, -1),  # Padding at the end.
-            ), dim=0) for vid in img_tmp]
-        
-        # Ensure each video has the same length.
-        img_tmp = [padded_video[i][0:video_length[i], :, :, :] for i in range(len(padded_video))]
+        if self.config.experiment.tokenised is False:
+            # Pad the videos to match the length of the longest video in the batch.
+            # Although the transfomer can indeed take in varying lengths of video, we need to still make their length uniform in the batch 
+            padded_video = [torch.cat(
+                (
+                    vid[0][None].expand(left_pad, -1, -1, -1),  # Padding at the start with the first frame.
+                    vid,
+                    vid[-1][None].expand(max_len - len(vid) - left_pad, -1, -1, -1),  # Padding at the end.
+                ), dim=0) for vid in img_tmp]
+            
+            # Ensure each video has the same length.
+            img_tmp = [padded_video[i][0:video_length[i], :, :, :] for i in range(len(padded_video))]
+        elif self.config.experiment.tokenised is True:
+            padded_video = [torch.cat(
+                (
+                    vid[0][None].expand(left_pad, -1),  # Padding at the start with the first frame.
+                    vid,
+                    vid[-1][None].expand(max_len - len(vid) - left_pad, -1),  # Padding at the end.
+                ), dim=0) for vid in img_tmp]
+            
+            # Ensure each video has the same length.
+            img_tmp = [padded_video[i][0:video_length[i], :] for i in range(len(padded_video))]
 
         # Track the length of each padded video.
         for i in range(len(img_tmp)):
