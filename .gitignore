@@ -29,3 +29,14 @@ final_product/vis_tokenizer/tokenizer_titok_l32.bin
 /final_product/vis_tokenizer/titok_l_32_stage1_run1
 /final_product/vis_tokenizer/titok_l_32_stage1_run1
 final_product/frozen_sign2text/ema_model/pytorch_model.bin
+/final_product/vis_tokenizer/wandb
+/final_product/vis_tokenizer/wandb
+/Resnet_VLP_run1
+/TiTok_SLT/__pycache__
+/TiTok_SLT/vis_tokenizer/wandb
+*.pyc
+TiTok_SLT/vis_tokenizer/tokenizer_titok_l32.bin
+/TiTok_SLT/Sign2Text
+/Resnet_VLP/pretrain_models
+TiTok_SLT/vis_tokenizer/maskgit-vqgan-imagenet-f16-256.bin
+TiTok_SLT/vis_tokenizer/generator_titok_l32.bin

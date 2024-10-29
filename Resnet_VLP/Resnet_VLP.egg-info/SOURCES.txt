@@ -1,0 +1,5 @@
+setup.py
+Resnet_VLP.egg-info/PKG-INFO
+Resnet_VLP.egg-info/SOURCES.txt
+Resnet_VLP.egg-info/dependency_links.txt
+Resnet_VLP.egg-info/top_level.txt
