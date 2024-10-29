@@ -123,7 +123,7 @@ def main ():
 
     ## Create contrastive model 
     
-    model,ema_model= create_CLIP(config, logger, accelerator)
+    model= create_CLIP(config, logger, accelerator)
     optimizer = create_optimizer(config, logger, model)
     lr_scheduler = create_scheduler(config, logger, accelerator, optimizer, len(train_dataloader))
 
@@ -139,7 +139,7 @@ def main ():
                 T_max=config.training.num_epochs,
             )
     
-    model, text_decoder,optimizer, optimizer_td, lr_scheduler, lr_scheduler_td= accelerator.prepare(model,
+    model,text_decoder,optimizer, optimizer_td, lr_scheduler, lr_scheduler_td= accelerator.prepare(model,
                                                                                                      text_decoder, 
                                                                                                      optimizer,
                                                                                                      optimizer_td,
@@ -157,7 +157,7 @@ def main ():
     ## Resume 
     # Auto resume from training 
     global_step, first_epoch = auto_resume(
-        config, logger, accelerator, ema_model,
+        config, logger, accelerator, 
         strict=True)
 
 
@@ -167,7 +167,7 @@ def main ():
     for current_epoch in range(first_epoch, num_train_epochs):
 
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
-        global_step, early_stop = train_one_epoch(config, accelerator, model, ema_model, criterion, tokenizer,
+        global_step, early_stop = train_one_epoch(config, accelerator, model, criterion, tokenizer,
                     train_dataloader, dev_dataloader, optimizer,
                     logger ,  TD_train_dict, lr_scheduler , global_step, early_stop) # the early stopping will be passed back in again 
     
@@ -175,8 +175,6 @@ def main ():
     # Save the final trained checkpoint
     if accelerator.is_main_process:
         model = accelerator.unwrap_model(model)
-        if config.training.use_ema:
-            ema_model.copy_to(model.parameters())
         save_checkpoint(model, output_dir, accelerator, global_step, logger=logger)
     accelerator.end_training()
 

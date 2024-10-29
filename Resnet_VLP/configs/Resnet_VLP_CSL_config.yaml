@@ -7,14 +7,13 @@ experiment:
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True
-  init_weight: 
+  init_weight:
 
 model:
   tokenizer: ./pretrain_models/MBart_proun
-  transformer: ./pretrain_models/MBart_proun # textCLIP only = 12 layers 
-  visual_encoder:  ./pretrain_models/mytran  # text decoder and Image CLIP = 3 layers
+  transformer: ./pretrain_models/MBart_proun # textCLIP only = 12 layers
+  visual_encoder: ./pretrain_models/mytran # text decoder and Image CLIP = 3 layers
   sign_proj: True
-
 
 dataset:
   name: CSL-Daily
@@ -49,14 +48,14 @@ lr_scheduler:
     end_lr: 1e-6
 
 training:
-  gradient_accumulation_steps: 4
-  per_gpu_batch_size: 2
-  mixed_precision: 'no'
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 4
+  mixed_precision: "no"
   enable_tf32: True
   enable_wandb: False
-  use_ema: True
+  use_ema: False
   seed: 42
   num_translated_images: 4
   max_grad_norm: 1.0
   num_epochs: 32
-  scale_embedding: False 
+  scale_embedding: False

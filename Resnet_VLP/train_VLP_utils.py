@@ -1,7 +1,6 @@
 from omegaconf import OmegaConf
 from torchinfo import summary
 import torch
-from ema_model import EMAModel
 import os 
 from torch.optim import AdamW
 from signdata import SignTransDataset
@@ -79,27 +78,8 @@ def create_CLIP(config, logger, accelerator, model_type="SLR_CLIP"):
         logger.info(f"loading weight from {config.experiment.init_weight}, msg: {msg}")
         
 
-    # Create the EMA model.
-    ema_model = None
-    if config.training.use_ema:
-        ema_model = EMAModel(model.parameters(), decay=0.999,
-                            model_cls=SLRCLIP, config=config)
-        # Create custom saving and loading hooks so that `accelerator.save_state(...)` serializes in a nice format.
-        def load_model_hook(models, input_dir):
-            load_model = EMAModel.from_pretrained(os.path.join(input_dir, "ema_model"),
-                                                  model_cls=SLRCLIP, config=config)
-            ema_model.load_state_dict(load_model.state_dict())
-            ema_model.to(accelerator.device)
-            del load_model
 
-        def save_model_hook(models, weights, output_dir):
-            if accelerator.is_main_process:
-                ema_model.save_pretrained(os.path.join(output_dir, "ema_model"))
-
-        accelerator.register_load_state_pre_hook(load_model_hook)
-        accelerator.register_save_state_pre_hook(save_model_hook)
-
-    return model, ema_model
+    return model
 
 
 
@@ -157,7 +137,7 @@ def create_signloader(config, logger,accelerator, tokenizer, device =  None):
 
 
 
-def auto_resume(config, logger, accelerator, ema_model, 
+def auto_resume(config, logger, accelerator, 
              strict=True):
     """Auto resuming the training."""
     global_step = 0
@@ -180,11 +160,7 @@ def auto_resume(config, logger, accelerator, ema_model,
                 logger=logger,
                 strict=strict
             )
-            if config.training.use_ema:
-                ema_model.set_step(global_step)
-            first_epoch = 1
-        else:
-            logger.info("Training from scratch.")
+        
     return global_step, first_epoch
 
 
@@ -311,29 +287,11 @@ def eval_CLIP(model,dev_dataloader,accelerator, criterion):
     local_model = accelerator.unwrap_model(model)
     total_val_loss = 0 
     with torch.no_grad(): 
-        for i, (src,tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
+        for i, (src,tgt, masked_tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
             loss_img = criterion
             loss_txt = criterion
-            batch = src['input_ids']
-            names = src['name_batch']
-            src_length = src['src_length_batch']
-            tgt_attn = tgt.attention_mask
             
-            images = batch.to(
-                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-                )
-            tgt_input = tgt['input_ids'].to(
-                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-                )
-            input_attn = src['attention_mask'].to(
-                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-                )
-            tgt_attn = tgt_attn.to(
-                    accelerator.device, memory_format=torch.contiguous_format, non_blocking=True
-                )
             
-            #tgt_input[tgt_attn== 0] = -100
-            original_images = torch.clone(images)
             
             logits_per_image, logits_per_text, ground_truth = model(images, tgt_input)
             loss_imgs = loss_img(logits_per_image,ground_truth)
@@ -362,7 +320,7 @@ def create_scheduler(config, logger, accelerator, optimizer, len_data):
 
 
 
-def train_one_epoch(config, accelerator, model, ema_model, criterion, tokenizer,
+def train_one_epoch(config, accelerator, model, criterion, tokenizer,
                     train_dataloader, dev_dataloader, optimizer,
                     logger ,  TD_train_dict, scheduler , global_step, early_stop
                     ):
@@ -423,7 +381,7 @@ def train_one_epoch(config, accelerator, model, ema_model, criterion, tokenizer,
             with accelerator.accumulate([TD_train_dict['text_decoder'], loss_fct]):
                 TD_train_dict['optimizer'].zero_grad()
                 with accelerator.accumulate([TD_train_dict['text_decoder'], loss_fct]):
-                    lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.module.model_txt)
+                    lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.model_txt)
                     masked_lm_loss = loss_fct(lm_logits.view(-1, lm_logits.shape[-1]), tgt_input['input_ids'].cuda().view(-1)) #* args.loss_lambda
                     accelerator.backward(masked_lm_loss)
                     TD_train_dict['optimizer'].step()
@@ -432,10 +390,7 @@ def train_one_epoch(config, accelerator, model, ema_model, criterion, tokenizer,
         
         
         if accelerator.sync_gradients:
-            if config.training.use_ema:
-                ema_model.step(model.parameters())
-            batch_time_meter.update(time.time() - end)
-            end = time.time()
+            
 
             if (global_step + 1) % int(config.experiment.log_every * len(train_dataloader)/config.training.gradient_accumulation_steps)  == 0:
                 samples_per_second_per_gpu = (
@@ -469,33 +424,17 @@ def train_one_epoch(config, accelerator, model, ema_model, criterion, tokenizer,
             # Evaluate reconstruction.
             if dev_dataloader is not None and (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)/config.training.gradient_accumulation_steps) == 0:
                 logger.info(f"Computing metrics on the validation set.")
-                if config.training.get("use_ema", False):
-                    ema_model.store(model.parameters())
-                    ema_model.copy_to(model.parameters())
-                    # Eval for EMA.
-                    total_val_loss= eval_CLIP(
-                        model,
-                        dev_dataloader,
-                        accelerator,
-                        criterion
-                    )
-
+                
             
-              
-                    if config.training.get("use_ema", False):
-                        # Switch back to the original model parameters for training.
-                        ema_model.restore(model.parameters())
-
-                else:
                      
-                    # Eval for non-EMA.
-                    total_val_loss = eval_CLIP(
-                        model=model,
-                        dev_dataloader=dev_dataloader,
-                        accelerator=accelerator,
-                        tokenizer=tokenizer , 
-                        config = config 
-                    )
+                # Eval for non-EMA.
+                total_val_loss = eval_CLIP(
+                    model=model,
+                    dev_dataloader=dev_dataloader,
+                    accelerator=accelerator,
+                    tokenizer=tokenizer , 
+                    config = config 
+                )
                         
                 accelerator.wait_for_everyone()
                 
