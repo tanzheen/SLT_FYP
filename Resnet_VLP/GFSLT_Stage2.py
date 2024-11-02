@@ -44,7 +44,7 @@ from PIL import Image
 from definition import *
 
 import torch.distributed
-from train_VLP_utils import create_CLIP, create_signloader, get_config
+from train_stage2_utils import * 
 import os 
 from accelerate import Accelerator
 from accelerate.utils import DistributedDataParallelKwargs
@@ -54,7 +54,6 @@ import sys
 import torch.multiprocessing as mp
 from train_VLP_utils import *
 from SLT_CLIP import *
-import torch.distributed as dist
 
 def main ():
     workspace = os.environ.get('WORKSPACE', '')
@@ -62,7 +61,7 @@ def main ():
         torch.hub.set_dir(workspace + "/models/hub")
     
     config = get_config()
-    #dist.init_process_group(backend="nccl")
+
     # Enable TF32 on Ampere GPUs.
     if config.training.enable_tf32:
         torch.backends.cuda.matmul.allow_tf32 = True
@@ -113,36 +112,18 @@ def main ():
 
     ## Create contrastive model 
     
-    model= create_CLIP(config, logger, accelerator)
+    model= create_SLT(config, logger, accelerator)
     optimizer = create_optimizer(config, logger, model)
     lr_scheduler = create_scheduler(config, logger, accelerator, optimizer, len(train_dataloader))
 
     ## Count the number of parameters here
 
-    
+    model,optimizer, lr_scheduler= accelerator.prepare(model,
+                                                       optimizer,
+                                                       lr_scheduler
+                                                       )
 
-    text_decoder = Text_Decoder(config)
-    optimizer_td = AdamW(text_decoder.parameters(), lr=config.optimizer.params.learning_rate)
-    lr_scheduler_td = scheduler.CosineAnnealingLR(
-                optimizer=optimizer_td,
-                eta_min=1e-8,
-                T_max=config.training.num_epochs,
-            )
-    
-    model,text_decoder,optimizer, optimizer_td, lr_scheduler, lr_scheduler_td= accelerator.prepare(model,
-                                                                                                     text_decoder, 
-                                                                                                     optimizer,
-                                                                                                     optimizer_td,
-                                                                                                     lr_scheduler,
-                                                                                                    lr_scheduler_td)
 
-    TD_train_dict = dict(
-        optimizer = optimizer_td,
-        lr_scheduler = lr_scheduler_td,
-        text_decoder = text_decoder
-    )
-
-    criterion = KLLoss()
 
     ## Resume 
     # Auto resume from training 
@@ -154,14 +135,13 @@ def main ():
     ## Start training
     num_train_epochs = config.training.num_epochs
     early_stop = EarlyStopping(verbose=True)
-    early_stop_td = EarlyStopping(verbose=True)
     for current_epoch in range(first_epoch, num_train_epochs):
         torch.cuda.empty_cache()
 
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
-        global_step, early_stop, early_stop_td = train_one_epoch(config, accelerator, model, criterion, tokenizer,
+        global_step, early_stop= train_one_epoch(config, accelerator, model, tokenizer,
                     train_dataloader, dev_dataloader, optimizer,
-                    logger ,  TD_train_dict, lr_scheduler , global_step, early_stop, early_stop_td) # the early stopping will be passed back in again 
+                    logger ,  lr_scheduler , global_step, early_stop) # the early stopping will be passed back in again 
     
 
     # Save the final trained checkpoint

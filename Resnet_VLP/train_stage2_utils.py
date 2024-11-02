@@ -63,23 +63,6 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 
-def create_CLIP(config, logger, accelerator, model_type="SLR_CLIP"):
-    """Creates Sign2Text model and loss module."""
-    logger.info("Creating model and loss module.")
-    if model_type == "SLR_CLIP":
-        model = SLRCLIP(config)
-
-    if config.experiment.init_weight:
-        # If loading a pretrained weight
-        model_weight = torch.load(config.experiment.init_weight, map_location="cpu")
-        msg = model.load_state_dict(model_weight, strict=False)
-        logger.info(f"loading weight from {config.experiment.init_weight}, msg: {msg}")
-        
-
-
-    return model
-
-
 
 
 
@@ -164,11 +147,11 @@ def auto_resume(config, logger, accelerator,
     return global_step, first_epoch
 
 
-def save_checkpoint(model, text_decoder, output_dir, accelerator, global_step, logger) -> Path:
+def save_checkpoint(model,  output_dir, accelerator, global_step, logger) -> Path:
     save_path = Path(output_dir) / f"checkpoint-{global_step}"
 
     state_dict = accelerator.get_state_dict(model)
-    td_state_dict = accelerator.get_state_dict(text_decoder)
+   
     if accelerator.is_main_process:
         unwrapped_model = accelerator.unwrap_model(model)
         unwrapped_model.save_pretrained_weight(
@@ -176,14 +159,7 @@ def save_checkpoint(model, text_decoder, output_dir, accelerator, global_step, l
             save_function=accelerator.save,
             state_dict=state_dict,
         )
-        logger.info(f"CLIP saved state to {save_path}")
-        text_decoder = accelerator.unwrap_model(text_decoder)
-        text_decoder.save_pretrained_weight(
-            save_path / "text_decoder",
-            save_function=accelerator.save,
-            state_dict=td_state_dict,
-        )
-        logger.info(f"Text decoder saved to {save_path}")
+        logger.info(f"SLT saved state to {save_path}")
 
         json.dump({"global_step": global_step}, (save_path / "metadata.json").open("w+"))
         
@@ -211,43 +187,47 @@ def log_grad_norm(model, accelerator, global_step):
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
 
+def translate_images(model, src, tgt, accelerator, config, global_step, output_dir, logger, tokenizer):
+    logger.info("Translating images...")
+    model = accelerator.unwrap_model(model)
 
-def eval_CLIP(model,dev_dataloader,accelerator, criterion, TD_train_dict): 
-    '''
-    translate images in the dev_loader 
-    Calculate metrics using BLEU
-    Output BLEU and Rouge values
-    '''
-    
+    dtype = torch.float32
+    if accelerator.mixed_precision == "fp16":
+        dtype = torch.float16
+    elif accelerator.mixed_precision == "bf16":
+        dtype = torch.bfloat16
+
+    ## Generate some examples
     model.eval()
-    local_model = accelerator.unwrap_model(model)
-    total_val_loss = 0 
-    total_td_loss = 0 
-    loss_fct = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX,label_smoothing=0.2)
-    with torch.no_grad(): 
-        for i, (src,tgt, masked_tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
-            loss_img = criterion
-            loss_txt = criterion
-            
-            
-            
-            logits_per_image, logits_per_text, ground_truth = local_model(src, tgt)
-            loss_imgs = loss_img(logits_per_image,ground_truth)
-            loss_texts = loss_txt(logits_per_text,ground_truth)
-            total_loss = (loss_imgs + loss_texts)/2.
-            total_val_loss += total_loss.item()
+    with torch.no_grad():
+        generated = model.generate(
+            src,
+            decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang],
+            num_beams=4,
+            max_length=150,
+        )
 
-            if torch.cuda.device_count() > 1:
-                lm_logits = TD_train_dict['text_decoder'](tgt, masked_tgt, model.module.model_txt)
-            else:  
-                lm_logits = TD_train_dict['text_decoder'](tgt, masked_tgt, model.model_txt)
-            masked_lm_loss = loss_fct(lm_logits.view(-1, lm_logits.shape[-1]), tgt['input_ids'].cuda().view(-1)) #* args.loss_lambda
-            total_td_loss += masked_lm_loss.item()
+        # Decode the generated token IDs
+        generated_batch = tokenizer.batch_decode(generated, skip_special_tokens=True)
+        tgt_batch  = tokenizer.batch_decode(tgt['input_ids'], skip_special_tokens=True)
+
+        # Log translations locally to text files
+        root = Path(output_dir) / "train_translations"
+        os.makedirs(root, exist_ok=True)
+        for i, (pred,gt) in enumerate(zip(generated_batch, tgt_batch)):
+            filename = f"{global_step:08}_t-{i:03}.txt"
+            path = os.path.join(root, filename)
             
-    model.train()
-    total_val_loss = torch.tensor(total_val_loss, device=accelerator.device)
-    total_td_loss = torch.tensor(total_td_loss, device=accelerator.device)
-    return total_val_loss, total_td_loss
+            # Save each translation as a separate text file
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(f"Sample {i + 1}:\n")
+                f.write(f"Ground Truth: {gt}\n")
+                f.write(f"Prediction  : {pred}\n")
+        
+        print(f"Translations saved locally in {root}")
+
+
+
 
 
 
@@ -267,9 +247,9 @@ def create_scheduler(config, logger, accelerator, optimizer, len_data):
 
 
 
-def train_one_epoch(config, accelerator, model, criterion, tokenizer,
+def train_one_epoch(config, accelerator, model, tokenizer,
                     train_dataloader, dev_dataloader, optimizer,
-                    logger ,  TD_train_dict, scheduler , global_step, early_stop, early_stop_td
+                    logger ,  scheduler , global_step, early_stop
                     ):
     
     batch_time_meter = AverageMeter()
@@ -279,8 +259,7 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
     total_loss = 0
     transformer_logs = defaultdict(float)
 
-    loss_img = criterion
-    loss_txt = criterion
+
     loss_fct = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX,label_smoothing=0.2)
 
     for step, (src_input, tgt_input, masked_tgt_input) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
@@ -291,13 +270,14 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
      
         data_time_meter.update(time.time() - end)
 
-        with accelerator.accumulate([model, loss_img, loss_txt]):
-            logits_per_image, logits_per_text, ground_truth = model(src_input, tgt_input)
-            loss_imgs = loss_img(logits_per_image,ground_truth)
-            loss_texts = loss_txt(logits_per_text,ground_truth)
-            total_loss = (loss_imgs + loss_texts)/2.
+        with accelerator.accumulate([model, loss_fct]):
+            out_logits = model(src_input, tgt_input)
+            label = tgt_input['input_ids'].reshape(-1)
+            logits = out_logits.reshape(-1,out_logits.shape[-1])
+            loss = loss_fct(logits, label.to(accelerator.device, non_blocking=True))
+
             optimizer.zero_grad()
-            accelerator.backward(total_loss)
+            accelerator.backward(loss)
             if config.training.max_grad_norm is not None and accelerator.sync_gradients:
                 accelerator.clip_grad_norm_(model.parameters(), config.training.max_grad_norm)
             
@@ -323,22 +303,11 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
             transformer_logs ['train total_loss'] = total_loss
 
 
-        # update the text decoder parames
-        if step % 5 == 0:
-            with accelerator.accumulate([TD_train_dict['text_decoder'], loss_fct]):
-                TD_train_dict['optimizer'].zero_grad()
-                with accelerator.accumulate([TD_train_dict['text_decoder'], loss_fct]):
-                    if torch.cuda.device_count() > 1:
-                        lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.module.model_txt)
-                    else:  
-                        lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.model_txt)
-                    masked_lm_loss = loss_fct(lm_logits.view(-1, lm_logits.shape[-1]), tgt_input['input_ids'].cuda().view(-1)) #* args.loss_lambda
-                    accelerator.backward(masked_lm_loss)
-                    TD_train_dict['optimizer'].step()
-                    TD_train_dict['lr_scheduler'].step()
-
+        
+        
         if accelerator.sync_gradients:
             
+
             if (global_step + 1) % int(config.experiment.log_every * len(train_dataloader)/config.training.gradient_accumulation_steps)  == 0:
                 
                 lr = scheduler.get_last_lr()[0]
@@ -364,18 +333,32 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
                 batch_time_meter.reset()
                 data_time_meter.reset()
 
+
+            ## Generate some examples
+            if (global_step + 1) % int(config.experiment.translate_every * len(train_dataloader)/config.training.gradient_accumulation_steps)== 0 and accelerator.is_main_process:
+
+                # Save a batch of translated images to check by reading
+                translate_images(model=model, 
+                                 src=src_input, 
+                                 tgt=tgt_input, 
+                                 accelerator=accelerator,
+                                 global_step= global_step, 
+                                 config=config, output_dir=config.experiment.output_dir, 
+                                 logger = logger, 
+                                 tokenizer = tokenizer)
+
+
             # Evaluate reconstruction.
             if dev_dataloader is not None and (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)/config.training.gradient_accumulation_steps) == 0:
                 logger.info(f"Computing metrics on the validation set.")
                 
                      
                 # Eval for non-EMA.
-                total_val_loss, td_val_loss = eval_CLIP(
+                total_val_loss = eval_SLT(
                     model=model,
                     dev_dataloader=dev_dataloader,
                     accelerator=accelerator,
-                    criterion=criterion,
-                    TD_train_dict=TD_train_dict
+                    criterion=loss_fct
                 )
                         
                 accelerator.wait_for_everyone()
@@ -384,28 +367,25 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
                 # gather all val losses to synchronise across all processes
                 total_val_loss = accelerator.gather(total_val_loss)
                 total_val_loss = total_val_loss.mean().item()
-
-                td_val_loss = accelerator.gather(td_val_loss)
-                td_val_loss = td_val_loss.mean().item()
-
                 if accelerator.is_main_process:
-                    # save if either loss decreases 
-                    should_save_CL = early_stop(total_val_loss)
-                    should_save_td = early_stop_td(td_val_loss)
-                    should_save = should_save_CL or should_save_td
+                    should_save = early_stop(total_val_loss)
                 else: should_save = False
 
                 should_save = torch.tensor([int(should_save)], dtype=torch.int, device=accelerator.device)
                 broadcast(should_save, src=0)
                 if bool(should_save.item()): # save only if lower validation loss and this function will return True 
-                    save_path = save_checkpoint(model=model,text_decoder=TD_train_dict['text_decoder'],output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
+                    save_path = save_checkpoint(model=model,
+                                                output_dir= config.experiment.output_dir,
+                                                accelerator= accelerator,
+                                                global_step= global_step + 1,
+                                                logger=logger)
             
                     # Wait for everyone to save their checkpoint.
                     accelerator.wait_for_everyone()
 
             global_step += 1
 
-    return global_step, early_stop, early_stop_td
+    return global_step, early_stop
 
 
 class EarlyStopping:
@@ -484,24 +464,43 @@ class EarlyStopping:
 
 
 
-class KLLoss(torch.nn.Module):
-    """Loss that uses a 'hinge' on the lower bound.
-    This means that for samples with a label value smaller than the threshold, the loss is zero if the prediction is
-    also smaller than that threshold.
-    args:
-        error_matric:  What base loss to use (MSE by default).
-        threshold:  Threshold to use for the hinge.
-        clip:  Clip the loss if it is above this value.
-    """
+def create_SLT(config, logger, accelerator, model_type="SLT"):
+    """Creates Sign2Text model and loss module."""
+    logger.info("Creating model and loss module.")
+    if model_type == "SLT":
+        model = gloss_free_model(config)
 
-    def __init__(self, error_metric=torch.nn.KLDivLoss(size_average=True, reduce=True)):
-        super().__init__()
-        print('=========using KL Loss=and has temperature and * bz==========')
-        self.error_metric = error_metric
+    if config.experiment.init_weight:
+        # If loading a pretrained weight
+        # Create special way to load it
 
-    def forward(self, prediction, label):
-        batch_size = prediction.shape[0]
-        probs1 = F.log_softmax(prediction, 1)
-        probs2 = F.softmax(label * 10, 1)
-        loss = self.error_metric(probs1, probs2) * batch_size
-        return loss
+        model_weight = torch.load(config.experiment.init_weight, map_location="cpu")
+        msg = model.load_state_dict(model_weight, strict=False)
+        logger.info(f"loading weight from {config.experiment.init_weight}, msg: {msg}")
+        
+
+
+    return model
+
+
+def eval_SLT(model,dev_dataloader,accelerator, criterion): 
+    '''
+    translate images in the dev_loader 
+    Calculate metrics using BLEU
+    Output BLEU and Rouge values
+    '''
+    
+    model.eval()
+    local_model = accelerator.unwrap_model(model)
+    total_val_loss = 0 
+    with torch.no_grad(): 
+        for i, (src,tgt, masked_tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
+            loss_fct = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX,label_smoothing=0.2)
+            out_logits = local_model(src, tgt)
+            label = tgt['input_ids'].reshape(-1)
+            logits = out_logits.reshape(-1,out_logits.shape[-1])
+            loss = criterion(logits, label.to(accelerator.device, non_blocking=True))
+            total_val_loss += loss.item()
+    model.train()
+    total_val_loss = torch.tensor(total_val_loss, device=accelerator.device)
+    return total_val_loss

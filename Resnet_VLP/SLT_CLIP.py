@@ -12,6 +12,7 @@ import torchvision
 from torch.nn.utils.rnn import pad_sequence
 #import pytorchvideo.models.x3d as x3d
 from train_VLP_utils import * 
+from base_model import BaseModel
 
 """ PyTorch MBART model."""
 from transformers import MBartForConditionalGeneration, MBartPreTrainedModel, MBartModel, MBartConfig
@@ -41,8 +42,6 @@ import numpy as np
 
 # global definition
 from definition import *
-
-from hpman.m import _
 from pathlib import Path
 
 
@@ -68,16 +67,18 @@ class PositionalEncoding(nn.Module):
 
 def make_resnet(name='resnet18'):
     if name == 'resnet18':
-        model = torchvision.models.resnet18(pretrained=True)
+        model = torchvision.models.resnet18(pretrained= False )
     elif name == 'resnet34':
-        model = torchvision.models.resnet34(pretrained=True)
+        model = torchvision.models.resnet34(pretrained=False)
     elif name == 'resnet50':
-        model = torchvision.models.resnet50(pretrained=True)
+        model = torchvision.models.resnet50(pretrained=False)
     elif name == 'resnet101':
-        model = torchvision.models.resnet101(pretrained=True)
+        model = torchvision.models.resnet101(pretrained=False)
     else:
         raise Exception('There are no supported resnet model {}.'.format(_('resnet')))
-
+    weights_path = "resnet18-f37072fd.pth"
+    state_dict = torch.load(weights_path, map_location="cpu")
+    model.load_state_dict(state_dict)
     inchannel = model.fc.in_features
     model.fc = nn.Identity()
     return model
@@ -174,9 +175,9 @@ class ImageCLIP(nn.Module):
         output = self.lm_head(last_hidden_state[:, 0, :])
         return output
 
-class Text_Decoder(nn.Module):
+class Text_Decoder(BaseModel):
     def __init__(self, config):
-        super(Text_Decoder, self).__init__()
+        super().__init__()
         self.text_decoder = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_decoder()
         self.lm_head = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_output_embeddings()
         self.register_buffer("final_logits_bias", torch.zeros((1, MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).model.shared.num_embeddings)))
@@ -199,9 +200,9 @@ class Text_Decoder(nn.Module):
         return lm_logits
     
         
-class SLRCLIP(nn.Module):
+class SLRCLIP(BaseModel):
     def __init__(self, config, embed_dim=1024) :
-        super(SLRCLIP, self).__init__()
+        super().__init__()
         self.model_txt = TextCLIP(config, inplanes=embed_dim, planes=embed_dim)
         self.model_images = ImageCLIP(config, inplanes=embed_dim, planes=embed_dim)
 
@@ -291,9 +292,9 @@ def config_decoder(config):
     elif decoder_type == 'LLMD':
         return MBartForConditionalGeneration.from_pretrained(config['model']['transformer'], ignore_mismatched_sizes = True, config = AutoConfig.from_pretrained(Path(config['model']['transformer'])/'LLMD_config.json'))
     
-class gloss_free_model(nn.Module):
+class gloss_free_model(BaseModel):
     def __init__(self, config,  embed_dim=1024, pretrain=None):
-        super(gloss_free_model, self).__init__()
+        super().__init__()
         self.config = config
 
         self.backbone = FeatureExtracter(frozen=_('freeze_backbone', False))
@@ -320,18 +321,20 @@ class gloss_free_model(nn.Module):
     def forward(self,src_input, tgt_input ):
         
         inputs_embeds, attention_mask = self.share_forward(src_input)
-
+        decoder_input_ids = shift_tokens_right(tgt_input['input_ids'].cuda(), self.mbart.config.pad_token_id)
         out = self.mbart(inputs_embeds = inputs_embeds,
                     attention_mask = attention_mask.cuda(),
-                    # decoder_input_ids = tgt_input['input_ids'].cuda(),
-                    labels = tgt_input['input_ids'].cuda(),
+                    decoder_input_ids = decoder_input_ids,
                     decoder_attention_mask = tgt_input['attention_mask'].cuda(),
                     return_dict = True,
                     )
+        
+
         return out['logits']
     
 
-    def generate(self,src_input,max_new_tokens,num_beams,decoder_start_token_id ):
+    def generate(self,src_input,max_new_tokens ,num_beams,decoder_start_token_id ):
+
         inputs_embeds, attention_mask = self.share_forward(src_input)
 
         out = self.mbart.generate(inputs_embeds = inputs_embeds,
@@ -339,3 +342,4 @@ class gloss_free_model(nn.Module):
                                 decoder_start_token_id=decoder_start_token_id
                             )
         return out
+    
