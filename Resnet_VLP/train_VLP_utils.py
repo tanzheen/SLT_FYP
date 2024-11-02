@@ -396,7 +396,8 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
                 else: should_save = False
 
                 should_save = torch.tensor([int(should_save)], dtype=torch.int, device=accelerator.device)
-                broadcast(should_save, src=0)
+                if torch.cuda.device_count() > 1:
+                    broadcast(should_save, src=0)
                 if bool(should_save.item()): # save only if lower validation loss and this function will return True 
                     save_path = save_checkpoint(model=model,text_decoder=TD_train_dict['text_decoder'],output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
             
