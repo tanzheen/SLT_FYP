@@ -40,3 +40,4 @@ TiTok_SLT/vis_tokenizer/tokenizer_titok_l32.bin
 /Resnet_VLP/pretrain_models
 TiTok_SLT/vis_tokenizer/maskgit-vqgan-imagenet-f16-256.bin
 TiTok_SLT/vis_tokenizer/generator_titok_l32.bin
+/Resnet_VLP/transferred_mbart_model
