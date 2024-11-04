@@ -10,15 +10,14 @@ import json
 from pathlib import Path
 import time 
 from collections import defaultdict
-import pprint
+
 from tqdm import tqdm 
-from accelerate import Accelerator
+
 import glob
 import sacrebleu
 from logger import setup_logger
 from sacrebleu.metrics import BLEU 
 import numpy as np 
-from torch.optim.lr_scheduler import CosineAnnealingLR, LinearLR
 from lr_schedulers import get_scheduler
 from torch.distributed import broadcast
 from torch.nn.utils.rnn import pad_sequence
@@ -26,7 +25,6 @@ from definition import *
 import torch.nn as nn
 import torch.nn.functional as F
 from SLT_CLIP import * 
-from typing import Iterable, Optional
 import sys 
 from definition import * 
 import math 
@@ -80,6 +78,8 @@ def create_CLIP(config, logger, accelerator, model_type="SLR_CLIP"):
 
 
     return model
+
+
 
 
 
@@ -210,73 +210,9 @@ def log_grad_norm(model, accelerator, global_step):
             grad_norm = (grads.norm(p=2) / grads.numel()).item()
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
-def translate_images(model, images,tgt_labels,input_attn,tgt_attn,  src_length ,config, accelerator, global_step, output_dir, logger, tokenizer): 
-    logger.info("Translating images...")
-    model = accelerator.unwrap_model(model)
-    images = torch.clone(images)
-    dtype = torch.float32
-    if accelerator.mixed_precision == "fp16":
-        dtype = torch.float16
-    elif accelerator.mixed_precision == "bf16":
-        dtype = torch.bfloat16
-
-    with torch.autocast("cuda", dtype=dtype, enabled=accelerator.mixed_precision != "no"):
-        output = model(src_input = images,tgt_input = tgt_labels, src_attn = input_attn, tgt_attn = tgt_attn, src_length = src_length)
-        # Output logits (predictions before softmax) from the decoder
-        # Get the predicted token IDs by taking the argmax of the logits along the vocabulary dimension
-        logits = output['logits']
-        probs = logits.softmax(dim=-1)
-        values, pred = torch.topk(probs,k=1, dim = -1)
-        predictions = pred.reshape(config.training.per_gpu_batch_size,-1).squeeze()
-        
-
-        # pad_tensor = torch.ones(200-len(predictions[0])).to(accelerator.device)
-        # predictions[0] = torch.cat((predictions[0],pad_tensor.long()),dim = 0)
-        # predictions = pad_sequence(predictions,batch_first=True,padding_value=PAD_IDX)
-
-        
-        pred_translations  = tokenizer.batch_decode(predictions, skip_special_tokens = True)
-
-        gt_translations = tokenizer.batch_decode(tgt_labels, skip_special_tokens = True)
-        #print(gt_translations)
-
-    
-    # Log translations using wandb or tensorboard, if enabled
-    if config.training.enable_wandb:
-        # Log translations to wandb (as text)
-        accelerator.get_tracker("wandb").log(
-            {f"Train Translations": pred_translations, 
-             f"Train truth": gt_translations},
-            step=global_step
-        )
-    else:
-        # Log translations to tensorboard (you may need a different logging method for text)
-        accelerator.get_tracker("tensorboard").log(
-            {"Train Translations": pred_translations, 
-             f"Train truth": gt_translations}, step=global_step
-        )
-
-    # Log translations locally to text files
-    root = Path(output_dir) / "train_translations"
-    os.makedirs(root, exist_ok=True)
-    for i, (pred,gt) in enumerate(zip(pred_translations, gt_translations)):
-        filename = f"{global_step:08}_t-{i:03}.txt"
-        path = os.path.join(root, filename)
-        
-        # Save each translation as a separate text file
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(f"Sample {i + 1}:\n")
-            f.write(f"Ground Truth: {gt}\n")
-            f.write(f"Prediction  : {pred}\n")
-    
-    print(f"Translations saved locally in {root}")
 
 
-    return pred_translations,gt_translations
-
-
-
-def eval_CLIP(model,dev_dataloader,accelerator, criterion): 
+def eval_CLIP(model,dev_dataloader,accelerator, criterion, TD_train_dict): 
     '''
     translate images in the dev_loader 
     Calculate metrics using BLEU
@@ -286,6 +222,8 @@ def eval_CLIP(model,dev_dataloader,accelerator, criterion):
     model.eval()
     local_model = accelerator.unwrap_model(model)
     total_val_loss = 0 
+    total_td_loss = 0 
+    loss_fct = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX,label_smoothing=0.2)
     with torch.no_grad(): 
         for i, (src,tgt, masked_tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
             loss_img = criterion
@@ -293,14 +231,23 @@ def eval_CLIP(model,dev_dataloader,accelerator, criterion):
             
             
             
-            logits_per_image, logits_per_text, ground_truth = model(images, tgt_input)
+            logits_per_image, logits_per_text, ground_truth = local_model(src, tgt)
             loss_imgs = loss_img(logits_per_image,ground_truth)
             loss_texts = loss_txt(logits_per_text,ground_truth)
             total_loss = (loss_imgs + loss_texts)/2.
             total_val_loss += total_loss.item()
-    model.train()
 
-    return total_val_loss
+            if torch.cuda.device_count() > 1:
+                lm_logits = TD_train_dict['text_decoder'](tgt, masked_tgt, model.module.model_txt)
+            else:  
+                lm_logits = TD_train_dict['text_decoder'](tgt, masked_tgt, model.model_txt)
+            masked_lm_loss = loss_fct(lm_logits.view(-1, lm_logits.shape[-1]), tgt['input_ids'].cuda().view(-1)) #* args.loss_lambda
+            total_td_loss += masked_lm_loss.item()
+            
+    model.train()
+    total_val_loss = torch.tensor(total_val_loss, device=accelerator.device)
+    total_td_loss = torch.tensor(total_td_loss, device=accelerator.device)
+    return total_val_loss, total_td_loss
 
 
 
@@ -322,7 +269,7 @@ def create_scheduler(config, logger, accelerator, optimizer, len_data):
 
 def train_one_epoch(config, accelerator, model, criterion, tokenizer,
                     train_dataloader, dev_dataloader, optimizer,
-                    logger ,  TD_train_dict, scheduler , global_step, early_stop
+                    logger ,  TD_train_dict, scheduler , global_step, early_stop, early_stop_td
                     ):
     
     batch_time_meter = AverageMeter()
@@ -381,25 +328,22 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
             with accelerator.accumulate([TD_train_dict['text_decoder'], loss_fct]):
                 TD_train_dict['optimizer'].zero_grad()
                 with accelerator.accumulate([TD_train_dict['text_decoder'], loss_fct]):
-                    lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.model_txt)
+                    if torch.cuda.device_count() > 1:
+                        lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.module.model_txt)
+                    else:  
+                        lm_logits = TD_train_dict['text_decoder'](tgt_input, masked_tgt_input, model.model_txt)
                     masked_lm_loss = loss_fct(lm_logits.view(-1, lm_logits.shape[-1]), tgt_input['input_ids'].cuda().view(-1)) #* args.loss_lambda
                     accelerator.backward(masked_lm_loss)
                     TD_train_dict['optimizer'].step()
                     TD_train_dict['lr_scheduler'].step()
 
-        
-        
         if accelerator.sync_gradients:
             
-
             if (global_step + 1) % int(config.experiment.log_every * len(train_dataloader)/config.training.gradient_accumulation_steps)  == 0:
-                samples_per_second_per_gpu = (
-                    config.training.gradient_accumulation_steps * config.training.per_gpu_batch_size / batch_time_meter.val
-                )
+                
                 lr = scheduler.get_last_lr()[0]
 
                 logger.info(
-                    f"Data (t): {data_time_meter.val:0.4f}, {samples_per_second_per_gpu:0.2f}/s/gpu "
                     f"Batch (t): {batch_time_meter.val:0.4f} "
                     f"LR: {lr:0.6f} "
                     f"Step: {global_step + 1} "
@@ -409,7 +353,6 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
                 logs = {
                     "lr": lr,
                     "lr/generator": lr,
-                    "samples/sec/gpu": samples_per_second_per_gpu,
                     "time/data_time": data_time_meter.val,
                     "time/batch_time": batch_time_meter.val,
                 }
@@ -425,15 +368,14 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
             if dev_dataloader is not None and (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)/config.training.gradient_accumulation_steps) == 0:
                 logger.info(f"Computing metrics on the validation set.")
                 
-            
                      
                 # Eval for non-EMA.
-                total_val_loss = eval_CLIP(
+                total_val_loss, td_val_loss = eval_CLIP(
                     model=model,
                     dev_dataloader=dev_dataloader,
                     accelerator=accelerator,
-                    tokenizer=tokenizer , 
-                    config = config 
+                    criterion=criterion,
+                    TD_train_dict=TD_train_dict
                 )
                         
                 accelerator.wait_for_everyone()
@@ -442,12 +384,20 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
                 # gather all val losses to synchronise across all processes
                 total_val_loss = accelerator.gather(total_val_loss)
                 total_val_loss = total_val_loss.mean().item()
+
+                td_val_loss = accelerator.gather(td_val_loss)
+                td_val_loss = td_val_loss.mean().item()
+
                 if accelerator.is_main_process:
-                    should_save = early_stop(total_val_loss)
+                    # save if either loss decreases 
+                    should_save_CL = early_stop(total_val_loss)
+                    should_save_td = early_stop_td(td_val_loss)
+                    should_save = should_save_CL or should_save_td
                 else: should_save = False
 
                 should_save = torch.tensor([int(should_save)], dtype=torch.int, device=accelerator.device)
-                broadcast(should_save, src=0)
+                if torch.cuda.device_count() > 1:
+                    broadcast(should_save, src=0)
                 if bool(should_save.item()): # save only if lower validation loss and this function will return True 
                     save_path = save_checkpoint(model=model,text_decoder=TD_train_dict['text_decoder'],output_dir= config.experiment.output_dir,accelerator= accelerator,global_step= global_step + 1,logger=logger)
             
@@ -456,9 +406,8 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
 
             global_step += 1
 
-    return global_step, early_stop
+    return global_step, early_stop, early_stop_td
 
-    
 
 class EarlyStopping:
     '''

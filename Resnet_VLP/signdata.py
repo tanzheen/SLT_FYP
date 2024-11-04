@@ -3,10 +3,8 @@
 import torch
 from torch.utils.data import Dataset
 from torch.nn.utils.rnn import pad_sequence
-import math
 from torchvision import transforms
 from PIL import Image
-import cv2
 import os
 import random
 import numpy as np

@@ -2,12 +2,12 @@
 from pickletools import optimize
 # from sched import scheduler
 import torch
-import torch.backends.cudnn as cudnn
+
 from torch.optim import lr_scheduler as scheduler
-from torch.nn.utils.rnn import pad_sequence
-from torch.nn import functional as F
-from torch import nn
-from torch.utils.data import DataLoader
+
+
+
+
 
 # *transformers
 from transformers import MBartForConditionalGeneration, MBartTokenizer,MBartConfig
@@ -17,41 +17,28 @@ from signdata import *
 
 # *basic
 import os
-import time
-import shutil
-import argparse, json, datetime
-import numpy as np
-from collections import OrderedDict
-from tqdm import tqdm
-import yaml
-import random
-import wandb
-import copy
+
+
+
 from pathlib import Path
-import math
+
 import sys
-from typing import Iterable, Optional
-from loguru import logger
+
 
 # *metric
 from sacrebleu.metrics import BLEU, CHRF, TER
 
-# *timm
-from timm.optim import create_optimizer
-from timm.scheduler import create_scheduler
-from timm.utils import NativeScaler
-from timm.loss import SoftTargetCrossEntropy
+
+
 from timm.optim import AdamW
 
-from hpman.m import _
-import hpargparse
 
 # visualization
 from torchvision.utils import save_image, make_grid
 from PIL import Image
 
-from hpman.m import _
-import hpargparse
+
+
 
 # global definition
 from definition import *
@@ -60,12 +47,14 @@ import torch.distributed
 from train_VLP_utils import create_CLIP, create_signloader, get_config
 import os 
 from accelerate import Accelerator
+from accelerate.utils import DistributedDataParallelKwargs
 from logger import setup_logger
 from accelerate.utils import set_seed
 import sys 
-from transformers import MBart50Tokenizer
 import torch.multiprocessing as mp
 from train_VLP_utils import *
+from SLT_CLIP import *
+import torch.distributed as dist
 
 def main ():
     workspace = os.environ.get('WORKSPACE', '')
@@ -73,7 +62,7 @@ def main ():
         torch.hub.set_dir(workspace + "/models/hub")
     
     config = get_config()
-
+    #dist.init_process_group(backend="nccl")
     # Enable TF32 on Ampere GPUs.
     if config.training.enable_tf32:
         torch.backends.cuda.matmul.allow_tf32 = True
@@ -89,13 +78,14 @@ def main ():
     tracker = "tensorboard"
     if config.training.enable_wandb:
         tracker = "wandb"
-  
+    kwargs = DistributedDataParallelKwargs(find_unused_parameters=True)
     accelerator = Accelerator(
         gradient_accumulation_steps=config.training.gradient_accumulation_steps,
         mixed_precision=config.training.mixed_precision,
         log_with=tracker,
         project_dir=config.experiment.logging_dir,
-        split_batches=False
+        split_batches=False,
+        kwargs_handlers= [kwargs]
     )
 
     logger = setup_logger(name="Sign2Text", log_level="INFO",
@@ -122,15 +112,11 @@ def main ():
 
 
     ## Create contrastive model 
-    
     model= create_CLIP(config, logger, accelerator)
     optimizer = create_optimizer(config, logger, model)
     lr_scheduler = create_scheduler(config, logger, accelerator, optimizer, len(train_dataloader))
 
     ## Count the number of parameters here
-
-    
-
     text_decoder = Text_Decoder(config)
     optimizer_td = AdamW(text_decoder.parameters(), lr=config.optimizer.params.learning_rate)
     lr_scheduler_td = scheduler.CosineAnnealingLR(
@@ -164,12 +150,14 @@ def main ():
     ## Start training
     num_train_epochs = config.training.num_epochs
     early_stop = EarlyStopping(verbose=True)
+    early_stop_td = EarlyStopping(verbose=True)
     for current_epoch in range(first_epoch, num_train_epochs):
+        torch.cuda.empty_cache()
 
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
-        global_step, early_stop = train_one_epoch(config, accelerator, model, criterion, tokenizer,
+        global_step, early_stop, early_stop_td = train_one_epoch(config, accelerator, model, criterion, tokenizer,
                     train_dataloader, dev_dataloader, optimizer,
-                    logger ,  TD_train_dict, lr_scheduler , global_step, early_stop) # the early stopping will be passed back in again 
+                    logger ,  TD_train_dict, lr_scheduler , global_step, early_stop, early_stop_td) # the early stopping will be passed back in again 
     
 
     # Save the final trained checkpoint
