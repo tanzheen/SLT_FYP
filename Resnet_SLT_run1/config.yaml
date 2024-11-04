@@ -8,7 +8,7 @@ experiment:
   log_grad_norm_every: 0.1
   resume: true
   init_weight: null
-  logging_dir: ../Resnet_SLT_run1/logs
+  logging_dir: ../Resnet_SLT_run1\logs
 model:
   tokenizer: ./pretrain_models/MBart_proun
   visual_encoder: transferred_mbart_model
@@ -43,9 +43,9 @@ lr_scheduler:
     warmup_steps: 4000
     end_lr: 1.0e-05
 training:
-  gradient_accumulation_steps: 1
+  gradient_accumulation_steps: 4
   per_gpu_batch_size: 4
-  mixed_precision: 'no'
+  mixed_precision: fp16
   enable_tf32: true
   enable_wandb: false
   use_ema: false

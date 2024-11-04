@@ -7,7 +7,7 @@ experiment:
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True
-  init_weight: 
+  init_weight:
 
 model:
   tokenizer: ./pretrain_models/MBart_proun
@@ -47,9 +47,9 @@ lr_scheduler:
     end_lr: 1e-5
 
 training:
-  gradient_accumulation_steps: 1
+  gradient_accumulation_steps: 4
   per_gpu_batch_size: 4
-  mixed_precision: "no"
+  mixed_precision: "fp16"
   enable_tf32: True
   enable_wandb: False
   use_ema: False
