@@ -11,7 +11,6 @@ import math
 import torchvision
 from torch.nn.utils.rnn import pad_sequence
 #import pytorchvideo.models.x3d as x3d
-from train_VLP_utils import * 
 from base_model import BaseModel
 
 """ PyTorch MBART model."""
@@ -297,9 +296,8 @@ class gloss_free_model(BaseModel):
         super().__init__()
         self.config = config
 
-        self.backbone = FeatureExtracter(frozen=_('freeze_backbone', False))
-        # self.mbart = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder'])
-        self.mbart = config_decoder(config)
+        self.backbone = FeatureExtracter()
+        self.mbart = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder'])
  
         if config['model']['sign_proj']:
             self.sign_emb = V_encoder(emb_size=embed_dim,feature_size=embed_dim, config = config)

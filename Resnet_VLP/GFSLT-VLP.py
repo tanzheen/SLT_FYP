@@ -112,15 +112,11 @@ def main ():
 
 
     ## Create contrastive model 
-    
     model= create_CLIP(config, logger, accelerator)
     optimizer = create_optimizer(config, logger, model)
     lr_scheduler = create_scheduler(config, logger, accelerator, optimizer, len(train_dataloader))
 
     ## Count the number of parameters here
-
-    
-
     text_decoder = Text_Decoder(config)
     optimizer_td = AdamW(text_decoder.parameters(), lr=config.optimizer.params.learning_rate)
     lr_scheduler_td = scheduler.CosineAnnealingLR(

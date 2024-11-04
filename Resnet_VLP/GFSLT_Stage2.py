@@ -52,8 +52,8 @@ from logger import setup_logger
 from accelerate.utils import set_seed
 import sys 
 import torch.multiprocessing as mp
-from train_VLP_utils import *
 from SLT_CLIP import *
+from train_stage2_utils import *
 
 def main ():
     workspace = os.environ.get('WORKSPACE', '')
@@ -87,7 +87,7 @@ def main ():
         kwargs_handlers= [kwargs]
     )
 
-    logger = setup_logger(name="Sign2Text", log_level="INFO",
+    logger = setup_logger(name=config.experiment.project, log_level="INFO",
         output_file=f"{output_dir}/log{accelerator.process_index}.txt")
     
     if accelerator.is_main_process:
@@ -169,7 +169,7 @@ if __name__ == "__main__":
 
 
 '''
-accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network GFSLT-VLP.py config=configs/Resnet_VLP_CSL_config.yaml --experiment.project="Resnet_VLP_CSL" --experiment.name="Resnet_VLP_CSL_run1" --experiment.output_dir="Resnet_VLP_CSL_run1" 
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network GFSLT_Stage2.py config=configs/stage2/Resnet_SLT_CSL_config.yaml --experiment.project="Resnet_VLP_CSL" --experiment.name="Resnet_VLP_CSL_run1" --experiment.output_dir="Resnet_VLP_CSL_run1" 
 '''
     
 
