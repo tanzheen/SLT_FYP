@@ -204,7 +204,7 @@ def translate_images(model, src, tgt, accelerator, config, global_step, output_d
             src,
             decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang],
             num_beams=4,
-            max_length=150,
+            max_length=150
         )
 
         # Decode the generated token IDs
