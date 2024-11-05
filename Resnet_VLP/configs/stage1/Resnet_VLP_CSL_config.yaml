@@ -10,8 +10,8 @@ experiment:
   init_weight:
 
 model:
-  tokenizer: ./pretrain_models/MBart_proun
-  transformer: ./pretrain_models/MBart_proun # textCLIP only = 12 layers
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt # ./pretrain_models/mbart_model
+  transformer: facebook/mbart-large-50-many-to-many-mmt # textCLIP only = 12 layers
   visual_encoder: ./pretrain_models/mytran # text decoder and Image CLIP = 3 layers
   sign_proj: True
 
@@ -35,7 +35,7 @@ dataset:
 optimizer:
   name: adamw
   params:
-    learning_rate: 5e-4
+    learning_rate: 1e-4
     beta1: 0.9
     beta2: 0.99
     weight_decay: 1e-4
@@ -45,7 +45,7 @@ lr_scheduler:
   params:
     learning_rate: ${optimizer.params.learning_rate}
     warmup_steps: 4000
-    end_lr: 1e-6
+    end_lr: 1e-5
 
 training:
   gradient_accumulation_steps: 1

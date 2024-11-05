@@ -177,9 +177,9 @@ class ImageCLIP(nn.Module):
 class Text_Decoder(BaseModel):
     def __init__(self, config):
         super().__init__()
-        self.text_decoder = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_decoder()
-        self.lm_head = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_output_embeddings()
-        self.register_buffer("final_logits_bias", torch.zeros((1, MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).model.shared.num_embeddings)))
+        self.text_decoder = MBartForConditionalGeneration.from_pretrained(config['model']['transformer']).get_decoder()
+        self.lm_head = MBartForConditionalGeneration.from_pretrained(config['model']['transformer']).get_output_embeddings()
+        self.register_buffer("final_logits_bias", torch.zeros((1, MBartForConditionalGeneration.from_pretrained(config['model']['transformer']).model.shared.num_embeddings)))
 
     
     def forward(self, tgt_input, masked_tgt_input, model_txt):
@@ -297,7 +297,7 @@ class gloss_free_model(BaseModel):
         self.config = config
 
         self.backbone = FeatureExtracter()
-        self.mbart = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder'])
+        self.mbart = MBartForConditionalGeneration.from_pretrained(config['model']['after_pretrained'])
  
         if config['model']['sign_proj']:
             self.sign_emb = V_encoder(emb_size=embed_dim,feature_size=embed_dim, config = config)

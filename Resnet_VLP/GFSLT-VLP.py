@@ -5,20 +5,14 @@ import torch
 
 from torch.optim import lr_scheduler as scheduler
 
-
-
-
-
 # *transformers
-from transformers import MBartForConditionalGeneration, MBartTokenizer,MBartConfig
+from transformers import MBartForConditionalGeneration, MBart50Tokenizer,MBartConfig
 
 # user defined
 from signdata import * 
 
 # *basic
 import os
-
-
 
 from pathlib import Path
 
@@ -27,18 +21,12 @@ import sys
 
 # *metric
 from sacrebleu.metrics import BLEU, CHRF, TER
-
-
-
 from timm.optim import AdamW
 
 
 # visualization
 from torchvision.utils import save_image, make_grid
 from PIL import Image
-
-
-
 
 # global definition
 from definition import *
@@ -55,6 +43,12 @@ import torch.multiprocessing as mp
 from train_VLP_utils import *
 from SLT_CLIP import *
 import torch.distributed as dist
+
+def count_parameters(model):
+    total_params = sum(p.numel() for p in model.parameters())
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print(f"Total parameters: {total_params}")
+    print(f"Trainable parameters: {trainable_params}")
 
 def main ():
     workspace = os.environ.get('WORKSPACE', '')
@@ -103,7 +97,7 @@ def main ():
         set_seed(config.training.seed, device_specific=True)
 
     ## Create dataset 
-    tokenizer = MBartTokenizer.from_pretrained(config.model.tokenizer,
+    tokenizer = MBart50Tokenizer.from_pretrained(config.model.tokenizer,
                                                src_lang=config.dataset.lang,
                                                  tgt_lang= config.dataset.lang)
     
@@ -113,6 +107,7 @@ def main ():
 
     ## Create contrastive model 
     model= create_CLIP(config, logger, accelerator)
+    count_parameters(model)
     optimizer = create_optimizer(config, logger, model)
     lr_scheduler = create_scheduler(config, logger, accelerator, optimizer, len(train_dataloader))
 
@@ -185,7 +180,7 @@ if __name__ == "__main__":
 
 
 '''
-accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network GFSLT-VLP.py config=configs/Resnet_VLP_CSL_config.yaml --experiment.project="Resnet_VLP_CSL" --experiment.name="Resnet_VLP_CSL_run1" --experiment.output_dir="Resnet_VLP_CSL_run1" 
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network GFSLT-VLP.py config=configs/stage1/Resnet_VLP_CSL_config.yaml --experiment.project="Resnet_VLP_CSL" --experiment.name="Resnet_VLP_CSL_run1" --experiment.output_dir="Resnet_VLP_CSL_run1" 
 '''
     
 
