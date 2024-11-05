@@ -135,9 +135,6 @@ class SignTransDataset(Dataset):
         norm_mean = [0.485, 0.456, 0.406]
         norm_std = [0.229, 0.224, 0.225]
         data_transform = transforms.Compose([
-            transforms.Resize((self.config.dataset.preprocessing.resize_shorter_edge, 
-                                self.config.dataset.preprocessing.resize_shorter_edge)),
-            transforms.RandomCrop((self.config.dataset.preprocessing.crop_size, self.config.dataset.preprocessing.crop_size)),
             transforms.ToTensor(),
             transforms.Normalize(norm_mean, norm_std)
         ])
@@ -149,7 +146,7 @@ class SignTransDataset(Dataset):
         paths = sorted(os.listdir(dir_path)) 
         for path in paths:
             if path.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')): 
-                    filtered_paths.append(path)
+                filtered_paths.append(path)
         paths = sorted(filtered_paths) 
         #print (paths)
         # If the video contains more frames than the max length, sample randomly up to max_length.
@@ -161,6 +158,7 @@ class SignTransDataset(Dataset):
         imgs = torch.zeros(len(paths), 3, 
                         self.config.dataset.preprocessing.crop_size, 
                         self.config.dataset.preprocessing.crop_size)
+        crop_rect, resize = data_augmentation(resize=(self.config.dataset.preprocessing.resize_shorter_edge, self.config.dataset.preprocessing.resize_shorter_edge), crop_size=self.config.dataset.preprocessing.crop_size, is_train=(self.phase=='train'))
         batch_image = []
 
         # Load each image, apply transformations, and crop if necessary.
@@ -168,12 +166,6 @@ class SignTransDataset(Dataset):
             img_path = os.path.join(dir_path, img_path)
             img = Image.open(img_path).convert("RGB")
             
-            # Crop the image based on the provided config (center horizontal, lower vertical crop).
-            x_start = int((img.size[0] - self.crop_width) // 2)
-            x_end = x_start + self.crop_width
-            y_start = img.size[1] - self.crop_height
-            y_end = img.size[1]
-            img = img.crop((x_start, y_start, x_end, y_end))
 
             batch_image.append(img)
 
@@ -184,8 +176,10 @@ class SignTransDataset(Dataset):
 
 
         for i, img in enumerate(batch_image):
+            img = img.resize(resize)
             img = data_transform(img).unsqueeze(0)  # Apply the dataset-specific transformation.
-            imgs[i, :, :, :] = img
+            imgs[i,:,:,:] = img[:,:,crop_rect[1]:crop_rect[3],crop_rect[0]:crop_rect[2]]
+        
         
         return imgs, paths  # Return the tensor (frames, RGB channels, height, width).
 
@@ -343,3 +337,12 @@ def sampler_func(clip, sn, random_choice=True):
                                                                                                             i + 1) / sn))))
                         for i in range(sn)]
     return f(clip)
+
+
+def data_augmentation(resize=(320, 240), crop_size=224, is_train=True):
+    if is_train:
+        left, top = np.random.randint(0, resize[0] - crop_size), np.random.randint(0, resize[1] - crop_size)
+    else:
+        left, top = (resize[0] - crop_size) // 2, (resize[1] - crop_size) // 2
+
+    return (left, top, left + crop_size, top + crop_size), resize

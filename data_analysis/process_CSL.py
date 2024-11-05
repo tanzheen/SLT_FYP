@@ -1,4 +1,4 @@
-import cv2
+
 import torch
 import json
 import torchvision.transforms as transforms
