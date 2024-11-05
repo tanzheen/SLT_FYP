@@ -204,7 +204,7 @@ def translate_images(model, src, tgt, accelerator, config, global_step, output_d
             src,
             decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang],
             num_beams=4,
-            max_length=150
+            max_new_tokens   =150
         )
 
         # Decode the generated token IDs
@@ -214,13 +214,14 @@ def translate_images(model, src, tgt, accelerator, config, global_step, output_d
         # Log translations locally to text files
         root = Path(output_dir) / "train_translations"
         os.makedirs(root, exist_ok=True)
-        for i, (pred,gt) in enumerate(zip(generated_batch, tgt_batch)):
+        for i, (name, pred,gt) in enumerate(zip(src['name_batch'], generated_batch, tgt_batch)):
             filename = f"{global_step:08}_t-{i:03}.txt"
             path = os.path.join(root, filename)
             
             # Save each translation as a separate text file
             with open(path, "w", encoding="utf-8") as f:
                 f.write(f"Sample {i + 1}:\n")
+                f.write(f"Name        : {name}\n")
                 f.write(f"Ground Truth: {gt}\n")
                 f.write(f"Prediction  : {pred}\n")
         
@@ -372,7 +373,8 @@ def train_one_epoch(config, accelerator, model, tokenizer,
                 else: should_save = False
 
                 should_save = torch.tensor([int(should_save)], dtype=torch.int, device=accelerator.device)
-                broadcast(should_save, src=0)
+                if torch.cuda.device_count() > 1:
+                    broadcast(should_save, src=0)
                 if bool(should_save.item()): # save only if lower validation loss and this function will return True 
                     save_path = save_checkpoint(model=model,
                                                 output_dir= config.experiment.output_dir,

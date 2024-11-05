@@ -337,7 +337,7 @@ class gloss_free_model(BaseModel):
 
         out = self.mbart.generate(inputs_embeds = inputs_embeds,
                     attention_mask = attention_mask.cuda(),max_new_tokens=max_new_tokens,num_beams = num_beams,
-                                decoder_start_token_id=decoder_start_token_id
+                               ## decoder_start_token_id=decoder_start_token_id
                             )
         return out
     

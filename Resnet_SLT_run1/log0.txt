@@ -406,3 +406,856 @@ config: configs/stage2/Resnet_SLT_CSL_config.yaml
 [32m[11/04 21:05:56 Resnet_SLT]: [0mCreating optimizers.
 [32m[11/04 21:05:56 Resnet_SLT]: [0mCreating lr_schedulers.
 [32m[11/04 21:05:56 Resnet_SLT]: [0mAll globbed checkpoints are: []
+[32m[11/04 21:07:23 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/04 21:07:23 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  visual_encoder: transferred_mbart_model
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 4
+  per_gpu_batch_size: 4
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/04 21:07:23 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 4
+[32m[11/04 21:07:23 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/04 21:07:24 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/04 21:07:24 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/04 21:07:24 Resnet_SLT]: [0mAll globbed checkpoints are: []
+[32m[11/04 21:20:54 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000003 Step: 115 Total Loss: 1058.3369 Recon Loss: 2.1180 
+[32m[11/04 21:33:59 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000006 Step: 230 Total Loss: 2033.4625 Recon Loss: 2.1068 
+[32m[11/04 21:48:46 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/04 21:48:46 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  visual_encoder: transferred_mbart_model
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/04 21:48:46 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/04 21:48:46 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/04 21:48:47 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/04 21:48:47 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/04 21:48:47 Resnet_SLT]: [0mAll globbed checkpoints are: []
+[32m[11/04 21:57:07 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000003 Step: 115 Total Loss: 2127.2745 Recon Loss: 2.1146 
+[32m[11/04 22:03:20 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000006 Step: 230 Total Loss: 4080.2709 Recon Loss: 2.1023 
+[32m[11/04 22:07:21 Resnet_SLT]: [0mTranslating images...
+[32m[11/04 22:10:46 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/04 22:10:46 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  visual_encoder: transferred_mbart_model
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/04 22:10:46 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/04 22:10:46 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/04 22:10:47 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/04 22:10:47 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/04 22:10:47 Resnet_SLT]: [0mAll globbed checkpoints are: []
+[32m[11/04 22:19:08 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000003 Step: 115 Total Loss: 2127.0316 Recon Loss: 2.1146 
+[32m[11/04 22:25:19 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000006 Step: 230 Total Loss: 4079.9830 Recon Loss: 2.1022 
+[32m[11/04 22:28:18 Resnet_SLT]: [0mTranslating images...
+[32m[11/04 22:33:17 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000009 Step: 345 Total Loss: 6018.0096 Recon Loss: 2.0974 
+[32m[11/04 23:10:24 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/04 23:10:24 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: facebook/mbart-50-many-to-many-mmt
+  visual_encoder: facebook/mbart-50-many-to-many-mmt
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/04 23:11:16 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/04 23:11:16 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt
+  visual_encoder: facebook/mbart-large-50-many-to-many-mmt
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/04 23:11:18 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/04 23:11:18 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/04 23:11:25 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/04 23:11:25 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/04 23:11:25 Resnet_SLT]: [0mAll globbed checkpoints are: []
+[32m[11/04 23:22:14 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000003 Step: 115 Total Loss: 10160.8552 Recon Loss: 7.4999 
+[32m[11/04 23:31:55 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000006 Step: 230 Total Loss: 15916.5511 Recon Loss: 5.5348 
+[32m[11/04 23:36:39 Resnet_SLT]: [0mTranslating images...
+[32m[11/04 23:38:43 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/04 23:38:43 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt
+  visual_encoder: facebook/mbart-large-50-many-to-many-mmt
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/04 23:38:45 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/04 23:38:46 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/04 23:38:48 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/04 23:38:48 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/04 23:38:48 Resnet_SLT]: [0mAll globbed checkpoints are: []
+[32m[11/04 23:47:01 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000003 Step: 115 Total Loss: 10198.9928 Recon Loss: 8.7596 
+[32m[11/04 23:53:07 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000006 Step: 230 Total Loss: 15988.6586 Recon Loss: 5.5406 
+[32m[11/04 23:56:02 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 00:00:07 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000009 Step: 345 Total Loss: 21631.7308 Recon Loss: 5.9450 
+[32m[11/05 00:09:57 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000011 Step: 460 Total Loss: 27257.9646 Recon Loss: 6.0476 
+[32m[11/05 00:19:51 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 00:19:55 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000014 Step: 575 Total Loss: 32866.6665 Recon Loss: 5.9892 
+[32m[11/05 00:29:57 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000017 Step: 690 Total Loss: 38433.7067 Recon Loss: 6.2677 
+[32m[11/05 00:40:07 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000020 Step: 805 Total Loss: 44021.4577 Recon Loss: 5.8800 
+[32m[11/05 00:45:03 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 00:50:19 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000023 Step: 920 Total Loss: 49604.5488 Recon Loss: 5.7757 
+[32m[11/05 01:00:41 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000026 Step: 1035 Total Loss: 55144.3837 Recon Loss: 6.6788 
+[32m[11/05 01:10:34 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 01:10:44 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000029 Step: 1150 Total Loss: 60680.0412 Recon Loss: 6.3180 
+[32m[11/05 01:10:44 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/05 09:38:49 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/05 09:38:49 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt
+  visual_encoder: facebook/mbart-large-50-many-to-many-mmt
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/05 09:38:51 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/05 09:38:51 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/05 09:38:58 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/05 09:38:58 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/05 09:38:58 Resnet_SLT]: [0mAll globbed checkpoints are: []
+[32m[11/05 09:50:05 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000003 Step: 115 Total Loss: 10189.4157 Recon Loss: 8.6217 
+[32m[11/05 10:00:10 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000006 Step: 230 Total Loss: 15967.7871 Recon Loss: 5.5280 
+[32m[11/05 10:05:10 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 10:10:14 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000009 Step: 345 Total Loss: 21610.7428 Recon Loss: 5.9293 
+[32m[11/05 10:20:15 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000011 Step: 460 Total Loss: 27237.2457 Recon Loss: 6.0434 
+[32m[11/05 10:30:10 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 10:30:15 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000014 Step: 575 Total Loss: 32847.7649 Recon Loss: 5.9911 
+[32m[11/05 10:40:11 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000017 Step: 690 Total Loss: 38417.7116 Recon Loss: 6.2984 
+[32m[11/05 10:50:33 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000020 Step: 805 Total Loss: 44007.4012 Recon Loss: 5.8857 
+[32m[11/05 10:55:33 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 11:00:52 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000023 Step: 920 Total Loss: 49592.4692 Recon Loss: 5.8198 
+[32m[11/05 11:11:20 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000026 Step: 1035 Total Loss: 55134.2279 Recon Loss: 6.6979 
+[32m[11/05 11:21:08 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 11:21:17 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000029 Step: 1150 Total Loss: 60670.0721 Recon Loss: 6.3445 
+[32m[11/05 11:21:17 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/05 11:26:50 Resnet_SLT]: [0mSLT saved state to ..\Resnet_SLT_run1\checkpoint-1150
+[32m[11/05 11:36:24 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000032 Step: 1265 Total Loss: 5413.2419 Recon Loss: 6.1893 
+[32m[11/05 11:45:49 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000034 Step: 1380 Total Loss: 10884.3491 Recon Loss: 5.4683 
+[32m[11/05 11:50:24 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 11:55:25 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000037 Step: 1495 Total Loss: 16362.6766 Recon Loss: 6.0254 
+[32m[11/05 12:05:31 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000040 Step: 1610 Total Loss: 21832.9113 Recon Loss: 4.8132 
+[32m[11/05 12:15:12 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 12:15:27 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000043 Step: 1725 Total Loss: 27320.1468 Recon Loss: 5.3894 
+[32m[11/05 12:25:22 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000046 Step: 1840 Total Loss: 32807.3400 Recon Loss: 5.6507 
+[32m[11/05 12:35:20 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000049 Step: 1955 Total Loss: 38286.9311 Recon Loss: 5.6155 
+[32m[11/05 12:40:04 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 12:45:17 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000052 Step: 2070 Total Loss: 43784.8601 Recon Loss: 5.5035 
+[32m[11/05 12:55:11 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000055 Step: 2185 Total Loss: 49245.1833 Recon Loss: 5.8914 
+[32m[11/05 13:04:38 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 13:04:57 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000057 Step: 2300 Total Loss: 54722.7536 Recon Loss: 6.6860 
+[32m[11/05 13:04:57 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/05 13:19:49 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000060 Step: 2415 Total Loss: 5297.5951 Recon Loss: 6.2638 
+[32m[11/05 13:28:43 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000063 Step: 2530 Total Loss: 10690.2842 Recon Loss: 6.0866 
+[32m[11/05 13:33:00 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 13:38:01 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000066 Step: 2645 Total Loss: 16083.9415 Recon Loss: 5.7470 
+[32m[11/05 13:47:12 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000069 Step: 2760 Total Loss: 21506.7128 Recon Loss: 7.1049 
+[32m[11/05 13:56:01 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 13:56:26 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000072 Step: 2875 Total Loss: 26957.3773 Recon Loss: 5.1383 
+[32m[11/05 14:05:40 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000075 Step: 2990 Total Loss: 32412.9259 Recon Loss: 6.4670 
+[32m[11/05 14:15:27 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000078 Step: 3105 Total Loss: 37842.2679 Recon Loss: 7.0057 
+[32m[11/05 14:19:35 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 14:24:44 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000080 Step: 3220 Total Loss: 43284.8101 Recon Loss: 6.4560 
+[32m[11/05 14:38:08 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000083 Step: 3335 Total Loss: 48758.3050 Recon Loss: 6.3884 
+[32m[11/05 14:46:38 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 14:47:08 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000086 Step: 3450 Total Loss: 54224.5231 Recon Loss: 5.6872 
+[32m[11/05 14:47:08 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/05 15:00:57 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000089 Step: 3565 Total Loss: 5216.3509 Recon Loss: 6.5644 
+[32m[11/05 15:09:26 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000092 Step: 3680 Total Loss: 10597.2256 Recon Loss: 5.4468 
+[32m[11/05 15:13:17 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 15:18:11 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 3795 Total Loss: 15971.6107 Recon Loss: 6.7315 
+[32m[11/05 15:27:23 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 3910 Total Loss: 21386.7081 Recon Loss: 5.2057 
+[32m[11/05 15:35:59 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 15:36:34 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4025 Total Loss: 26788.1459 Recon Loss: 6.2114 
+[32m[11/05 15:45:51 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4140 Total Loss: 32198.3437 Recon Loss: 5.5682 
+[32m[11/05 15:54:53 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4255 Total Loss: 37535.1278 Recon Loss: 5.2663 
+[32m[11/05 15:58:54 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 16:04:08 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4370 Total Loss: 42985.4638 Recon Loss: 6.9259 
+[32m[11/05 16:13:35 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4485 Total Loss: 48395.9522 Recon Loss: 6.1873 
+[32m[11/05 16:22:10 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 16:22:48 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4600 Total Loss: 53825.5432 Recon Loss: 6.7673 
+[32m[11/05 16:22:48 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/05 16:36:41 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4715 Total Loss: 5111.3509 Recon Loss: 6.2201 
+[32m[11/05 16:45:11 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4830 Total Loss: 10418.0669 Recon Loss: 6.0985 
+[32m[11/05 16:48:51 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 16:53:50 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4945 Total Loss: 15735.7932 Recon Loss: 5.2911 
+[32m[11/05 17:03:07 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5060 Total Loss: 21024.8013 Recon Loss: 6.5121 
+[32m[11/05 17:11:46 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 17:12:29 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5175 Total Loss: 26317.2121 Recon Loss: 6.9737 
+[32m[11/05 17:21:41 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5290 Total Loss: 31610.5743 Recon Loss: 5.7664 
+[32m[11/05 17:30:58 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5405 Total Loss: 36848.1842 Recon Loss: 6.9854 
+[32m[11/05 17:34:45 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 17:40:08 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5520 Total Loss: 42102.7769 Recon Loss: 4.9839 
+[32m[11/05 17:49:30 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5635 Total Loss: 47393.8772 Recon Loss: 5.0800 
+[32m[11/05 17:58:03 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 17:58:51 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5750 Total Loss: 52665.4510 Recon Loss: 4.7864 
+[32m[11/05 17:58:51 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/05 18:12:25 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5865 Total Loss: 4953.8816 Recon Loss: 5.2763 
+[32m[11/05 18:21:07 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5980 Total Loss: 10066.4991 Recon Loss: 5.7908 
+[32m[11/05 18:24:42 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 18:29:52 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6095 Total Loss: 15208.5490 Recon Loss: 6.2393 
+[32m[11/05 18:39:01 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6210 Total Loss: 20407.0253 Recon Loss: 5.3402 
+[32m[11/05 18:47:19 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 18:48:12 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6325 Total Loss: 25543.3210 Recon Loss: 5.5064 
+[32m[11/05 18:57:24 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6440 Total Loss: 30746.7063 Recon Loss: 4.6577 
+[32m[11/05 19:06:48 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6555 Total Loss: 35876.9122 Recon Loss: 5.3972 
+[32m[11/05 19:10:22 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 19:16:02 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6670 Total Loss: 41060.3360 Recon Loss: 6.2504 
+[32m[11/05 19:25:21 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6785 Total Loss: 46213.7889 Recon Loss: 5.6384 
+[32m[11/05 19:33:25 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 19:34:18 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6900 Total Loss: 51343.0595 Recon Loss: 5.9578 
+[32m[11/05 19:34:18 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/05 19:48:06 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7015 Total Loss: 4776.3351 Recon Loss: 5.3980 
+[32m[11/05 19:56:34 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7130 Total Loss: 9814.0059 Recon Loss: 5.7750 
+[32m[11/05 19:59:55 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 20:05:08 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7245 Total Loss: 14833.2514 Recon Loss: 4.3676 
+[32m[11/05 20:14:12 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7360 Total Loss: 19855.0200 Recon Loss: 5.5601 
+[32m[11/05 20:22:27 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 20:23:30 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7475 Total Loss: 24852.0016 Recon Loss: 5.0527 
+[32m[11/05 20:32:49 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7590 Total Loss: 29893.7052 Recon Loss: 7.3876 
+[32m[11/05 20:42:01 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7705 Total Loss: 34973.6261 Recon Loss: 7.0097 
+[32m[11/05 20:45:28 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 20:51:06 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7820 Total Loss: 40021.9862 Recon Loss: 6.0210 
+[32m[11/05 21:00:16 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7935 Total Loss: 45074.1330 Recon Loss: 5.4993 
+[32m[11/05 21:08:20 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 21:09:28 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8050 Total Loss: 50110.8218 Recon Loss: 4.6399 
+[32m[11/05 21:09:28 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/05 21:24:07 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8165 Total Loss: 4613.7241 Recon Loss: 4.3126 
+[32m[11/05 21:33:18 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8280 Total Loss: 9530.5057 Recon Loss: 5.1764 
+[32m[11/05 21:36:39 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 21:43:37 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8395 Total Loss: 14469.7340 Recon Loss: 6.4613 
+[32m[11/05 21:58:20 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8510 Total Loss: 19414.5840 Recon Loss: 5.4921 
+[32m[11/05 22:12:18 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 22:13:29 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8625 Total Loss: 24375.4765 Recon Loss: 4.8064 
+[32m[11/05 22:22:32 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8740 Total Loss: 29319.6226 Recon Loss: 5.5953 
+[32m[11/05 22:31:44 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8855 Total Loss: 34244.2081 Recon Loss: 3.9495 
+[32m[11/05 22:39:22 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 22:41:20 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/05 22:41:20 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt
+  visual_encoder: facebook/mbart-large-50-many-to-many-mmt
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/05 22:41:23 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/05 22:41:23 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/05 22:41:31 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/05 22:41:31 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/05 22:41:31 Resnet_SLT]: [0mAll globbed checkpoints are: ['../Resnet_SLT_run1\\checkpoint-1150']
+[32m[11/05 22:41:31 Resnet_SLT]: [0mLoad checkpoint from ..\Resnet_SLT_run1\checkpoint-1150
+[32m[11/05 22:41:40 Resnet_SLT]: [0mResuming at global_step 1150
+[32m[11/05 22:51:53 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000032 Step: 1265 Total Loss: 5513.4869 Recon Loss: 6.3132 
+[32m[11/05 23:01:04 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000034 Step: 1380 Total Loss: 10997.4476 Recon Loss: 5.0357 
+[32m[11/05 23:05:37 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 23:10:28 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000037 Step: 1495 Total Loss: 16484.4064 Recon Loss: 5.3445 
+[32m[11/05 23:19:54 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000040 Step: 1610 Total Loss: 21995.1584 Recon Loss: 5.6259 
+[32m[11/05 23:29:03 Resnet_SLT]: [0mTranslating images...
+[32m[11/05 23:29:18 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000043 Step: 1725 Total Loss: 27516.8497 Recon Loss: 5.1106 
+[32m[11/05 23:38:42 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000046 Step: 1840 Total Loss: 33018.7899 Recon Loss: 5.5814 
+[32m[11/05 23:43:33 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/05 23:43:33 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt
+  visual_encoder: facebook/mbart-large-50-many-to-many-mmt
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/05 23:43:35 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/05 23:43:35 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/05 23:43:43 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/05 23:43:43 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/05 23:43:43 Resnet_SLT]: [0mAll globbed checkpoints are: ['../Resnet_SLT_run1\\checkpoint-1150']
+[32m[11/05 23:43:43 Resnet_SLT]: [0mLoad checkpoint from ..\Resnet_SLT_run1\checkpoint-1150
+[32m[11/05 23:43:51 Resnet_SLT]: [0mResuming at global_step 1150
+[32m[11/05 23:45:25 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/05 23:45:25 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt
+  visual_encoder: facebook/mbart-large-50-many-to-many-mmt
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/05 23:45:27 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/05 23:45:27 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/05 23:45:30 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/05 23:45:30 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/05 23:45:30 Resnet_SLT]: [0mAll globbed checkpoints are: ['../Resnet_SLT_run1\\checkpoint-1150']
+[32m[11/05 23:45:30 Resnet_SLT]: [0mLoad checkpoint from ..\Resnet_SLT_run1\checkpoint-1150
+[32m[11/05 23:45:33 Resnet_SLT]: [0mResuming at global_step 1150
+[32m[11/05 23:57:20 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000032 Step: 1265 Total Loss: 5511.6959 Recon Loss: 6.3148 
