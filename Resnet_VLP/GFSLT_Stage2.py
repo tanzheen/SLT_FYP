@@ -173,7 +173,9 @@ accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_pro
 '''
     
 
-
+'''
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network GFSLT_Stage2.py config=configs/stage2/Resnet_SLT_P14_config.yaml --experiment.project="Resnet_VLP_P14" --experiment.name="Resnet_VLP_P14_run1" --experiment.output_dir="Resnet_VLP_P14_run1" 
+'''
     
 
     

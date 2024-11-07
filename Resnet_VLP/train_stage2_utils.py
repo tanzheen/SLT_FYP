@@ -292,14 +292,14 @@ def train_one_epoch(config, accelerator, model, tokenizer,
                 log_grad_norm(model, accelerator, global_step + 1)
         
 
-            loss_value = total_loss.item()
-            if not math.isfinite(loss_value):
+            loss_value = loss.item()
+            if not math.isfinite(loss_value ):
                 print("Loss is {}, stopping training".format(loss_value))
                 sys.exit(1)
 
-            total_loss += loss_value
+            total_loss += loss.item()
             transformer_logs = {}
-            transformer_logs ['train current loss'] = loss_value 
+            transformer_logs ['train current loss'] = loss.item()
             transformer_logs ['train total_loss'] = total_loss
 
 

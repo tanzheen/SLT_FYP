@@ -4,6 +4,7 @@ experiment:
   output_dir: "../Resnet_VLP_run1"
   save_every: 1
   log_every: 0.1
+  translate_every: 0.25
   eval_every: 1
   log_grad_norm_every: 0.1
   resume: True

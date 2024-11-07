@@ -6,7 +6,7 @@ import torch
 from torch.optim import lr_scheduler as scheduler
 
 # *transformers
-from transformers import MBartForConditionalGeneration, MBart50Tokenizer,MBartConfig
+from transformers import MBartForConditionalGeneration, MBartTokenizer,MBartConfig
 
 # user defined
 from signdata import * 
@@ -97,7 +97,7 @@ def main ():
         set_seed(config.training.seed, device_specific=True)
 
     ## Create dataset 
-    tokenizer = MBart50Tokenizer.from_pretrained(config.model.tokenizer,
+    tokenizer = MBartTokenizer.from_pretrained(config.model.tokenizer,
                                                src_lang=config.dataset.lang,
                                                  tgt_lang= config.dataset.lang)
     
