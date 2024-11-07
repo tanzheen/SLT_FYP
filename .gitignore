@@ -43,3 +43,4 @@ TiTok_SLT/vis_tokenizer/generator_titok_l32.bin
 /Resnet_VLP/transferred_mbart_model
 /Resnet_SLT_run1
 /data_analysis/__pycache__
+/Resnet_VLP/wandb

@@ -322,7 +322,8 @@ class gloss_free_model(BaseModel):
         decoder_input_ids = shift_tokens_right(tgt_input['input_ids'].cuda(), self.mbart.config.pad_token_id)
         out = self.mbart(inputs_embeds = inputs_embeds,
                     attention_mask = attention_mask.cuda(),
-                    decoder_input_ids = decoder_input_ids,
+                    #decoder_input_ids = decoder_input_ids,
+                    labels = tgt_input['input_ids'].cuda(),
                     decoder_attention_mask = tgt_input['attention_mask'].cuda(),
                     return_dict = True,
                     )

@@ -1259,3 +1259,328 @@ config: configs/stage2/Resnet_SLT_CSL_config.yaml
 [32m[11/05 23:45:30 Resnet_SLT]: [0mLoad checkpoint from ..\Resnet_SLT_run1\checkpoint-1150
 [32m[11/05 23:45:33 Resnet_SLT]: [0mResuming at global_step 1150
 [32m[11/05 23:57:20 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000032 Step: 1265 Total Loss: 5511.6959 Recon Loss: 6.3148 
+[32m[11/06 00:08:13 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000034 Step: 1380 Total Loss: 10998.1729 Recon Loss: 5.0527 
+[32m[11/06 00:13:24 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 00:18:58 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000037 Step: 1495 Total Loss: 16485.4649 Recon Loss: 5.3758 
+[32m[11/06 00:29:50 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000040 Step: 1610 Total Loss: 21995.0836 Recon Loss: 5.6439 
+[32m[11/06 00:40:21 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 00:40:39 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000043 Step: 1725 Total Loss: 27519.5678 Recon Loss: 5.0936 
+[32m[11/06 00:51:25 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000046 Step: 1840 Total Loss: 33017.8010 Recon Loss: 5.5114 
+[32m[11/06 01:02:19 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000049 Step: 1955 Total Loss: 38542.8383 Recon Loss: 5.5694 
+[32m[11/06 01:07:20 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 01:13:03 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000052 Step: 2070 Total Loss: 44079.1054 Recon Loss: 5.3388 
+[32m[11/06 01:23:52 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000055 Step: 2185 Total Loss: 49589.9195 Recon Loss: 5.8516 
+[32m[11/06 01:34:00 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 01:34:22 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000057 Step: 2300 Total Loss: 55115.2753 Recon Loss: 5.7627 
+[32m[11/06 01:34:22 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 01:39:53 Resnet_SLT]: [0mSLT saved state to ..\Resnet_SLT_run1\checkpoint-2300
+[32m[11/06 01:50:25 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000060 Step: 2415 Total Loss: 5407.7622 Recon Loss: 5.6332 
+[32m[11/06 02:00:38 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000063 Step: 2530 Total Loss: 10863.2267 Recon Loss: 5.6301 
+[32m[11/06 02:05:27 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 02:11:04 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000066 Step: 2645 Total Loss: 16322.0778 Recon Loss: 6.2514 
+[32m[11/06 02:21:52 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000069 Step: 2760 Total Loss: 21795.3510 Recon Loss: 4.6054 
+[32m[11/06 02:32:03 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 02:32:34 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000072 Step: 2875 Total Loss: 27286.7139 Recon Loss: 5.5176 
+[32m[11/06 02:43:13 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000075 Step: 2990 Total Loss: 32777.9539 Recon Loss: 5.8188 
+[32m[11/06 02:53:57 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000078 Step: 3105 Total Loss: 38270.3872 Recon Loss: 5.6483 
+[32m[11/06 02:58:51 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 03:04:41 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000080 Step: 3220 Total Loss: 43771.6092 Recon Loss: 5.1402 
+[32m[11/06 03:15:22 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000083 Step: 3335 Total Loss: 49247.3284 Recon Loss: 5.5909 
+[32m[11/06 03:25:20 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 03:25:50 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000086 Step: 3450 Total Loss: 54739.8737 Recon Loss: 6.9859 
+[32m[11/06 03:25:50 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 03:41:21 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000089 Step: 3565 Total Loss: 5295.9906 Recon Loss: 6.3639 
+[32m[11/06 03:51:01 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000092 Step: 3680 Total Loss: 10702.1370 Recon Loss: 5.8418 
+[32m[11/06 03:55:36 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 04:01:24 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 3795 Total Loss: 16099.0310 Recon Loss: 5.8648 
+[32m[11/06 04:11:56 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 3910 Total Loss: 21517.8492 Recon Loss: 7.2238 
+[32m[11/06 04:21:57 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 04:22:35 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4025 Total Loss: 26969.6434 Recon Loss: 5.2697 
+[32m[11/06 04:33:10 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4140 Total Loss: 32434.6946 Recon Loss: 6.4577 
+[32m[11/06 04:44:08 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4255 Total Loss: 37850.5239 Recon Loss: 7.0916 
+[32m[11/06 04:48:40 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 04:54:38 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4370 Total Loss: 43276.0974 Recon Loss: 6.7402 
+[32m[11/06 05:07:39 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4485 Total Loss: 48722.6568 Recon Loss: 6.2160 
+[32m[11/06 05:17:13 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 05:18:00 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4600 Total Loss: 54156.5517 Recon Loss: 5.3841 
+[32m[11/06 05:18:00 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 05:33:24 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4715 Total Loss: 5183.8649 Recon Loss: 6.1361 
+[32m[11/06 05:43:25 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4830 Total Loss: 10497.7806 Recon Loss: 5.4435 
+[32m[11/06 05:47:46 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 05:53:40 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4945 Total Loss: 15789.6720 Recon Loss: 6.7649 
+[32m[11/06 06:04:17 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5060 Total Loss: 21097.9928 Recon Loss: 4.9826 
+[32m[11/06 06:14:01 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 06:14:57 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5175 Total Loss: 26396.1345 Recon Loss: 6.0349 
+[32m[11/06 06:25:36 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5290 Total Loss: 31676.1227 Recon Loss: 5.5459 
+[32m[11/06 06:36:02 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5405 Total Loss: 36877.4610 Recon Loss: 5.1441 
+[32m[11/06 06:40:26 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 06:46:36 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5520 Total Loss: 42196.2464 Recon Loss: 6.8876 
+[32m[11/06 06:57:30 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5635 Total Loss: 47476.2511 Recon Loss: 6.0975 
+[32m[11/06 07:07:16 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 07:09:47 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5750 Total Loss: 52784.1727 Recon Loss: 6.8230 
+[32m[11/06 07:09:47 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 07:25:22 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5865 Total Loss: 4978.6190 Recon Loss: 5.9412 
+[32m[11/06 07:35:18 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5980 Total Loss: 10162.6154 Recon Loss: 5.9050 
+[32m[11/06 07:39:26 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 07:45:27 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6095 Total Loss: 15340.1211 Recon Loss: 5.4039 
+[32m[11/06 07:56:19 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6210 Total Loss: 20506.6736 Recon Loss: 6.6574 
+[32m[11/06 08:06:03 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 08:07:04 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6325 Total Loss: 25664.7064 Recon Loss: 6.7647 
+[32m[11/06 08:16:22 Resnet_SLT]: [0mSaving config to ..\Resnet_SLT_run1\config.yaml
+[32m[11/06 08:16:22 Resnet_SLT]: [0mConfig:
+experiment:
+  project: Resnet_SLT
+  name: Resnet_SLT_run1
+  output_dir: ../Resnet_SLT_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_SLT_run1\logs
+model:
+  tokenizer: facebook/mbart-large-50-many-to-many-mmt
+  visual_encoder: facebook/mbart-large-50-many-to-many-mmt
+  sign_proj: true
+dataset:
+  name: CSL-Daily
+  lang: zh_CN
+  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
+  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
+  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
+  img_path: ../../CSL-Daily/sentence/frames_512x512/
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_CSL_config.yaml
+--experiment:
+  project: Resnet_VLP_CSL
+  name: Resnet_VLP_CSL_run1
+  output_dir: Resnet_VLP_CSL_run1
+
+[32m[11/06 08:16:24 Resnet_SLT]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/06 08:16:24 Resnet_SLT]: [0mCreating model and loss module.
+[32m[11/06 08:16:32 Resnet_SLT]: [0mCreating optimizers.
+[32m[11/06 08:16:32 Resnet_SLT]: [0mCreating lr_schedulers.
+[32m[11/06 08:16:32 Resnet_SLT]: [0mAll globbed checkpoints are: ['../Resnet_SLT_run1\\checkpoint-1150', '../Resnet_SLT_run1\\checkpoint-2300']
+[32m[11/06 08:16:32 Resnet_SLT]: [0mLoad checkpoint from ..\Resnet_SLT_run1\checkpoint-2300
+[32m[11/06 08:16:41 Resnet_SLT]: [0mResuming at global_step 2300
+[32m[11/06 08:28:05 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000060 Step: 2415 Total Loss: 5532.8095 Recon Loss: 5.7060 
+[32m[11/06 08:38:44 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000063 Step: 2530 Total Loss: 11069.7257 Recon Loss: 4.4285 
+[32m[11/06 08:43:40 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 08:49:28 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000066 Step: 2645 Total Loss: 16605.2692 Recon Loss: 5.1820 
+[32m[11/06 09:00:24 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000069 Step: 2760 Total Loss: 22190.6351 Recon Loss: 5.1169 
+[32m[11/06 09:10:49 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 09:11:19 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000072 Step: 2875 Total Loss: 27813.4217 Recon Loss: 4.4854 
+[32m[11/06 09:22:13 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000075 Step: 2990 Total Loss: 33395.4090 Recon Loss: 5.1440 
+[32m[11/06 09:33:15 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000078 Step: 3105 Total Loss: 39014.4892 Recon Loss: 5.3894 
+[32m[11/06 09:38:08 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 09:44:05 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000080 Step: 3220 Total Loss: 44649.8078 Recon Loss: 4.7447 
+[32m[11/06 09:54:59 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000083 Step: 3335 Total Loss: 50300.6947 Recon Loss: 5.5503 
+[32m[11/06 10:05:03 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 10:05:36 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000086 Step: 3450 Total Loss: 55973.5364 Recon Loss: 5.4358 
+[32m[11/06 10:05:36 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 10:11:13 Resnet_SLT]: [0mSLT saved state to ..\Resnet_SLT_run1\checkpoint-3450
+[32m[11/06 10:22:07 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000089 Step: 3565 Total Loss: 5478.9494 Recon Loss: 5.6806 
+[32m[11/06 10:32:40 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000092 Step: 3680 Total Loss: 10992.8253 Recon Loss: 5.8939 
+[32m[11/06 10:37:28 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 10:43:18 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 3795 Total Loss: 16487.0529 Recon Loss: 6.4712 
+[32m[11/06 10:54:15 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 3910 Total Loss: 22012.8596 Recon Loss: 4.5575 
+[32m[11/06 11:04:24 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 11:05:06 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4025 Total Loss: 27530.4243 Recon Loss: 5.4342 
+[32m[11/06 11:15:56 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4140 Total Loss: 33068.2698 Recon Loss: 5.8841 
+[32m[11/06 11:26:50 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4255 Total Loss: 38596.0259 Recon Loss: 5.5560 
+[32m[11/06 11:31:37 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 11:37:40 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4370 Total Loss: 44109.9596 Recon Loss: 4.7204 
+[32m[11/06 11:48:26 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4485 Total Loss: 49590.9674 Recon Loss: 5.2503 
+[32m[11/06 11:58:29 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 11:59:12 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4600 Total Loss: 55085.9708 Recon Loss: 7.0291 
+[32m[11/06 11:59:12 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 12:04:50 Resnet_SLT]: [0mSLT saved state to ..\Resnet_SLT_run1\checkpoint-4600
+[32m[11/06 12:15:33 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4715 Total Loss: 5262.0655 Recon Loss: 6.5499 
+[32m[11/06 12:25:49 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4830 Total Loss: 10620.0133 Recon Loss: 5.7273 
+[32m[11/06 12:30:24 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 12:36:47 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4945 Total Loss: 15956.9231 Recon Loss: 5.2025 
+[32m[11/06 12:47:40 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5060 Total Loss: 21311.7884 Recon Loss: 6.9781 
+[32m[11/06 12:57:49 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 12:58:43 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5175 Total Loss: 26698.6645 Recon Loss: 5.4942 
+[32m[11/06 13:09:38 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5290 Total Loss: 32075.5469 Recon Loss: 6.6864 
+[32m[11/06 13:20:47 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5405 Total Loss: 37393.9877 Recon Loss: 6.8946 
+[32m[11/06 13:25:16 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 13:31:44 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5520 Total Loss: 42710.5046 Recon Loss: 6.7137 
+[32m[11/06 13:47:59 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5635 Total Loss: 48055.0111 Recon Loss: 6.4552 
+[32m[11/06 13:57:35 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 13:58:33 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5750 Total Loss: 53375.7164 Recon Loss: 5.4553 
+[32m[11/06 13:58:33 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 14:04:07 Resnet_SLT]: [0mSLT saved state to ..\Resnet_SLT_run1\checkpoint-5750
+[32m[11/06 14:15:38 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5865 Total Loss: 5057.5913 Recon Loss: 6.1047 
+[32m[11/06 14:26:22 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5980 Total Loss: 10261.0498 Recon Loss: 5.1496 
+[32m[11/06 14:30:49 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 14:37:12 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6095 Total Loss: 15450.1800 Recon Loss: 6.3375 
+[32m[11/06 15:10:52 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6210 Total Loss: 20658.6977 Recon Loss: 4.8702 
+[32m[11/06 15:46:05 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 15:50:01 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6325 Total Loss: 25838.7814 Recon Loss: 5.6780 
+[32m[11/06 16:32:44 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6440 Total Loss: 31010.9719 Recon Loss: 5.0787 
+[32m[11/06 17:10:35 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6555 Total Loss: 36116.0836 Recon Loss: 5.0089 
+[32m[11/06 17:26:13 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 17:32:51 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6670 Total Loss: 41335.3649 Recon Loss: 6.0944 
+[32m[11/06 17:54:40 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6785 Total Loss: 46529.1926 Recon Loss: 5.9843 
+[32m[11/06 18:06:07 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 18:07:16 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6900 Total Loss: 51740.1488 Recon Loss: 6.9315 
+[32m[11/06 18:07:16 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 18:23:01 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7015 Total Loss: 4885.8123 Recon Loss: 6.1159 
+[32m[11/06 18:33:04 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7130 Total Loss: 9963.6119 Recon Loss: 5.8835 
+[32m[11/06 18:37:03 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 18:43:16 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7245 Total Loss: 15056.8028 Recon Loss: 5.4078 
+[32m[11/06 18:54:18 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7360 Total Loss: 20123.1035 Recon Loss: 6.7893 
+[32m[11/06 19:03:59 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 19:05:17 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7475 Total Loss: 25179.3586 Recon Loss: 7.0458 
+[32m[11/06 19:16:05 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7590 Total Loss: 30262.9179 Recon Loss: 5.5477 
+[32m[11/06 19:26:55 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7705 Total Loss: 35271.6654 Recon Loss: 6.9403 
+[32m[11/06 19:30:56 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 19:37:37 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7820 Total Loss: 40291.8656 Recon Loss: 4.8781 
+[32m[11/06 19:48:39 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 7935 Total Loss: 45381.3284 Recon Loss: 4.5121 
+[32m[11/06 19:58:29 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 19:59:49 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8050 Total Loss: 50440.0987 Recon Loss: 4.8001 
+[32m[11/06 19:59:49 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 20:15:25 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8165 Total Loss: 4763.6578 Recon Loss: 5.3121 
+[32m[11/06 20:25:42 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8280 Total Loss: 9669.7181 Recon Loss: 5.4035 
+[32m[11/06 20:29:34 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 20:35:58 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8395 Total Loss: 14616.0991 Recon Loss: 6.0135 
+[32m[11/06 20:46:46 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8510 Total Loss: 19619.1930 Recon Loss: 5.7943 
+[32m[11/06 20:56:02 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 20:57:28 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8625 Total Loss: 24551.2946 Recon Loss: 5.1953 
+[32m[11/06 21:08:14 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8740 Total Loss: 29546.9429 Recon Loss: 4.4500 
+[32m[11/06 21:19:18 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8855 Total Loss: 34479.2448 Recon Loss: 5.3181 
+[32m[11/06 21:23:06 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 21:29:59 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 8970 Total Loss: 39458.8358 Recon Loss: 6.2899 
+[32m[11/06 21:40:50 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 9085 Total Loss: 44411.3194 Recon Loss: 5.4496 
+[32m[11/06 21:49:49 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 21:51:15 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 9200 Total Loss: 49312.5659 Recon Loss: 5.8324 
+[32m[11/06 21:51:15 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 22:06:44 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 9315 Total Loss: 4605.9499 Recon Loss: 5.4075 
+[32m[11/06 22:16:38 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 9430 Total Loss: 9445.0889 Recon Loss: 5.3266 
+[32m[11/06 22:20:14 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 22:26:45 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 9545 Total Loss: 14286.5695 Recon Loss: 4.3864 
+[32m[11/06 22:37:27 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 9660 Total Loss: 19133.2171 Recon Loss: 5.3131 
+[32m[11/06 22:46:34 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 22:48:16 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 9775 Total Loss: 23965.7472 Recon Loss: 4.8566 
+[32m[11/06 22:59:06 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 9890 Total Loss: 28828.0475 Recon Loss: 6.9537 
+[32m[11/06 23:09:47 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 10005 Total Loss: 33748.9631 Recon Loss: 6.9355 
+[32m[11/06 23:13:26 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 23:20:25 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 10120 Total Loss: 38628.6233 Recon Loss: 5.7621 
+[32m[11/06 23:31:06 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 10235 Total Loss: 43509.1811 Recon Loss: 5.8644 
+[32m[11/06 23:40:04 Resnet_SLT]: [0mTranslating images...
+[32m[11/06 23:41:45 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 10350 Total Loss: 48374.1219 Recon Loss: 4.3599 
+[32m[11/06 23:41:45 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/06 23:57:27 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 10465 Total Loss: 4479.9453 Recon Loss: 4.1137 
+[32m[11/07 00:07:29 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 10580 Total Loss: 9265.6173 Recon Loss: 4.8487 
+[32m[11/07 00:10:49 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 00:17:52 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 10695 Total Loss: 14063.5893 Recon Loss: 6.1988 
+[32m[11/07 00:28:38 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 10810 Total Loss: 18860.5676 Recon Loss: 4.9800 
+[32m[11/07 00:37:41 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 00:40:54 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 10925 Total Loss: 23659.0348 Recon Loss: 4.8175 
+[32m[11/07 00:51:21 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 11040 Total Loss: 28442.2930 Recon Loss: 5.2240 
+[32m[11/07 01:01:59 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 11155 Total Loss: 33223.9226 Recon Loss: 3.8993 
+[32m[11/07 01:07:18 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 01:14:36 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 11270 Total Loss: 38039.0738 Recon Loss: 6.2523 
+[32m[11/07 01:25:28 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 11385 Total Loss: 42834.0670 Recon Loss: 6.2023 
+[32m[11/07 01:38:09 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 01:40:03 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 11500 Total Loss: 47602.2127 Recon Loss: 4.3288 
+[32m[11/07 01:40:03 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/07 01:55:48 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 11615 Total Loss: 4422.6574 Recon Loss: 4.9552 
+[32m[11/07 02:05:58 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 11730 Total Loss: 9123.3719 Recon Loss: 4.5126 
+[32m[11/07 02:09:07 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 02:16:21 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 11845 Total Loss: 13826.2313 Recon Loss: 6.2439 
+[32m[11/07 02:27:08 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 11960 Total Loss: 18516.3009 Recon Loss: 5.3124 
+[32m[11/07 02:35:58 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 02:37:58 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 12075 Total Loss: 23235.9837 Recon Loss: 4.4194 
+[32m[11/07 02:48:49 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 12190 Total Loss: 27947.2258 Recon Loss: 5.0174 
+[32m[11/07 02:59:27 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 12305 Total Loss: 32670.1270 Recon Loss: 5.6054 
+[32m[11/07 03:02:55 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 03:10:14 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 12420 Total Loss: 37398.9512 Recon Loss: 5.8999 
+[32m[11/07 03:20:58 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 12535 Total Loss: 42151.4686 Recon Loss: 4.5314 
+[32m[11/07 03:29:48 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 03:31:59 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 12650 Total Loss: 46893.0572 Recon Loss: 5.0804 
+[32m[11/07 03:31:59 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/07 03:47:45 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 12765 Total Loss: 4277.5644 Recon Loss: 3.9370 
+[32m[11/07 03:57:47 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 12880 Total Loss: 8885.6586 Recon Loss: 4.1394 
+[32m[11/07 04:00:53 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 04:08:06 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 12995 Total Loss: 13543.3294 Recon Loss: 4.7157 
+[32m[11/07 04:19:47 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 13110 Total Loss: 18153.1497 Recon Loss: 5.4970 
+[32m[11/07 04:30:22 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 04:33:19 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 13225 Total Loss: 22846.2190 Recon Loss: 5.6649 
+[32m[11/07 04:47:01 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 13340 Total Loss: 27463.9277 Recon Loss: 5.7054 
+[32m[11/07 05:01:06 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 13455 Total Loss: 32093.4111 Recon Loss: 5.8904 
+[32m[11/07 05:05:35 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 05:15:44 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 13570 Total Loss: 36811.2003 Recon Loss: 4.6044 
+[32m[11/07 05:30:05 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 13685 Total Loss: 41442.7846 Recon Loss: 5.0920 
+[32m[11/07 05:40:19 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 05:42:34 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 13800 Total Loss: 46096.5231 Recon Loss: 5.7216 
+[32m[11/07 05:42:34 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/07 05:58:33 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 13915 Total Loss: 4140.5194 Recon Loss: 5.6927 
+[32m[11/07 06:08:55 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 14030 Total Loss: 8674.7060 Recon Loss: 5.1051 
+[32m[11/07 06:11:58 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 06:19:25 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 14145 Total Loss: 13280.9770 Recon Loss: 6.2959 
+[32m[11/07 06:30:13 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 14260 Total Loss: 17880.9709 Recon Loss: 7.7459 
+[32m[11/07 06:38:35 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 06:40:53 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 14375 Total Loss: 22503.8675 Recon Loss: 5.0297 
+[32m[11/07 06:51:43 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 14490 Total Loss: 27082.0746 Recon Loss: 5.2324 
+[32m[11/07 07:03:24 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 14605 Total Loss: 31658.4463 Recon Loss: 4.4240 
+[32m[11/07 07:06:41 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 07:15:16 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 14720 Total Loss: 36214.3687 Recon Loss: 5.2459 
+[32m[11/07 07:29:35 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 14835 Total Loss: 40813.8147 Recon Loss: 4.8621 
+[32m[11/07 07:40:56 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 07:43:42 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 14950 Total Loss: 45391.2394 Recon Loss: 3.9638 
+[32m[11/07 07:43:42 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/07 07:59:18 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 15065 Total Loss: 4119.7312 Recon Loss: 4.2594 
+[32m[11/07 08:09:21 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 15180 Total Loss: 8686.0070 Recon Loss: 3.8647 
+[32m[11/07 08:12:00 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 08:19:24 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 15295 Total Loss: 13209.8339 Recon Loss: 4.5716 
+[32m[11/07 08:30:19 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 15410 Total Loss: 17754.0074 Recon Loss: 4.6304 
+[32m[11/07 08:38:37 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 08:42:26 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 15525 Total Loss: 22259.1952 Recon Loss: 4.9375 
+[32m[11/07 08:53:22 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 15640 Total Loss: 26800.9017 Recon Loss: 4.5037 
+[32m[11/07 09:04:00 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 15755 Total Loss: 31357.6137 Recon Loss: 4.4662 
+[32m[11/07 09:06:42 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 09:14:35 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 15870 Total Loss: 35872.9509 Recon Loss: 5.0357 
+[32m[11/07 09:25:24 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 15985 Total Loss: 40422.2274 Recon Loss: 4.2293 
+[32m[11/07 09:33:47 Resnet_SLT]: [0mTranslating images...
+[32m[11/07 09:36:21 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 16100 Total Loss: 44966.4875 Recon Loss: 4.5510 
+[32m[11/07 09:36:21 Resnet_SLT]: [0mComputing metrics on the validation set.
+[32m[11/07 09:51:56 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 16215 Total Loss: 4030.0246 Recon Loss: 5.9259 
+[32m[11/07 10:02:13 Resnet_SLT]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 16330 Total Loss: 8492.9911 Recon Loss: 6.8136 
+[32m[11/07 10:04:45 Resnet_SLT]: [0mTranslating images...

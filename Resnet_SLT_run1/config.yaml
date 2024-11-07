@@ -48,7 +48,7 @@ training:
   per_gpu_batch_size: 2
   mixed_precision: fp16
   enable_tf32: true
-  enable_wandb: false
+  enable_wandb: true
   use_ema: false
   seed: 42
   num_translated_images: 4
