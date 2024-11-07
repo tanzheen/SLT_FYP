@@ -10,9 +10,9 @@ experiment:
   init_weight:
 
 model:
-  tokenizer: /hpctmp/e0724993/mbart_model
-  transformer: /hpctmp/e0724993/mbart_model # textCLIP only = 12 layers
-  visual_encoder: /hpctmp/e0724993/pretrain_models/mytran # text decoder and Image CLIP = 3 layers
+  tokenizer: /hpctmp/e0724993/pretrain_models/MBart_trimmed_CSL
+  transformer: /hpctmp/e0724993/pretrain_models/MBart_trimmed_CSL # textCLIP only = 12 layers
+  visual_encoder: /hpctmp/e0724993/pretrain_models/mytran_CSL # text decoder and Image CLIP = 3 layers
   sign_proj: True
 
 dataset:

@@ -6,12 +6,13 @@ experiment:
   log_every: 0.1
   eval_every: 1
   log_grad_norm_every: 0.25
+  translate_every: 0.25 
   resume: True
   init_weight:
 
 model:
-  tokenizer: /hpctmp/e0724993/pretrain_models/MBart_trimmed # ./pretrain_models/mbart_model
-  transformer: /hpctmp/e0724993/pretrain_models/MBart_trimmed # textCLIP only = 12 layers
+  tokenizer: /hpctmp/e0724993/pretrain_models/MBart_proun # ./pretrain_models/mbart_model
+  transformer: /hpctmp/e0724993/pretrain_models/MBart_proun # textCLIP only = 12 layers
   visual_encoder: /hpctmp/e0724993/pretrain_models/mytran # text decoder and Image CLIP = 3 layers
   sign_proj: True
 
