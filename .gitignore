@@ -44,3 +44,5 @@ TiTok_SLT/vis_tokenizer/generator_titok_l32.bin
 /Resnet_SLT_run1
 /data_analysis/__pycache__
 /Resnet_VLP/wandb
+/Resnet_VLP/text_decoder
+/Resnet_VLP/unwrapped_model
