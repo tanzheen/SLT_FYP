@@ -1,7 +1,7 @@
 experiment:
-  project: "Resnet_VLP"
-  name: "Resnet_VLP_run1"
-  output_dir: "../Resnet_VLP_run1"
+  project: "Resnet_VLP_P14"
+  name: "Resnet_VLP_P14_run1"
+  output_dir: "../Resnet_VLP_P14_run1"
   save_every: 1
   log_every: 0.1
   eval_every: 1
@@ -10,18 +10,18 @@ experiment:
   init_weight:
 
 model:
-  tokenizer: facebook/mbart-large-50-many-to-many-mmt # ./pretrain_models/mbart_model
-  transformer: facebook/mbart-large-50-many-to-many-mmt # textCLIP only = 12 layers
+  tokenizer: ./pretrain_models/MBart_trimmed # ./pretrain_models/mbart_model
+  transformer: ./pretrain_models/MBart_trimmed # textCLIP only = 12 layers
   visual_encoder: ./pretrain_models/mytran # text decoder and Image CLIP = 3 layers
   sign_proj: True
 
 dataset:
-  name: CSL-Daily
-  lang: zh_CN
-  train: ../../CSL-Daily/sentence_label/processed/labels_train.pkl
-  dev: ../../CSL-Daily/sentence_label/processed/labels_dev.pkl
-  test: ../../CSL-Daily/sentence_label/processed/labels_test.pkl
-  img_path: ../../CSL-Daily/sentence/frames_512x512/ # + <train/dev/test> + <video_name>
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px # + <train/dev/test> + <video_name>
   max_length: 300
   params:
     num_workers: 4
@@ -52,7 +52,7 @@ training:
   per_gpu_batch_size: 4
   mixed_precision: "no"
   enable_tf32: True
-  enable_wandb: False
+  enable_wandb: True
   use_ema: False
   seed: 42
   num_translated_images: 4

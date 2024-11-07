@@ -276,7 +276,7 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
     data_time_meter = AverageMeter()
     end = time.time()
 
-    total_loss = 0
+    total_training_loss = 0
     transformer_logs = defaultdict(float)
 
     loss_img = criterion
@@ -317,10 +317,10 @@ def train_one_epoch(config, accelerator, model, criterion, tokenizer,
                 print("Loss is {}, stopping training".format(loss_value))
                 sys.exit(1)
 
-            total_loss += loss_value
+            total_training_loss += loss_value
             transformer_logs = {}
             transformer_logs ['train current loss'] = loss_value 
-            transformer_logs ['train total_loss'] = total_loss
+            transformer_logs ['train total_loss'] = total_training_loss
 
 
         # update the text decoder parames

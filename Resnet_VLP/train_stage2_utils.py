@@ -204,7 +204,7 @@ def translate_images(model, src, tgt, accelerator, config, global_step, output_d
             src,
             decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang],
             num_beams=4,
-            max_new_tokens   =150
+            max_new_tokens=150
         )
 
         # Decode the generated token IDs
@@ -214,14 +214,13 @@ def translate_images(model, src, tgt, accelerator, config, global_step, output_d
         # Log translations locally to text files
         root = Path(output_dir) / "train_translations"
         os.makedirs(root, exist_ok=True)
-        for i, (name, pred,gt) in enumerate(zip(src['name_batch'], generated_batch, tgt_batch)):
+        for i, (pred,gt) in enumerate(zip(generated_batch, tgt_batch)):
             filename = f"{global_step:08}_t-{i:03}.txt"
             path = os.path.join(root, filename)
             
             # Save each translation as a separate text file
             with open(path, "w", encoding="utf-8") as f:
                 f.write(f"Sample {i + 1}:\n")
-                f.write(f"Name        : {name}\n")
                 f.write(f"Ground Truth: {gt}\n")
                 f.write(f"Prediction  : {pred}\n")
         
@@ -293,7 +292,7 @@ def train_one_epoch(config, accelerator, model, tokenizer,
                 log_grad_norm(model, accelerator, global_step + 1)
         
 
-            loss_value = loss.item()
+            loss_value = total_loss.item()
             if not math.isfinite(loss_value):
                 print("Loss is {}, stopping training".format(loss_value))
                 sys.exit(1)

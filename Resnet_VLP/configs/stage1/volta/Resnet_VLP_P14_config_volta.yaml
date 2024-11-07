@@ -1,7 +1,7 @@
 experiment:
-  project: "Resnet_VLP"
-  name: "Resnet_VLP_run1"
-  output_dir: "/scratch2/e0724993/Resnet_VLP_run1"
+  project: "Resnet_VLP_P14"
+  name: "Resnet_VLP_P14_run1"
+  output_dir: "/scratch2/e0724993/Resnet_VLP_P14_run1"
   save_every: 1
   log_every: 0.1
   eval_every: 1
@@ -10,18 +10,18 @@ experiment:
   init_weight:
 
 model:
-  tokenizer: /hpctmp/e0724993/mbart_model
-  transformer: /hpctmp/e0724993/mbart_model # textCLIP only = 12 layers
+  tokenizer: /hpctmp/e0724993/pretrain_models/MBart_trimmed # ./pretrain_models/mbart_model
+  transformer: /hpctmp/e0724993/pretrain_models/MBart_trimmed # textCLIP only = 12 layers
   visual_encoder: /hpctmp/e0724993/pretrain_models/mytran # text decoder and Image CLIP = 3 layers
   sign_proj: True
 
 dataset:
-  name: CSL-Daily
-  lang: zh_CN
-  train: /hpctmp/e0724993/CSL-Daily/sentence_label/processed/labels_train.pkl
-  dev: /hpctmp/e0724993/CSL-Daily/sentence_label/processed/labels_dev.pkl
-  test: /hpctmp/e0724993/CSL-Daily/sentence_label/processed/labels_test.pkl
-  img_path: /hpctmp/e0724993/CSL-Daily/sentence/frames_512x512/ # + <train/dev/test> + <video_name>
+  name: PHOENIX2014T
+  lang: de_DE 
+  train: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px # + <train/dev/test> + <video_name>
   max_length: 300
   params:
     num_workers: 4
@@ -35,17 +35,17 @@ dataset:
 optimizer:
   name: adamw
   params:
-    learning_rate: 5e-4
+    learning_rate: 1e-4
     beta1: 0.9
     beta2: 0.99
-    weight_decay: 1e-4
+    weight_decay: 1e-5
 
 lr_scheduler:
   scheduler: cosine
   params:
     learning_rate: ${optimizer.params.learning_rate}
     warmup_steps: 4000
-    end_lr: 1e-4
+    end_lr: 1e-5
 
 training:
   gradient_accumulation_steps: 8 
