@@ -348,3 +348,1109 @@ config: configs/stage2/Resnet_SLT_P14_config.yaml
 [32m[11/07 10:18:35 Resnet_VLP_P14]: [0mCreating optimizers.
 [32m[11/07 10:18:35 Resnet_VLP_P14]: [0mCreating lr_schedulers.
 [32m[11/07 10:18:36 Resnet_VLP_P14]: [0mAll globbed checkpoints are: []
+[32m[11/07 10:24:45 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000001 Step: 44 Total Loss: 6562.0026 Recon Loss: 16.2467 
+[32m[11/07 10:28:35 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000002 Step: 88 Total Loss: 11902.2454 Recon Loss: 12.7657 
+[32m[11/07 10:31:38 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 10:35:35 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000003 Step: 132 Total Loss: 15710.1891 Recon Loss: 9.7030 
+[32m[11/07 10:38:43 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000004 Step: 176 Total Loss: 18655.2024 Recon Loss: 7.8793 
+[32m[11/07 10:42:20 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000006 Step: 220 Total Loss: 21295.3025 Recon Loss: 6.9898 
+[32m[11/07 10:42:20 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 11:10:25 Sign2Text]: [0mSaving config to ..\Resnet_VLP_P14_run1\config.yaml
+[32m[11/07 11:10:25 Sign2Text]: [0mConfig:
+experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: ../Resnet_VLP_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_VLP_P14_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  transformer: ./pretrain_models/MBart_proun
+  visual_encoder: ./pretrain_models/mytran
+  sign_proj: true
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 4
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage1/Resnet_VLP_P14_config.yaml
+--experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: Resnet_VLP_P14_run1
+
+[32m[11/07 11:10:26 Sign2Text]: [0mCreating Signloaders. Batch_size = 4
+[32m[11/07 11:10:26 Sign2Text]: [0mCreating model and loss module.
+[32m[11/07 11:10:26 Sign2Text]: [0mCreating optimizers.
+[32m[11/07 11:10:26 Sign2Text]: [0mCreating lr_schedulers.
+[32m[11/07 11:10:29 Sign2Text]: [0mAll globbed checkpoints are: []
+[32m[11/07 11:12:34 Sign2Text]: [0mSaving config to ..\Resnet_VLP_P14_run1\config.yaml
+[32m[11/07 11:12:34 Sign2Text]: [0mConfig:
+experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: ../Resnet_VLP_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_VLP_P14_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  transformer: ./pretrain_models/MBart_proun
+  visual_encoder: ./pretrain_models/mytran
+  sign_proj: true
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage1/Resnet_VLP_P14_config.yaml
+--experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: Resnet_VLP_P14_run1
+
+[32m[11/07 11:12:34 Sign2Text]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/07 11:12:34 Sign2Text]: [0mCreating model and loss module.
+[32m[11/07 11:12:34 Sign2Text]: [0mCreating optimizers.
+[32m[11/07 11:12:34 Sign2Text]: [0mCreating lr_schedulers.
+[32m[11/07 11:12:36 Sign2Text]: [0mAll globbed checkpoints are: []
+[32m[11/07 11:18:42 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000001 Step: 44 Total Loss: 247.5326 Recon Loss: 0.7205 
+[32m[11/07 11:28:05 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000002 Step: 88 Total Loss: 494.9250 Recon Loss: 0.6610 
+[32m[11/07 11:35:07 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000003 Step: 132 Total Loss: 742.6825 Recon Loss: 0.6354 
+[32m[11/07 11:43:37 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000004 Step: 176 Total Loss: 990.5268 Recon Loss: 0.6166 
+[32m[11/07 11:52:03 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000006 Step: 220 Total Loss: 1230.1810 Recon Loss: 0.7292 
+[32m[11/07 12:02:17 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000007 Step: 264 Total Loss: 1477.1032 Recon Loss: 0.6935 
+[32m[11/07 12:10:50 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000008 Step: 308 Total Loss: 1723.5560 Recon Loss: 0.7893 
+[32m[11/07 12:21:15 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000009 Step: 352 Total Loss: 1970.2884 Recon Loss: 0.7044 
+[32m[11/07 12:25:07 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000010 Step: 396 Total Loss: 2217.6922 Recon Loss: 0.8836 
+[32m[11/07 12:29:42 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000011 Step: 440 Total Loss: 2457.3694 Recon Loss: 0.7632 
+[32m[11/07 12:29:56 Sign2Text]: [0mComputing metrics on the validation set.
+[32m[11/07 12:32:21 Sign2Text]: [0mCLIP saved state to ..\Resnet_VLP_P14_run1\checkpoint-443
+[32m[11/07 12:32:21 Sign2Text]: [0mText decoder saved to ..\Resnet_VLP_P14_run1\checkpoint-443
+[32m[11/07 12:40:57 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000012 Step: 484 Total Loss: 235.9228 Recon Loss: 0.7687 
+[32m[11/07 12:45:25 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000013 Step: 528 Total Loss: 478.4437 Recon Loss: 0.6688 
+[32m[11/07 12:49:26 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000014 Step: 572 Total Loss: 728.0334 Recon Loss: 0.7398 
+[32m[11/07 12:52:06 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000015 Step: 616 Total Loss: 975.4561 Recon Loss: 0.6803 
+[32m[11/07 12:56:00 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000017 Step: 660 Total Loss: 1223.4313 Recon Loss: 0.7100 
+[32m[11/07 13:04:16 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000018 Step: 704 Total Loss: 1467.7075 Recon Loss: 0.6347 
+[32m[11/07 13:12:47 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000019 Step: 748 Total Loss: 1707.1263 Recon Loss: 0.6241 
+[32m[11/07 13:19:47 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000020 Step: 792 Total Loss: 1951.1627 Recon Loss: 0.7009 
+[32m[11/07 13:24:17 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000021 Step: 836 Total Loss: 2193.2208 Recon Loss: 0.7260 
+[32m[11/07 13:27:40 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000022 Step: 880 Total Loss: 2438.9002 Recon Loss: 0.7064 
+[32m[11/07 13:28:08 Sign2Text]: [0mComputing metrics on the validation set.
+[32m[11/07 13:35:38 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000023 Step: 924 Total Loss: 223.1646 Recon Loss: 0.4093 
+[32m[11/07 13:38:04 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000024 Step: 968 Total Loss: 470.8997 Recon Loss: 0.8006 
+[32m[11/07 13:40:49 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000025 Step: 1012 Total Loss: 718.9396 Recon Loss: 0.6963 
+[32m[11/07 13:43:47 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000026 Step: 1056 Total Loss: 950.3545 Recon Loss: 0.7067 
+[32m[11/07 13:46:39 Sign2Text]: [0mBatch (t): 0.0000 LR: 0.000028 Step: 1100 Total Loss: 1182.6222 Recon Loss: 1.7877 
+[32m[11/07 13:52:56 Resnet_VLP_P14]: [0mSaving config to ..\Resnet_VLP_P14_run1\config.yaml
+[32m[11/07 13:52:56 Resnet_VLP_P14]: [0mConfig:
+experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: ../Resnet_VLP_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_VLP_P14_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  transformer: ./pretrain_models/MBart_proun
+  visual_encoder: ./pretrain_models/mytran
+  sign_proj: true
+  after_pretrained: ./pretrain_models/mytran
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_P14_config.yaml
+--experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: Resnet_VLP_P14_run1
+
+[32m[11/07 13:52:57 Resnet_VLP_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/07 13:52:57 Resnet_VLP_P14]: [0mCreating model and loss module.
+[32m[11/07 13:52:57 Resnet_VLP_P14]: [0mCreating optimizers.
+[32m[11/07 13:52:57 Resnet_VLP_P14]: [0mCreating lr_schedulers.
+[32m[11/07 13:52:57 Resnet_VLP_P14]: [0mAll globbed checkpoints are: ['../Resnet_VLP_P14_run1\\checkpoint-443']
+[32m[11/07 13:52:57 Resnet_VLP_P14]: [0mLoad checkpoint from ..\Resnet_VLP_P14_run1\checkpoint-443
+[32m[11/07 13:53:25 Resnet_VLP_P14]: [0mSaving config to ..\Resnet_VLP_P14_run1\config.yaml
+[32m[11/07 13:53:25 Resnet_VLP_P14]: [0mConfig:
+experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: ../Resnet_VLP_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_VLP_P14_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  transformer: ./pretrain_models/MBart_proun
+  visual_encoder: ./pretrain_models/mytran
+  sign_proj: true
+  after_pretrained: ./pretrain_models/mytran
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_P14_config.yaml
+--experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: Resnet_VLP_P14_run1
+
+[32m[11/07 13:53:25 Resnet_VLP_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/07 13:53:25 Resnet_VLP_P14]: [0mCreating model and loss module.
+[32m[11/07 13:53:26 Resnet_VLP_P14]: [0mCreating optimizers.
+[32m[11/07 13:53:26 Resnet_VLP_P14]: [0mCreating lr_schedulers.
+[32m[11/07 13:53:26 Resnet_VLP_P14]: [0mAll globbed checkpoints are: ['../Resnet_VLP_P14_run1\\checkpoint-443']
+[32m[11/07 13:53:26 Resnet_VLP_P14]: [0mLoad checkpoint from ..\Resnet_VLP_P14_run1\checkpoint-443
+[32m[11/07 13:55:16 Resnet_VLP_P14]: [0mSaving config to ..\Resnet_VLP_P14_run1\config.yaml
+[32m[11/07 13:55:16 Resnet_VLP_P14]: [0mConfig:
+experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: ../Resnet_VLP_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_VLP_P14_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  transformer: ./pretrain_models/MBart_proun
+  visual_encoder: ./pretrain_models/mytran
+  sign_proj: true
+  after_pretrained: ./pretrain_models/mytran
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_P14_config.yaml
+--experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: Resnet_VLP_P14_run1
+
+[32m[11/07 13:55:16 Resnet_VLP_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/07 13:55:16 Resnet_VLP_P14]: [0mCreating model and loss module.
+[32m[11/07 13:55:16 Resnet_VLP_P14]: [0mCreating optimizers.
+[32m[11/07 13:55:16 Resnet_VLP_P14]: [0mCreating lr_schedulers.
+[32m[11/07 13:55:16 Resnet_VLP_P14]: [0mAll globbed checkpoints are: []
+[32m[11/07 13:56:05 Resnet_VLP_P14]: [0mSaving config to ..\Resnet_VLP_P14_run1\config.yaml
+[32m[11/07 13:56:05 Resnet_VLP_P14]: [0mConfig:
+experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: ../Resnet_VLP_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_VLP_P14_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  transformer: ./pretrain_models/MBart_proun
+  visual_encoder: ./pretrain_models/mytran
+  sign_proj: true
+  after_pretrained: ./pretrain_models/mytran
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_P14_config.yaml
+--experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: Resnet_VLP_P14_run1
+
+[32m[11/07 13:56:05 Resnet_VLP_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/07 13:56:05 Resnet_VLP_P14]: [0mCreating model and loss module.
+[32m[11/07 13:56:05 Resnet_VLP_P14]: [0mCreating optimizers.
+[32m[11/07 13:56:05 Resnet_VLP_P14]: [0mCreating lr_schedulers.
+[32m[11/07 13:56:05 Resnet_VLP_P14]: [0mAll globbed checkpoints are: []
+[32m[11/07 13:58:33 Resnet_VLP_P14]: [0mSaving config to ..\Resnet_VLP_P14_run1\config.yaml
+[32m[11/07 13:58:33 Resnet_VLP_P14]: [0mConfig:
+experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: ../Resnet_VLP_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_VLP_P14_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  transformer: ./pretrain_models/MBart_proun
+  visual_encoder: ./pretrain_models/mytran
+  sign_proj: true
+  after_pretrained: ./pretrain_models/mytran
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 4
+  per_gpu_batch_size: 4
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_P14_config.yaml
+--experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: Resnet_VLP_P14_run1
+
+[32m[11/07 13:58:33 Resnet_VLP_P14]: [0mCreating Signloaders. Batch_size = 4
+[32m[11/07 13:58:33 Resnet_VLP_P14]: [0mCreating model and loss module.
+[32m[11/07 13:58:33 Resnet_VLP_P14]: [0mCreating optimizers.
+[32m[11/07 13:58:33 Resnet_VLP_P14]: [0mCreating lr_schedulers.
+[32m[11/07 13:58:33 Resnet_VLP_P14]: [0mAll globbed checkpoints are: []
+[32m[11/07 14:03:36 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000001 Step: 44 Total Loss: 3246.8431 Recon Loss: 16.6550 
+[32m[11/07 14:06:17 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000002 Step: 88 Total Loss: 5855.4024 Recon Loss: 12.8478 
+[32m[11/07 14:07:36 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 14:08:21 Resnet_VLP_P14]: [0mSaving config to ..\Resnet_VLP_P14_run1\config.yaml
+[32m[11/07 14:08:21 Resnet_VLP_P14]: [0mConfig:
+experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: ../Resnet_VLP_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../Resnet_VLP_P14_run1\logs
+model:
+  tokenizer: ./pretrain_models/MBart_proun
+  transformer: ./pretrain_models/MBart_proun
+  visual_encoder: ./pretrain_models/mytran
+  sign_proj: true
+  after_pretrained: ./pretrain_models/mytran
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 4
+  per_gpu_batch_size: 4
+  mixed_precision: fp16
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/stage2/Resnet_SLT_P14_config.yaml
+--experiment:
+  project: Resnet_VLP_P14
+  name: Resnet_VLP_P14_run1
+  output_dir: Resnet_VLP_P14_run1
+
+[32m[11/07 14:08:21 Resnet_VLP_P14]: [0mCreating Signloaders. Batch_size = 4
+[32m[11/07 14:08:21 Resnet_VLP_P14]: [0mCreating model and loss module.
+[32m[11/07 14:08:21 Resnet_VLP_P14]: [0mCreating optimizers.
+[32m[11/07 14:08:21 Resnet_VLP_P14]: [0mCreating lr_schedulers.
+[32m[11/07 14:08:21 Resnet_VLP_P14]: [0mAll globbed checkpoints are: []
+[32m[11/07 14:13:24 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000001 Step: 44 Total Loss: 3246.8444 Recon Loss: 16.6551 
+[32m[11/07 14:15:37 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000002 Step: 88 Total Loss: 5855.4321 Recon Loss: 12.8477 
+[32m[11/07 14:16:34 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 14:17:50 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000003 Step: 132 Total Loss: 7684.0759 Recon Loss: 9.1058 
+[32m[11/07 14:20:11 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000004 Step: 176 Total Loss: 9095.2991 Recon Loss: 7.6356 
+[32m[11/07 14:22:39 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000006 Step: 220 Total Loss: 10358.9451 Recon Loss: 6.8827 
+[32m[11/07 14:22:39 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 14:25:01 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000007 Step: 264 Total Loss: 11559.3517 Recon Loss: 6.7334 
+[32m[11/07 14:27:27 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000008 Step: 308 Total Loss: 12719.5359 Recon Loss: 6.5379 
+[32m[11/07 14:28:36 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 14:29:49 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000009 Step: 352 Total Loss: 13853.1454 Recon Loss: 6.4864 
+[32m[11/07 14:32:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000010 Step: 396 Total Loss: 14971.5419 Recon Loss: 6.0299 
+[32m[11/07 14:34:37 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000011 Step: 440 Total Loss: 16074.9895 Recon Loss: 6.6923 
+[32m[11/07 14:34:37 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 14:34:47 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 14:36:59 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-443
+[32m[11/07 14:39:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000012 Step: 484 Total Loss: 989.3693 Recon Loss: 6.1938 
+[32m[11/07 14:41:13 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000013 Step: 528 Total Loss: 2062.1411 Recon Loss: 6.0369 
+[32m[11/07 14:42:04 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 14:43:04 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000014 Step: 572 Total Loss: 3109.2438 Recon Loss: 5.9592 
+[32m[11/07 14:45:00 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000015 Step: 616 Total Loss: 4131.1161 Recon Loss: 6.2183 
+[32m[11/07 14:47:02 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000017 Step: 660 Total Loss: 5125.5375 Recon Loss: 5.3962 
+[32m[11/07 14:47:02 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 14:52:00 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000018 Step: 704 Total Loss: 6095.9245 Recon Loss: 5.2707 
+[32m[11/07 14:54:14 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000019 Step: 748 Total Loss: 7036.5157 Recon Loss: 4.7561 
+[32m[11/07 14:55:19 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 14:56:20 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000020 Step: 792 Total Loss: 7954.1508 Recon Loss: 5.5109 
+[32m[11/07 14:58:29 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000021 Step: 836 Total Loss: 8861.4055 Recon Loss: 5.1724 
+[32m[11/07 15:01:19 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000022 Step: 880 Total Loss: 9764.1819 Recon Loss: 4.9093 
+[32m[11/07 15:01:19 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 15:01:39 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 15:03:53 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-886
+[32m[11/07 15:06:09 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000023 Step: 924 Total Loss: 718.4254 Recon Loss: 4.8995 
+[32m[11/07 15:07:59 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000024 Step: 968 Total Loss: 1585.8744 Recon Loss: 5.1193 
+[32m[11/07 15:08:57 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 15:09:59 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000025 Step: 1012 Total Loss: 2435.5509 Recon Loss: 4.5728 
+[32m[11/07 15:11:55 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000026 Step: 1056 Total Loss: 3290.1225 Recon Loss: 4.8814 
+[32m[11/07 15:13:45 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000028 Step: 1100 Total Loss: 4121.7826 Recon Loss: 4.3766 
+[32m[11/07 15:13:45 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 15:15:39 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000029 Step: 1144 Total Loss: 4961.0788 Recon Loss: 4.7608 
+[32m[11/07 15:17:49 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000030 Step: 1188 Total Loss: 5784.6098 Recon Loss: 4.9420 
+[32m[11/07 15:18:59 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 15:20:12 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000031 Step: 1232 Total Loss: 6606.5042 Recon Loss: 4.8597 
+[32m[11/07 15:22:37 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000032 Step: 1276 Total Loss: 7423.8524 Recon Loss: 4.5454 
+[32m[11/07 15:25:15 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000033 Step: 1320 Total Loss: 8245.0597 Recon Loss: 4.6858 
+[32m[11/07 15:25:15 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 15:25:52 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 15:28:06 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-1329
+[32m[11/07 15:30:06 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000034 Step: 1364 Total Loss: 585.0708 Recon Loss: 4.4565 
+[32m[11/07 15:32:04 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000035 Step: 1408 Total Loss: 1390.3349 Recon Loss: 4.6529 
+[32m[11/07 15:33:00 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 15:34:02 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000036 Step: 1452 Total Loss: 2186.0007 Recon Loss: 4.4119 
+[32m[11/07 15:35:52 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000037 Step: 1496 Total Loss: 2976.1693 Recon Loss: 5.2680 
+[32m[11/07 15:37:46 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000039 Step: 1540 Total Loss: 3750.9036 Recon Loss: 4.2997 
+[32m[11/07 15:37:46 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 15:39:45 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000040 Step: 1584 Total Loss: 4534.9912 Recon Loss: 4.3670 
+[32m[11/07 15:42:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000041 Step: 1628 Total Loss: 5320.7399 Recon Loss: 4.2914 
+[32m[11/07 15:43:26 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 15:44:39 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000042 Step: 1672 Total Loss: 6089.4555 Recon Loss: 4.1954 
+[32m[11/07 15:47:18 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000043 Step: 1716 Total Loss: 6873.9974 Recon Loss: 5.1577 
+[32m[11/07 15:50:15 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000044 Step: 1760 Total Loss: 7649.3628 Recon Loss: 3.9599 
+[32m[11/07 15:50:15 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 15:53:21 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 15:55:35 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-1772
+[32m[11/07 15:57:20 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000045 Step: 1804 Total Loss: 491.7687 Recon Loss: 4.3866 
+[32m[11/07 15:59:11 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000046 Step: 1848 Total Loss: 1259.5398 Recon Loss: 4.2002 
+[32m[11/07 16:00:25 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 16:01:24 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000047 Step: 1892 Total Loss: 2015.5171 Recon Loss: 4.7673 
+[32m[11/07 16:04:54 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000048 Step: 1936 Total Loss: 2775.3466 Recon Loss: 4.5478 
+[32m[11/07 16:08:13 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000050 Step: 1980 Total Loss: 3532.5605 Recon Loss: 5.0077 
+[32m[11/07 16:08:13 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 16:12:53 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000051 Step: 2024 Total Loss: 4285.1419 Recon Loss: 4.0144 
+[32m[11/07 16:15:26 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000052 Step: 2068 Total Loss: 5042.4213 Recon Loss: 3.9625 
+[32m[11/07 16:16:55 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 16:18:50 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000053 Step: 2112 Total Loss: 5789.5823 Recon Loss: 4.8974 
+[32m[11/07 16:24:43 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000054 Step: 2156 Total Loss: 6545.4440 Recon Loss: 4.7391 
+[32m[11/07 16:30:38 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000055 Step: 2200 Total Loss: 7290.9195 Recon Loss: 4.6778 
+[32m[11/07 16:30:38 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 16:31:33 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 16:33:47 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-2215
+[32m[11/07 16:35:35 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000056 Step: 2244 Total Loss: 402.2307 Recon Loss: 4.3495 
+[32m[11/07 16:37:57 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000057 Step: 2288 Total Loss: 1141.2823 Recon Loss: 4.5369 
+[32m[11/07 16:39:22 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 16:42:59 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000058 Step: 2332 Total Loss: 1883.2933 Recon Loss: 4.4567 
+[32m[11/07 16:45:25 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000059 Step: 2376 Total Loss: 2616.9103 Recon Loss: 4.3017 
+[32m[11/07 16:50:55 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000061 Step: 2420 Total Loss: 3352.8374 Recon Loss: 4.2126 
+[32m[11/07 16:50:55 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 16:53:07 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000062 Step: 2464 Total Loss: 4093.3770 Recon Loss: 4.0608 
+[32m[11/07 16:55:37 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000063 Step: 2508 Total Loss: 4831.6299 Recon Loss: 4.2604 
+[32m[11/07 16:56:43 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 16:57:51 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000064 Step: 2552 Total Loss: 5560.6629 Recon Loss: 3.6307 
+[32m[11/07 17:00:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000065 Step: 2596 Total Loss: 6297.4437 Recon Loss: 4.6740 
+[32m[11/07 17:02:29 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000066 Step: 2640 Total Loss: 7027.1654 Recon Loss: 3.7471 
+[32m[11/07 17:02:29 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 17:03:38 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 17:05:53 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-2658
+[32m[11/07 17:07:30 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000067 Step: 2684 Total Loss: 330.4400 Recon Loss: 4.3011 
+[32m[11/07 17:09:18 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000068 Step: 2728 Total Loss: 1053.0148 Recon Loss: 4.8691 
+[32m[11/07 17:10:11 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 17:11:06 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000069 Step: 2772 Total Loss: 1770.6136 Recon Loss: 4.4989 
+[32m[11/07 17:12:59 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000070 Step: 2816 Total Loss: 2488.4777 Recon Loss: 3.8295 
+[32m[11/07 17:14:53 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000072 Step: 2860 Total Loss: 3197.7120 Recon Loss: 3.9846 
+[32m[11/07 17:14:53 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 17:17:00 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000073 Step: 2904 Total Loss: 3925.5111 Recon Loss: 3.9599 
+[32m[11/07 17:19:10 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000074 Step: 2948 Total Loss: 4650.5986 Recon Loss: 4.7600 
+[32m[11/07 17:20:15 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 17:21:30 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000075 Step: 2992 Total Loss: 5371.1718 Recon Loss: 3.7847 
+[32m[11/07 17:24:01 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000076 Step: 3036 Total Loss: 6084.0728 Recon Loss: 3.4176 
+[32m[11/07 17:26:49 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000077 Step: 3080 Total Loss: 6811.3747 Recon Loss: 4.0323 
+[32m[11/07 17:26:49 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 17:28:05 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 17:30:18 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-3101
+[32m[11/07 17:31:44 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000078 Step: 3124 Total Loss: 256.4159 Recon Loss: 3.7540 
+[32m[11/07 17:33:40 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000079 Step: 3168 Total Loss: 966.4055 Recon Loss: 3.2780 
+[32m[11/07 17:34:37 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 17:35:32 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000080 Step: 3212 Total Loss: 1675.7109 Recon Loss: 4.2687 
+[32m[11/07 17:37:23 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000081 Step: 3256 Total Loss: 2375.0636 Recon Loss: 4.4537 
+[32m[11/07 17:39:21 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000082 Step: 3300 Total Loss: 3082.2133 Recon Loss: 3.6986 
+[32m[11/07 17:39:21 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 17:41:18 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000084 Step: 3344 Total Loss: 3792.0193 Recon Loss: 3.1335 
+[32m[11/07 17:43:27 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000085 Step: 3388 Total Loss: 4511.0889 Recon Loss: 4.2742 
+[32m[11/07 17:44:32 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 17:47:20 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000086 Step: 3432 Total Loss: 5214.0064 Recon Loss: 3.8760 
+[32m[11/07 17:53:00 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000087 Step: 3476 Total Loss: 5906.4893 Recon Loss: 3.3753 
+[32m[11/07 17:58:28 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000088 Step: 3520 Total Loss: 6613.9523 Recon Loss: 4.6172 
+[32m[11/07 17:58:28 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 18:00:04 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 18:02:16 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-3544
+[32m[11/07 18:03:31 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000089 Step: 3564 Total Loss: 188.8535 Recon Loss: 4.1233 
+[32m[11/07 18:05:32 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000090 Step: 3608 Total Loss: 885.3396 Recon Loss: 3.4697 
+[32m[11/07 18:08:33 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 18:09:29 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000091 Step: 3652 Total Loss: 1583.9549 Recon Loss: 4.6659 
+[32m[11/07 18:12:30 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000092 Step: 3696 Total Loss: 2274.8297 Recon Loss: 4.3157 
+[32m[11/07 18:16:44 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 3740 Total Loss: 2967.0536 Recon Loss: 3.5794 
+[32m[11/07 18:16:44 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 18:21:33 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 3784 Total Loss: 3659.7894 Recon Loss: 3.7302 
+[32m[11/07 18:25:49 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 3828 Total Loss: 4354.9308 Recon Loss: 3.8877 
+[32m[11/07 18:28:14 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 18:30:52 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 3872 Total Loss: 5050.9436 Recon Loss: 4.4634 
+[32m[11/07 18:41:10 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 3916 Total Loss: 5750.6445 Recon Loss: 3.7912 
+[32m[11/07 18:44:00 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 3960 Total Loss: 6443.5065 Recon Loss: 4.5139 
+[32m[11/07 18:44:00 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 18:45:43 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 18:47:57 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-3987
+[32m[11/07 18:49:16 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4004 Total Loss: 122.9682 Recon Loss: 4.0311 
+[32m[11/07 18:51:16 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4048 Total Loss: 808.5967 Recon Loss: 3.5564 
+[32m[11/07 18:52:17 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 18:53:17 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4092 Total Loss: 1495.1592 Recon Loss: 4.0371 
+[32m[11/07 18:57:21 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4136 Total Loss: 2185.5187 Recon Loss: 3.1550 
+[32m[11/07 18:59:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4180 Total Loss: 2861.6922 Recon Loss: 3.8124 
+[32m[11/07 18:59:08 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 19:01:18 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4224 Total Loss: 3546.8272 Recon Loss: 4.3925 
+[32m[11/07 19:03:29 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4268 Total Loss: 4233.4648 Recon Loss: 4.1982 
+[32m[11/07 19:04:30 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 19:05:31 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4312 Total Loss: 4921.6697 Recon Loss: 4.0152 
+[32m[11/07 19:07:25 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4356 Total Loss: 5602.0980 Recon Loss: 4.8704 
+[32m[11/07 19:09:29 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4400 Total Loss: 6277.3142 Recon Loss: 3.9658 
+[32m[11/07 19:09:29 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 19:13:19 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 19:17:51 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-4430
+[32m[11/07 19:21:10 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4444 Total Loss: 60.5904 Recon Loss: 4.3526 
+[32m[11/07 19:23:02 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4488 Total Loss: 732.9012 Recon Loss: 4.0518 
+[32m[11/07 19:24:02 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 19:25:04 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4532 Total Loss: 1409.1797 Recon Loss: 3.3608 
+[32m[11/07 19:27:09 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4576 Total Loss: 2078.9895 Recon Loss: 3.6288 
+[32m[11/07 19:29:36 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4620 Total Loss: 2754.9219 Recon Loss: 3.3438 
+[32m[11/07 19:29:36 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 19:43:58 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4664 Total Loss: 3420.1086 Recon Loss: 4.0447 
+[32m[11/07 20:01:44 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4708 Total Loss: 4098.2079 Recon Loss: 3.5848 
+[32m[11/07 20:10:44 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 20:12:21 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4752 Total Loss: 4768.3576 Recon Loss: 3.7519 
+[32m[11/07 20:24:39 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4796 Total Loss: 5437.0402 Recon Loss: 3.6279 
+[32m[11/07 20:36:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4840 Total Loss: 6105.3540 Recon Loss: 4.2569 
+[32m[11/07 20:36:08 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 20:38:21 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 20:40:35 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-4873
+[32m[11/07 20:41:12 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4884 Total Loss: 6766.5930 Recon Loss: 3.3617 
+[32m[11/07 20:43:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4928 Total Loss: 658.3769 Recon Loss: 4.0032 
+[32m[11/07 20:44:22 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 20:49:32 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 4972 Total Loss: 1315.2143 Recon Loss: 3.4141 
+[32m[11/07 20:51:23 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5016 Total Loss: 1977.2376 Recon Loss: 3.4805 
+[32m[11/07 20:53:11 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5060 Total Loss: 2636.6342 Recon Loss: 3.1382 
+[32m[11/07 20:53:11 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 20:56:09 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5104 Total Loss: 3299.6678 Recon Loss: 4.1694 
+[32m[11/07 20:58:07 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5148 Total Loss: 3962.1167 Recon Loss: 2.9349 
+[32m[11/07 20:59:07 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 21:00:11 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5192 Total Loss: 4621.5457 Recon Loss: 3.2480 
+[32m[11/07 21:08:41 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5236 Total Loss: 5283.3463 Recon Loss: 3.7003 
+[32m[11/07 21:20:55 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5280 Total Loss: 5948.4755 Recon Loss: 3.8420 
+[32m[11/07 21:20:55 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 21:23:16 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 21:25:46 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-5316
+[32m[11/07 21:26:13 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5324 Total Loss: 6606.0437 Recon Loss: 3.6551 
+[32m[11/07 21:30:07 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5368 Total Loss: 584.8404 Recon Loss: 3.9138 
+[32m[11/07 21:33:34 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 21:34:51 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5412 Total Loss: 1228.6623 Recon Loss: 3.6317 
+[32m[11/07 21:37:27 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5456 Total Loss: 1878.3885 Recon Loss: 3.6830 
+[32m[11/07 21:40:21 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5500 Total Loss: 2531.4857 Recon Loss: 3.5815 
+[32m[11/07 21:40:21 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 21:43:32 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5544 Total Loss: 3187.1336 Recon Loss: 3.6333 
+[32m[11/07 21:46:27 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5588 Total Loss: 3837.1295 Recon Loss: 3.5219 
+[32m[11/07 21:47:47 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 21:51:34 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5632 Total Loss: 4486.2653 Recon Loss: 3.7720 
+[32m[11/07 21:54:04 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5676 Total Loss: 5146.2009 Recon Loss: 3.7991 
+[32m[11/07 21:59:07 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5720 Total Loss: 5805.5144 Recon Loss: 4.1231 
+[32m[11/07 21:59:07 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 22:01:38 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 22:03:51 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-5759
+[32m[11/07 22:04:09 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5764 Total Loss: 6451.3739 Recon Loss: 4.8524 
+[32m[11/07 22:06:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5808 Total Loss: 526.6729 Recon Loss: 4.5833 
+[32m[11/07 22:07:14 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 22:08:06 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5852 Total Loss: 1173.0270 Recon Loss: 3.2120 
+[32m[11/07 22:09:47 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5896 Total Loss: 1810.3848 Recon Loss: 4.4343 
+[32m[11/07 22:11:26 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5940 Total Loss: 2453.8788 Recon Loss: 3.3849 
+[32m[11/07 22:11:26 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 22:13:14 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 5984 Total Loss: 3093.0550 Recon Loss: 3.3351 
+[32m[11/07 22:14:56 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6028 Total Loss: 3733.6460 Recon Loss: 3.6089 
+[32m[11/07 22:15:51 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 22:16:47 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6072 Total Loss: 4376.1403 Recon Loss: 3.5024 
+[32m[11/07 22:18:38 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6116 Total Loss: 5019.0549 Recon Loss: 4.1076 
+[32m[11/07 22:22:36 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6160 Total Loss: 5663.6366 Recon Loss: 3.1522 
+[32m[11/07 22:22:36 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 22:28:11 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/07 22:30:25 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-6202
+[32m[11/07 22:30:31 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6204 Total Loss: 6307.5047 Recon Loss: 3.8726 
+[32m[11/07 22:33:43 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6248 Total Loss: 462.9373 Recon Loss: 3.4111 
+[32m[11/07 22:34:55 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 22:35:47 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6292 Total Loss: 1090.0751 Recon Loss: 2.9761 
+[32m[11/07 22:37:33 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6336 Total Loss: 1725.8563 Recon Loss: 3.3935 
+[32m[11/07 22:39:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6380 Total Loss: 2361.2485 Recon Loss: 3.5506 
+[32m[11/07 22:39:22 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 22:44:30 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6424 Total Loss: 2989.0978 Recon Loss: 4.2052 
+[32m[11/07 23:05:32 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000100 Step: 6468 Total Loss: 3636.1169 Recon Loss: 3.9270 
+[32m[11/07 23:20:38 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/07 23:22:09 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6512 Total Loss: 4269.8476 Recon Loss: 3.5412 
+[32m[11/07 23:32:56 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6556 Total Loss: 4906.1586 Recon Loss: 3.4782 
+[32m[11/07 23:49:46 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6600 Total Loss: 5546.4513 Recon Loss: 3.9163 
+[32m[11/07 23:49:46 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 00:06:45 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6644 Total Loss: 6175.2723 Recon Loss: 3.3657 
+[32m[11/08 00:07:16 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 00:17:29 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6688 Total Loss: 393.2583 Recon Loss: 3.4514 
+[32m[11/08 00:18:43 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 00:21:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6732 Total Loss: 1013.8742 Recon Loss: 3.7210 
+[32m[11/08 00:25:54 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6776 Total Loss: 1643.7345 Recon Loss: 4.1233 
+[32m[11/08 00:31:32 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6820 Total Loss: 2271.2669 Recon Loss: 3.7401 
+[32m[11/08 00:31:32 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 00:33:46 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6864 Total Loss: 2901.3457 Recon Loss: 3.4878 
+[32m[11/08 00:36:01 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6908 Total Loss: 3531.8431 Recon Loss: 3.9139 
+[32m[11/08 00:37:06 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 00:38:17 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6952 Total Loss: 4153.1466 Recon Loss: 3.6249 
+[32m[11/08 00:40:27 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 6996 Total Loss: 4779.6199 Recon Loss: 3.2627 
+[32m[11/08 00:42:47 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7040 Total Loss: 5404.9839 Recon Loss: 3.4005 
+[32m[11/08 00:42:47 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 00:45:06 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7084 Total Loss: 6044.8143 Recon Loss: 3.6263 
+[32m[11/08 00:45:19 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 00:47:31 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-7088
+[32m[11/08 00:49:48 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7128 Total Loss: 339.8079 Recon Loss: 2.9794 
+[32m[11/08 00:50:34 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 00:51:25 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7172 Total Loss: 955.6027 Recon Loss: 3.3658 
+[32m[11/08 00:53:11 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7216 Total Loss: 1570.4386 Recon Loss: 3.4685 
+[32m[11/08 00:54:59 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7260 Total Loss: 2193.0202 Recon Loss: 3.5168 
+[32m[11/08 00:54:59 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 00:56:58 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7304 Total Loss: 2815.3603 Recon Loss: 4.2863 
+[32m[11/08 00:59:53 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7348 Total Loss: 3440.6186 Recon Loss: 3.9596 
+[32m[11/08 01:05:58 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 01:12:10 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7392 Total Loss: 4058.9734 Recon Loss: 3.6850 
+[32m[11/08 01:25:43 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7436 Total Loss: 4677.1331 Recon Loss: 4.3544 
+[32m[11/08 01:39:21 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7480 Total Loss: 5300.4818 Recon Loss: 3.6398 
+[32m[11/08 01:39:21 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 01:43:55 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7524 Total Loss: 5922.9200 Recon Loss: 3.9413 
+[32m[11/08 01:44:21 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 01:46:35 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-7531
+[32m[11/08 01:48:43 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7568 Total Loss: 273.5420 Recon Loss: 3.3316 
+[32m[11/08 01:49:31 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 01:50:21 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7612 Total Loss: 874.5320 Recon Loss: 4.0441 
+[32m[11/08 01:52:18 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7656 Total Loss: 1488.3929 Recon Loss: 3.8755 
+[32m[11/08 01:54:10 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7700 Total Loss: 2102.6579 Recon Loss: 4.0297 
+[32m[11/08 01:54:10 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 01:58:44 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7744 Total Loss: 2716.4575 Recon Loss: 3.4778 
+[32m[11/08 02:00:56 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7788 Total Loss: 3337.4245 Recon Loss: 3.5263 
+[32m[11/08 02:02:03 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 02:03:06 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7832 Total Loss: 3949.2174 Recon Loss: 3.5159 
+[32m[11/08 02:05:20 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7876 Total Loss: 4565.1552 Recon Loss: 3.2723 
+[32m[11/08 02:07:44 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7920 Total Loss: 5180.4395 Recon Loss: 3.4518 
+[32m[11/08 02:07:44 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 02:13:18 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 7964 Total Loss: 5798.3487 Recon Loss: 3.2000 
+[32m[11/08 02:14:35 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 02:20:13 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 8008 Total Loss: 218.1865 Recon Loss: 3.5112 
+[32m[11/08 02:21:23 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 02:26:11 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 8052 Total Loss: 819.1638 Recon Loss: 3.0722 
+[32m[11/08 02:35:27 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 8096 Total Loss: 1429.5385 Recon Loss: 3.4909 
+[32m[11/08 02:44:21 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 8140 Total Loss: 2037.2223 Recon Loss: 3.8000 
+[32m[11/08 02:44:21 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 02:56:57 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 8184 Total Loss: 2642.7114 Recon Loss: 3.6175 
+[32m[11/08 03:08:20 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 8228 Total Loss: 3243.5445 Recon Loss: 3.1721 
+[32m[11/08 03:14:54 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 03:18:39 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 8272 Total Loss: 3854.5501 Recon Loss: 3.1560 
+[32m[11/08 03:21:16 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000099 Step: 8316 Total Loss: 4449.5804 Recon Loss: 3.7065 
+[32m[11/08 03:23:38 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8360 Total Loss: 5057.3927 Recon Loss: 3.8953 
+[32m[11/08 03:23:38 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 03:28:31 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8404 Total Loss: 5670.3028 Recon Loss: 3.6087 
+[32m[11/08 03:29:16 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 03:31:29 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-8417
+[32m[11/08 03:33:35 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8448 Total Loss: 163.3767 Recon Loss: 3.0960 
+[32m[11/08 03:34:25 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 03:35:17 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8492 Total Loss: 766.9486 Recon Loss: 3.6700 
+[32m[11/08 03:36:59 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8536 Total Loss: 1365.2188 Recon Loss: 3.3160 
+[32m[11/08 03:38:42 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8580 Total Loss: 1961.2884 Recon Loss: 3.7005 
+[32m[11/08 03:38:42 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 03:40:27 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8624 Total Loss: 2551.8970 Recon Loss: 3.6368 
+[32m[11/08 03:42:12 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8668 Total Loss: 3150.3205 Recon Loss: 3.2261 
+[32m[11/08 03:43:02 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 03:43:55 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8712 Total Loss: 3749.6811 Recon Loss: 3.2733 
+[32m[11/08 03:45:44 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8756 Total Loss: 4356.2799 Recon Loss: 3.3274 
+[32m[11/08 03:47:41 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8800 Total Loss: 4961.7576 Recon Loss: 3.4401 
+[32m[11/08 03:47:41 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 03:49:56 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8844 Total Loss: 5567.2419 Recon Loss: 3.2467 
+[32m[11/08 03:50:49 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 03:53:00 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-8860
+[32m[11/08 03:54:57 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8888 Total Loss: 108.2877 Recon Loss: 3.4121 
+[32m[11/08 03:55:50 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 03:57:11 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8932 Total Loss: 701.4072 Recon Loss: 3.5605 
+[32m[11/08 04:05:44 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 8976 Total Loss: 1290.6917 Recon Loss: 3.7746 
+[32m[11/08 04:14:46 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9020 Total Loss: 1878.5667 Recon Loss: 3.4463 
+[32m[11/08 04:14:46 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 04:16:35 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9064 Total Loss: 2467.8503 Recon Loss: 3.4111 
+[32m[11/08 04:18:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9108 Total Loss: 3063.1034 Recon Loss: 3.4873 
+[32m[11/08 04:19:17 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 04:20:09 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9152 Total Loss: 3660.5446 Recon Loss: 2.8447 
+[32m[11/08 04:22:07 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9196 Total Loss: 4262.2708 Recon Loss: 2.6717 
+[32m[11/08 04:24:05 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9240 Total Loss: 4860.8855 Recon Loss: 3.6565 
+[32m[11/08 04:24:05 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 04:26:50 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9284 Total Loss: 5458.3061 Recon Loss: 3.5694 
+[32m[11/08 04:28:09 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 04:30:24 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-9303
+[32m[11/08 04:32:24 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9328 Total Loss: 53.0450 Recon Loss: 3.1971 
+[32m[11/08 04:33:28 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 04:34:30 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9372 Total Loss: 641.0820 Recon Loss: 3.0841 
+[32m[11/08 04:36:32 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9416 Total Loss: 1228.4555 Recon Loss: 3.4714 
+[32m[11/08 04:39:23 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9460 Total Loss: 1816.2318 Recon Loss: 3.8613 
+[32m[11/08 04:39:23 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 04:42:09 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9504 Total Loss: 2404.5498 Recon Loss: 2.8073 
+[32m[11/08 04:44:43 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9548 Total Loss: 2986.2912 Recon Loss: 3.3980 
+[32m[11/08 04:46:04 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 04:47:49 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000098 Step: 9592 Total Loss: 3573.2988 Recon Loss: 3.1904 
+[32m[11/08 04:58:25 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 9636 Total Loss: 4169.3007 Recon Loss: 3.4315 
+[32m[11/08 05:09:12 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 9680 Total Loss: 4755.7703 Recon Loss: 3.3495 
+[32m[11/08 05:09:12 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 05:20:30 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 9724 Total Loss: 5344.3374 Recon Loss: 3.5648 
+[32m[11/08 05:26:23 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 05:30:52 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-9746
+[32m[11/08 05:35:37 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 9768 Total Loss: 5934.4612 Recon Loss: 3.0469 
+[32m[11/08 05:37:03 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 05:38:05 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 9812 Total Loss: 580.1938 Recon Loss: 3.3110 
+[32m[11/08 05:40:06 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 9856 Total Loss: 1159.5504 Recon Loss: 3.7629 
+[32m[11/08 05:42:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 9900 Total Loss: 1742.3378 Recon Loss: 3.3807 
+[32m[11/08 05:42:08 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 05:44:14 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 9944 Total Loss: 2330.9036 Recon Loss: 2.9852 
+[32m[11/08 05:46:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 9988 Total Loss: 2921.8540 Recon Loss: 3.1062 
+[32m[11/08 05:47:23 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 05:48:23 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10032 Total Loss: 3506.0573 Recon Loss: 3.4998 
+[32m[11/08 05:50:23 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10076 Total Loss: 4085.5540 Recon Loss: 3.1707 
+[32m[11/08 05:52:26 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10120 Total Loss: 4669.5974 Recon Loss: 3.3041 
+[32m[11/08 05:52:26 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 06:08:16 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10164 Total Loss: 5258.8430 Recon Loss: 3.2963 
+[32m[11/08 06:17:57 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 06:22:01 Resnet_VLP_P14]: [0mSLT saved state to ..\Resnet_VLP_P14_run1\checkpoint-10189
+[32m[11/08 06:28:35 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10208 Total Loss: 5834.1542 Recon Loss: 2.7988 
+[32m[11/08 06:30:56 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 06:32:16 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10252 Total Loss: 520.6736 Recon Loss: 2.8458 
+[32m[11/08 06:35:54 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10296 Total Loss: 1087.8423 Recon Loss: 3.4171 
+[32m[11/08 06:39:49 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10340 Total Loss: 1663.5077 Recon Loss: 3.7724 
+[32m[11/08 06:39:49 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 06:45:46 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10384 Total Loss: 2243.2388 Recon Loss: 2.6863 
+[32m[11/08 06:50:00 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10428 Total Loss: 2822.2770 Recon Loss: 3.4690 
+[32m[11/08 06:52:12 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 06:55:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10472 Total Loss: 3397.2012 Recon Loss: 3.3031 
+[32m[11/08 07:02:02 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10516 Total Loss: 3979.0257 Recon Loss: 3.6168 
+[32m[11/08 07:08:11 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10560 Total Loss: 4560.3644 Recon Loss: 3.9089 
+[32m[11/08 07:08:11 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 07:11:06 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10604 Total Loss: 5135.7807 Recon Loss: 3.2053 
+[32m[11/08 07:12:47 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 07:15:58 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000097 Step: 10648 Total Loss: 5715.6377 Recon Loss: 2.7309 
+[32m[11/08 07:17:21 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 07:18:13 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 10692 Total Loss: 467.3050 Recon Loss: 3.0032 
+[32m[11/08 07:19:55 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 10736 Total Loss: 1030.9974 Recon Loss: 3.2292 
+[32m[11/08 07:21:34 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 10780 Total Loss: 1598.1568 Recon Loss: 2.9354 
+[32m[11/08 07:21:34 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 07:26:05 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 10824 Total Loss: 2173.9596 Recon Loss: 3.6903 
+[32m[11/08 07:32:03 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 10868 Total Loss: 2751.5526 Recon Loss: 3.5449 
+[32m[11/08 07:34:21 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 07:35:16 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 10912 Total Loss: 3319.7584 Recon Loss: 3.0797 
+[32m[11/08 07:37:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 10956 Total Loss: 3894.5546 Recon Loss: 3.0202 
+[32m[11/08 07:39:43 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11000 Total Loss: 4473.0069 Recon Loss: 3.7590 
+[32m[11/08 07:39:43 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 07:41:57 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11044 Total Loss: 5049.0988 Recon Loss: 3.2860 
+[32m[11/08 07:43:53 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 07:52:59 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11088 Total Loss: 5617.3734 Recon Loss: 2.8033 
+[32m[11/08 07:54:27 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 07:55:26 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11132 Total Loss: 404.5905 Recon Loss: 3.4735 
+[32m[11/08 07:57:17 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11176 Total Loss: 967.4682 Recon Loss: 3.1251 
+[32m[11/08 07:59:07 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11220 Total Loss: 1533.6957 Recon Loss: 3.0278 
+[32m[11/08 07:59:07 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 08:00:52 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11264 Total Loss: 2094.1253 Recon Loss: 2.9900 
+[32m[11/08 08:02:36 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11308 Total Loss: 2659.3507 Recon Loss: 3.7051 
+[32m[11/08 08:07:58 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 08:08:51 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11352 Total Loss: 3223.5817 Recon Loss: 3.2667 
+[32m[11/08 08:10:35 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11396 Total Loss: 3790.8817 Recon Loss: 3.1243 
+[32m[11/08 08:12:20 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11440 Total Loss: 4361.0562 Recon Loss: 3.3578 
+[32m[11/08 08:12:20 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 08:14:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11484 Total Loss: 4932.0135 Recon Loss: 3.4158 
+[32m[11/08 08:15:32 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 08:18:17 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11528 Total Loss: 5502.8740 Recon Loss: 3.1756 
+[32m[11/08 08:19:52 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 08:20:43 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000096 Step: 11572 Total Loss: 352.4406 Recon Loss: 2.8271 
+[32m[11/08 08:22:30 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 11616 Total Loss: 913.6718 Recon Loss: 3.1930 
+[32m[11/08 08:24:12 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 11660 Total Loss: 1477.0801 Recon Loss: 3.5330 
+[32m[11/08 08:24:12 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 08:26:07 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 11704 Total Loss: 2037.8723 Recon Loss: 3.0868 
+[32m[11/08 08:28:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 11748 Total Loss: 2596.6283 Recon Loss: 2.9073 
+[32m[11/08 08:29:10 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 08:30:20 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 11792 Total Loss: 3153.8260 Recon Loss: 3.5107 
+[32m[11/08 08:41:39 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 11836 Total Loss: 3719.3789 Recon Loss: 3.2013 
+[32m[11/08 09:01:28 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 11880 Total Loss: 4279.6732 Recon Loss: 2.8914 
+[32m[11/08 09:01:28 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 09:06:02 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 11924 Total Loss: 4840.9851 Recon Loss: 3.3352 
+[32m[11/08 09:10:50 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 09:14:15 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 11968 Total Loss: 5404.9219 Recon Loss: 3.2695 
+[32m[11/08 09:17:00 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 09:18:00 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 12012 Total Loss: 297.7946 Recon Loss: 3.1887 
+[32m[11/08 09:20:06 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 12056 Total Loss: 848.7545 Recon Loss: 3.2779 
+[32m[11/08 09:22:08 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 12100 Total Loss: 1400.1098 Recon Loss: 3.2409 
+[32m[11/08 09:22:08 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 09:24:03 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 12144 Total Loss: 1958.7173 Recon Loss: 3.1070 
+[32m[11/08 09:26:18 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 12188 Total Loss: 2516.1579 Recon Loss: 3.1282 
+[32m[11/08 09:27:21 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 09:28:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 12232 Total Loss: 3070.7596 Recon Loss: 2.9944 
+[32m[11/08 09:30:40 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 12276 Total Loss: 3629.7614 Recon Loss: 3.0341 
+[32m[11/08 09:33:10 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 12320 Total Loss: 4181.1675 Recon Loss: 2.9357 
+[32m[11/08 09:33:10 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 09:36:55 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000095 Step: 12364 Total Loss: 4743.3013 Recon Loss: 3.4593 
+[32m[11/08 09:39:23 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 09:41:43 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12408 Total Loss: 5301.8602 Recon Loss: 2.7147 
+[32m[11/08 09:43:06 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 09:44:27 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12452 Total Loss: 244.6547 Recon Loss: 3.2754 
+[32m[11/08 09:46:23 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12496 Total Loss: 796.6957 Recon Loss: 3.1187 
+[32m[11/08 09:51:17 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12540 Total Loss: 1337.7006 Recon Loss: 3.0144 
+[32m[11/08 09:51:17 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 09:57:09 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12584 Total Loss: 1887.0030 Recon Loss: 2.8296 
+[32m[11/08 09:59:04 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12628 Total Loss: 2437.2679 Recon Loss: 3.3023 
+[32m[11/08 09:59:58 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:00:55 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12672 Total Loss: 2983.5831 Recon Loss: 3.0541 
+[32m[11/08 10:02:49 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12716 Total Loss: 3533.4676 Recon Loss: 3.2351 
+[32m[11/08 10:04:46 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12760 Total Loss: 4087.4959 Recon Loss: 2.9678 
+[32m[11/08 10:04:46 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:06:36 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12804 Total Loss: 4638.4389 Recon Loss: 2.6470 
+[32m[11/08 10:08:27 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 10:10:42 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12848 Total Loss: 5195.2466 Recon Loss: 3.5013 
+[32m[11/08 10:12:04 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:13:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12892 Total Loss: 197.4644 Recon Loss: 3.3665 
+[32m[11/08 10:14:56 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12936 Total Loss: 732.8882 Recon Loss: 3.0200 
+[32m[11/08 10:16:37 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 12980 Total Loss: 1276.3761 Recon Loss: 2.8108 
+[32m[11/08 10:16:37 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:18:19 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 13024 Total Loss: 1820.6615 Recon Loss: 2.9090 
+[32m[11/08 10:20:00 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 13068 Total Loss: 2364.4892 Recon Loss: 3.4863 
+[32m[11/08 10:20:47 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:21:36 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000094 Step: 13112 Total Loss: 2908.1633 Recon Loss: 3.2202 
+[32m[11/08 10:23:11 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13156 Total Loss: 3453.4922 Recon Loss: 3.0776 
+[32m[11/08 10:24:44 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13200 Total Loss: 4003.7185 Recon Loss: 2.7572 
+[32m[11/08 10:24:44 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:26:22 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13244 Total Loss: 4546.0463 Recon Loss: 2.7520 
+[32m[11/08 10:28:23 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13288 Total Loss: 5096.6190 Recon Loss: 3.0715 
+[32m[11/08 10:28:29 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 10:31:47 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:33:15 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13332 Total Loss: 145.4058 Recon Loss: 3.2372 
+[32m[11/08 10:34:59 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13376 Total Loss: 680.6289 Recon Loss: 2.6963 
+[32m[11/08 10:36:35 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13420 Total Loss: 1217.0317 Recon Loss: 3.3253 
+[32m[11/08 10:36:35 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:38:23 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13464 Total Loss: 1757.4736 Recon Loss: 3.0169 
+[32m[11/08 10:40:14 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13508 Total Loss: 2299.0638 Recon Loss: 3.2370 
+[32m[11/08 10:41:09 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:45:54 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13552 Total Loss: 2836.8176 Recon Loss: 2.7974 
+[32m[11/08 10:47:50 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13596 Total Loss: 3381.9229 Recon Loss: 3.1698 
+[32m[11/08 10:50:04 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13640 Total Loss: 3924.3683 Recon Loss: 2.8009 
+[32m[11/08 10:50:04 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 10:52:42 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13684 Total Loss: 4460.9240 Recon Loss: 2.7619 
+[32m[11/08 10:55:29 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13728 Total Loss: 4999.9865 Recon Loss: 2.9370 
+[32m[11/08 10:55:53 Resnet_VLP_P14]: [0mComputing metrics on the validation set.
+[32m[11/08 10:59:08 Resnet_VLP_P14]: [0mTranslating images...
+[32m[11/08 11:00:55 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13772 Total Loss: 96.2643 Recon Loss: 2.9934 
+[32m[11/08 11:04:02 Resnet_VLP_P14]: [0mBatch (t): 0.0000 LR: 0.000093 Step: 13816 Total Loss: 622.5012 Recon Loss: 2.8599 

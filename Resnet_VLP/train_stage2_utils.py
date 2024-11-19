@@ -74,17 +74,16 @@ def create_optimizer(config, logger, model):
 
     optimizer_type = config.optimizer.name
     if optimizer_type == "adamw":
-        optimizer_cls = AdamW
+        optimizer = AdamW(model.parameters(),
+        lr=config.optimizer.params.learning_rate,  # Default learning rate, not used as we set per group
+        betas=(config.optimizer.params.beta1, config.optimizer.params.beta2)
+    )
+    elif optimizer_type == "sgd":
+        optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9, weight_decay=0.0001)
     else:
         raise ValueError(f"Optimizer {optimizer_type} not supported")
 
 
-   
-
-    optimizer = optimizer_cls(model.parameters(),
-        lr=config.optimizer.params.learning_rate,  # Default learning rate, not used as we set per group
-        betas=(config.optimizer.params.beta1, config.optimizer.params.beta2)
-    )
 
     return optimizer
 
@@ -214,13 +213,15 @@ def translate_images(model, src, tgt, accelerator, config, global_step, output_d
         # Log translations locally to text files
         root = Path(output_dir) / "train_translations"
         os.makedirs(root, exist_ok=True)
-        for i, (pred,gt) in enumerate(zip(generated_batch, tgt_batch)):
+        for i, (name,gen,  pred,gt) in enumerate(zip(src['name_batch'],generated, generated_batch, tgt_batch)):
             filename = f"{global_step:08}_t-{i:03}.txt"
             path = os.path.join(root, filename)
             
             # Save each translation as a separate text file
             with open(path, "w", encoding="utf-8") as f:
                 f.write(f"Sample {i + 1}:\n")
+                f.write(f"Name: {name}\n")
+                f.write(f"tokens : {gen}\n")
                 f.write(f"Ground Truth: {gt}\n")
                 f.write(f"Prediction  : {pred}\n")
         

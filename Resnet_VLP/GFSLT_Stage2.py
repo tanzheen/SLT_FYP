@@ -10,7 +10,7 @@ from torch.optim import lr_scheduler as scheduler
 
 
 # *transformers
-from transformers import MBartForConditionalGeneration, MBart50Tokenizer,MBartConfig
+from transformers import MBartForConditionalGeneration, MBartTokenizer,MBartConfig
 
 # user defined
 from signdata import * 
@@ -102,7 +102,7 @@ def main ():
         set_seed(config.training.seed, device_specific=True)
 
     ## Create dataset 
-    tokenizer = MBart50Tokenizer.from_pretrained(config.model.tokenizer,
+    tokenizer = MBartTokenizer.from_pretrained(config.model.tokenizer,
                                                src_lang=config.dataset.lang,
                                                  tgt_lang= config.dataset.lang)
     
@@ -169,12 +169,12 @@ if __name__ == "__main__":
 
 
 '''
-accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network GFSLT_Stage2.py config=configs/stage2/Resnet_SLT_CSL_config.yaml --experiment.project="Resnet_VLP_CSL" --experiment.name="Resnet_VLP_CSL_run1" --experiment.output_dir="Resnet_VLP_CSL_run1" 
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network GFSLT_Stage2.py config=configs/stage2/Resnet_SLT_CSL_config.yaml --experiment.project="Resnet_SLT_CSL" --experiment.name="Resnet_SLT_CSL_run1" --experiment.output_dir="Resnet_SLT_CSL_run1" 
 '''
     
 
 '''
-accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network GFSLT_Stage2.py config=configs/stage2/Resnet_SLT_P14_config.yaml --experiment.project="Resnet_VLP_P14" --experiment.name="Resnet_VLP_P14_run1" --experiment.output_dir="Resnet_VLP_P14_run1" 
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network GFSLT_Stage2.py config=configs/stage2/Resnet_SLT_P14_config.yaml --experiment.project="Resnet_SLT_P14" --experiment.name="Resnet_SLT_P14_run1" --experiment.output_dir="Resnet_SLT_P14_run1" 
 '''
     
 

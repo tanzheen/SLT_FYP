@@ -1,14 +1,14 @@
 experiment:
   project: "Resnet_VLP_P14"
-  name: "Resnet_VLP_P14_run1"
-  output_dir: "../Resnet_VLP_P14_run1"
+  name: "Resnet_VLP_P14_run3"
+  output_dir: "../Resnet_SLT_P14_run3"
   save_every: 1
   log_every: 0.1
   eval_every: 1
   translate_every: 0.25
   log_grad_norm_every: 0.1
   resume: True
-  init_weight:
+  init_weight: ../Resnet_SLT_P14_run2/checkpoint-4873/unwrapped_model/pytorch_model.bin
 
 model:
   tokenizer: ./pretrain_models/MBart_proun # ./pretrain_models/mbart_model
@@ -35,9 +35,9 @@ dataset:
     person_size: 410
 
 optimizer:
-  name: adamw
+  name: sgd
   params:
-    learning_rate: 1e-4
+    learning_rate: 0.01
     beta1: 0.9
     beta2: 0.99
     weight_decay: 1e-4
@@ -50,14 +50,14 @@ lr_scheduler:
     end_lr: 1e-5
 
 training:
-  gradient_accumulation_steps: 8
-  per_gpu_batch_size: 2
-  mixed_precision: "no"
+  gradient_accumulation_steps: 4
+  per_gpu_batch_size: 4
+  mixed_precision: "fp16"
   enable_tf32: True
   enable_wandb: True
   use_ema: False
   seed: 42
   num_translated_images: 4
   max_grad_norm: 1.0
-  num_epochs: 32
+  num_epochs: 100
   scale_embedding: False

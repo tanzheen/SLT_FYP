@@ -11,9 +11,9 @@ experiment:
   init_weight:
 
 model:
-  tokenizer: ./pretrain_models/MBart_trimmed # ./pretrain_models/mbart_model
-  transformer: ./pretrain_models/MBart_trimmed # textCLIP only = 12 layers
-  visual_encoder: ./pretrain_models/mytran # text decoder and Image CLIP = 3 layers
+  tokenizer: pretrain_models/MBart_proun # ./pretrain_models/mbart_model
+  transformer: pretrain_models/MBart_proun # textCLIP only = 12 layers
+  visual_encoder: pretrain_models/mytran # text decoder and Image CLIP = 3 layers
   sign_proj: True
 
 dataset:
@@ -49,9 +49,9 @@ lr_scheduler:
     end_lr: 1e-5
 
 training:
-  gradient_accumulation_steps: 1
-  per_gpu_batch_size: 4
-  mixed_precision: "no"
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: "fp16"
   enable_tf32: True
   enable_wandb: True
   use_ema: False
