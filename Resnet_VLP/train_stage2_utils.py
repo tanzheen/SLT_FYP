@@ -4,7 +4,7 @@ import torch
 import os 
 from torch.optim import AdamW
 from signdata import SignTransDataset
-from transformers import MBart50Tokenizer
+from transformers import MBartTokenizer
 from torch.utils.data import DataLoader
 import json 
 from pathlib import Path
@@ -28,6 +28,7 @@ from SLT_CLIP import *
 import sys 
 from definition import * 
 import math 
+from torch.optim import SGD
 
 
 def get_config():
@@ -64,8 +65,6 @@ class AverageMeter(object):
 
 
 
-
-
 def create_optimizer(config, logger, model):
     """Creates optimizer for Sign2Text model."""
     logger.info("Creating optimizers.")
@@ -74,18 +73,14 @@ def create_optimizer(config, logger, model):
 
     optimizer_type = config.optimizer.name
     if optimizer_type == "adamw":
-        optimizer_cls = AdamW
-    else:
-        raise ValueError(f"Optimizer {optimizer_type} not supported")
-
-
-   
-
-    optimizer = optimizer_cls(model.parameters(),
+        optimizer = AdamW(model.parameters(),
         lr=config.optimizer.params.learning_rate,  # Default learning rate, not used as we set per group
         betas=(config.optimizer.params.beta1, config.optimizer.params.beta2)
     )
-
+    elif optimizer_type == "sgd" :
+        optimizer = SGD(model.parameters(), lr=learning_rate, momentum=0.9, weight_decay=0.01)
+    else:
+        raise ValueError(f"Optimizer {optimizer_type} not supported")
     return optimizer
 
 

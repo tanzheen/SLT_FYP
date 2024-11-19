@@ -2,7 +2,7 @@ from omegaconf import OmegaConf
 from torchinfo import summary
 import torch
 import os 
-from torch.optim import AdamW
+from torch.optim import AdamW, SGD
 from signdata import SignTransDataset
 from transformers import MBart50Tokenizer
 from torch.utils.data import DataLoader
@@ -91,17 +91,19 @@ def create_optimizer(config, logger, model):
 
     optimizer_type = config.optimizer.name
     if optimizer_type == "adamw":
-        optimizer_cls = AdamW
+        optimizer = AdamW(model.parameters(),
+        lr=config.optimizer.params.learning_rate,  # Default learning rate, not used as we set per group
+        betas=(config.optimizer.params.beta1, config.optimizer.params.beta2)
+    )
+    elif optimizer_type == "sgd" :
+        optimizer = SGD(model.parameters(), lr=learning_rate, momentum=0.9, weight_decay=0.01)
     else:
         raise ValueError(f"Optimizer {optimizer_type} not supported")
 
 
    
 
-    optimizer = optimizer_cls(model.parameters(),
-        lr=config.optimizer.params.learning_rate,  # Default learning rate, not used as we set per group
-        betas=(config.optimizer.params.beta1, config.optimizer.params.beta2)
-    )
+    
 
     return optimizer
 
