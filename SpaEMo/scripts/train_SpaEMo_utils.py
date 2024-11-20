@@ -3,7 +3,6 @@ from torchinfo import summary
 import torch
 import os 
 from torch.optim import AdamW
-from signdata import SignTransDataset
 from transformers import MBartTokenizer
 from torch.utils.data import DataLoader
 import json 
@@ -15,17 +14,13 @@ from tqdm import tqdm
 
 import glob
 import sacrebleu
-from logger import setup_logger
 from sacrebleu.metrics import BLEU 
 import numpy as np 
 
 from torch.distributed import broadcast
-from definition import *
 import torch.nn as nn
 import torch.nn.functional as F
-from SLT_CLIP import * 
 import sys 
-from definition import * 
 import math 
 from torch.optim import SGD
 from data.SignVideoData import SignVideoDataset
@@ -181,9 +176,8 @@ def translate_images(model, src, tgt, accelerator, config, global_step, output_d
     with torch.no_grad():
         generated = model.generate(
             src,
-            decoder_start_token_id=tokenizer.lang_code_to_id[config.dataset.lang],
             num_beams=4,
-            max_new_tokens=150
+            max_length = 150 
         )
 
         # Decode the generated token IDs
@@ -268,7 +262,7 @@ def eval_SpaEMo(model,dev_dataloader,accelerator):
     local_model = accelerator.unwrap_model(model)
     total_val_loss = 0 
     with torch.no_grad(): 
-        for i, (src,tgt, masked_tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
+        for i, (src,tgt) in enumerate(tqdm(dev_dataloader, desc = f"Validation!")): 
 
             output = local_model(src, tgt)
             loss = output.loss
@@ -297,7 +291,7 @@ def create_SpaEMo(config, logger):
 
 def train_one_epoch(config, accelerator, model, tokenizer,
                     train_dataloader, dev_dataloader, optimizer,
-                    logger ,  scheduler , global_step, early_stop
+                    logger ,  scheduler , global_step, early_stop, current_epoch
                     ):
     
     batch_time_meter = AverageMeter()
@@ -308,7 +302,7 @@ def train_one_epoch(config, accelerator, model, tokenizer,
     transformer_logs = defaultdict(float)
 
 
-    for step, (src_input, tgt_input, masked_tgt_input) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
+    for step, (src_input, tgt_input) in enumerate(tqdm(train_dataloader, desc=f"Training!")):
         model.train()
         # print(f"batch len: {len(batch)}")
         # print("batch shape: " ,batch.shape)
@@ -325,7 +319,7 @@ def train_one_epoch(config, accelerator, model, tokenizer,
                 accelerator.clip_grad_norm_(model.parameters(), config.training.max_grad_norm)
             
             optimizer.step()
-            scheduler.step()
+            scheduler.step(current_epoch)
 
             if (
                 accelerator.sync_gradients

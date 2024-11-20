@@ -7,7 +7,7 @@ import torch.distributed
 from accelerate import Accelerator
 from accelerate.utils import DistributedDataParallelKwargs
 from accelerate.utils import set_seed
-from logger import setup_logger
+from scripts.logger import setup_logger
 from timm.optim import create_optimizer_v2
 from timm.scheduler import  create_scheduler, create_scheduler_v2
 import torch.multiprocessing as mp
@@ -59,6 +59,7 @@ def main ():
         set_seed(config.training.seed, device_specific=True)
 
     tokenizer = AutoTokenizer.from_pretrained(config.model.tokenizer)
+    tokenizer.padding_side= 'right'
 
     train_dataloader, dev_dataloader, test_dataloader = create_dataloader(config, 
                                                                           logger, 
@@ -100,7 +101,7 @@ def main ():
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
         global_step, early_stop= train_one_epoch(config, accelerator, model, tokenizer,
                     train_dataloader, dev_dataloader, optimizer,
-                    logger ,  scheduler , global_step, early_stop) # the early stopping will be passed back in again 
+                    logger ,  scheduler , global_step, early_stop, current_epoch ) # the early stopping will be passed back in again 
     
 
     # Save the final trained checkpoint
@@ -127,7 +128,7 @@ if __name__ == "__main__":
 
 
 '''
-'accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network train_SpaEMo_script.py config=configs/SpaEMo_P14_config.yaml --experiment.project="SpaEMo_P14" --experiment.name="SpaEMo_P14_run1" --experiment.output_dir="SpaEMo_P14_run1"'
+accelerate launch --num_machines=1 --num_processes=1 --machine_rank=0 --main_process_ip=127.0.0.1 --main_process_port=9999 --same_network train_SpaEMo_script.py config=configs/SpaEMo_P14_config.yaml --experiment.project="SpaEMo_P14" --experiment.name="SpaEMo_P14_run1" --experiment.output_dir="SpaEMo_P14_run1"
 '''
 
 

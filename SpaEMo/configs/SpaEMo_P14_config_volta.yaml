@@ -1,7 +1,7 @@
 experiment:
   project: "SpaEMo_P14"
   name: "SpaEMo_P14_run1"
-  output_dir: "../SpaEMo_P14_run1"
+  output_dir: "/scratch2/e0724993/SpaEMo_P14_run1"
   save_every: 1
   log_every: 0.1
   eval_every: 1
@@ -11,11 +11,12 @@ experiment:
   init_weight:
 
 model:
-  tokenizer: text/gemma_instruct_2b
-  emotion_model: trpakov/vit-face-expression
-  spatio_model: openai/clip-vit-large-patch14
-  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
-  llm: text/gemma_instruct_2b
+  tokenizer: /scratch2/e0724993/gemma_instruct_2b
+  emotion_model: /scratch2/e0724993/vit_face_expression
+  spatio_model: /scratch2/e0724993/openai_vit
+  motion_model: /scratch2/e0724993/videomae
+  face_detector: /scratch2/e0724993/yunet/face_detection_yunet_2023mar.onnx
+  llm: /scratch2/e0724993/gemma_instruct_2b
   transformer_type: causal
   emo_hiddim: 768
   spatio_hiddim: 768
@@ -25,10 +26,10 @@ dataset:
   name: PHOENIX2014T
   prompt: "Translate the following sentence into spoken German:"
   lang: de_DE
-  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
-  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
-  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
-  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px # + <train/dev/test> + <video_name>
+  train: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px # + <train/dev/test> + <video_name>
   max_length: 300
   params:
     num_workers: 4

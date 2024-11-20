@@ -6,7 +6,7 @@ from PIL import Image
 import os
 import random
 import numpy as np
-from definition import *
+
 import pickle
 from vidaug import augmentors as va
 import math 
@@ -29,9 +29,9 @@ def load_annot_file(file_path):
 
 class FaceDetectorYunet():
     def __init__(self,
-                  model_path='./face_detection_yunet_2023mar.onnx',
+                  model_path='./Emo/face_detection_yunet_2023mar.onnx',
                   img_size=(300, 300),
-                  threshold=0.5):
+                  threshold=0.1):
         self.model_path = model_path
         self.img_size = img_size
         self.fd = cv2.FaceDetectorYN_create(str(model_path),
@@ -167,9 +167,10 @@ class SignVideoDataset(Dataset):
             # va.RandomCrop(size=(256, 256)),
             sometimes(va.RandomTranslate(x=10, y=10))]
         )
-        self.facial_processor = AutoImageProcessor.from_pretrained("trpakov/vit-face-expression")
-        self.image_processor =  AutoProcessor.from_pretrained("openai/clip-vit-large-patch14")
-        self.video_processor = AutoImageProcessor.from_pretrained("MCG-NJU/videomae-large-finetuned-kinetics")
+        
+        self.facial_processor = AutoImageProcessor.from_pretrained(config.model.emotion_model)
+        self.image_processor =  AutoImageProcessor.from_pretrained(config.model.spatio_model)
+        self.video_processor = AutoImageProcessor.from_pretrained(config.model.motion_model)
         self.transformer_type = config.model.transformer_type 
 
     def __len__(self):
@@ -196,7 +197,7 @@ class SignVideoDataset(Dataset):
         
         text_label = file['translation']  # Corresponding translation (text label). 
         if self.transformer_type == 'causal': 
-            text_label = " " + text_label
+            text_label =" "+ text_label
         length = file['length']  # Number of frames in the video.
         
         # Load the images for the video and pad as necessary.
@@ -252,7 +253,7 @@ class SignVideoDataset(Dataset):
         
         return batch_image , paths 
 
-    def extract_faces(self, img_sample, face_detector):
+    def extract_faces(self, name, img_sample, face_detector):
         """
         Extract faces from the images using the provided face detector.
         
@@ -268,44 +269,51 @@ class SignVideoDataset(Dataset):
                 ])
         plots= [] 
         faces_PIL = []
+        #print("length of img_sample to face detector : ", len(img_sample))
         for img in img_sample:
             img_width , img_height = img.size
             img = np.array(img)
             faces = face_detector.detect(img)
+            if faces is None:
+                #print(f"No face detected in {name}")
+                # take previous face 
+                faces = [prev_face]
             if len(faces)>1: # Sometimes hands might be detected as faces, the face will have the lowest y2
                 faces = [min(faces, key=lambda x: x['y2'])]
             face = faces[0]
             x1, y1, x2, y2 = face['x1'], face['y1'], face['x2'], face['y2']
-        # Calculate width and height of the bounding box
-        width = x2 - x1
-        height = y2 - y1
+            
+            # Calculate width and height of the bounding box
+            width = x2 - x1
+            height = y2 - y1
 
-        # Determine the size of the square side (maximum of width and height)
-        side_length = max(width, height)
+            # Determine the size of the square side (maximum of width and height)
+            side_length = max(width, height)
 
-        # Calculate the center of the original bounding box
-        center_x = x1 + width // 2
-        center_y = y1 + height // 2
+            # Calculate the center of the original bounding box
+            center_x = x1 + width // 2
+            center_y = y1 + height // 2
 
-        # Adjust the bounding box to make it a square, centered around the original box
-        new_x1 = center_x - side_length // 2
-        new_y1 = center_y - side_length // 2
-        new_x2 = new_x1 + side_length
-        new_y2 = new_y1 + side_length
+            # Adjust the bounding box to make it a square, centered around the original box
+            new_x1 = center_x - side_length // 2
+            new_y1 = center_y - side_length // 2
+            new_x2 = new_x1 + side_length
+            new_y2 = new_y1 + side_length
 
-        # Ensure the new bounding box stays within the image boundaries
-        new_x1 = max(0, new_x1)
-        new_y1 = max(0, new_y1)
-        new_x2 = min(img_width, new_x2)
-        new_y2 = min(img_height, new_y2)
-        
-        # Crop the face from the image
-        cropped_face = img[new_y1:new_y2, new_x1:new_x2]
-        plots.append(cropped_face)
-        # Convert the cropped face to a tensor
-        face_tensor = transform(cropped_face) ## need to convert back to PIL image after cropping
-        faces_PIL.append(face_tensor)
-
+            # Ensure the new bounding box stays within the image boundaries
+            new_x1 = max(0, new_x1)
+            new_y1 = max(0, new_y1)
+            new_x2 = min(img_width, new_x2)
+            new_y2 = min(img_height, new_y2)
+            
+            # Crop the face from the image
+            cropped_face = img[new_y1:new_y2, new_x1:new_x2]
+            plots.append(cropped_face)
+            # Convert the cropped face to a tensor
+            face_tensor = transform(cropped_face) ## need to convert back to PIL image after cropping
+            faces_PIL.append(face_tensor)
+            prev_face = face
+        #print ("faces_PIL: ", faces_PIL)
         return faces_PIL, plots
     
 
@@ -339,6 +347,7 @@ class SignVideoDataset(Dataset):
                 - 'tgt_batch': The batched text labels.
         """
         name_batch, emo_batch, image_batch, clip_batch, num_frames_batch, num_clips_batch, tgt_batch = [], [], [], [], [], [], []
+        face_detector = FaceDetectorYunet(model_path = self.config.model.face_detector )
         for name, img_sample, text_label in batch: 
             name_batch.append(name)
             tgt_batch.append(text_label)
@@ -347,8 +356,10 @@ class SignVideoDataset(Dataset):
             # Cut up video properly to a list of list of 16 images
             
             num_clips = math.ceil((len(img_sample)-8) / 8)
-            num_frames = num_clips * 8 +8
+            num_frames = num_clips * 8 +8 
 
+        
+            #print("length of image sample: ", len(img_sample), "num_clips: ", num_clips, "num_frames: ", num_frames)
             # if not enough frames, repeat the last frame
             img_sample.extend([img_sample[-1]]*(num_frames-len(img_sample)))
             
@@ -356,6 +367,7 @@ class SignVideoDataset(Dataset):
             clip_sample = [img_sample[i:i+16] for i in range(0, len(img_sample), 8) 
                            if len(img_sample[i:i+16])==16 if len(img_sample)-i>8]
 
+            assert num_clips == len(clip_sample), f"Number of clips mismatch: {num_clips} vs {len(clip_sample)}"
 
             # Add the clips and images to the batch
             clip_batch.extend(clip_sample)
@@ -364,12 +376,15 @@ class SignVideoDataset(Dataset):
             image_batch.extend(img_sample)
 
             # Extract facial features 
-            face_detector = FaceDetectorYunet()
-            faces_PIL, plots = self.extract_faces(img_sample, face_detector)
+            
+            faces_PIL, plots = self.extract_faces(name, img_sample, face_detector)
 
             emo_batch.extend(faces_PIL)
+        #print(f"tgt_batch: {tgt_batch}")
 
         # Transform images using AutoProcessors 
+        #print(len(image_batch))
+        #print(image_batch)
         clip_batch = self.video_processor(clip_batch, return_tensors="pt")
         image_batch = self.image_processor(image_batch, return_tensors="pt")
         emo_batch = self.facial_processor(emo_batch, return_tensors="pt")

@@ -5,6 +5,7 @@ from torch.nn.utils.rnn import pad_sequence
 import copy 
 from peft import LoraConfig, get_peft_model
 import os 
+import math
 from typing import Union, Callable, Dict, Optional
 
 def create_mask(seq_lengths: list, device="cpu"):
@@ -31,11 +32,14 @@ class Emo_extractor(nn.Module):
         # for param in self.emotion_model.vit.parameters():
         #     param.requires_grad = False
 
-    def extract_emo_features(self, faces): 
+    def forward(self, faces): 
         with torch.no_grad():
+            #print("faces shape: ", faces.pixel_values.shape)
             embeddings = self.emotion_model.vit.embeddings(faces.pixel_values)  # Obtain embeddings from the ViT backbone
             encoder_outputs = self.emotion_model.vit.encoder(embeddings)  # Pass through the encoder layers
             features = self.emotion_model.vit.layernorm(encoder_outputs[0][:, 0, :])  # Extract [CLS] token feature
+        
+        #print(f"emo features shape: {features.shape}")
         return features # hidden size = 768
     
 class Spatio_extractor(nn.Module): 
@@ -48,7 +52,6 @@ class Spatio_extractor(nn.Module):
         # Freeze all parameters in the spatio extractor model
         # for param in self.spatio_extractor.parameters():
         #     param.requires_grad = False
-
     
     def forward(self, images): 
         with torch.no_grad():
@@ -88,8 +91,8 @@ class SignAdaptor (nn.Module):
         start_clips = 0 
         start_frames = 0 
         for i , (num_clips, num_frames) in enumerate(zip(num_clips_batch, num_frames_batch)): 
-            repeat_factor = num_frames/num_clips # number of times to repeat clips 
-
+            repeat_factor = math.floor(num_frames/num_clips) # number of times to repeat clips 
+            #print(f"num_clips: {num_clips}, num_frames: {num_frames}, repeat factor: {repeat_factor}")
             end_clips = start_clips + num_clips
             end_frames = start_frames  + num_frames
             current_images = image_batch[start_frames :end_frames]
@@ -98,8 +101,13 @@ class SignAdaptor (nn.Module):
 
             # repeat the number of clips accordingly 
             expanded_clips = current_clips.unsqueeze(1).repeat(1, repeat_factor, 1)
-            expanded_clips= expanded_clips.view(-1, current_clips.size(1))
+            expanded_clips = expanded_clips.view(-1, current_clips.size(1))
 
+            #repeat the last clip again if required
+            if repeat_factor*num_clips < num_frames:
+                last_clip = current_clips[-1].unsqueeze(0).repeat(num_frames - repeat_factor*num_clips, 1)
+                expanded_clips = torch.cat([expanded_clips, last_clip], dim=0)
+            #print(f"shape of current_emos: {current_emos.shape}, shape of current_images: {current_images.shape}, shape of expanded_clips: {expanded_clips.shape}")
             # Concat the features along the dimensions
             combined_features = torch.cat([current_emos, current_images, expanded_clips], dim=1) 
             embeddings_batch.append(combined_features)
@@ -165,12 +173,12 @@ class TemporalConv(nn.Module):
     def forward(self, frame_feat, lgt):
         # need to make sure it is permuted correctly
         # frame_feat: batch_size, hidden_size, seq_len
-        visual_feat = self.temporal_conv(frame_feat)
+        visual_feat = self.temporal_conv(frame_feat.permute(0,2,1))
         lgt = self.update_lgt(lgt)
-        attn_masks = create_mask(seq_lengths = lgt.cpu().to(torch.int).tolist())
+        attn_masks = create_mask(seq_lengths = lgt)
         return {
             "visual_feat": visual_feat.permute(0, 2, 1),
-            "feat_len": lgt.cpu(),
+            "feat_len": lgt,
             "src_attn": attn_masks
         }
     
@@ -291,9 +299,6 @@ class BaseModel(torch.nn.Module):
         self.eval()
 
 
-    
-
-
 
 class SpaEMo(BaseModel):
     def __init__(self, config) : 
@@ -364,14 +369,14 @@ class SpaEMo(BaseModel):
         return new_input_embeds, new_labels
 
     def forward(self, src_input,tgt_input):
-        emo_features = self.emo_extractor.extract_emo_features(src_input['faces'])
-        spatio_features = self.spatio_extractor(src_input['images'])
-        motion_features = self.motion_extractor(src_input['videos'])
+        emo_features = self.emo_extractor(src_input['emo_batch'])
+        spatio_features = self.spatio_extractor(src_input['image_batch'])
+        motion_features = self.motion_extractor(src_input['clip_batch'])
 
         # Create a new dictionary for transferring of results
-        emb_input = {'faces': emo_features, 
-                     'images': spatio_features, 
-                     'videos': motion_features, 
+        emb_input = {'emo_batch': emo_features, 
+                     'image_batch': spatio_features, 
+                     'clip_batch': motion_features, 
                      'num_clips_batch': src_input['num_clips_batch'],
                      'num_frames_batch': src_input['num_frames_batch'],}
         
@@ -383,3 +388,57 @@ class SpaEMo(BaseModel):
 
         return outputs
     
+    def create_generation_inputs(self, visual_feats ,visual_attn,  tokenizer , prompt): 
+        # The space will be added by the model itself
+        prompt_ids = tokenizer(prompt, return_tensors="pt", add_special_tokens=True)
+        prompt_len = len(prompt_ids["input_ids"][0])
+        #print(f"prompt_len: {prompt_len}")
+        #print(f"visual feats shape: {visual_feats.shape}")
+        prompt_embeds = self.lora_model.get_input_embeddings()(prompt_ids["input_ids"]).squeeze()
+
+
+        #print(f"tgt embeds: {tgt_embeds.shape}")
+        #print(f"tgt attn: {tgt_attn.shape}")
+        new_input_embeds = [] 
+
+
+        for i in range(visual_feats.shape[0]): # batch size
+            curr_vis_feats = visual_feats[i] # take the current visual features
+            curr_vis_attn = visual_attn[i] # take the current visual attention mask
+            curr_vis_feats = curr_vis_feats[curr_vis_attn==1] # only take the visual features that are attended to
+
+            curr_vis_len = curr_vis_feats.shape[0] # get the length of the visual features
+    
+            combined_embeds = torch.cat((prompt_embeds, curr_vis_feats), dim = 0) #Concat all the embeddings
+            #print(f"combined_embeds: {combined_embeds}")
+            new_input_embeds.append(combined_embeds) 
+       
+            # assert the length of the labels is the same as the combined embeddings
+        
+        # perform padding for the batch before returning
+        new_input_embeds = torch.nn.utils.rnn.pad_sequence(new_input_embeds, batch_first=True, padding_value=0)
+        #print("HERE", [labels.shape for labels in new_labels])
+
+        return new_input_embeds
+
+    def generate(self, src_input, num_beams =4, max_length = 100): 
+        with torch.no_grad(): 
+            emo_features = self.emo_extractor(src_input['emo_batch'])
+            spatio_features = self.spatio_extractor(src_input['image_batch'])
+            motion_features = self.motion_extractor(src_input['clip_batch'])
+
+            # Create a new dictionary for transferring of results
+            emb_input = {'emo_batch': emo_features, 
+                        'image_batch': spatio_features, 
+                        'clip_batch': motion_features, 
+                        'num_clips_batch': src_input['num_clips_batch'],
+                        'num_frames_batch': src_input['num_frames_batch'],}
+            
+            combined_features = self.adaptor(emb_input, self.tokenizer.pad_token_id)
+            temporal_features = self.tconv(combined_features, src_input['num_frames_batch'])
+            vis_features = self.mlp(temporal_features['visual_feat'])
+            new_input_embeds  = self.create_generation_inputs(vis_features, temporal_features['src_attn'],  self.tokenizer, self.config.dataset.prompt )  
+            outputs = self.lora_model.generate(inputs_embeds = new_input_embeds, num_beams = num_beams, max_length = max_length)
+
+        return outputs
+

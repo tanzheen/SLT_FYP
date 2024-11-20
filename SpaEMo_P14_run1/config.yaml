@@ -9,7 +9,7 @@ experiment:
   log_grad_norm_every: 0.1
   resume: true
   init_weight: null
-  logging_dir: ../SpaEMo_P14_run1/logs
+  logging_dir: ../SpaEMo_P14_run1\logs
 model:
   tokenizer: text/gemma_instruct_2b
   emotion_model: trpakov/vit-face-expression
@@ -47,9 +47,9 @@ lr_scheduler:
 training:
   gradient_accumulation_steps: 8
   per_gpu_batch_size: 2
-  mixed_precision: 'no'
+  mixed_precision: fp16
   enable_tf32: true
-  enable_wandb: true
+  enable_wandb: false
   use_ema: false
   seed: 42
   num_translated_images: 4
