@@ -113,10 +113,14 @@ def main ():
 
     ## Count the number of parameters here
     text_decoder = Text_Decoder(config)
+    if config.experiment.td_init_weight: 
+        td_weight = torch.load(config.experiment.td_init_weight, map_location="cpu")
+        msg = text_decoder.load_state_dict(td_weight, strict=False)
+        logger.info(f"loading weight from {config.experiment.td_init_weight}, msg: {msg}")
     optimizer_td = AdamW(text_decoder.parameters(), lr=config.optimizer.params.learning_rate)
     lr_scheduler_td = scheduler.CosineAnnealingLR(
                 optimizer=optimizer_td,
-                eta_min=1e-8,
+                eta_min=1e-6,
                 T_max=config.training.num_epochs,
             )
     
@@ -146,9 +150,9 @@ def main ():
     num_train_epochs = config.training.num_epochs
     early_stop = EarlyStopping(verbose=True)
     early_stop_td = EarlyStopping(verbose=True)
+
     for current_epoch in range(first_epoch, num_train_epochs):
         torch.cuda.empty_cache()
-
         accelerator.print(f"Epoch {current_epoch}/{num_train_epochs-1} started.")
         global_step, early_stop, early_stop_td = train_one_epoch(config, accelerator, model, criterion, tokenizer,
                     train_dataloader, dev_dataloader, optimizer,

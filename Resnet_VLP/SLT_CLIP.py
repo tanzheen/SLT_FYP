@@ -177,9 +177,9 @@ class ImageCLIP(nn.Module):
 class Text_Decoder(BaseModel):
     def __init__(self, config):
         super().__init__()
-        self.text_decoder = MBartForConditionalGeneration.from_pretrained(config['model']['transformer']).get_decoder()
-        self.lm_head = MBartForConditionalGeneration.from_pretrained(config['model']['transformer']).get_output_embeddings()
-        self.register_buffer("final_logits_bias", torch.zeros((1, MBartForConditionalGeneration.from_pretrained(config['model']['transformer']).model.shared.num_embeddings)))
+        self.text_decoder = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_decoder()
+        self.lm_head = MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).get_output_embeddings()
+        self.register_buffer("final_logits_bias", torch.zeros((1, MBartForConditionalGeneration.from_pretrained(config['model']['visual_encoder']).model.shared.num_embeddings)))
 
     
     def forward(self, tgt_input, masked_tgt_input, model_txt):
@@ -200,11 +200,10 @@ class Text_Decoder(BaseModel):
     
         
 class SLRCLIP(BaseModel):
-    def __init__(self, config, embed_dim=1024) :
+    def __init__(self, config, embed_dim=1024):
         super().__init__()
         self.model_txt = TextCLIP(config, inplanes=embed_dim, planes=embed_dim)
         self.model_images = ImageCLIP(config, inplanes=embed_dim, planes=embed_dim)
-
         self.logit_scale = nn.Parameter(torch.ones([]) * np.log(1 / 0.07))
 
     def get_model_txt(self):
@@ -228,7 +227,6 @@ class SLRCLIP(BaseModel):
         logits_per_text = logit_scale * text_features @ image_features.t()
 
         ground_truth = torch.eye(logits_per_image.shape[0], device=logits_per_text.device, dtype=logits_per_image.dtype, requires_grad=False)
-
         return logits_per_image, logits_per_text, ground_truth
 
 class FeatureExtracter(nn.Module):

@@ -1,17 +1,19 @@
 experiment:
   project: "Resnet_VLP_P14"
-  name: "Resnet_VLP_P14_run1"
-  output_dir: "/scratch2/e0724993/Resnet_VLP_P14_run1"
+  name: "Resnet_VLP_P14_run2"
+  output_dir: "/scratch2/e0724993/Resnet_VLP_P14_run"
   save_every: 1
   log_every: 0.1
   eval_every: 1
   log_grad_norm_every: 0.25
+  translate_every: 0.25 
   resume: True
-  init_weight:
+  init_weight: /scratch2/e0724993/Resnet_VLP_P14_run1/checkpoint-19049/unwrapped_model/pytorch_model.bin
+  td_init_weight: /scratch2/e0724993/Resnet_VLP_P14_run1/checkpoint-19049/text_decoder/pytorch_model.bin
 
 model:
-  tokenizer: /hpctmp/e0724993/pretrain_models/MBart_trimmed # ./pretrain_models/mbart_model
-  transformer: /hpctmp/e0724993/pretrain_models/MBart_trimmed # textCLIP only = 12 layers
+  tokenizer: /hpctmp/e0724993/pretrain_models/MBart_proun # ./pretrain_models/mbart_model
+  transformer: /hpctmp/e0724993/pretrain_models/MBart_proun # textCLIP only = 12 layers
   visual_encoder: /hpctmp/e0724993/pretrain_models/mytran # text decoder and Image CLIP = 3 layers
   sign_proj: True
 
@@ -33,19 +35,19 @@ dataset:
     person_size: 410
 
 optimizer:
-  name: adamw
+  name: sgd
   params:
-    learning_rate: 1e-4
+    learning_rate: 1e-3
     beta1: 0.9
     beta2: 0.99
-    weight_decay: 1e-5
+    weight_decay: 1e-3
 
 lr_scheduler:
   scheduler: cosine
   params:
     learning_rate: ${optimizer.params.learning_rate}
     warmup_steps: 4000
-    end_lr: 1e-5
+    end_lr: 1e-4
 
 training:
   gradient_accumulation_steps: 8 

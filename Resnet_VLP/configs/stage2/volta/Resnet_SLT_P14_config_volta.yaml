@@ -1,0 +1,63 @@
+experiment:
+  project: "Resnet_SLT_P14"
+  name: "Resnet_SLT_P14_run1"
+  output_dir: "/scratch2/e0724993/Resnet_SLT_P14_run1"
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: True
+  init_weight:
+
+model:
+  tokenizer: /hpctmp/e0724993/pretrain_models/MBart_proun # ./pretrain_models/mbart_model
+  transformer: /hpctmp/e0724993/pretrain_models/MBart_proun # textCLIP only = 12 layers
+  visual_encoder: /hpctmp/e0724993/pretrain_models/mytran # text decoder and Image CLIP = 3 layers
+  sign_proj: True
+  after_pretrained: /hpctmp/e0724993/transferred_mbart_model
+
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px # + <train/dev/test> + <video_name>
+  max_length: 300
+  params:
+    num_workers: 4
+  preprocessing:
+    crop_size: 224
+    resize_shorter_edge: 256
+    random_crop: True
+    random_flip: True
+    person_size: 410
+
+optimizer:
+  name: sgd
+  params:
+    learning_rate: 1e-3
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 1e-3
+
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 1e-5
+
+training:
+  gradient_accumulation_steps: 4
+  per_gpu_batch_size: 4
+  mixed_precision: "no"
+  enable_tf32: True
+  enable_wandb: False
+  use_ema: False
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: False

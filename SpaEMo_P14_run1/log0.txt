@@ -1,0 +1,1127 @@
+[32m[11/19 14:41:11 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 14:41:11 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: gemma_instruct_2b
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 14:41:48 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 14:41:48 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 14:41:49 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 14:42:31 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 14:42:31 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 14:42:32 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 14:44:47 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 14:44:47 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+dataset:
+  name: PHOENIX2014T
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 14:44:48 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 14:51:27 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 14:51:27 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 14:51:27 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 14:52:04 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 14:52:04 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 14:52:05 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 14:52:17 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 14:54:45 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 14:54:45 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 14:54:45 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 14:54:59 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:05:25 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:05:25 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:05:26 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:05:38 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:09:48 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:09:48 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:09:49 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:10:00 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:10:32 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:10:32 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:10:32 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:10:44 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:11:20 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:11:20 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:11:21 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:11:33 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:14:32 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:14:32 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:14:33 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:14:44 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:16:21 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:16:21 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:16:21 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:16:32 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:18:46 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:18:46 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:18:47 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:18:58 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:21:34 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:21:34 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:21:35 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:21:47 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:24:46 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:24:46 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:24:47 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:24:58 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:28:21 SpaEMo_P14]: [0mSaving config to ../SpaEMo_P14_run1/config.yaml
+[32m[11/19 15:28:21 SpaEMo_P14]: [0mConfig:
+experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: ../SpaEMo_P14_run1
+  save_every: 1
+  log_every: 0.1
+  eval_every: 1
+  translate_every: 0.25
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: null
+  logging_dir: ../SpaEMo_P14_run1/logs
+model:
+  tokenizer: text/gemma_instruct_2b
+  emotion_model: trpakov/vit-face-expression
+  spatio_model: openai/clip-vit-large-patch14
+  motion_model: MCG-NJU/videomae-large-finetuned-kinetics
+  llm: text/gemma_instruct_2b
+  transformer_type: causal
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+dataset:
+  name: PHOENIX2014T
+  prompt: 'Translate the following sentence into spoken German:'
+  lang: de_DE
+  train: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: ../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px
+  max_length: 300
+  params:
+    num_workers: 4
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5.0e-05
+training:
+  gradient_accumulation_steps: 8
+  per_gpu_batch_size: 2
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: true
+  use_ema: false
+  seed: 42
+  num_translated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 32
+  scale_embedding: false
+config: configs/SpaEMo_P14_config.yaml
+--experiment:
+  project: SpaEMo_P14
+  name: SpaEMo_P14_run1
+  output_dir: SpaEMo_P14_run1
+
+[32m[11/19 15:28:21 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
+[32m[11/19 15:28:33 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/19 15:29:16 SpaEMo_P14]: [0mAll globbed checkpoints are: []

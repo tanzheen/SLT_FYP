@@ -1,0 +1,1 @@
+{"src_lang": null, "tgt_lang": null, "bos_token": "<s>", "eos_token": "</s>", "sep_token": "</s>", "unk_token": "<unk>", "pad_token": "<pad>", "special_tokens_map_file": "m2m_100_1.2B_v2/special_tokens_map.json", "tokenizer_file": null, "name_or_path": "m2m_100_1.2B_v2"}

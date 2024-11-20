@@ -1,0 +1,4779 @@
+Bus Voltage:   3.95200 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  3.95339 V
+Current:       13.90000 mA
+
+Digi pot level: 21
+Bus Voltage:   3.95200 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  3.95339 V
+Current:       13.90000 mA
+
+Turn on Voltage: 1.92 V
+Planck's constant (h): 6.7684202194
+Digi pot level: 0
+Bus Voltage:   3.18000 V
+Shunt Voltage: 0.88000 mV
+Load Voltage:  3.18088 V
+Current:       8.70000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.23200 V
+Shunt Voltage: 0.91000 mV
+Load Voltage:  3.23291 V
+Current:       9.10000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.28400 V
+Shunt Voltage: 0.94000 mV
+Load Voltage:  3.28494 V
+Current:       9.40000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.33600 V
+Shunt Voltage: 0.98000 mV
+Load Voltage:  3.33698 V
+Current:       9.80000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.38400 V
+Shunt Voltage: 1.01000 mV
+Load Voltage:  3.38501 V
+Current:       10.10000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.43200 V
+Shunt Voltage: 1.05000 mV
+Load Voltage:  3.43305 V
+Current:       10.40000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.48400 V
+Shunt Voltage: 1.08000 mV
+Load Voltage:  3.48508 V
+Current:       10.80000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.53600 V
+Shunt Voltage: 1.11000 mV
+Load Voltage:  3.53711 V
+Current:       11.10000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.58800 V
+Shunt Voltage: 1.15000 mV
+Load Voltage:  3.58915 V
+Current:       11.40000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.63200 V
+Shunt Voltage: 1.18000 mV
+Load Voltage:  3.63318 V
+Current:       11.70000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.68400 V
+Shunt Voltage: 1.21000 mV
+Load Voltage:  3.68521 V
+Current:       12.10000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.73600 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.73724 V
+Current:       12.40000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.77600 V
+Shunt Voltage: 1.28000 mV
+Load Voltage:  3.77728 V
+Current:       12.70000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.82800 V
+Shunt Voltage: 1.31000 mV
+Load Voltage:  3.82931 V
+Current:       13.00000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.87600 V
+Shunt Voltage: 1.34000 mV
+Load Voltage:  3.87734 V
+Current:       13.40000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.91600 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  3.91737 V
+Current:       13.70000 mA
+
+Digi pot level: 16
+Bus Voltage:   3.96000 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  3.96140 V
+Current:       13.90000 mA
+
+Digi pot level: 17
+Bus Voltage:   3.95600 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  3.95740 V
+Current:       14.00000 mA
+
+Digi pot level: 18
+Bus Voltage:   3.95600 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  3.95739 V
+Current:       14.00000 mA
+
+Digi pot level: 19
+Bus Voltage:   3.95600 V
+Shunt Voltage: 1.41000 mV
+Load Voltage:  3.95741 V
+Current:       14.00000 mA
+
+Digi pot level: 20
+Bus Voltage:   3.96000 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  3.96140 V
+Current:       14.00000 mA
+
+Turn on Voltage: 1.88 V
+Planck's constant (h): 6.6237940788
+Digi pot level: 0
+Bus Voltage:   3.18000 V
+Shunt Voltage: 0.88000 mV
+Load Voltage:  3.18088 V
+Current:       8.80000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.91000 mV
+Load Voltage:  3.23691 V
+Current:       9.10000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.28000 V
+Shunt Voltage: 0.95000 mV
+Load Voltage:  3.28095 V
+Current:       9.40000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.34000 V
+Shunt Voltage: 0.98000 mV
+Load Voltage:  3.34098 V
+Current:       9.80000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.39200 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.39302 V
+Current:       10.20000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.44800 V
+Shunt Voltage: 1.05000 mV
+Load Voltage:  3.44905 V
+Current:       10.50000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.49200 V
+Shunt Voltage: 1.08000 mV
+Load Voltage:  3.49308 V
+Current:       10.80000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.54400 V
+Shunt Voltage: 1.12000 mV
+Load Voltage:  3.54512 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.58800 V
+Shunt Voltage: 1.15000 mV
+Load Voltage:  3.58915 V
+Current:       11.50000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.64000 V
+Shunt Voltage: 1.18000 mV
+Load Voltage:  3.64118 V
+Current:       11.80000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.69200 V
+Shunt Voltage: 1.21000 mV
+Load Voltage:  3.69321 V
+Current:       12.10000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.74000 V
+Shunt Voltage: 1.25000 mV
+Load Voltage:  3.74125 V
+Current:       12.40000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.79200 V
+Shunt Voltage: 1.28000 mV
+Load Voltage:  3.79328 V
+Current:       12.80000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.83600 V
+Shunt Voltage: 1.31000 mV
+Load Voltage:  3.83731 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.88800 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  3.88935 V
+Current:       13.40000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.92800 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  3.92938 V
+Current:       13.80000 mA
+
+Digi pot level: 16
+Bus Voltage:   3.97600 V
+Shunt Voltage: 1.41000 mV
+Load Voltage:  3.97741 V
+Current:       14.00000 mA
+
+Digi pot level: 17
+Bus Voltage:   3.97600 V
+Shunt Voltage: 1.41000 mV
+Load Voltage:  3.97741 V
+Current:       14.10000 mA
+
+Digi pot level: 18
+Bus Voltage:   3.98400 V
+Shunt Voltage: 1.41000 mV
+Load Voltage:  3.98541 V
+Current:       14.10000 mA
+
+Digi pot level: 19
+Bus Voltage:   3.98400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  3.98542 V
+Current:       14.10000 mA
+
+Digi pot level: 20
+Bus Voltage:   3.98400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  3.98542 V
+Current:       14.10000 mA
+
+Turn on Voltage: 1.87 V
+Planck's constant (h): 6.5807962418
+Digi pot level: 0
+Bus Voltage:   3.19200 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.19289 V
+Current:       8.80000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.24400 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.24492 V
+Current:       9.10000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.29200 V
+Shunt Voltage: 0.95000 mV
+Load Voltage:  3.29295 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.34400 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.34499 V
+Current:       9.80000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.40000 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.40102 V
+Current:       10.10000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.44400 V
+Shunt Voltage: 1.05000 mV
+Load Voltage:  3.44505 V
+Current:       10.50000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.50400 V
+Shunt Voltage: 1.08000 mV
+Load Voltage:  3.50508 V
+Current:       10.90000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.54913 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.60116 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.65200 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.65319 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.70000 V
+Shunt Voltage: 1.22000 mV
+Load Voltage:  3.70122 V
+Current:       12.20000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.74400 V
+Shunt Voltage: 1.25000 mV
+Load Voltage:  3.74525 V
+Current:       12.50000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.79200 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  3.79329 V
+Current:       12.80000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.84400 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  3.84532 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.89600 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  3.89735 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.94000 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  3.94138 V
+Current:       13.80000 mA
+
+Digi pot level: 16
+Bus Voltage:   3.98400 V
+Shunt Voltage: 1.41000 mV
+Load Voltage:  3.98541 V
+Current:       14.10000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.00000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.00143 V
+Current:       14.20000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.00400 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.00543 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   3.99600 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  3.99743 V
+Current:       14.30000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.00400 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.00543 V
+Current:       14.20000 mA
+
+Digi pot level: 21
+Bus Voltage:   4.00400 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.00543 V
+Current:       14.20000 mA
+
+Turn on Voltage: 1.89 V
+Planck's constant (h): 6.6537060738
+Digi pot level: 0
+Bus Voltage:   3.19600 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.19689 V
+Current:       8.80000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.24400 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.24492 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.29600 V
+Shunt Voltage: 0.95000 mV
+Load Voltage:  3.29695 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.35200 V
+Shunt Voltage: 0.97000 mV
+Load Voltage:  3.35297 V
+Current:       9.70000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.40400 V
+Shunt Voltage: 1.01000 mV
+Load Voltage:  3.40501 V
+Current:       10.10000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.44800 V
+Shunt Voltage: 1.04000 mV
+Load Voltage:  3.44904 V
+Current:       10.30000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.50000 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.50106 V
+Current:       10.60000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.54910 V
+Current:       11.00000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.14000 mV
+Load Voltage:  3.60114 V
+Current:       11.30000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.64400 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.64517 V
+Current:       11.60000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.71600 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  3.71720 V
+Current:       12.00000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.74800 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  3.74926 V
+Current:       12.50000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.77600 V
+Shunt Voltage: 1.28000 mV
+Load Voltage:  3.77728 V
+Current:       12.70000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.86000 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  3.86132 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.90000 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  3.90136 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.96800 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  3.96940 V
+Current:       13.90000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.01200 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.01343 V
+Current:       14.20000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.02000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.02143 V
+Current:       14.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.02800 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.02944 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.03744 V
+Current:       14.30000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.03200 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.03344 V
+Current:       14.30000 mA
+
+Turn on Voltage: 1.90 V
+Planck's constant (h): 6.6852889061
+Digi pot level: 0
+Bus Voltage:   3.21200 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.21289 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.26400 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.26493 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.31600 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.31696 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.37200 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.37300 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.42000 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.42103 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.47200 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.47306 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.52400 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.52510 V
+Current:       10.90000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.57200 V
+Shunt Voltage: 1.14000 mV
+Load Voltage:  3.57314 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.62800 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.62917 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.68000 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  3.68120 V
+Current:       12.00000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.73200 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  3.73323 V
+Current:       12.40000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.77600 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.77727 V
+Current:       12.70000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.83200 V
+Shunt Voltage: 1.31000 mV
+Load Voltage:  3.83331 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.87600 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.87733 V
+Current:       13.30000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.92400 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  3.92537 V
+Current:       13.60000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.97200 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  3.97340 V
+Current:       14.00000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.02400 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.02543 V
+Current:       14.30000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.04144 V
+Current:       14.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.02400 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.02544 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.03200 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.03345 V
+Current:       14.30000 mA
+
+Turn on Voltage: 1.88 V
+Planck's constant (h): 6.6401381493
+Digi pot level: 0
+Bus Voltage:   3.21600 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.21689 V
+Current:       9.00000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.26800 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.26893 V
+Current:       9.30000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.32000 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.32096 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.37200 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.37300 V
+Current:       10.00000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.42000 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.42103 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.47600 V
+Shunt Voltage: 1.07000 mV
+Load Voltage:  3.47707 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.52800 V
+Shunt Voltage: 1.11000 mV
+Load Voltage:  3.52911 V
+Current:       11.00000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.58000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.58113 V
+Current:       11.40000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.63200 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.63317 V
+Current:       11.70000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.68000 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  3.68120 V
+Current:       12.00000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.72800 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.72924 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.78000 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.78127 V
+Current:       12.70000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.83200 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  3.83330 V
+Current:       13.00000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.88000 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.88133 V
+Current:       13.40000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.92800 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  3.92937 V
+Current:       13.70000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.97600 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  3.97740 V
+Current:       14.00000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.02400 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.02543 V
+Current:       14.40000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.04145 V
+Current:       14.40000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.03200 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.03344 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.02800 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.02944 V
+Current:       14.30000 mA
+
+Turn on Voltage: 1.88 V
+Planck's constant (h): 6.6232872009
+Digi pot level: 0
+Bus Voltage:   3.21200 V
+Shunt Voltage: 0.90000 mV
+Load Voltage:  3.21290 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.26400 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.26493 V
+Current:       9.30000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.31600 V
+Shunt Voltage: 0.97000 mV
+Load Voltage:  3.31697 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.37200 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.37300 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.42400 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.42503 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.47600 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.47706 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.52800 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.52910 V
+Current:       11.00000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.58000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.58113 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.62800 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.62917 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.68000 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  3.68120 V
+Current:       12.00000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.72800 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.72924 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.77600 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.77727 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.83200 V
+Shunt Voltage: 1.31000 mV
+Load Voltage:  3.83331 V
+Current:       13.00000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.87600 V
+Shunt Voltage: 1.34000 mV
+Load Voltage:  3.87734 V
+Current:       13.40000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.92800 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  3.92937 V
+Current:       13.60000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.96800 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  3.96940 V
+Current:       13.90000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.02000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.02143 V
+Current:       14.30000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.03744 V
+Current:       14.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.03744 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.03200 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.03344 V
+Current:       14.40000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.03200 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.03344 V
+Current:       14.40000 mA
+
+Digi pot level: 21
+Bus Voltage:   4.03200 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.03344 V
+Current:       14.40000 mA
+
+Digi pot level: 22
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.03745 V
+Current:       14.40000 mA
+
+Turn on Voltage: 1.88 V
+Planck's constant (h): 6.6295466423
+Digi pot level: 0
+Bus Voltage:   3.21200 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.21289 V
+Current:       9.00000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.26800 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.26893 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.32000 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.32096 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.36800 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.36900 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.42400 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.42503 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.47600 V
+Shunt Voltage: 1.07000 mV
+Load Voltage:  3.47707 V
+Current:       10.70000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.52800 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.52910 V
+Current:       11.00000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.58000 V
+Shunt Voltage: 1.14000 mV
+Load Voltage:  3.58114 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.63200 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.63317 V
+Current:       11.70000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.68000 V
+Shunt Voltage: 1.21000 mV
+Load Voltage:  3.68121 V
+Current:       12.00000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.73200 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.73324 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.78000 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.78127 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.82800 V
+Shunt Voltage: 1.31000 mV
+Load Voltage:  3.82931 V
+Current:       13.00000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.88000 V
+Shunt Voltage: 1.34000 mV
+Load Voltage:  3.88134 V
+Current:       13.30000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.92800 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  3.92937 V
+Current:       13.70000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.97600 V
+Shunt Voltage: 1.41000 mV
+Load Voltage:  3.97741 V
+Current:       14.00000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.02000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.02143 V
+Current:       14.30000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.04145 V
+Current:       14.40000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.04545 V
+Current:       14.40000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.03745 V
+Current:       14.40000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.03744 V
+Current:       14.40000 mA
+
+Turn on Voltage: 1.87 V
+Planck's constant (h): 6.6115813255
+Digi pot level: 0
+Bus Voltage:   3.21600 V
+Shunt Voltage: 0.90000 mV
+Load Voltage:  3.21690 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.26400 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.26493 V
+Current:       9.30000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.32000 V
+Shunt Voltage: 0.97000 mV
+Load Voltage:  3.32097 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.36800 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.36900 V
+Current:       10.00000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.42400 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.42503 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.47600 V
+Shunt Voltage: 1.07000 mV
+Load Voltage:  3.47707 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.52800 V
+Shunt Voltage: 1.11000 mV
+Load Voltage:  3.52911 V
+Current:       11.00000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.58000 V
+Shunt Voltage: 1.14000 mV
+Load Voltage:  3.58114 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.63200 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.63317 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.68000 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  3.68120 V
+Current:       12.00000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.73200 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.73324 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.78000 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.78127 V
+Current:       12.70000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.82800 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  3.82930 V
+Current:       13.10000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.88000 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.88133 V
+Current:       13.40000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.92400 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  3.92537 V
+Current:       13.70000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.97600 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  3.97740 V
+Current:       14.00000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.02400 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.02543 V
+Current:       14.30000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.03745 V
+Current:       14.40000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.04145 V
+Current:       14.40000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.04545 V
+Current:       14.40000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.04545 V
+Current:       14.40000 mA
+
+Turn on Voltage: 1.89 V
+Planck's constant (h): 6.6511082649
+Digi pot level: 0
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.23689 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28400 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.28493 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34400 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.34496 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39200 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.39300 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44400 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.44503 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.50000 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.50106 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.54910 V
+Current:       11.00000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60113 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65200 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.65316 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70800 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  3.70920 V
+Current:       12.00000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75200 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  3.75323 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.80527 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.85200 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  3.85330 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.90400 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.90533 V
+Current:       13.30000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.95200 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  3.95335 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.99600 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  3.99739 V
+Current:       14.00000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.20000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.05600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.05744 V
+Current:       14.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.06144 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.06144 V
+Current:       14.30000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.05200 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.05343 V
+Current:       14.30000 mA
+
+Turn on Voltage: 1.88 V
+Planck's constant (h): 6.6443629265
+Digi pot level: 0
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.23689 V
+Current:       8.80000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.29200 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.29293 V
+Current:       9.30000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34000 V
+Shunt Voltage: 0.95000 mV
+Load Voltage:  3.34095 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39600 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.39699 V
+Current:       10.00000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44800 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.44903 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.49600 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.49706 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.54909 V
+Current:       11.00000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60113 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65200 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.65316 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70400 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.70519 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75600 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.75724 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  3.80526 V
+Current:       12.70000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.85200 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  3.85330 V
+Current:       13.00000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.90000 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.90133 V
+Current:       13.30000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.95200 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  3.95336 V
+Current:       13.60000 mA
+
+Digi pot level: 15
+Bus Voltage:   4.00000 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  4.00140 V
+Current:       13.90000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.04943 V
+Current:       14.20000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.05600 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.05743 V
+Current:       14.20000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.06143 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.05200 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.05344 V
+Current:       14.30000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.05600 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.05743 V
+Current:       14.20000 mA
+
+Digi pot level: 21
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.06143 V
+Current:       14.30000 mA
+
+Turn on Voltage: 1.89 V
+Planck's constant (h): 6.6760711670
+Digi pot level: 0
+Bus Voltage:   3.24000 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.24089 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28800 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.28892 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34400 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.34496 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39200 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.39300 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44400 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.44503 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.50000 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.50106 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.54909 V
+Current:       11.00000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60113 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65200 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.65317 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70400 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.70519 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75600 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.75724 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  3.80526 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.85200 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  3.85330 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.90400 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.90533 V
+Current:       13.30000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.95200 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  3.95336 V
+Current:       13.60000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.99600 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  3.99739 V
+Current:       14.00000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.04943 V
+Current:       14.30000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.05600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.05744 V
+Current:       14.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.06144 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.06143 V
+Current:       14.30000 mA
+
+Turn on Voltage: 1.90 V
+Planck's constant (h): 6.7100930214
+Digi pot level: 0
+Bus Voltage:   3.24000 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.24089 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28800 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.28893 V
+Current:       9.30000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34400 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.34496 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39200 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.39299 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44800 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.44903 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.50000 V
+Shunt Voltage: 1.07000 mV
+Load Voltage:  3.50107 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.54909 V
+Current:       11.00000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60400 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60513 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65600 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.65716 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70800 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.70919 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75600 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  3.75723 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.80527 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.85200 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  3.85330 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.90000 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.90133 V
+Current:       13.30000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.95600 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  3.95736 V
+Current:       13.60000 mA
+
+Digi pot level: 15
+Bus Voltage:   4.00000 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  4.00140 V
+Current:       13.90000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.04943 V
+Current:       14.20000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.05600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.05744 V
+Current:       14.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.06400 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.06544 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.05600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.05744 V
+Current:       14.30000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.06144 V
+Current:       14.30000 mA
+
+Turn on Voltage: 1.88 V
+Planck's constant (h): 6.6183600426
+Digi pot level: 0
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.90000 mV
+Load Voltage:  3.23690 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28800 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.28893 V
+Current:       9.30000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34400 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.34496 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39200 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.39300 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44800 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.44902 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.50000 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.50106 V
+Current:       10.50000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.55200 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.55309 V
+Current:       10.90000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60113 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65600 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.65716 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70400 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  3.70520 V
+Current:       12.00000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75600 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  3.75723 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  3.80526 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.85200 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  3.85330 V
+Current:       13.00000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.90000 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.90133 V
+Current:       13.30000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.95200 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  3.95336 V
+Current:       13.60000 mA
+
+Digi pot level: 15
+Bus Voltage:   4.00000 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  4.00139 V
+Current:       13.90000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.20000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.06143 V
+Current:       14.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.06143 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.05200 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.05344 V
+Current:       14.20000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.06143 V
+Current:       14.30000 mA
+
+Turn on Voltage: 1.89 V
+Planck's constant (h): 6.6765742302
+Digi pot level: 0
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.23689 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.29200 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.29293 V
+Current:       9.30000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34400 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.34496 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39600 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.39699 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44800 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.44903 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.50000 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.50106 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.55200 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.55309 V
+Current:       10.90000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60400 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60513 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65200 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.65316 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70000 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  3.70120 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75600 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.75724 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.80527 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.85600 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  3.85730 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.90400 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.90533 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.94800 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  3.94936 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   4.00000 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  4.00140 V
+Current:       13.90000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.04543 V
+Current:       14.20000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.06400 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.06544 V
+Current:       14.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.05600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.05744 V
+Current:       14.30000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.06400 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.06544 V
+Current:       14.30000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.05600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.05744 V
+Current:       14.30000 mA
+
+Turn on Voltage: 1.87 V
+Planck's constant (h): 6.5996212959
+Digi pot level: 0
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.23689 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.29200 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.29292 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.33600 V
+Shunt Voltage: 0.95000 mV
+Load Voltage:  3.33695 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.38800 V
+Shunt Voltage: 0.98000 mV
+Load Voltage:  3.38898 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44000 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.44102 V
+Current:       10.20000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.49600 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.49706 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54400 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.54510 V
+Current:       10.90000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.12000 mV
+Load Voltage:  3.60112 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.64800 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.64916 V
+Current:       11.50000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.69600 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.69719 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.74400 V
+Shunt Voltage: 1.22000 mV
+Load Voltage:  3.74522 V
+Current:       12.20000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80000 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  3.80126 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.84400 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  3.84529 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.89600 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  3.89732 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.94000 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  3.94135 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.99200 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  3.99339 V
+Current:       13.80000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04142 V
+Current:       14.20000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04142 V
+Current:       14.20000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04142 V
+Current:       14.20000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04542 V
+Current:       14.10000 mA
+
+Turn on Voltage: 1.88 V
+Planck's constant (h): 6.6322417259
+Digi pot level: 0
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.23689 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28400 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.28492 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.33600 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.33696 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39200 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.39299 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44400 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.44502 V
+Current:       10.20000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.49200 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.49306 V
+Current:       10.50000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54400 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.54509 V
+Current:       10.90000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.59200 V
+Shunt Voltage: 1.12000 mV
+Load Voltage:  3.59312 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.64400 V
+Shunt Voltage: 1.15000 mV
+Load Voltage:  3.64515 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70000 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.70119 V
+Current:       11.80000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.74800 V
+Shunt Voltage: 1.22000 mV
+Load Voltage:  3.74922 V
+Current:       12.20000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.79600 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  3.79726 V
+Current:       12.50000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.84800 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  3.84929 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.89600 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.89733 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.94800 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  3.94935 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.98800 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  3.98939 V
+Current:       13.80000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.03742 V
+Current:       14.10000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.20000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.20000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.04143 V
+Current:       14.20000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04142 V
+Current:       14.20000 mA
+
+Turn on Voltage: 1.88 V
+Planck's constant (h): 6.6317157745
+Digi pot level: 0
+Bus Voltage:   3.23200 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.23289 V
+Current:       8.80000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28800 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.28892 V
+Current:       9.10000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.33600 V
+Shunt Voltage: 0.95000 mV
+Load Voltage:  3.33695 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39200 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.39299 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44400 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.44502 V
+Current:       10.20000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.49600 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.49706 V
+Current:       10.50000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.54909 V
+Current:       10.80000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.12000 mV
+Load Voltage:  3.60112 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65200 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.65316 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70000 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.70119 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.74800 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  3.74923 V
+Current:       12.20000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.79600 V
+Shunt Voltage: 1.25000 mV
+Load Voltage:  3.79725 V
+Current:       12.50000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.84800 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  3.84929 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.89200 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  3.89332 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.94400 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  3.94535 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.98800 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  3.98939 V
+Current:       13.80000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.03742 V
+Current:       14.10000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04542 V
+Current:       14.20000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.20000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.10000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.20000 mA
+
+Turn on Voltage: 1.91 V
+Planck's constant (h): 6.7442584038
+Digi pot level: 0
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.88000 mV
+Load Voltage:  3.23688 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28800 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.28892 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34000 V
+Shunt Voltage: 0.95000 mV
+Load Voltage:  3.34095 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39200 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.39299 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44800 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.44903 V
+Current:       10.20000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.50000 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.50106 V
+Current:       10.50000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.54909 V
+Current:       10.80000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60400 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60513 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65200 V
+Shunt Voltage: 1.15000 mV
+Load Voltage:  3.65315 V
+Current:       11.50000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70400 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.70519 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75200 V
+Shunt Voltage: 1.22000 mV
+Load Voltage:  3.75322 V
+Current:       12.20000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80000 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  3.80126 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.85200 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  3.85330 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.89600 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  3.89732 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.94800 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  3.94935 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.99200 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  3.99338 V
+Current:       13.80000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.41000 mV
+Load Voltage:  4.04141 V
+Current:       14.10000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.20000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.05200 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.05342 V
+Current:       14.20000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.05200 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.05342 V
+Current:       14.20000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04542 V
+Current:       14.20000 mA
+
+Turn on Voltage: 1.89 V
+Planck's constant (h): 6.6797757149
+Digi pot level: 0
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.88000 mV
+Load Voltage:  3.23688 V
+Current:       8.80000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.29200 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.29292 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34000 V
+Shunt Voltage: 0.95000 mV
+Load Voltage:  3.34095 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39600 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.39699 V
+Current:       9.80000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44800 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.44902 V
+Current:       10.20000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.50000 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.50106 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.55200 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.55309 V
+Current:       10.90000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60113 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65600 V
+Shunt Voltage: 1.15000 mV
+Load Voltage:  3.65715 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70400 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.70519 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75200 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  3.75323 V
+Current:       12.20000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80000 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  3.80126 V
+Current:       12.50000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.85200 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  3.85329 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.90000 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  3.90132 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.94800 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  3.94936 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.99200 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  3.99338 V
+Current:       13.80000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04000 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04142 V
+Current:       14.10000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.05200 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.05342 V
+Current:       14.10000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.05200 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.05342 V
+Current:       14.10000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04542 V
+Current:       14.20000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04542 V
+Current:       14.20000 mA
+
+Digi pot level: 21
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.20000 mA
+
+Digi pot level: 22
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.10000 mA
+
+Turn on Voltage: 1.91 V
+Planck's constant (h): 6.7224121094
+Digi pot level: 0
+Bus Voltage:   3.24000 V
+Shunt Voltage: 0.88000 mV
+Load Voltage:  3.24088 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28800 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.28892 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34400 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.34496 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39600 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.39699 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44400 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.44502 V
+Current:       10.20000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.49600 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.49706 V
+Current:       10.50000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.54909 V
+Current:       10.90000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60113 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.65200 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.65316 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70000 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.70119 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75200 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  3.75323 V
+Current:       12.20000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.25000 mV
+Load Voltage:  3.80525 V
+Current:       12.50000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.84800 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  3.84929 V
+Current:       12.90000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.90000 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  3.90132 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.94400 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  3.94536 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.99600 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  3.99738 V
+Current:       13.80000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.41000 mV
+Load Voltage:  4.04541 V
+Current:       14.10000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04542 V
+Current:       14.10000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.10000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.10000 mA
+
+Turn on Voltage: 1.88 V
+Planck's constant (h): 6.6354041100
+Digi pot level: 0
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.23689 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28800 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.28892 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.34400 V
+Shunt Voltage: 0.95000 mV
+Load Voltage:  3.34495 V
+Current:       9.50000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.39600 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.39699 V
+Current:       9.80000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.44400 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.44502 V
+Current:       10.20000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.49600 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.49706 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.54800 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.54909 V
+Current:       10.80000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.60000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.60113 V
+Current:       11.20000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.64800 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.64916 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.70000 V
+Shunt Voltage: 1.18000 mV
+Load Voltage:  3.70118 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.75600 V
+Shunt Voltage: 1.22000 mV
+Load Voltage:  3.75722 V
+Current:       12.20000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  3.80526 V
+Current:       12.50000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.84800 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  3.84929 V
+Current:       12.80000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.90000 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  3.90132 V
+Current:       13.20000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.94400 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  3.94535 V
+Current:       13.50000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.99600 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  3.99739 V
+Current:       13.80000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04542 V
+Current:       14.10000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04542 V
+Current:       14.20000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.04400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04542 V
+Current:       14.20000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.04800 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.04942 V
+Current:       14.10000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.09200 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.09345 V
+Current:       14.40000 mA
+
+Digi pot level: 21
+Bus Voltage:   4.07600 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.07744 V
+Current:       14.40000 mA
+
+Digi pot level: 22
+Bus Voltage:   4.08400 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.08544 V
+Current:       14.40000 mA
+
+Digi pot level: 23
+Bus Voltage:   4.08000 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.08144 V
+Current:       14.40000 mA
+
+Turn on Voltage: 1.89 V
+Planck's constant (h): 6.6495604515
+Digi pot level: 0
+Bus Voltage:   3.24800 V
+Shunt Voltage: 0.90000 mV
+Load Voltage:  3.24890 V
+Current:       9.00000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.30000 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.30093 V
+Current:       9.30000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.35600 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.35696 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.40800 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.40899 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.46000 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.46103 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.51600 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.51706 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.56400 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.56510 V
+Current:       10.90000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.61600 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.61713 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.66800 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.66917 V
+Current:       11.60000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.72000 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  3.72120 V
+Current:       12.00000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.77200 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.77324 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.82000 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.82127 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.86800 V
+Shunt Voltage: 1.31000 mV
+Load Voltage:  3.86931 V
+Current:       13.00000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.92000 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  3.92133 V
+Current:       13.30000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.96800 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  3.96937 V
+Current:       13.70000 mA
+
+Digi pot level: 15
+Bus Voltage:   4.01600 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  4.01740 V
+Current:       14.00000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.06400 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.06543 V
+Current:       14.20000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.08800 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.08945 V
+Current:       14.40000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.08400 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.08544 V
+Current:       14.40000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.08000 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.08144 V
+Current:       14.40000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.08000 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.08144 V
+Current:       14.40000 mA
+
+Turn on Voltage: 1.89 V
+Planck's constant (h): 6.6580734253
+Digi pot level: 0
+Bus Voltage:   3.25200 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.25289 V
+Current:       9.00000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.30400 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.30493 V
+Current:       9.30000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.35600 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.35696 V
+Current:       9.60000 mA
+
+Digi pot level: 3
+Bus Voltage:   3.40400 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.40500 V
+Current:       9.90000 mA
+
+Digi pot level: 4
+Bus Voltage:   3.46400 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.46503 V
+Current:       10.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   3.51200 V
+Shunt Voltage: 1.07000 mV
+Load Voltage:  3.51307 V
+Current:       10.60000 mA
+
+Digi pot level: 6
+Bus Voltage:   3.56800 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.56910 V
+Current:       11.00000 mA
+
+Digi pot level: 7
+Bus Voltage:   3.61600 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.61713 V
+Current:       11.30000 mA
+
+Digi pot level: 8
+Bus Voltage:   3.67200 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.67316 V
+Current:       11.70000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.72000 V
+Shunt Voltage: 1.21000 mV
+Load Voltage:  3.72121 V
+Current:       11.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   3.77200 V
+Shunt Voltage: 1.24000 mV
+Load Voltage:  3.77324 V
+Current:       12.30000 mA
+
+Digi pot level: 11
+Bus Voltage:   3.82400 V
+Shunt Voltage: 1.27000 mV
+Load Voltage:  3.82527 V
+Current:       12.60000 mA
+
+Digi pot level: 12
+Bus Voltage:   3.87200 V
+Shunt Voltage: 1.31000 mV
+Load Voltage:  3.87331 V
+Current:       13.00000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.92000 V
+Shunt Voltage: 1.34000 mV
+Load Voltage:  3.92134 V
+Current:       13.30000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.96800 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  3.96937 V
+Current:       13.60000 mA
+
+Digi pot level: 15
+Bus Voltage:   4.02000 V
+Shunt Voltage: 1.40000 mV
+Load Voltage:  4.02140 V
+Current:       14.00000 mA
+
+Digi pot level: 16
+Bus Voltage:   4.06800 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.06943 V
+Current:       14.30000 mA
+
+Digi pot level: 17
+Bus Voltage:   4.08400 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.08545 V
+Current:       14.40000 mA
+
+Digi pot level: 18
+Bus Voltage:   4.08000 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.08145 V
+Current:       14.40000 mA
+
+Digi pot level: 19
+Bus Voltage:   4.08000 V
+Shunt Voltage: 1.45000 mV
+Load Voltage:  4.08145 V
+Current:       14.40000 mA
+
+Digi pot level: 20
+Bus Voltage:   4.08800 V
+Shunt Voltage: 1.44000 mV
+Load Voltage:  4.08944 V
+Current:       14.40000 mA
+
+Turn on Voltage: 1.89 V
+Planck's constant (h): 6.6568403244
+Digi pot level: 0
+Bus Voltage:   3.24800 V
+Shunt Voltage: 0.90000 mV
+Load Voltage:  3.24890 V
+Current:       8.90000 mA
+
+Digi pot level: 1
+Bus Voltage:   3.28800 V
+Shunt Voltage: 0.94000 mV
+Load Voltage:  3.28894 V
+Current:       9.20000 mA
+
+Digi pot level: 2
+Bus Voltage:   3.33600 V
+Shunt Voltage: 0.97000 mV
+Load Voltage:  3.33697 V
+Current:       9.70000 mA
+
+Digi pot level: 3
+Bus Voltage:   2.03600 V
+Shunt Voltage: -0.01000 mV
+Load Voltage:  2.03599 V
+Current:       -0.10000 mA
+
+Digi pot level: 4
+Bus Voltage:   2.52400 V
+Shunt Voltage: 0.03000 mV
+Load Voltage:  2.52403 V
+Current:       0.30000 mA
+
+Digi pot level: 5
+Bus Voltage:   2.62000 V
+Shunt Voltage: 0.07000 mV
+Load Voltage:  2.62007 V
+Current:       0.60000 mA
+
+Turn on Voltage: 2.28 V
+Planck's constant (h): 8.0248003006
+Digi pot level: 0
+Bus Voltage:   2.49600 V
+Shunt Voltage: 0.03000 mV
+Load Voltage:  2.49603 V
+Current:       0.40000 mA
+
+Digi pot level: 1
+Bus Voltage:   2.58800 V
+Shunt Voltage: 0.06000 mV
+Load Voltage:  2.58806 V
+Current:       0.60000 mA
+
+Digi pot level: 2
+Bus Voltage:   2.65600 V
+Shunt Voltage: 0.10000 mV
+Load Voltage:  2.65610 V
+Current:       0.90000 mA
+
+Digi pot level: 3
+Bus Voltage:   2.71600 V
+Shunt Voltage: 0.13000 mV
+Load Voltage:  2.71613 V
+Current:       1.30000 mA
+
+Digi pot level: 4
+Bus Voltage:   2.77600 V
+Shunt Voltage: 0.16000 mV
+Load Voltage:  2.77616 V
+Current:       1.50000 mA
+
+Digi pot level: 5
+Bus Voltage:   2.82400 V
+Shunt Voltage: 0.19000 mV
+Load Voltage:  2.82419 V
+Current:       1.90000 mA
+
+Digi pot level: 6
+Bus Voltage:   2.88800 V
+Shunt Voltage: 0.22000 mV
+Load Voltage:  2.88822 V
+Current:       2.10000 mA
+
+Digi pot level: 7
+Bus Voltage:   2.93600 V
+Shunt Voltage: 0.25000 mV
+Load Voltage:  2.93625 V
+Current:       2.40000 mA
+
+Digi pot level: 8
+Bus Voltage:   2.98400 V
+Shunt Voltage: 0.28000 mV
+Load Voltage:  2.98428 V
+Current:       2.80000 mA
+
+Digi pot level: 9
+Bus Voltage:   3.04400 V
+Shunt Voltage: 0.30000 mV
+Load Voltage:  3.04430 V
+Current:       2.90000 mA
+
+Digi pot level: 10
+Bus Voltage:   2.88800 V
+Shunt Voltage: 0.36000 mV
+Load Voltage:  2.88836 V
+Current:       3.60000 mA
+
+Digi pot level: 11
+Bus Voltage:   2.92000 V
+Shunt Voltage: 0.39000 mV
+Load Voltage:  2.92039 V
+Current:       3.90000 mA
+
+Digi pot level: 12
+Bus Voltage:   2.96000 V
+Shunt Voltage: 0.43000 mV
+Load Voltage:  2.96043 V
+Current:       4.30000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.02800 V
+Shunt Voltage: 0.46000 mV
+Load Voltage:  3.02846 V
+Current:       4.50000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.11600 V
+Shunt Voltage: 0.50000 mV
+Load Voltage:  3.11650 V
+Current:       5.00000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.14400 V
+Shunt Voltage: 0.55000 mV
+Load Voltage:  3.14455 V
+Current:       5.50000 mA
+
+Digi pot level: 16
+Bus Voltage:   3.19600 V
+Shunt Voltage: 0.59000 mV
+Load Voltage:  3.19659 V
+Current:       5.90000 mA
+
+Digi pot level: 17
+Bus Voltage:   3.24800 V
+Shunt Voltage: 0.63000 mV
+Load Voltage:  3.24863 V
+Current:       6.20000 mA
+
+Digi pot level: 18
+Bus Voltage:   3.20000 V
+Shunt Voltage: 0.62000 mV
+Load Voltage:  3.20062 V
+Current:       6.10000 mA
+
+Digi pot level: 19
+Bus Voltage:   3.30000 V
+Shunt Voltage: 0.67000 mV
+Load Voltage:  3.30067 V
+Current:       6.70000 mA
+
+Digi pot level: 20
+Bus Voltage:   3.33600 V
+Shunt Voltage: 0.69000 mV
+Load Voltage:  3.33669 V
+Current:       6.90000 mA
+
+Digi pot level: 21
+Bus Voltage:   3.39200 V
+Shunt Voltage: 0.72000 mV
+Load Voltage:  3.39272 V
+Current:       7.30000 mA
+
+Digi pot level: 22
+Bus Voltage:   3.44400 V
+Shunt Voltage: 0.75000 mV
+Load Voltage:  3.44475 V
+Current:       7.50000 mA
+
+Digi pot level: 23
+Bus Voltage:   3.47600 V
+Shunt Voltage: 0.78000 mV
+Load Voltage:  3.47678 V
+Current:       7.70000 mA
+
+Digi pot level: 24
+Bus Voltage:   3.52800 V
+Shunt Voltage: 0.81000 mV
+Load Voltage:  3.52881 V
+Current:       8.00000 mA
+
+Digi pot level: 25
+Bus Voltage:   3.63200 V
+Shunt Voltage: 0.85000 mV
+Load Voltage:  3.63285 V
+Current:       8.50000 mA
+
+Digi pot level: 26
+Bus Voltage:   3.67600 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.67689 V
+Current:       8.90000 mA
+
+Digi pot level: 27
+Bus Voltage:   3.72800 V
+Shunt Voltage: 0.93000 mV
+Load Voltage:  3.72893 V
+Current:       9.20000 mA
+
+Digi pot level: 28
+Bus Voltage:   3.76400 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.76496 V
+Current:       9.60000 mA
+
+Digi pot level: 29
+Bus Voltage:   3.82400 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.82500 V
+Current:       9.90000 mA
+
+Digi pot level: 30
+Bus Voltage:   3.88000 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.88102 V
+Current:       10.20000 mA
+
+Digi pot level: 31
+Bus Voltage:   3.92800 V
+Shunt Voltage: 1.07000 mV
+Load Voltage:  3.92907 V
+Current:       10.60000 mA
+
+Digi pot level: 32
+Bus Voltage:   3.96400 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.96509 V
+Current:       11.00000 mA
+
+Digi pot level: 33
+Bus Voltage:   4.01200 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  4.01313 V
+Current:       11.30000 mA
+
+Digi pot level: 34
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  4.06116 V
+Current:       11.60000 mA
+
+Digi pot level: 35
+Bus Voltage:   4.11600 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  4.11719 V
+Current:       11.90000 mA
+
+Digi pot level: 36
+Bus Voltage:   4.16400 V
+Shunt Voltage: 1.22000 mV
+Load Voltage:  4.16522 V
+Current:       12.20000 mA
+
+Digi pot level: 37
+Bus Voltage:   4.20400 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  4.20526 V
+Current:       12.60000 mA
+
+Digi pot level: 38
+Bus Voltage:   4.24800 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  4.24929 V
+Current:       12.90000 mA
+
+Digi pot level: 39
+Bus Voltage:   4.28800 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  4.28930 V
+Current:       13.00000 mA
+
+Digi pot level: 40
+Bus Voltage:   4.27200 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  4.27332 V
+Current:       13.10000 mA
+
+Digi pot level: 41
+Bus Voltage:   4.21200 V
+Shunt Voltage: 1.28000 mV
+Load Voltage:  4.21328 V
+Current:       12.80000 mA
+
+Digi pot level: 42
+Bus Voltage:   4.23600 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  4.23730 V
+Current:       12.90000 mA
+
+Digi pot level: 43
+Bus Voltage:   4.23600 V
+Shunt Voltage: 1.28000 mV
+Load Voltage:  4.23728 V
+Current:       12.70000 mA
+
+Turn on Voltage: 2.32 V
+Planck's constant (h): 8.1851749420
+Digi pot level: 0
+Bus Voltage:   2.03200 V
+Shunt Voltage: 0.03000 mV
+Load Voltage:  2.03203 V
+Current:       0.30000 mA
+
+Digi pot level: 1
+Bus Voltage:   2.12800 V
+Shunt Voltage: 0.07000 mV
+Load Voltage:  2.12807 V
+Current:       0.70000 mA
+
+Digi pot level: 2
+Bus Voltage:   2.20400 V
+Shunt Voltage: 0.10000 mV
+Load Voltage:  2.20410 V
+Current:       1.10000 mA
+
+Digi pot level: 3
+Bus Voltage:   2.27600 V
+Shunt Voltage: 0.14000 mV
+Load Voltage:  2.27614 V
+Current:       1.40000 mA
+
+Digi pot level: 4
+Bus Voltage:   2.34400 V
+Shunt Voltage: 0.18000 mV
+Load Voltage:  2.34418 V
+Current:       1.80000 mA
+
+Digi pot level: 5
+Bus Voltage:   2.58800 V
+Shunt Voltage: 0.21000 mV
+Load Voltage:  2.58821 V
+Current:       2.10000 mA
+
+Digi pot level: 6
+Bus Voltage:   2.38400 V
+Shunt Voltage: 0.25000 mV
+Load Voltage:  2.38425 V
+Current:       2.50000 mA
+
+Digi pot level: 7
+Bus Voltage:   2.34400 V
+Shunt Voltage: 0.30000 mV
+Load Voltage:  2.34430 V
+Current:       3.00000 mA
+
+Digi pot level: 8
+Bus Voltage:   2.54000 V
+Shunt Voltage: 0.32000 mV
+Load Voltage:  2.54032 V
+Current:       3.20000 mA
+
+Digi pot level: 9
+Bus Voltage:   2.80400 V
+Shunt Voltage: 0.34000 mV
+Load Voltage:  2.80434 V
+Current:       3.40000 mA
+
+Digi pot level: 10
+Bus Voltage:   2.94000 V
+Shunt Voltage: 0.37000 mV
+Load Voltage:  2.94037 V
+Current:       3.60000 mA
+
+Digi pot level: 11
+Bus Voltage:   2.94000 V
+Shunt Voltage: 0.40000 mV
+Load Voltage:  2.94040 V
+Current:       4.10000 mA
+
+Digi pot level: 12
+Bus Voltage:   2.98000 V
+Shunt Voltage: 0.44000 mV
+Load Voltage:  2.98044 V
+Current:       4.40000 mA
+
+Digi pot level: 13
+Bus Voltage:   3.03600 V
+Shunt Voltage: 0.47000 mV
+Load Voltage:  3.03647 V
+Current:       4.70000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.09600 V
+Shunt Voltage: 0.50000 mV
+Load Voltage:  3.09650 V
+Current:       5.00000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.13200 V
+Shunt Voltage: 0.54000 mV
+Load Voltage:  3.13254 V
+Current:       5.40000 mA
+
+Digi pot level: 16
+Bus Voltage:   3.15200 V
+Shunt Voltage: 0.58000 mV
+Load Voltage:  3.15258 V
+Current:       5.80000 mA
+
+Digi pot level: 17
+Bus Voltage:   3.20000 V
+Shunt Voltage: 0.60000 mV
+Load Voltage:  3.20060 V
+Current:       6.10000 mA
+
+Digi pot level: 18
+Bus Voltage:   3.24400 V
+Shunt Voltage: 0.64000 mV
+Load Voltage:  3.24464 V
+Current:       6.40000 mA
+
+Digi pot level: 19
+Bus Voltage:   3.27600 V
+Shunt Voltage: 0.68000 mV
+Load Voltage:  3.27668 V
+Current:       6.80000 mA
+
+Digi pot level: 20
+Bus Voltage:   3.32000 V
+Shunt Voltage: 0.72000 mV
+Load Voltage:  3.32072 V
+Current:       7.10000 mA
+
+Digi pot level: 21
+Bus Voltage:   3.36800 V
+Shunt Voltage: 0.75000 mV
+Load Voltage:  3.36875 V
+Current:       7.50000 mA
+
+Digi pot level: 22
+Bus Voltage:   3.41200 V
+Shunt Voltage: 0.78000 mV
+Load Voltage:  3.41278 V
+Current:       7.80000 mA
+
+Digi pot level: 23
+Bus Voltage:   3.45600 V
+Shunt Voltage: 0.82000 mV
+Load Voltage:  3.45682 V
+Current:       8.20000 mA
+
+Digi pot level: 24
+Bus Voltage:   3.50400 V
+Shunt Voltage: 0.85000 mV
+Load Voltage:  3.50485 V
+Current:       8.50000 mA
+
+Digi pot level: 25
+Bus Voltage:   3.55200 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.55289 V
+Current:       8.90000 mA
+
+Digi pot level: 26
+Bus Voltage:   3.60000 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.60092 V
+Current:       9.20000 mA
+
+Digi pot level: 27
+Bus Voltage:   3.64400 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.64496 V
+Current:       9.50000 mA
+
+Digi pot level: 28
+Bus Voltage:   3.69600 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.69699 V
+Current:       9.90000 mA
+
+Digi pot level: 29
+Bus Voltage:   3.74800 V
+Shunt Voltage: 1.02000 mV
+Load Voltage:  3.74902 V
+Current:       10.20000 mA
+
+Digi pot level: 30
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.06000 mV
+Load Voltage:  3.80506 V
+Current:       10.50000 mA
+
+Digi pot level: 31
+Bus Voltage:   3.84400 V
+Shunt Voltage: 1.09000 mV
+Load Voltage:  3.84509 V
+Current:       10.90000 mA
+
+Digi pot level: 32
+Bus Voltage:   3.88400 V
+Shunt Voltage: 1.12000 mV
+Load Voltage:  3.88512 V
+Current:       11.20000 mA
+
+Digi pot level: 33
+Bus Voltage:   3.93200 V
+Shunt Voltage: 1.16000 mV
+Load Voltage:  3.93316 V
+Current:       11.50000 mA
+
+Digi pot level: 34
+Bus Voltage:   3.98400 V
+Shunt Voltage: 1.19000 mV
+Load Voltage:  3.98519 V
+Current:       11.90000 mA
+
+Digi pot level: 35
+Bus Voltage:   4.02800 V
+Shunt Voltage: 1.22000 mV
+Load Voltage:  4.02922 V
+Current:       12.20000 mA
+
+Digi pot level: 36
+Bus Voltage:   4.08000 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  4.08126 V
+Current:       12.50000 mA
+
+Digi pot level: 37
+Bus Voltage:   4.12000 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  4.12129 V
+Current:       12.80000 mA
+
+Digi pot level: 38
+Bus Voltage:   4.16800 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  4.16932 V
+Current:       13.20000 mA
+
+Digi pot level: 39
+Bus Voltage:   4.22000 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  4.22135 V
+Current:       13.50000 mA
+
+Digi pot level: 40
+Bus Voltage:   4.24000 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  4.24136 V
+Current:       13.60000 mA
+
+Digi pot level: 41
+Bus Voltage:   4.24000 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.24137 V
+Current:       13.70000 mA
+
+Digi pot level: 42
+Bus Voltage:   4.24000 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.24137 V
+Current:       13.70000 mA
+
+Digi pot level: 43
+Bus Voltage:   4.24000 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.24137 V
+Current:       13.70000 mA
+
+Digi pot level: 44
+Bus Voltage:   4.24000 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  4.24138 V
+Current:       13.70000 mA
+
+Turn on Voltage: 2.36 V
+Planck's constant (h): 8.3120336533
+Digi pot level: 0
+Bus Voltage:   1.94800 V
+Shunt Voltage: 0.04000 mV
+Load Voltage:  1.94804 V
+Current:       0.40000 mA
+
+Digi pot level: 1
+Bus Voltage:   2.04000 V
+Shunt Voltage: 0.07000 mV
+Load Voltage:  2.04007 V
+Current:       0.70000 mA
+
+Digi pot level: 2
+Bus Voltage:   2.11600 V
+Shunt Voltage: 0.10000 mV
+Load Voltage:  2.11610 V
+Current:       1.00000 mA
+
+Digi pot level: 3
+Bus Voltage:   2.18400 V
+Shunt Voltage: 0.14000 mV
+Load Voltage:  2.18414 V
+Current:       1.40000 mA
+
+Digi pot level: 4
+Bus Voltage:   2.25200 V
+Shunt Voltage: 0.18000 mV
+Load Voltage:  2.25218 V
+Current:       1.80000 mA
+
+Digi pot level: 5
+Bus Voltage:   2.31600 V
+Shunt Voltage: 0.21000 mV
+Load Voltage:  2.31621 V
+Current:       2.10000 mA
+
+Digi pot level: 6
+Bus Voltage:   2.38000 V
+Shunt Voltage: 0.25000 mV
+Load Voltage:  2.38025 V
+Current:       2.50000 mA
+
+Digi pot level: 7
+Bus Voltage:   2.44400 V
+Shunt Voltage: 0.29000 mV
+Load Voltage:  2.44429 V
+Current:       2.90000 mA
+
+Digi pot level: 8
+Bus Voltage:   2.50400 V
+Shunt Voltage: 0.32000 mV
+Load Voltage:  2.50432 V
+Current:       3.20000 mA
+
+Digi pot level: 9
+Bus Voltage:   2.56800 V
+Shunt Voltage: 0.36000 mV
+Load Voltage:  2.56836 V
+Current:       3.60000 mA
+
+Digi pot level: 10
+Bus Voltage:   2.62800 V
+Shunt Voltage: 0.39000 mV
+Load Voltage:  2.62839 V
+Current:       3.90000 mA
+
+Digi pot level: 11
+Bus Voltage:   2.68800 V
+Shunt Voltage: 0.43000 mV
+Load Voltage:  2.68843 V
+Current:       4.20000 mA
+
+Digi pot level: 12
+Bus Voltage:   2.74800 V
+Shunt Voltage: 0.46000 mV
+Load Voltage:  2.74846 V
+Current:       4.70000 mA
+
+Digi pot level: 13
+Bus Voltage:   2.80800 V
+Shunt Voltage: 0.50000 mV
+Load Voltage:  2.80850 V
+Current:       5.00000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.00000 V
+Shunt Voltage: 0.51000 mV
+Load Voltage:  3.00051 V
+Current:       5.10000 mA
+
+Digi pot level: 15
+Bus Voltage:   2.96400 V
+Shunt Voltage: 0.56000 mV
+Load Voltage:  2.96456 V
+Current:       5.60000 mA
+
+Digi pot level: 16
+Bus Voltage:   2.99600 V
+Shunt Voltage: 0.60000 mV
+Load Voltage:  2.99660 V
+Current:       6.00000 mA
+
+Digi pot level: 17
+Bus Voltage:   3.03200 V
+Shunt Voltage: 0.64000 mV
+Load Voltage:  3.03264 V
+Current:       6.40000 mA
+
+Digi pot level: 18
+Bus Voltage:   3.07600 V
+Shunt Voltage: 0.67000 mV
+Load Voltage:  3.07667 V
+Current:       6.80000 mA
+
+Digi pot level: 19
+Bus Voltage:   3.12400 V
+Shunt Voltage: 0.71000 mV
+Load Voltage:  3.12471 V
+Current:       7.10000 mA
+
+Digi pot level: 20
+Bus Voltage:   3.18800 V
+Shunt Voltage: 0.75000 mV
+Load Voltage:  3.18875 V
+Current:       7.50000 mA
+
+Digi pot level: 21
+Bus Voltage:   3.23600 V
+Shunt Voltage: 0.78000 mV
+Load Voltage:  3.23678 V
+Current:       7.90000 mA
+
+Digi pot level: 22
+Bus Voltage:   3.29200 V
+Shunt Voltage: 0.82000 mV
+Load Voltage:  3.29282 V
+Current:       8.20000 mA
+
+Digi pot level: 23
+Bus Voltage:   3.35200 V
+Shunt Voltage: 0.85000 mV
+Load Voltage:  3.35285 V
+Current:       8.50000 mA
+
+Digi pot level: 24
+Bus Voltage:   3.52400 V
+Shunt Voltage: 0.86000 mV
+Load Voltage:  3.52486 V
+Current:       8.60000 mA
+
+Digi pot level: 25
+Bus Voltage:   3.61200 V
+Shunt Voltage: 0.89000 mV
+Load Voltage:  3.61289 V
+Current:       8.90000 mA
+
+Digi pot level: 26
+Bus Voltage:   3.66000 V
+Shunt Voltage: 0.92000 mV
+Load Voltage:  3.66092 V
+Current:       9.30000 mA
+
+Digi pot level: 27
+Bus Voltage:   3.70800 V
+Shunt Voltage: 0.96000 mV
+Load Voltage:  3.70896 V
+Current:       9.50000 mA
+
+Digi pot level: 28
+Bus Voltage:   3.76000 V
+Shunt Voltage: 0.99000 mV
+Load Voltage:  3.76099 V
+Current:       9.90000 mA
+
+Digi pot level: 29
+Bus Voltage:   3.74000 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.74103 V
+Current:       10.30000 mA
+
+Digi pot level: 30
+Bus Voltage:   3.80400 V
+Shunt Voltage: 1.08000 mV
+Load Voltage:  3.80508 V
+Current:       10.80000 mA
+
+Digi pot level: 31
+Bus Voltage:   3.86000 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.86113 V
+Current:       11.20000 mA
+
+Digi pot level: 32
+Bus Voltage:   3.96400 V
+Shunt Voltage: 1.15000 mV
+Load Voltage:  3.96515 V
+Current:       11.40000 mA
+
+Digi pot level: 33
+Bus Voltage:   3.97200 V
+Shunt Voltage: 1.18000 mV
+Load Voltage:  3.97318 V
+Current:       11.80000 mA
+
+Digi pot level: 34
+Bus Voltage:   4.00400 V
+Shunt Voltage: 1.21000 mV
+Load Voltage:  4.00521 V
+Current:       12.20000 mA
+
+Digi pot level: 35
+Bus Voltage:   4.06000 V
+Shunt Voltage: 1.25000 mV
+Load Voltage:  4.06125 V
+Current:       12.50000 mA
+
+Digi pot level: 36
+Bus Voltage:   4.11600 V
+Shunt Voltage: 1.28000 mV
+Load Voltage:  4.11728 V
+Current:       12.80000 mA
+
+Digi pot level: 37
+Bus Voltage:   4.16400 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  4.16532 V
+Current:       13.20000 mA
+
+Digi pot level: 38
+Bus Voltage:   4.20800 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  4.20935 V
+Current:       13.50000 mA
+
+Digi pot level: 39
+Bus Voltage:   4.25600 V
+Shunt Voltage: 1.39000 mV
+Load Voltage:  4.25739 V
+Current:       13.80000 mA
+
+Digi pot level: 40
+Bus Voltage:   4.31600 V
+Shunt Voltage: 1.41000 mV
+Load Voltage:  4.31741 V
+Current:       14.10000 mA
+
+Digi pot level: 41
+Bus Voltage:   4.31200 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.31342 V
+Current:       14.20000 mA
+
+Digi pot level: 42
+Bus Voltage:   4.31200 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.31343 V
+Current:       14.20000 mA
+
+Digi pot level: 43
+Bus Voltage:   4.31200 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.31343 V
+Current:       14.30000 mA
+
+Digi pot level: 44
+Bus Voltage:   4.31200 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.31342 V
+Current:       14.20000 mA
+
+Digi pot level: 45
+Bus Voltage:   4.30800 V
+Shunt Voltage: 1.43000 mV
+Load Voltage:  4.30943 V
+Current:       14.30000 mA
+
+Digi pot level: 46
+Bus Voltage:   4.30400 V
+Shunt Voltage: 1.42000 mV
+Load Voltage:  4.30542 V
+Current:       14.20000 mA
+
+Turn on Voltage: 2.02 V
+Planck's constant (h): 7.1221222878
+Digi pot level: 0
+Bus Voltage:   1.92800 V
+Shunt Voltage: 0.05000 mV
+Load Voltage:  1.92805 V
+Current:       0.50000 mA
+
+Digi pot level: 1
+Bus Voltage:   2.02000 V
+Shunt Voltage: 0.07000 mV
+Load Voltage:  2.02007 V
+Current:       0.70000 mA
+
+Digi pot level: 2
+Bus Voltage:   2.26800 V
+Shunt Voltage: 0.10000 mV
+Load Voltage:  2.26810 V
+Current:       1.00000 mA
+
+Digi pot level: 3
+Bus Voltage:   2.31200 V
+Shunt Voltage: 0.14000 mV
+Load Voltage:  2.31214 V
+Current:       1.40000 mA
+
+Digi pot level: 4
+Bus Voltage:   2.38800 V
+Shunt Voltage: 0.18000 mV
+Load Voltage:  2.38818 V
+Current:       1.70000 mA
+
+Digi pot level: 5
+Bus Voltage:   2.45200 V
+Shunt Voltage: 0.21000 mV
+Load Voltage:  2.45221 V
+Current:       2.10000 mA
+
+Digi pot level: 6
+Bus Voltage:   2.52000 V
+Shunt Voltage: 0.25000 mV
+Load Voltage:  2.52025 V
+Current:       2.50000 mA
+
+Digi pot level: 7
+Bus Voltage:   2.58400 V
+Shunt Voltage: 0.29000 mV
+Load Voltage:  2.58429 V
+Current:       2.80000 mA
+
+Digi pot level: 8
+Bus Voltage:   2.69600 V
+Shunt Voltage: 0.31000 mV
+Load Voltage:  2.69631 V
+Current:       3.10000 mA
+
+Digi pot level: 9
+Bus Voltage:   2.75600 V
+Shunt Voltage: 0.35000 mV
+Load Voltage:  2.75635 V
+Current:       3.50000 mA
+
+Digi pot level: 10
+Bus Voltage:   2.81600 V
+Shunt Voltage: 0.38000 mV
+Load Voltage:  2.81638 V
+Current:       3.80000 mA
+
+Digi pot level: 11
+Bus Voltage:   2.87200 V
+Shunt Voltage: 0.42000 mV
+Load Voltage:  2.87242 V
+Current:       4.10000 mA
+
+Digi pot level: 12
+Bus Voltage:   2.92800 V
+Shunt Voltage: 0.45000 mV
+Load Voltage:  2.92845 V
+Current:       4.50000 mA
+
+Digi pot level: 13
+Bus Voltage:   2.98800 V
+Shunt Voltage: 0.48000 mV
+Load Voltage:  2.98848 V
+Current:       4.80000 mA
+
+Digi pot level: 14
+Bus Voltage:   3.04000 V
+Shunt Voltage: 0.51000 mV
+Load Voltage:  3.04051 V
+Current:       5.10000 mA
+
+Digi pot level: 15
+Bus Voltage:   3.00400 V
+Shunt Voltage: 0.57000 mV
+Load Voltage:  3.00457 V
+Current:       5.60000 mA
+
+Digi pot level: 16
+Bus Voltage:   3.04000 V
+Shunt Voltage: 0.59000 mV
+Load Voltage:  3.04059 V
+Current:       6.10000 mA
+
+Digi pot level: 17
+Bus Voltage:   3.10000 V
+Shunt Voltage: 0.64000 mV
+Load Voltage:  3.10064 V
+Current:       6.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   3.15600 V
+Shunt Voltage: 0.67000 mV
+Load Voltage:  3.15667 V
+Current:       6.70000 mA
+
+Digi pot level: 19
+Bus Voltage:   3.21600 V
+Shunt Voltage: 0.70000 mV
+Load Voltage:  3.21670 V
+Current:       7.00000 mA
+
+Digi pot level: 20
+Bus Voltage:   3.27200 V
+Shunt Voltage: 0.74000 mV
+Load Voltage:  3.27274 V
+Current:       7.40000 mA
+
+Digi pot level: 21
+Bus Voltage:   3.32800 V
+Shunt Voltage: 0.77000 mV
+Load Voltage:  3.32877 V
+Current:       7.70000 mA
+
+Digi pot level: 22
+Bus Voltage:   3.38400 V
+Shunt Voltage: 0.81000 mV
+Load Voltage:  3.38481 V
+Current:       8.00000 mA
+
+Digi pot level: 23
+Bus Voltage:   3.44000 V
+Shunt Voltage: 0.84000 mV
+Load Voltage:  3.44084 V
+Current:       8.40000 mA
+
+Digi pot level: 24
+Bus Voltage:   3.49200 V
+Shunt Voltage: 0.87000 mV
+Load Voltage:  3.49287 V
+Current:       8.70000 mA
+
+Digi pot level: 25
+Bus Voltage:   3.55200 V
+Shunt Voltage: 0.91000 mV
+Load Voltage:  3.55291 V
+Current:       9.10000 mA
+
+Digi pot level: 26
+Bus Voltage:   3.60400 V
+Shunt Voltage: 0.94000 mV
+Load Voltage:  3.60494 V
+Current:       9.30000 mA
+
+Digi pot level: 27
+Bus Voltage:   3.66400 V
+Shunt Voltage: 0.97000 mV
+Load Voltage:  3.66497 V
+Current:       9.70000 mA
+
+Digi pot level: 28
+Bus Voltage:   3.71200 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.71300 V
+Current:       10.00000 mA
+
+Digi pot level: 29
+Bus Voltage:   3.77200 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.77303 V
+Current:       10.40000 mA
+
+Digi pot level: 30
+Bus Voltage:   3.82400 V
+Shunt Voltage: 1.07000 mV
+Load Voltage:  3.82507 V
+Current:       10.70000 mA
+
+Digi pot level: 31
+Bus Voltage:   3.87600 V
+Shunt Voltage: 1.11000 mV
+Load Voltage:  3.87711 V
+Current:       11.00000 mA
+
+Digi pot level: 32
+Bus Voltage:   3.93200 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.93313 V
+Current:       11.30000 mA
+
+Digi pot level: 33
+Bus Voltage:   3.98000 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.98117 V
+Current:       11.70000 mA
+
+Digi pot level: 34
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  4.03720 V
+Current:       12.00000 mA
+
+Digi pot level: 35
+Bus Voltage:   4.08800 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  4.08923 V
+Current:       12.30000 mA
+
+Digi pot level: 36
+Bus Voltage:   4.14000 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  4.14126 V
+Current:       12.70000 mA
+
+Digi pot level: 37
+Bus Voltage:   4.19200 V
+Shunt Voltage: 1.30000 mV
+Load Voltage:  4.19330 V
+Current:       13.00000 mA
+
+Digi pot level: 38
+Bus Voltage:   4.24400 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  4.24533 V
+Current:       13.30000 mA
+
+Digi pot level: 39
+Bus Voltage:   4.29600 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  4.29736 V
+Current:       13.60000 mA
+
+Digi pot level: 40
+Bus Voltage:   4.32400 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  4.32538 V
+Current:       13.70000 mA
+
+Digi pot level: 41
+Bus Voltage:   4.32400 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  4.32538 V
+Current:       13.80000 mA
+
+Digi pot level: 42
+Bus Voltage:   4.32400 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  4.32538 V
+Current:       13.80000 mA
+
+Digi pot level: 43
+Bus Voltage:   4.32400 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.32537 V
+Current:       13.70000 mA
+
+Digi pot level: 44
+Bus Voltage:   4.32400 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  4.32538 V
+Current:       13.70000 mA
+
+Turn on Voltage: 2.10 V
+Planck's constant (h): 7.3911809921
+Digi pot level: 0
+Bus Voltage:   1.99600 V
+Shunt Voltage: 0.04000 mV
+Load Voltage:  1.99604 V
+Current:       0.40000 mA
+
+Digi pot level: 1
+Bus Voltage:   2.09200 V
+Shunt Voltage: 0.07000 mV
+Load Voltage:  2.09207 V
+Current:       0.70000 mA
+
+Digi pot level: 2
+Bus Voltage:   2.16800 V
+Shunt Voltage: 0.10000 mV
+Load Voltage:  2.16810 V
+Current:       1.00000 mA
+
+Digi pot level: 3
+Bus Voltage:   2.23600 V
+Shunt Voltage: 0.14000 mV
+Load Voltage:  2.23614 V
+Current:       1.40000 mA
+
+Digi pot level: 4
+Bus Voltage:   2.30400 V
+Shunt Voltage: 0.18000 mV
+Load Voltage:  2.30418 V
+Current:       1.80000 mA
+
+Digi pot level: 5
+Bus Voltage:   2.36800 V
+Shunt Voltage: 0.22000 mV
+Load Voltage:  2.36822 V
+Current:       2.20000 mA
+
+Digi pot level: 6
+Bus Voltage:   2.43600 V
+Shunt Voltage: 0.25000 mV
+Load Voltage:  2.43625 V
+Current:       2.60000 mA
+
+Digi pot level: 7
+Bus Voltage:   2.50000 V
+Shunt Voltage: 0.29000 mV
+Load Voltage:  2.50029 V
+Current:       2.90000 mA
+
+Digi pot level: 8
+Bus Voltage:   2.56400 V
+Shunt Voltage: 0.33000 mV
+Load Voltage:  2.56433 V
+Current:       3.20000 mA
+
+Digi pot level: 9
+Bus Voltage:   2.62400 V
+Shunt Voltage: 0.36000 mV
+Load Voltage:  2.62436 V
+Current:       3.60000 mA
+
+Digi pot level: 10
+Bus Voltage:   2.68400 V
+Shunt Voltage: 0.39000 mV
+Load Voltage:  2.68439 V
+Current:       4.00000 mA
+
+Digi pot level: 11
+Bus Voltage:   2.74400 V
+Shunt Voltage: 0.43000 mV
+Load Voltage:  2.74443 V
+Current:       4.30000 mA
+
+Digi pot level: 12
+Bus Voltage:   2.80400 V
+Shunt Voltage: 0.46000 mV
+Load Voltage:  2.80446 V
+Current:       4.60000 mA
+
+Digi pot level: 13
+Bus Voltage:   2.86400 V
+Shunt Voltage: 0.50000 mV
+Load Voltage:  2.86450 V
+Current:       5.00000 mA
+
+Digi pot level: 14
+Bus Voltage:   2.92400 V
+Shunt Voltage: 0.53000 mV
+Load Voltage:  2.92453 V
+Current:       5.30000 mA
+
+Digi pot level: 15
+Bus Voltage:   2.98400 V
+Shunt Voltage: 0.57000 mV
+Load Voltage:  2.98457 V
+Current:       5.70000 mA
+
+Digi pot level: 16
+Bus Voltage:   3.04400 V
+Shunt Voltage: 0.60000 mV
+Load Voltage:  3.04460 V
+Current:       6.00000 mA
+
+Digi pot level: 17
+Bus Voltage:   3.10000 V
+Shunt Voltage: 0.64000 mV
+Load Voltage:  3.10064 V
+Current:       6.40000 mA
+
+Digi pot level: 18
+Bus Voltage:   3.16000 V
+Shunt Voltage: 0.67000 mV
+Load Voltage:  3.16067 V
+Current:       6.70000 mA
+
+Digi pot level: 19
+Bus Voltage:   3.21600 V
+Shunt Voltage: 0.70000 mV
+Load Voltage:  3.21670 V
+Current:       7.00000 mA
+
+Digi pot level: 20
+Bus Voltage:   3.27200 V
+Shunt Voltage: 0.74000 mV
+Load Voltage:  3.27274 V
+Current:       7.30000 mA
+
+Digi pot level: 21
+Bus Voltage:   3.33200 V
+Shunt Voltage: 0.77000 mV
+Load Voltage:  3.33277 V
+Current:       7.70000 mA
+
+Digi pot level: 22
+Bus Voltage:   3.38400 V
+Shunt Voltage: 0.81000 mV
+Load Voltage:  3.38481 V
+Current:       8.00000 mA
+
+Digi pot level: 23
+Bus Voltage:   3.44000 V
+Shunt Voltage: 0.84000 mV
+Load Voltage:  3.44084 V
+Current:       8.40000 mA
+
+Digi pot level: 24
+Bus Voltage:   3.49600 V
+Shunt Voltage: 0.87000 mV
+Load Voltage:  3.49687 V
+Current:       8.80000 mA
+
+Digi pot level: 25
+Bus Voltage:   3.55200 V
+Shunt Voltage: 0.90000 mV
+Load Voltage:  3.55290 V
+Current:       9.00000 mA
+
+Digi pot level: 26
+Bus Voltage:   3.60800 V
+Shunt Voltage: 0.94000 mV
+Load Voltage:  3.60894 V
+Current:       9.30000 mA
+
+Digi pot level: 27
+Bus Voltage:   3.66000 V
+Shunt Voltage: 0.97000 mV
+Load Voltage:  3.66097 V
+Current:       9.70000 mA
+
+Digi pot level: 28
+Bus Voltage:   3.71600 V
+Shunt Voltage: 1.01000 mV
+Load Voltage:  3.71701 V
+Current:       10.00000 mA
+
+Digi pot level: 29
+Bus Voltage:   3.76800 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.76903 V
+Current:       10.30000 mA
+
+Digi pot level: 30
+Bus Voltage:   3.82400 V
+Shunt Voltage: 1.08000 mV
+Load Voltage:  3.82508 V
+Current:       10.70000 mA
+
+Digi pot level: 31
+Bus Voltage:   3.88000 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.88110 V
+Current:       11.10000 mA
+
+Digi pot level: 32
+Bus Voltage:   3.93200 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.93313 V
+Current:       11.30000 mA
+
+Digi pot level: 33
+Bus Voltage:   3.98800 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.98917 V
+Current:       11.70000 mA
+
+Digi pot level: 34
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  4.03720 V
+Current:       12.00000 mA
+
+Digi pot level: 35
+Bus Voltage:   4.09200 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  4.09323 V
+Current:       12.30000 mA
+
+Digi pot level: 36
+Bus Voltage:   4.14400 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  4.14526 V
+Current:       12.60000 mA
+
+Digi pot level: 37
+Bus Voltage:   4.19600 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  4.19729 V
+Current:       12.90000 mA
+
+Digi pot level: 38
+Bus Voltage:   4.24400 V
+Shunt Voltage: 1.32000 mV
+Load Voltage:  4.24532 V
+Current:       13.20000 mA
+
+Digi pot level: 39
+Bus Voltage:   4.29600 V
+Shunt Voltage: 1.36000 mV
+Load Voltage:  4.29736 V
+Current:       13.50000 mA
+
+Digi pot level: 40
+Bus Voltage:   4.32000 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.32137 V
+Current:       13.70000 mA
+
+Digi pot level: 41
+Bus Voltage:   4.32400 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.32537 V
+Current:       13.70000 mA
+
+Digi pot level: 42
+Bus Voltage:   4.32400 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.32537 V
+Current:       13.70000 mA
+
+Digi pot level: 43
+Bus Voltage:   4.32400 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.32537 V
+Current:       13.70000 mA
+
+Turn on Voltage: 2.04 V
+Planck's constant (h): 7.1989784241
+Digi pot level: 0
+Bus Voltage:   2.00000 V
+Shunt Voltage: 0.04000 mV
+Load Voltage:  2.00004 V
+Current:       0.40000 mA
+
+Digi pot level: 1
+Bus Voltage:   2.09200 V
+Shunt Voltage: 0.07000 mV
+Load Voltage:  2.09207 V
+Current:       0.70000 mA
+
+Digi pot level: 2
+Bus Voltage:   2.16800 V
+Shunt Voltage: 0.11000 mV
+Load Voltage:  2.16811 V
+Current:       1.00000 mA
+
+Digi pot level: 3
+Bus Voltage:   2.24000 V
+Shunt Voltage: 0.14000 mV
+Load Voltage:  2.24014 V
+Current:       1.40000 mA
+
+Digi pot level: 4
+Bus Voltage:   2.30800 V
+Shunt Voltage: 0.18000 mV
+Load Voltage:  2.30818 V
+Current:       1.80000 mA
+
+Digi pot level: 5
+Bus Voltage:   2.37200 V
+Shunt Voltage: 0.22000 mV
+Load Voltage:  2.37222 V
+Current:       2.20000 mA
+
+Digi pot level: 6
+Bus Voltage:   2.44000 V
+Shunt Voltage: 0.26000 mV
+Load Voltage:  2.44026 V
+Current:       2.50000 mA
+
+Digi pot level: 7
+Bus Voltage:   2.50000 V
+Shunt Voltage: 0.29000 mV
+Load Voltage:  2.50029 V
+Current:       2.90000 mA
+
+Digi pot level: 8
+Bus Voltage:   2.56400 V
+Shunt Voltage: 0.32000 mV
+Load Voltage:  2.56432 V
+Current:       3.20000 mA
+
+Digi pot level: 9
+Bus Voltage:   2.62400 V
+Shunt Voltage: 0.35000 mV
+Load Voltage:  2.62435 V
+Current:       3.60000 mA
+
+Digi pot level: 10
+Bus Voltage:   2.68400 V
+Shunt Voltage: 0.40000 mV
+Load Voltage:  2.68440 V
+Current:       3.90000 mA
+
+Digi pot level: 11
+Bus Voltage:   2.74800 V
+Shunt Voltage: 0.43000 mV
+Load Voltage:  2.74843 V
+Current:       4.20000 mA
+
+Digi pot level: 12
+Bus Voltage:   2.80800 V
+Shunt Voltage: 0.46000 mV
+Load Voltage:  2.80846 V
+Current:       4.60000 mA
+
+Digi pot level: 13
+Bus Voltage:   2.86800 V
+Shunt Voltage: 0.49000 mV
+Load Voltage:  2.86849 V
+Current:       4.90000 mA
+
+Digi pot level: 14
+Bus Voltage:   2.92400 V
+Shunt Voltage: 0.53000 mV
+Load Voltage:  2.92453 V
+Current:       5.30000 mA
+
+Digi pot level: 15
+Bus Voltage:   2.98400 V
+Shunt Voltage: 0.56000 mV
+Load Voltage:  2.98456 V
+Current:       5.70000 mA
+
+Digi pot level: 16
+Bus Voltage:   3.04400 V
+Shunt Voltage: 0.60000 mV
+Load Voltage:  3.04460 V
+Current:       6.10000 mA
+
+Digi pot level: 17
+Bus Voltage:   3.10000 V
+Shunt Voltage: 0.63000 mV
+Load Voltage:  3.10063 V
+Current:       6.30000 mA
+
+Digi pot level: 18
+Bus Voltage:   3.16000 V
+Shunt Voltage: 0.67000 mV
+Load Voltage:  3.16067 V
+Current:       6.70000 mA
+
+Digi pot level: 19
+Bus Voltage:   3.21600 V
+Shunt Voltage: 0.70000 mV
+Load Voltage:  3.21670 V
+Current:       7.00000 mA
+
+Digi pot level: 20
+Bus Voltage:   3.27600 V
+Shunt Voltage: 0.74000 mV
+Load Voltage:  3.27674 V
+Current:       7.30000 mA
+
+Digi pot level: 21
+Bus Voltage:   3.32800 V
+Shunt Voltage: 0.77000 mV
+Load Voltage:  3.32877 V
+Current:       7.70000 mA
+
+Digi pot level: 22
+Bus Voltage:   3.38400 V
+Shunt Voltage: 0.80000 mV
+Load Voltage:  3.38480 V
+Current:       8.00000 mA
+
+Digi pot level: 23
+Bus Voltage:   3.44400 V
+Shunt Voltage: 0.84000 mV
+Load Voltage:  3.44484 V
+Current:       8.30000 mA
+
+Digi pot level: 24
+Bus Voltage:   3.49600 V
+Shunt Voltage: 0.87000 mV
+Load Voltage:  3.49687 V
+Current:       8.70000 mA
+
+Digi pot level: 25
+Bus Voltage:   3.55600 V
+Shunt Voltage: 0.90000 mV
+Load Voltage:  3.55690 V
+Current:       9.10000 mA
+
+Digi pot level: 26
+Bus Voltage:   3.60800 V
+Shunt Voltage: 0.94000 mV
+Load Voltage:  3.60894 V
+Current:       9.30000 mA
+
+Digi pot level: 27
+Bus Voltage:   3.66400 V
+Shunt Voltage: 0.97000 mV
+Load Voltage:  3.66497 V
+Current:       9.70000 mA
+
+Digi pot level: 28
+Bus Voltage:   3.71600 V
+Shunt Voltage: 1.00000 mV
+Load Voltage:  3.71700 V
+Current:       10.10000 mA
+
+Digi pot level: 29
+Bus Voltage:   3.77200 V
+Shunt Voltage: 1.03000 mV
+Load Voltage:  3.77303 V
+Current:       10.30000 mA
+
+Digi pot level: 30
+Bus Voltage:   3.82800 V
+Shunt Voltage: 1.07000 mV
+Load Voltage:  3.82907 V
+Current:       10.70000 mA
+
+Digi pot level: 31
+Bus Voltage:   3.88000 V
+Shunt Voltage: 1.10000 mV
+Load Voltage:  3.88110 V
+Current:       11.10000 mA
+
+Digi pot level: 32
+Bus Voltage:   3.93600 V
+Shunt Voltage: 1.13000 mV
+Load Voltage:  3.93713 V
+Current:       11.30000 mA
+
+Digi pot level: 33
+Bus Voltage:   3.98400 V
+Shunt Voltage: 1.17000 mV
+Load Voltage:  3.98517 V
+Current:       11.70000 mA
+
+Digi pot level: 34
+Bus Voltage:   4.03600 V
+Shunt Voltage: 1.20000 mV
+Load Voltage:  4.03720 V
+Current:       12.00000 mA
+
+Digi pot level: 35
+Bus Voltage:   4.09200 V
+Shunt Voltage: 1.23000 mV
+Load Voltage:  4.09323 V
+Current:       12.20000 mA
+
+Digi pot level: 36
+Bus Voltage:   4.14400 V
+Shunt Voltage: 1.26000 mV
+Load Voltage:  4.14526 V
+Current:       12.60000 mA
+
+Digi pot level: 37
+Bus Voltage:   4.19600 V
+Shunt Voltage: 1.29000 mV
+Load Voltage:  4.19729 V
+Current:       13.00000 mA
+
+Digi pot level: 38
+Bus Voltage:   4.24400 V
+Shunt Voltage: 1.33000 mV
+Load Voltage:  4.24533 V
+Current:       13.20000 mA
+
+Digi pot level: 39
+Bus Voltage:   4.29600 V
+Shunt Voltage: 1.35000 mV
+Load Voltage:  4.29735 V
+Current:       13.60000 mA
+
+Digi pot level: 40
+Bus Voltage:   4.32000 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.32137 V
+Current:       13.60000 mA
+
+Digi pot level: 41
+Bus Voltage:   4.32000 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.32137 V
+Current:       13.70000 mA
+
+Digi pot level: 42
+Bus Voltage:   4.32000 V
+Shunt Voltage: 1.38000 mV
+Load Voltage:  4.32138 V
+Current:       13.70000 mA
+
+Digi pot level: 43
+Bus Voltage:   4.32000 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.32137 V
+Current:       13.70000 mA
+
+Digi pot level: 44
+Bus Voltage:   4.32400 V
+Shunt Voltage: 1.37000 mV
+Load Voltage:  4.32537 V
+Current:       13.70000 mA
+
+Turn on Voltage: 2.05 V
+Planck's constant (h): 7.2315902710

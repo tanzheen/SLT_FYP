@@ -1,0 +1,5 @@
+setup.py
+SpaEMo.egg-info/PKG-INFO
+SpaEMo.egg-info/SOURCES.txt
+SpaEMo.egg-info/dependency_links.txt
+SpaEMo.egg-info/top_level.txt
