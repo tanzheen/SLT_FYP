@@ -345,18 +345,15 @@ def train_one_epoch(config, accelerator, model, tokenizer,
 
             if (global_step + 1) % int(config.experiment.log_every * len(train_dataloader)/config.training.gradient_accumulation_steps)  == 0:
                 
-                lr = scheduler.get_last_lr()[0]
+              
 
                 logger.info(
                     f"Batch (t): {batch_time_meter.val:0.4f} "
-                    f"LR: {lr:0.6f} "
                     f"Step: {global_step + 1} "
                     f"Total Loss: {transformer_logs['train total_loss']:0.4f} "
                     f"Recon Loss: {transformer_logs['train current loss']:0.4f} "
                 )
                 logs = {
-                    "lr": lr,
-                    "lr/generator": lr,
                     "time/data_time": data_time_meter.val,
                     "time/batch_time": batch_time_meter.val,
                 }
