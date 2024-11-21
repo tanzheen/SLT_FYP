@@ -47,3 +47,11 @@ TiTok_SLT/vis_tokenizer/generator_titok_l32.bin
 /Resnet_SLT_P14_run2
 /Resnet_SLT_P14_run3
 /Resnet_VLP_P14_run1
+*.venus01
+/SpaEMo/wandb
+*.safetensors
+*.bin
+*.h5
+*.pth
+*.model
+*.gguf
