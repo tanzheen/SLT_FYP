@@ -55,3 +55,7 @@ TiTok_SLT/vis_tokenizer/generator_titok_l32.bin
 *.pth
 *.model
 *.gguf
+/SpaEMo/Spatial/openai_vit
+/SpaEMo/Text/gemma_instruct_2b
+/SpaEMo/Motion/videomae
+/SpaEMo/Emo/vit_face_expression

@@ -204,14 +204,31 @@ class SignVideoDataset(Dataset):
             text_label =" "+ text_label
         length = file['length']  # Number of frames in the video.
         
-        # Load the images for the video and pad as necessary.
-        img_sample, path_lst= self.load_imgs(os.path.join(self.img_path, name))
-        if len(img_sample) != length: # Number of PIL Images not matching indicated length
-            print(f"Name: {name}, Length mismatch: Retrieved {img_sample.shape[0]} vs Recorded {length}") 
-        # else: 
-        #     print(f"Name list: {path_lst}, Name: {name}, Length: {length}") 
+        if self.config.training.token_usage: 
+
+            sign_dir = os.path.join(self.img_path, name)
+            emo_save_path = os.path.join(sign_dir, "emo_embeddings")
+            image_save_path = os.path.join(sign_dir, "image_embeddings")
+            clip_save_path = os.path.join(sign_dir, "clip_embeddings")
+
+            # load emo features
+            emo_features = torch.load(os.path.join(emo_save_path, "emo.pt"))
+            # load image_features 
+            image_features = torch.load(os.path.join(image_save_path, "image.pt"))
+            # load clip_features
+            clip_features = torch.load(os.path.join(clip_save_path, "clip.pt"))
+
+            return name, emo_features, image_features, clip_features, text_label
+    
+        else: # no tokenisation used 
+            # Load the images for the video and pad as necessary.
+            img_sample, path_lst= self.load_imgs(os.path.join(self.img_path, name))
+            if len(img_sample) != length: # Number of PIL Images not matching indicated length
+                print(f"Name: {name}, Length mismatch: Retrieved {img_sample.shape[0]} vs Recorded {length}") 
+            # else: 
+            #     print(f"Name list: {path_lst}, Name: {name}, Length: {length}") 
         
-        return name, img_sample, text_label
+            return name, img_sample, text_label
 
     def load_imgs(self, dir_path):
         """
@@ -356,12 +373,10 @@ class SignVideoDataset(Dataset):
             name_batch.append(name)
             tgt_batch.append(text_label)
             
-
             # Cut up video properly to a list of list of 16 images
             
             num_clips = math.ceil((len(img_sample)-8) / 8)
             num_frames = num_clips * 8 +8 
-
         
             #print("length of image sample: ", len(img_sample), "num_clips: ", num_clips, "num_frames: ", num_frames)
             # if not enough frames, repeat the last frame
@@ -407,9 +422,28 @@ class SignVideoDataset(Dataset):
             'clip_batch': clip_batch,
             'num_frames_batch': num_frames_batch,
             'num_clips_batch': num_clips_batch,
-            'tgt_batch': tgt_input
         }
 
+        return src_input, tgt_input
+    
+    def collate_tokens (self, batch): 
+        name_batch, emo_batch, image_batch, clip_batch, tgt_batch = [], [], [], [], []
+        for name, emo_features, image_features, clip_features, text_label in batch: 
+            name_batch.append(name)
+            tgt_batch.append(text_label)
+            emo_batch.append(emo_features)
+            image_batch.append(image_features)
+            clip_batch.append(clip_features)
+
+        tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
+
+        src_input = {
+            'name_batch': name_batch,
+            'emo_batch': emo_batch,
+            'image_batch': image_batch,
+            'clip_batch': clip_batch,
+        }
+        
         return src_input, tgt_input
 
 

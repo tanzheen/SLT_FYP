@@ -78,6 +78,7 @@ class Motion_extractor(nn.Module):
 class SignAdaptor (nn.Module): 
     def __init__(self, config): 
         super().__init__()
+        self.config = config
         
     def forward(self, src_input, pad_idx = 0 ): 
         # batch_size, seq_len, hidden_size
@@ -366,6 +367,7 @@ class SpaEMo(BaseModel):
         self.lora_model.print_trainable_parameters()
 
     def create_causal_inputs(self, visual_feats ,visual_attn,  tgt_ids,tokenizer , prompt): 
+        '''This function is only for causal language modeling.'''
         # The space will be added by the model itself
         prompt_ids = tokenizer(prompt, return_tensors="pt", add_special_tokens=True)
         prompt_len = len(prompt_ids["input_ids"][0])
@@ -423,6 +425,10 @@ class SpaEMo(BaseModel):
                      'num_frames_batch': src_input['num_frames_batch'],}
         
         combined_features = self.adaptor(emb_input, self.tokenizer.pad_token_id)
+
+        # if tokenised, just need arrangement and then the visual embeddings go straight right into the temporal conv
+
+
         temporal_features = self.tconv(combined_features, src_input['num_frames_batch'])
         vis_features = self.mlp(temporal_features['visual_feat'])
         new_input_embeds , new_labels = self.create_causal_inputs(vis_features, temporal_features['src_attn'], tgt_input, self.tokenizer, self.config.dataset.prompt )
@@ -486,7 +492,8 @@ class SpaEMo(BaseModel):
             motion_features = self.motion_extractor(src_input['clip_batch'])
 
             # Create a new dictionary for transferring of results
-            emb_input = {'emo_batch': emo_features, 
+            emb_input = {'name_batch': src_input['name_batch'],
+                        'emo_batch': emo_features, 
                         'image_batch': spatio_features, 
                         'clip_batch': motion_features, 
                         'num_clips_batch': src_input['num_clips_batch'],
@@ -499,4 +506,40 @@ class SpaEMo(BaseModel):
             outputs = self.lora_model.generate(inputs_embeds = new_input_embeds, num_beams = num_beams, max_length = max_length)
 
         return outputs
+    
+
+    def vis_text_align(self, src_input, tgt_input):
+
+        ##Get visual features 
+        emo_features = self.emo_extractor(src_input['emo_batch'])
+        spatio_features = self.spatio_extractor(src_input['image_batch'])
+        motion_features = self.motion_extractor(src_input['clip_batch'])
+
+        # Create a new dictionary for transferring of results
+        emb_input = {'name_batch': src_input['name_batch'],
+                     'emo_batch': emo_features, 
+                     'image_batch': spatio_features, 
+                     'clip_batch': motion_features, 
+                     'num_clips_batch': src_input['num_clips_batch'],
+                     'num_frames_batch': src_input['num_frames_batch'],}
+        
+        combined_features = self.adaptor(emb_input, self.tokenizer.pad_token_id)
+        temporal_features = self.tconv(combined_features, src_input['num_frames_batch'])
+        image_embeds = self.mlp(temporal_features['visual_feat'])
+
+        # Get textual features 
+        text_embeds = self.lora_model.get_input_embeddings()(tgt_input["input_ids"])
+
+
+        # align the visual features with the text features, don't need to perform causal modelling
+        # normalized features
+        image_embeds = image_embeds / image_embeds.norm(dim=-1, keepdim=True)
+        text_embeds = text_embeds / text_embeds.norm(dim=-1, keepdim=True)
+
+        # cosine similarity as logits
+        logit_scale = self.logit_scale.exp()
+        logits_per_text = torch.matmul(text_embeds, image_embeds.t()) * logit_scale
+        logits_per_image = logits_per_text.T
+        
+        return logits_per_text
 

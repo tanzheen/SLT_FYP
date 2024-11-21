@@ -311,8 +311,15 @@ def train_one_epoch(config, accelerator, model, tokenizer,
         data_time_meter.update(time.time() - end)
 
         with accelerator.accumulate([model]):
-            outputs = model(src_input, tgt_input)
-            loss = outputs.loss
+
+            if config.training.vt_align and global_step < config.training.vt_steps:
+                logits_per_text = model.vis_text_align(src_input, tgt_input)
+                loss = clip_loss(logits_per_text)
+            else: 
+                outputs = model(src_input, tgt_input)
+                loss = outputs.loss
+
+
             optimizer.zero_grad()
             accelerator.backward(loss)
             if config.training.max_grad_norm is not None and accelerator.sync_gradients:
@@ -381,7 +388,11 @@ def train_one_epoch(config, accelerator, model, tokenizer,
 
 
             # Evaluate reconstruction.
-            if dev_dataloader is not None and (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)/config.training.gradient_accumulation_steps) == 0:
+            if dev_dataloader is not None and \
+                (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)/config.training.gradient_accumulation_steps) == 0:
+                           
+                if global_step < config.training.vt_steps: continue # Skip evaluation if not over to align vis-text
+                
                 logger.info(f"Computing metrics on the validation set.")
                 
                      
@@ -418,3 +429,14 @@ def train_one_epoch(config, accelerator, model, tokenizer,
             global_step += 1
 
     return global_step, early_stop
+
+
+
+def contrastive_loss(logits: torch.Tensor) -> torch.Tensor:
+    return nn.functional.cross_entropy(logits, torch.arange(len(logits), device=logits.device))
+
+
+def clip_loss(similarity: torch.Tensor) -> torch.Tensor:
+    caption_loss = contrastive_loss(similarity)
+    image_loss = contrastive_loss(similarity.t())
+    return (caption_loss + image_loss) / 2.0
