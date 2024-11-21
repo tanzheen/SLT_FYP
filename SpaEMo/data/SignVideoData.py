@@ -13,6 +13,7 @@ import math
 import cv2
 from transformers import AutoImageProcessor, AutoProcessor
 
+
 def load_annot_file(file_path):
     """
     Load the annotation file from the provided path.
@@ -172,6 +173,9 @@ class SignVideoDataset(Dataset):
         self.image_processor =  AutoImageProcessor.from_pretrained(config.model.spatio_model)
         self.video_processor = AutoImageProcessor.from_pretrained(config.model.motion_model)
         self.transformer_type = config.model.transformer_type 
+
+        print(cv2.__version__)
+        print(cv2.getBuildInformation())
 
     def __len__(self):
         """
