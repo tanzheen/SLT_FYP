@@ -70,8 +70,8 @@ def main ():
     optimizer = create_optimizer_v2(
         model.parameters(),
         opt=config.optimizer.name,
-        lr=1e-3,
-        weight_decay=1e-4
+        lr=1e-4,
+        weight_decay=0.01
     )
 
     scheduler, _ = create_scheduler_v2(optimizer=optimizer, sched="cosine", 

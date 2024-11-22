@@ -205,7 +205,7 @@ class SignVideoDataset(Dataset):
         length = file['length']  # Number of frames in the video.
         
         if self.config.training.token_usage: 
-
+            # if the image and video embeddings are already saved, load them
             sign_dir = os.path.join(self.img_path, name)
             emo_save_path = os.path.join(sign_dir, "emo_embeddings")
             image_save_path = os.path.join(sign_dir, "image_embeddings")
@@ -427,21 +427,31 @@ class SignVideoDataset(Dataset):
         return src_input, tgt_input
     
     def collate_tokens (self, batch): 
-        name_batch, emo_batch, image_batch, clip_batch, tgt_batch = [], [], [], [], []
+        name_batch, emo_batch, image_batch, clip_batch, tgt_batch, num_frames_batch , num_clips_batch  = [], [], [], [], [], [], []
+
+        # append each the different features into the different lists 
         for name, emo_features, image_features, clip_features, text_label in batch: 
             name_batch.append(name)
             tgt_batch.append(text_label)
             emo_batch.append(emo_features)
             image_batch.append(image_features)
             clip_batch.append(clip_features)
+            num_frames = len(image_features)
+            num_clips = len(clip_features)
+            num_frames_batch.append(num_frames)
+            num_clips_batch.append(num_clips)
+
 
         tgt_input = self.tokenizer(tgt_batch, return_tensors="pt", padding=True, truncation=True)
+        
 
         src_input = {
             'name_batch': name_batch,
             'emo_batch': emo_batch,
             'image_batch': image_batch,
             'clip_batch': clip_batch,
+            'num_frames_batch': num_frames_batch,
+            'num_clips_batch': num_clips_batch,
         }
         
         return src_input, tgt_input

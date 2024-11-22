@@ -82,6 +82,9 @@ class SignAdaptor (nn.Module):
         
     def forward(self, src_input, pad_idx = 0 ): 
         # batch_size, seq_len, hidden_size
+        if self.config.training.token_usage: # use the other function is we are using the saved embeddings 
+            return self.tokenised_forward(src_input, pad_idx = pad_idx)
+
         name_batch = src_input['name_batch']
         emo_batch = src_input['emo_batch']
         image_batch = src_input['image_batch']
@@ -95,16 +98,18 @@ class SignAdaptor (nn.Module):
         for i , (num_clips, num_frames) in enumerate(zip(num_clips_batch, num_frames_batch)): 
             name = name_batch[i]
             #print(f"num_clips: {num_clips}, num_frames: {num_frames}, repeat factor: {repeat_factor}")
+            # Sectioning out the frames after the visual features extractor
             end_clips = start_clips + num_clips
             end_frames = start_frames  + num_frames
             current_images = image_batch[start_frames :end_frames]
             current_emos = emo_batch[start_frames :end_frames]
             current_clips = clip_batch [start_clips :end_clips]
 
-            # repeat the number of clips accordingly 
+            # repeat the number of clips accordingly (each frame will be concatenated to a similar clip a few times)
             repeat_factor = math.floor(num_frames/num_clips) # number of times to repeat clips 
             expanded_clips = current_clips.unsqueeze(1).repeat(1, repeat_factor, 1)
             expanded_clips = expanded_clips.view(-1, current_clips.size(1))
+
 
             #repeat the last clip again if required
             if repeat_factor*num_clips < num_frames:
@@ -121,6 +126,45 @@ class SignAdaptor (nn.Module):
         
         x = pad_sequence(embeddings_batch, batch_first=True, padding_value=pad_idx)
         return x 
+    
+    def tokenised_forward(self, src_input, pad_idx = 0):
+        name_batch = src_input['name_batch']
+        emo_batch = src_input['emo_batch']
+        image_batch = src_input['image_batch']
+        clip_batch = src_input['clip_batch']
+        num_frames_batch = src_input['num_frames_batch']
+        num_clips_batch = src_input['num_clips_batch']
+        
+        embeddings_batch = [] 
+        
+        for i , (num_clips, num_frames) in enumerate(zip(num_clips_batch, num_frames_batch)):
+            # if its tokenised already, then don't need to batch out the clips and frames with start and end indices
+
+            current_clips = clip_batch[i]
+            current_images = image_batch[i]
+            current_emos = emo_batch[i]
+
+            # repeat the number of clips accordingly (each frame will be concatenated to a similar clip a few times)
+            repeat_factor = math.floor(num_frames/num_clips) # number of times to repeat clips 
+            expanded_clips = current_clips.unsqueeze(1).repeat(1, repeat_factor, 1)
+            expanded_clips = expanded_clips.view(-1, current_clips.size(1))
+
+            #repeat the last clip again if required
+            if repeat_factor*num_clips < num_frames:
+                last_clip = current_clips[-1].unsqueeze(0).repeat(num_frames - repeat_factor*num_clips, 1)
+                expanded_clips = torch.cat([expanded_clips, last_clip], dim=0)
+            
+            #print(f"shape of current_emos: {current_emos.shape}, shape of current_images: {current_images.shape}, shape of expanded_clips: {expanded_clips.shape}")
+            # Concat the features along the dimensions
+            combined_features = torch.cat([current_emos, current_images, expanded_clips], dim=1) 
+            embeddings_batch.append(combined_features)
+
+        x = pad_sequence(embeddings_batch, batch_first=True, padding_value=pad_idx)
+        return x 
+    
+
+
+
     
     def save_embeddings(self, src_input, save_path): 
         # batch_size, seq_len, hidden_size
@@ -347,6 +391,7 @@ class SpaEMo(BaseModel):
         super().__init__()
         self.config = config
         self.combined_dim = config.model.emo_hiddim + config.model.spatio_hiddim + config.model.motion_hiddim
+        self.logit_scale = nn.Parameter(torch.tensor(2.6592))
         self.emo_extractor = Emo_extractor(config)
         self.spatio_extractor = Spatio_extractor(config)
         self.motion_extractor = Motion_extractor(config)
@@ -431,7 +476,12 @@ class SpaEMo(BaseModel):
 
         temporal_features = self.tconv(combined_features, src_input['num_frames_batch'])
         vis_features = self.mlp(temporal_features['visual_feat'])
-        new_input_embeds , new_labels = self.create_causal_inputs(vis_features, temporal_features['src_attn'], tgt_input, self.tokenizer, self.config.dataset.prompt )
+        if self.config.model.transformer_type == 'causal': 
+            new_input_embeds , new_labels = self.create_causal_inputs(vis_features, temporal_features['src_attn'], tgt_input, self.tokenizer, self.config.dataset.prompt )
+        elif self.config.model.transformer_type == 'seq2seq':
+            raise NotImplemented
+            new_input_embeds, new_labels= self.create_seq_inputs (vis_features, temporal_features['src_attn'], tgt_input, self.tokenizer, self.config.dataset.prompt)
+        
         outputs = self.lora_model(inputs_embeds = new_input_embeds, labels = new_labels)
 
         return outputs

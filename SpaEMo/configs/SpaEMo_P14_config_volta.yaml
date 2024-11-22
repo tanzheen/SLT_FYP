@@ -1,7 +1,7 @@
 experiment:
   project: "SpaEMo_P14"
-  name: "SpaEMo_P14_run1"
-  output_dir: "/scratch2/e0724993/SpaEMo_P14_run1"
+  name: "SpaEMo_P14_run2"
+  output_dir: "/scratch2/e0724993/SpaEMo_P14_run2"
   save_every: 1
   log_every: 0.1
   eval_every: 1
@@ -17,7 +17,7 @@ model:
   motion_model: /scratch2/e0724993/videomae
   face_detector: /scratch2/e0724993/yunet/face_detection_yunet_2023mar.onnx
   llm: /scratch2/e0724993/gemma_instruct_2b
-  transformer_type: causal
+  transformer_type: causal # "seq2seq" or "causal"
   emo_hiddim: 768
   spatio_hiddim: 768
   motion_hiddim: 1024

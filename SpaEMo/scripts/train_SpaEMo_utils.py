@@ -68,23 +68,29 @@ def create_dataloader(config, logger,accelerator, tokenizer, device =  None):
     batch_size = config.training.per_gpu_batch_size 
     logger.info(f"Creating Signloaders. Batch_size = {batch_size}")
 
+
+
+
     train_dataset = SignVideoDataset(tokenizer, config,  'train')
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, 
-                                  num_workers=config.dataset.params.num_workers, collate_fn=train_dataset.collate_fn,
-                                   generator=torch.Generator(device=device))
+                                  num_workers=config.dataset.params.num_workers,
+                                  collate_fn=train_dataset.collate_tokens if config.training.token_usage else train_dataset.collate_fn,
+                                  generator=torch.Generator(device=device))
     train_dataloader = accelerator.prepare(train_dataloader)
     print("train dataloader done!")
 
     dev_dataset = SignVideoDataset(tokenizer, config,  'dev')
     dev_dataloader = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False, 
-                                num_workers=config.dataset.params.num_workers, collate_fn=dev_dataset.collate_fn, 
-                                 generator=torch.Generator(device=device) )
+                                num_workers=config.dataset.params.num_workers,
+                                collate_fn=dev_dataset.collate_tokens if config.training.token_usage else dev_dataset.collate_fn, 
+                                generator=torch.Generator(device=device) )
     dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
 
     test_dataset = SignVideoDataset(tokenizer, config, 'test')
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False,
-                                  num_workers=config.dataset.params.num_workers, collate_fn=test_dataset.collate_fn, 
+                                  num_workers=config.dataset.params.num_workers, 
+                                  collate_fn=test_dataset.collate_tokens if config.training.token_usage else test_dataset.collate_fn, 
                                   generator=torch.Generator(device=device))
     test_dataloader = accelerator.prepare(test_dataloader)
     print("train dataloader done!")
@@ -311,10 +317,13 @@ def train_one_epoch(config, accelerator, model, tokenizer,
         data_time_meter.update(time.time() - end)
 
         with accelerator.accumulate([model]):
-
+            
+            # alignment starts first for a certain number of steps 
             if config.training.vt_align and global_step < config.training.vt_steps:
                 logits_per_text = model.vis_text_align(src_input, tgt_input)
                 loss = clip_loss(logits_per_text)
+
+            # then the transformer model starts training
             else: 
                 outputs = model(src_input, tgt_input)
                 loss = outputs.loss
@@ -391,7 +400,7 @@ def train_one_epoch(config, accelerator, model, tokenizer,
             if dev_dataloader is not None and \
                 (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)/config.training.gradient_accumulation_steps) == 0:
                            
-                if global_step < config.training.vt_steps: continue # Skip evaluation if not over to align vis-text
+                if global_step < config.training.vt_steps: continue # Skip evaluation if aligning vis-text is not over
                 
                 logger.info(f"Computing metrics on the validation set.")
                 
