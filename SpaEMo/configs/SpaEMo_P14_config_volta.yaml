@@ -61,3 +61,7 @@ training:
   max_grad_norm: 1.0
   num_epochs: 32
   scale_embedding: False
+  token_usage: True # Set to True to use token usage
+  vt_align: True # Set to True to use visual token alignment
+  s2_scale: True
+  vt_steps: 10000
