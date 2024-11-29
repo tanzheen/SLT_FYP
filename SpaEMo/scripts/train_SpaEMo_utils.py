@@ -76,7 +76,7 @@ def create_dataloader(config, logger,accelerator, tokenizer, device =  None):
                                   num_workers=config.dataset.params.num_workers,
                                   collate_fn=train_dataset.collate_tokens if config.training.token_usage else train_dataset.collate_fn,
                                   generator=torch.Generator(device=device))
-    train_dataloader = accelerator.prepare(train_dataloader)
+    #train_dataloader = accelerator.prepare(train_dataloader)
     print("train dataloader done!")
 
     dev_dataset = SignVideoDataset(tokenizer, config,  'dev')
@@ -84,7 +84,7 @@ def create_dataloader(config, logger,accelerator, tokenizer, device =  None):
                                 num_workers=config.dataset.params.num_workers,
                                 collate_fn=dev_dataset.collate_tokens if config.training.token_usage else dev_dataset.collate_fn, 
                                 generator=torch.Generator(device=device) )
-    dev_dataloader = accelerator.prepare(dev_dataloader)
+    #dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
 
     test_dataset = SignVideoDataset(tokenizer, config, 'test')
@@ -92,7 +92,7 @@ def create_dataloader(config, logger,accelerator, tokenizer, device =  None):
                                   num_workers=config.dataset.params.num_workers, 
                                   collate_fn=test_dataset.collate_tokens if config.training.token_usage else test_dataset.collate_fn, 
                                   generator=torch.Generator(device=device))
-    test_dataloader = accelerator.prepare(test_dataloader)
+    #test_dataloader = accelerator.prepare(test_dataloader)
     print("train dataloader done!")
 
     return train_dataloader, dev_dataloader, test_dataloader

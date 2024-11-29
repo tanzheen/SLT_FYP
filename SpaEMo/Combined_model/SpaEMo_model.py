@@ -25,10 +25,11 @@ def create_mask(seq_lengths: list, device="cpu"):
     mask = torch.arange(max_len, device=device)[None, :] < torch.tensor(seq_lengths, device=device)[:, None]
     return mask.to(torch.bool)
 
+
 class Emo_extractor(nn.Module): 
     def __init__(self, config): 
         super().__init__()
-        self.emotion_model = AutoModelForImageClassification.from_pretrained(config.model.emotion_model)
+        self.emotion_model = AutoModelForImageClassification.from_pretrained(config.model.emotion_model).to('cuda')
         # Freeze all parameters in the emotion model
 
         # for param in self.emotion_model.vit.parameters():
@@ -37,7 +38,7 @@ class Emo_extractor(nn.Module):
     def forward(self, faces): 
         with torch.no_grad():
             #print("faces shape: ", faces.pixel_values.shape)
-            embeddings = self.emotion_model.vit.embeddings(faces.pixel_values)  # Obtain embeddings from the ViT backbone
+            embeddings = self.emotion_model.vit.embeddings(faces.pixel_values.cuda())  # Obtain embeddings from the ViT backbone
             encoder_outputs = self.emotion_model.vit.encoder(embeddings)  # Pass through the encoder layers
             features = self.emotion_model.vit.layernorm(encoder_outputs[0][:, 0, :])  # Extract [CLS] token feature
         
@@ -47,8 +48,8 @@ class Emo_extractor(nn.Module):
 class Spatio_extractor(nn.Module): 
     def __init__(self, config): 
         super().__init__()
-        self.spatio_extractor = AutoModelForZeroShotImageClassification.from_pretrained(config.model.spatio_model).get_image_features
-
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.spatio_extractor = AutoModelForZeroShotImageClassification.from_pretrained(config.model.spatio_model).to(device).get_image_features
         ## Settle S2 wrapper too
 
         # Freeze all parameters in the spatio extractor model
@@ -57,13 +58,14 @@ class Spatio_extractor(nn.Module):
     
     def forward(self, images): 
         with torch.no_grad():
-            spatial_features = self.spatio_extractor(images.pixel_values)  # Shape: [batch_size, num_patches, feature_dim]
+            spatial_features = self.spatio_extractor(images.pixel_values.cuda())  # Shape: [batch_size, num_patches, feature_dim]
         return spatial_features # hidden size = 768
 
 class Motion_extractor(nn.Module):
     def __init__(self, config): 
         super().__init__()
-        self.motion_model = VideoMAEForVideoClassification.from_pretrained(config.model.motion_model)
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.motion_model = VideoMAEForVideoClassification.from_pretrained(config.model.motion_model).to(device)
         # Freeze all parameters in the motion model
         # for param in self.motion_model.parameters():
         #     param.requires_grad = False
@@ -71,7 +73,7 @@ class Motion_extractor(nn.Module):
     def forward(self, video_tensor): 
         with torch.no_grad():
             # Forward pass up to the encoder and normalization layer
-            features = self.motion_model.videomae(video_tensor.pixel_values).last_hidden_state  # Shape: [batch_size, num_patches, feature_dim]
+            features = self.motion_model.videomae(video_tensor.pixel_values.cuda()).last_hidden_state  # Shape: [batch_size, num_patches, feature_dim]
             # Apply the final LayerNorm before the classifier
             features = self.motion_model.fc_norm(features.mean(dim=1))  # Shape: [batch_size, 1024]
         return features 
@@ -611,14 +613,14 @@ class SpaEMo(BaseModel):
         #print(f"prompt_len: {prompt_len}")
         #print(f"visual feats shape: {visual_feats.shape}")
 
-        prompt_embeds = self.lora_model.get_input_embeddings()(prompt_ids["input_ids"]).squeeze()
+        #prompt_embeds = self.lora_model.get_input_embeddings()(prompt_ids["input_ids"]).squeeze()
         combined_features, src_length = self.adaptor(emb_input, self.tokenizer.pad_token_id)
 
         # if tokenised, just need arrangement and then the visual embeddings go straight right into the temporal conv
 
 
-        temporal_features = self.tconv(combined_features, src_length)
-        vis_features = self.mlp(temporal_features['visual_feat'])
+        temporal_features = self.tconv(combined_features.cuda(), src_length)
+        vis_features = self.mlp(temporal_features['visual_feat'].cuda())
         if self.config.model.transformer_type == 'causal': 
             new_input_embeds , new_labels = self.create_causal_inputs(vis_features, temporal_features['src_attn'], tgt_input, 
                                                                       self.tokenizer, self.config.dataset.prompt )
@@ -632,7 +634,7 @@ class SpaEMo(BaseModel):
             outputs = self.lora_model(inputs_embeds = new_input_embeds.cuda(),
                                       attention_mask= temporal_features['src_attn'].cuda(), 
                                       decoder_attention_mask = label_attn.cuda(),
-                                       labels = new_labels)
+                                       labels = new_labels.cuda())
 
         
         return outputs, temporal_features
