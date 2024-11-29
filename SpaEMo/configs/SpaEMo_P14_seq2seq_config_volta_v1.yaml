@@ -1,0 +1,70 @@
+experiment:
+  project: "SpaEMo_P14"
+  name: "SpaEMo_P14_run5"
+  output_dir: "/scratch2/e0724993/SpaEMo_P14_run5"
+  save_every: 5
+  log_every: 0.1
+  eval_every: 5
+  translate_every: 3
+  log_grad_norm_every: 0.1
+  resume: True
+  init_weight:
+
+model:
+  tokenizer: /scratch2/e0724993/m2m_1.2b
+  emotion_model: /scratch2/e0724993/vit_face_expression
+  spatio_model: /scratch2/e0724993/openai_vit
+  motion_model: /scratch2/e0724993/videomae
+  face_detector: /scratch2/e0724993/yunet/face_detection_yunet_2023mar.onnx
+  llm: /scratch2/e0724993/m2m_1.2b
+  transformer_type: seq2seq # "seq2seq" or "causal"
+  emo_hiddim: 768
+  spatio_hiddim: 768
+  motion_hiddim: 1024
+  multilingual: True 
+  llm_hiddim: 1024
+  adaptor_type : 1
+
+dataset:
+  name: PHOENIX2014T
+  prompt: "Translate the following sentence into spoken German:"
+  lang: de
+  train: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_train.pkl
+  dev: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_dev.pkl
+  test: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/annotations/processed/labels_test.pkl
+  img_path: /hpctmp/e0724993/PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px # + <train/dev/test> + <video_name>
+  max_length: 300
+  params:
+    num_workers: 4
+
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 1e-4
+    beta1: 0.9
+    beta2: 0.98
+    weight_decay: 0.01
+
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 4000
+    end_lr: 5e-5
+
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 8
+  mixed_precision: "no"
+  enable_tf32: False
+  enable_wandb: False # Set to True to enable wandb logging
+  use_ema: False
+  seed: 42
+  num_translated_images: 2
+  max_grad_norm: 1.0
+  num_epochs: 200
+  scale_embedding: False
+  token_usage: True # Set to True to use token usage
+  vt_align: True # Set to True to use visual token alignment
+  s2_scale: False
+  vt_steps: 3000

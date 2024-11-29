@@ -61,17 +61,22 @@ def main ():
     tokenizer = AutoTokenizer.from_pretrained(config.model.tokenizer)
     tokenizer.padding_side= 'right'
 
+    if config.model.multilingual:
+        tokenizer.src_lang = config.dataset.lang
+        tokenizer.tgt_lang = config.dataset.lang
+
     train_dataloader, dev_dataloader, test_dataloader = create_dataloader(config, 
                                                                           logger, 
                                                                           accelerator,
                                                                             tokenizer)
+    
     model = create_SpaEMo(config, logger)
     # Create an optimizer
     optimizer = create_optimizer_v2(
         model.parameters(),
         opt=config.optimizer.name,
-        lr=1e-4,
-        weight_decay=0.01
+        lr=config.optimizer.params.learning_rate,
+        weight_decay=config.optimizer.params.weight_decay
     )
 
     scheduler, _ = create_scheduler_v2(optimizer=optimizer, sched="cosine", 
@@ -95,6 +100,7 @@ def main ():
     ## Start training
     num_train_epochs = config.training.num_epochs
     early_stop = EarlyStopping(verbose=True)
+
     for current_epoch in range(first_epoch, num_train_epochs):
         torch.cuda.empty_cache()
 

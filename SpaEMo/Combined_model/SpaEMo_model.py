@@ -1,12 +1,14 @@
-from transformers import AutoModelForCausalLM,  AutoImageProcessor, AutoModelForImageClassification, AutoTokenizer , AutoModelForZeroShotImageClassification, VideoMAEForVideoClassification
+from transformers import AutoModelForCausalLM,  AutoImageProcessor, AutoModelForImageClassification, AutoTokenizer , AutoModelForZeroShotImageClassification, VideoMAEForVideoClassification, AutoModelForSeq2SeqLM
 import torch 
 import torch.nn as nn 
 from torch.nn.utils.rnn import pad_sequence
 import copy 
-from peft import LoraConfig, get_peft_model
+from peft import LoraConfig, get_peft_model, TaskType
 import os 
 import math
 from typing import Union, Callable, Dict, Optional
+
+
 
 def create_mask(seq_lengths: list, device="cpu"):
     """
@@ -80,7 +82,7 @@ class SignAdaptor (nn.Module):
         super().__init__()
         self.config = config
         
-    def forward(self, src_input, pad_idx = 0 ): 
+    def forward(self, src_input, pad_idx): 
         # batch_size, seq_len, hidden_size
         if self.config.training.token_usage: # use the other function is we are using the saved embeddings 
             return self.tokenised_forward(src_input, pad_idx = pad_idx)
@@ -93,6 +95,7 @@ class SignAdaptor (nn.Module):
         num_clips_batch = src_input['num_clips_batch']
         
         embeddings_batch = []
+        src_length = [] 
         start_clips = 0 
         start_frames = 0 
         for i , (num_clips, num_frames) in enumerate(zip(num_clips_batch, num_frames_batch)): 
@@ -120,14 +123,15 @@ class SignAdaptor (nn.Module):
             # Concat the features along the dimensions
             combined_features = torch.cat([current_emos, current_images, expanded_clips], dim=1) 
             embeddings_batch.append(combined_features)
+            src_length.append(combined_features.size(0))
 
             start_clips = end_clips
             start_frames = end_frames
         
         x = pad_sequence(embeddings_batch, batch_first=True, padding_value=pad_idx)
-        return x 
+        return x , src_length
     
-    def tokenised_forward(self, src_input, pad_idx = 0):
+    def tokenised_forward(self, src_input, pad_idx):
         name_batch = src_input['name_batch']
         emo_batch = src_input['emo_batch']
         image_batch = src_input['image_batch']
@@ -136,6 +140,7 @@ class SignAdaptor (nn.Module):
         num_clips_batch = src_input['num_clips_batch']
         
         embeddings_batch = [] 
+        src_length = [] 
         
         for i , (num_clips, num_frames) in enumerate(zip(num_clips_batch, num_frames_batch)):
             # if its tokenised already, then don't need to batch out the clips and frames with start and end indices
@@ -158,12 +163,99 @@ class SignAdaptor (nn.Module):
             # Concat the features along the dimensions
             combined_features = torch.cat([current_emos, current_images, expanded_clips], dim=1) 
             embeddings_batch.append(combined_features)
+            src_length.append(combined_features.size(0))
 
         x = pad_sequence(embeddings_batch, batch_first=True, padding_value=pad_idx)
-        return x 
+        return x , src_length
     
+class SignAdaptorV2(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.spatio_proj = nn.Linear(self.config.model.spatio_hiddim + self.config.model.emo_hiddim,
+                                     self.config.model.llm_hiddim)
+        self.motion_proj = nn.Linear(self.config.model.motion_hiddim,
+                                     self.config.model.llm_hiddim)
+
+    def forward(self, src_input, pad_idx):
+        # batch_size, seq_len, hidden_size
+        if self.config.training.token_usage:
+            return self.tokenised_forward(src_input, pad_idx=pad_idx)
+        
+        name_batch = src_input['name_batch']
+        emo_batch = src_input['emo_batch']
+        image_batch = src_input['image_batch']
+        clip_batch = src_input['clip_batch']
+        num_frames_batch = src_input['num_frames_batch']
+        num_clips_batch = src_input['num_clips_batch']
+
+        embeddings_batch = []
+        src_length = []
+        start_clips = 0 
+        start_frames = 0 
+
+        ## If not tokenised, then batch out the clips and frames with start and end indices
+        for i , (num_clips, num_frames) in enumerate(zip(num_clips_batch, num_frames_batch)): 
+            name = name_batch[i]
+            #print(f"num_clips: {num_clips}, num_frames: {num_frames}, repeat factor: {repeat_factor}")
+            # Sectioning out the frames after the visual features extractor
+            end_clips = start_clips + num_clips
+            end_frames = start_frames  + num_frames
+            current_images = image_batch[start_frames :end_frames]
+            current_emos = emo_batch[start_frames :end_frames]
+            current_clips = clip_batch [start_clips :end_clips]
+
+            # However, this time we do not concat the features on dim 1, but rather on dim 0
+            # Therefore, don't need to repeat the clips
+
+            # Go through the different projection layers
+            spatio_emo = torch.cat([current_emos, current_images], dim=1)
+            spatio_proj = self.spatio_proj(spatio_emo)
+            motion_proj = self.motion_proj(current_clips)
+
+            # Concat the features along the temporal dimensions
+            combined_features = torch.cat([  spatio_proj, motion_proj], dim=0)
+
+            embeddings_batch.append(combined_features)
+            src_length.append(combined_features.size(0))
+
+            start_clips = end_clips
+            start_frames = end_frames
+    
+        x = pad_sequence(embeddings_batch, batch_first=True, padding_value=pad_idx)
+        return x , src_length
+    
+    def tokenised_forward(self, src_input, pad_idx = 0):
+        name_batch = src_input['name_batch']
+        emo_batch = src_input['emo_batch']
+        image_batch = src_input['image_batch']
+        clip_batch = src_input['clip_batch']
+        num_frames_batch = src_input['num_frames_batch']
+        num_clips_batch = src_input['num_clips_batch']
+        
+        embeddings_batch = [] 
+        src_len =  []
+        
+        for i , (num_clips, num_frames) in enumerate(zip(num_clips_batch, num_frames_batch)):
+            # if its tokenised already, then don't need to batch out the clips and frames with start and end indices
+
+            current_clips = clip_batch[i]
+            current_images = image_batch[i]
+            current_emos = emo_batch[i]
+
+            # Go through the different projection layers
+            spatio_emo = torch.cat([current_emos, current_images], dim=1)
+            spatio_proj = self.spatio_proj(spatio_emo)
+            motion_proj = self.motion_proj(current_clips)
+            
+            # Concat the features along the dimensions
+            combined_features = torch.cat([spatio_proj,  motion_proj], dim=0)
+            embeddings_batch.append(combined_features)
+            src_len.append(combined_features.size(0))
 
 
+        x = pad_sequence(embeddings_batch, batch_first=True, padding_value=pad_idx)
+        return x , src_len
 
     
     def save_embeddings(self, src_input, save_path): 
@@ -272,18 +364,22 @@ class MLP(nn.Module):
     def __init__(
         self,
         config,
+        in_features,
+        out_features,
         hidden_features=None,
-        out_features=2048,
         act_layer=nn.GELU,
         drop=0.1
     ):
         ''''''
         super().__init__()
-        self.in_features= config.model.emo_hiddim + config.model.spatio_hiddim + config.model.motion_hiddim
-        hidden_features = hidden_features or self.in_features
-        self.fc1 = nn.Linear(self.in_features, hidden_features)
+        self.config = config
+        self.in_features= in_features
+        self.hidden_features = hidden_features or self.in_features
+        self.out_features = out_features
+        print(f"MLP: self.in_features: {self.in_features}, hidden_features: {self.hidden_features}")
+        self.fc1 = nn.Linear(self.in_features, self.hidden_features)
         self.act = act_layer()
-        self.fc2 = nn.Linear(hidden_features, out_features)
+        self.fc2 = nn.Linear(self.hidden_features, self.out_features)
         self.drop = nn.Dropout(drop)
 
     def forward(self, x):
@@ -387,7 +483,8 @@ class BaseModel(torch.nn.Module):
 
 
 class SpaEMo(BaseModel):
-    def __init__(self, config) : 
+
+    def __init__(self, config): 
         super().__init__()
         self.config = config
         self.combined_dim = config.model.emo_hiddim + config.model.spatio_hiddim + config.model.motion_hiddim
@@ -395,19 +492,51 @@ class SpaEMo(BaseModel):
         self.emo_extractor = Emo_extractor(config)
         self.spatio_extractor = Spatio_extractor(config)
         self.motion_extractor = Motion_extractor(config)
-        self.adaptor =  SignAdaptor(config)
-        self.tconv = TemporalConv(input_size = self.combined_dim, hidden_size=self.combined_dim)
-        self.mlp = MLP(config)
+        
+        if self.config.model.adaptor_type == 1:
+            self.adaptor =  SignAdaptor(config)
+            self.tconv = TemporalConv(input_size = self.combined_dim, hidden_size=self.combined_dim)
+            self.mlp = MLP(config, in_features=self.combined_dim, out_features=self.config.model.llm_hiddim)
+
+        elif self.config.model.adaptor_type == 2:
+            self.adaptor = SignAdaptorV2(config)  
+            self.tconv = TemporalConv(input_size = self.config.model.llm_hiddim, hidden_size=self.config.model.llm_hiddim)
+            self.mlp = MLP(config, in_features=self.config.model.llm_hiddim, out_features=self.config.model.llm_hiddim)
+
         self.tokenizer = AutoTokenizer.from_pretrained(config.model.tokenizer)
-        self.lora_config =  LoraConfig(
-                                        task_type="CAUSAL_LM",   # Type of task
+        if self.config.model.transformer_type == 'causal':
+            self.lora_config =  LoraConfig(
+                                        task_type=TaskType.CAUSAL_LM,   # Type of task
                                         inference_mode=False,    # Enable training
                                         r=8,                     # Low-rank dimension
                                         lora_alpha=16,           # Scaling factor
                                         lora_dropout=0.1,        # Dropout rate for LoRA
                                         target_modules=["q_proj", "v_proj"]  # Target modules (Gemma specific)
                                         )
-        model = AutoModelForCausalLM.from_pretrained(config.model.llm)
+            model = AutoModelForCausalLM.from_pretrained(config.model.llm)
+
+        elif self.config.model.transformer_type == 'seq2seq':
+            self.lora_config = LoraConfig(
+                                task_type=TaskType.SEQ_2_SEQ_LM,  # Task type for sequence-to-sequence learning
+                                inference_mode=False,
+                                r=16,  # Low-rank dimension
+                                lora_alpha=32,  # Scaling factor
+                                lora_dropout=0.1,  # Dropout probability
+                                target_modules=["q_proj", "v_proj"]
+                                )
+            model = AutoModelForSeq2SeqLM.from_pretrained(config.model.llm)
+        
+        elif self.config.model.transformer_type == 'seq2seq_v2': 
+            self.lora_config =LoraConfig(
+                                        r=16,
+                                        lora_alpha=32,
+                                        target_modules=["q", "v"],
+                                        lora_dropout=0.1,
+                                        bias="none",
+                                        task_type=TaskType.SEQ_2_SEQ_LM
+                                        )
+            model = AutoModelForSeq2SeqLM.from_pretrained(config.model.llm)
+
         self.lora_model = get_peft_model(model, self.lora_config)
         self.lora_model.print_trainable_parameters()
 
@@ -418,6 +547,7 @@ class SpaEMo(BaseModel):
         prompt_len = len(prompt_ids["input_ids"][0])
         #print(f"prompt_len: {prompt_len}")
         #print(f"visual feats shape: {visual_feats.shape}")
+
         prompt_embeds = self.lora_model.get_input_embeddings()(prompt_ids["input_ids"]).squeeze()
         tgt_embeds = self.lora_model.get_input_embeddings()(tgt_ids["input_ids"])
 
@@ -450,41 +580,62 @@ class SpaEMo(BaseModel):
             # assert the length of the labels is the same as the combined embeddings
         
         # perform padding for the batch before returning
-        new_input_embeds = torch.nn.utils.rnn.pad_sequence(new_input_embeds, batch_first=True, padding_value=0)
+        new_input_embeds = pad_sequence(new_input_embeds, batch_first=True, padding_value=0)
         #print("HERE", [labels.shape for labels in new_labels])
-        new_labels = torch.nn.utils.rnn.pad_sequence(new_labels, batch_first=True, padding_value=-100).squeeze()
+        new_labels = pad_sequence(new_labels, batch_first=True, padding_value=-100).squeeze()
         new_labels[new_labels==0]=-100
         return new_input_embeds, new_labels
 
     def forward(self, src_input,tgt_input):
-        emo_features = self.emo_extractor(src_input['emo_batch'])
-        spatio_features = self.spatio_extractor(src_input['image_batch'])
-        motion_features = self.motion_extractor(src_input['clip_batch'])
+        '''
+        2 types of forward pass: 
+        a. CausalLM: need to prep the visual embeddings and label tokens such that they are in consecutive order
+        b. Seq2Seq: need to prep the visual embeddings and label tokens separately, might also need to prepare for the attention mask
+        '''
+
+        # This part if tokens are not saved
+        if self.config.training.token_usage == False:
+            src_input['emo_batch'] = self.emo_extractor(src_input['emo_batch'])
+            src_input['image_batch']= self.spatio_extractor(src_input['image_batch'])
+            src_input['clip_batch']= self.motion_extractor(src_input['clip_batch'])
 
         # Create a new dictionary for transferring of results
         emb_input = {'name_batch': src_input['name_batch'],
-                     'emo_batch': emo_features, 
-                     'image_batch': spatio_features, 
-                     'clip_batch': motion_features, 
+                     'emo_batch': src_input['emo_batch'], 
+                     'image_batch': src_input['image_batch'], 
+                     'clip_batch': src_input['clip_batch'], 
                      'num_clips_batch': src_input['num_clips_batch'],
                      'num_frames_batch': src_input['num_frames_batch'],}
-        
-        combined_features = self.adaptor(emb_input, self.tokenizer.pad_token_id)
+        prompt = self.config.dataset.prompt
+        prompt_ids = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=True)
+        #print(f"prompt_len: {prompt_len}")
+        #print(f"visual feats shape: {visual_feats.shape}")
+
+        prompt_embeds = self.lora_model.get_input_embeddings()(prompt_ids["input_ids"]).squeeze()
+        combined_features, src_length = self.adaptor(emb_input, self.tokenizer.pad_token_id)
 
         # if tokenised, just need arrangement and then the visual embeddings go straight right into the temporal conv
 
 
-        temporal_features = self.tconv(combined_features, src_input['num_frames_batch'])
+        temporal_features = self.tconv(combined_features, src_length)
         vis_features = self.mlp(temporal_features['visual_feat'])
         if self.config.model.transformer_type == 'causal': 
-            new_input_embeds , new_labels = self.create_causal_inputs(vis_features, temporal_features['src_attn'], tgt_input, self.tokenizer, self.config.dataset.prompt )
-        elif self.config.model.transformer_type == 'seq2seq':
-            raise NotImplemented
-            new_input_embeds, new_labels= self.create_seq_inputs (vis_features, temporal_features['src_attn'], tgt_input, self.tokenizer, self.config.dataset.prompt)
-        
-        outputs = self.lora_model(inputs_embeds = new_input_embeds, labels = new_labels)
+            new_input_embeds , new_labels = self.create_causal_inputs(vis_features, temporal_features['src_attn'], tgt_input, 
+                                                                      self.tokenizer, self.config.dataset.prompt )
+            outputs = self.lora_model(inputs_embeds = new_input_embeds, labels = new_labels)
+            
+        elif self.config.model.transformer_type == 'seq2seq' or self.config.model.transformer_type == 'seq2seq_v2':
+            new_input_embeds = vis_features
+            new_labels = tgt_input["input_ids"]
+            label_attn = tgt_input["attention_mask"]
+            new_labels = new_labels.masked_fill(new_labels == self.tokenizer.pad_token_id, -100)
+            outputs = self.lora_model(inputs_embeds = new_input_embeds.cuda(),
+                                      attention_mask= temporal_features['src_attn'].cuda(), 
+                                      decoder_attention_mask = label_attn.cuda(),
+                                       labels = new_labels)
 
-        return outputs
+        
+        return outputs, temporal_features
     
     def save_embeddings(self, src_input, phase = None ):
         assert phase is not None, "Please specify the phase of the model"
@@ -510,7 +661,6 @@ class SpaEMo(BaseModel):
         #print(f"visual feats shape: {visual_feats.shape}")
         prompt_embeds = self.lora_model.get_input_embeddings()(prompt_ids["input_ids"]).squeeze()
 
-
         #print(f"tgt embeds: {tgt_embeds.shape}")
         #print(f"tgt attn: {tgt_attn.shape}")
         new_input_embeds = [] 
@@ -535,25 +685,29 @@ class SpaEMo(BaseModel):
 
         return new_input_embeds
 
-    def generate(self, src_input, num_beams =4, max_length = 100): 
+    def generate(self, src_input, num_beams =5, max_length = 50): 
         with torch.no_grad(): 
-            emo_features = self.emo_extractor(src_input['emo_batch'])
-            spatio_features = self.spatio_extractor(src_input['image_batch'])
-            motion_features = self.motion_extractor(src_input['clip_batch'])
+            if self.config.training.token_usage == False:
+                src_input['emo_batch'] = self.emo_extractor(src_input['emo_batch'])
+                src_input['image_batch'] = self.spatio_extractor(src_input['image_batch'])
+                src_input['clip_batch']= self.motion_extractor(src_input['clip_batch'])
 
             # Create a new dictionary for transferring of results
             emb_input = {'name_batch': src_input['name_batch'],
-                        'emo_batch': emo_features, 
-                        'image_batch': spatio_features, 
-                        'clip_batch': motion_features, 
+                        'emo_batch': src_input['emo_batch'], 
+                        'image_batch': src_input['image_batch'], 
+                        'clip_batch': src_input['clip_batch'], 
                         'num_clips_batch': src_input['num_clips_batch'],
                         'num_frames_batch': src_input['num_frames_batch'],}
             
-            combined_features = self.adaptor(emb_input, self.tokenizer.pad_token_id)
-            temporal_features = self.tconv(combined_features, src_input['num_frames_batch'])
+            combined_features, src_len = self.adaptor(emb_input, self.tokenizer.pad_token_id)
+            temporal_features = self.tconv(combined_features,src_len)
             vis_features = self.mlp(temporal_features['visual_feat'])
-            new_input_embeds  = self.create_generation_inputs(vis_features, temporal_features['src_attn'],  self.tokenizer, self.config.dataset.prompt )  
-            outputs = self.lora_model.generate(inputs_embeds = new_input_embeds, num_beams = num_beams, max_length = max_length)
+            if self.config.model.transformer_type == "causal": 
+                new_input_embeds  = self.create_generation_inputs(vis_features, temporal_features['src_attn'],  self.tokenizer, self.config.dataset.prompt )
+            else: 
+                new_input_embeds = vis_features.cuda()
+            outputs = self.lora_model.generate(inputs_embeds = new_input_embeds,attention_mask = temporal_features['src_attn'].cuda(), num_beams = num_beams, max_length = max_length)
 
         return outputs
     
@@ -561,25 +715,28 @@ class SpaEMo(BaseModel):
     def vis_text_align(self, src_input, tgt_input):
 
         ##Get visual features 
-        emo_features = self.emo_extractor(src_input['emo_batch'])
-        spatio_features = self.spatio_extractor(src_input['image_batch'])
-        motion_features = self.motion_extractor(src_input['clip_batch'])
+        if self.config.training.token_usage == False:
+            src_input['emo_batch'] = self.emo_extractor(src_input['emo_batch'])
+            src_input['image_batch']= self.spatio_extractor(src_input['image_batch'])
+            src_input['clip_batch']= self.motion_extractor(src_input['clip_batch'])
 
         # Create a new dictionary for transferring of results
         emb_input = {'name_batch': src_input['name_batch'],
-                     'emo_batch': emo_features, 
-                     'image_batch': spatio_features, 
-                     'clip_batch': motion_features, 
+                     'emo_batch': src_input['emo_batch'], 
+                     'image_batch': src_input['image_batch'], 
+                     'clip_batch': src_input['clip_batch'], 
                      'num_clips_batch': src_input['num_clips_batch'],
                      'num_frames_batch': src_input['num_frames_batch'],}
         
-        combined_features = self.adaptor(emb_input, self.tokenizer.pad_token_id)
-        temporal_features = self.tconv(combined_features, src_input['num_frames_batch'])
+        combined_features , src_len = self.adaptor(emb_input, self.tokenizer.pad_token_id)
+        temporal_features = self.tconv(combined_features, src_len)
         image_embeds = self.mlp(temporal_features['visual_feat'])
 
         # Get textual features 
         text_embeds = self.lora_model.get_input_embeddings()(tgt_input["input_ids"])
 
+        image_embeds = image_embeds.mean(1)  # pooler_output
+        text_embeds = text_embeds.mean(1)  # pooler_output
 
         # align the visual features with the text features, don't need to perform causal modelling
         # normalized features

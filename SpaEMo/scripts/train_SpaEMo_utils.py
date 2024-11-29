@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 import time 
 from collections import defaultdict
-
+import csv 
 from tqdm import tqdm 
 
 import glob
@@ -175,7 +175,7 @@ def translate_images(model, src, tgt, accelerator, config, global_step, output_d
     if accelerator.mixed_precision == "fp16":
         dtype = torch.float16
     elif accelerator.mixed_precision == "bf16":
-        dtype = torch.bfloat16
+        dtype = torch.bfloat16does 
 
     ## Generate some examples
     model.eval()
@@ -193,13 +193,14 @@ def translate_images(model, src, tgt, accelerator, config, global_step, output_d
         # Log translations locally to text files
         root = Path(output_dir) / "train_translations"
         os.makedirs(root, exist_ok=True)
-        for i, (pred,gt) in enumerate(zip(generated_batch, tgt_batch)):
+        for i, (name, pred,gt) in enumerate(zip(src['name_batch'], generated_batch, tgt_batch)):
             filename = f"{global_step:08}_t-{i:03}.txt"
             path = os.path.join(root, filename)
             
             # Save each translation as a separate text file
             with open(path, "w", encoding="utf-8") as f:
                 f.write(f"Sample {i + 1}:\n")
+                f.write(f"Name        : {name}\n")
                 f.write(f"Ground Truth: {gt}\n")
                 f.write(f"Prediction  : {pred}\n")
         
@@ -259,9 +260,7 @@ class EarlyStopping:
 
 def eval_SpaEMo(model,dev_dataloader,accelerator): 
     '''
-    translate images in the dev_loader 
-    Calculate metrics using BLEU
-    Output BLEU and Rouge values
+    translate sample images in the dev_loader 
     '''
     
     model.eval()
@@ -276,6 +275,53 @@ def eval_SpaEMo(model,dev_dataloader,accelerator):
     model.train()
     total_val_loss = torch.tensor(total_val_loss, device=accelerator.device)
     return total_val_loss
+
+def generate_bleu(model, dev_dataloader, accelerator, tokenizer, output_dir, phase): 
+    model.eval() 
+    name = [] 
+    refs = [] 
+    gen = [] 
+    for step, (src, tgt) in enumerate(tqdm(dev_dataloader, desc=f"Generation!")):
+        with torch.no_grad():
+            generated = model.generate(
+                src,
+                num_beams=5,
+                max_length = 60 
+            )
+
+            # Decode the generated token IDs
+            generated_batch = tokenizer.batch_decode(generated, skip_special_tokens=True)
+            tgt_batch  = tokenizer.batch_decode(tgt['input_ids'], skip_special_tokens=True)
+            
+            name.extend(src['name_batch'])
+            refs.extend(tgt_batch)
+            gen.extend(generated_batch)
+
+    # Calculate BLEU score
+    print (gen)
+    print([refs])
+    blue = sacrebleu.corpus_bleu(gen, [refs])
+    print(f"BLEU score: {blue}")
+
+
+
+
+    # Save lists as a CSV file
+    if phase == "dev": 
+        filepath = os.path.join(output_dir, "dev_bleu.csv")
+    else: 
+        filepath = os.path.join(output_dir, "test_bleu.csv")
+
+    with open(filepath, "w", newline="") as file:
+        writer = csv.writer(file)
+        # Write header
+        writer.writerow(["Name", "Reference", "Generated"])
+        # Write rows
+        writer.writerows(zip(name, refs, gen))
+    
+
+    print(f"Translations saved locally in {filepath}")
+
 
 def create_SpaEMo(config, logger):
     """Creates Sign2Text model and loss module."""
@@ -400,7 +446,9 @@ def train_one_epoch(config, accelerator, model, tokenizer,
             if dev_dataloader is not None and \
                 (global_step + 1) % int(config.experiment.eval_every* len(train_dataloader)/config.training.gradient_accumulation_steps) == 0:
                            
-                if global_step < config.training.vt_steps: continue # Skip evaluation if aligning vis-text is not over
+                if global_step < config.training.vt_steps: 
+                    global_step += 1
+                    continue # Skip evaluation if aligning vis-text is not over
                 
                 logger.info(f"Computing metrics on the validation set.")
                 

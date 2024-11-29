@@ -174,8 +174,7 @@ class SignVideoDataset(Dataset):
         self.video_processor = AutoImageProcessor.from_pretrained(config.model.motion_model)
         self.transformer_type = config.model.transformer_type 
 
-        print(cv2.__version__)
-        print(cv2.getBuildInformation())
+
 
     def __len__(self):
         """
@@ -227,8 +226,7 @@ class SignVideoDataset(Dataset):
                 print(f"Name: {name}, Length mismatch: Retrieved {img_sample.shape[0]} vs Recorded {length}") 
             # else: 
             #     print(f"Name list: {path_lst}, Name: {name}, Length: {length}") 
-        
-            return name, img_sample, text_label
+            return name, img_sample, text_label, path_lst
 
     def load_imgs(self, dir_path):
         """
@@ -265,6 +263,7 @@ class SignVideoDataset(Dataset):
         batch_image = []
         batch_face = []
         # Load each image, apply transformations, and crop if necessary.
+        
         for i, img_path in enumerate(paths):
             img_path = os.path.join(dir_path, img_path)
             img = Image.open(img_path).convert("RGB")
@@ -367,9 +366,10 @@ class SignVideoDataset(Dataset):
                 - 'num_clips_batch': list of number of clips in each video.
                 - 'tgt_batch': The batched text labels.
         """
-        name_batch, emo_batch, image_batch, clip_batch, num_frames_batch, num_clips_batch, tgt_batch = [], [], [], [], [], [], []
+        name_batch, emo_batch, image_batch, clip_batch, num_frames_batch, num_clips_batch, tgt_batch, path_batch = [], [], [], [], [], [], [], []
         face_detector = FaceDetectorYunet(model_path = self.config.model.face_detector )
-        for name, img_sample, text_label in batch: 
+        for name, img_sample, text_label , path_lst in batch: 
+            path_batch.append(path_lst)
             name_batch.append(name)
             tgt_batch.append(text_label)
             
@@ -422,6 +422,7 @@ class SignVideoDataset(Dataset):
             'clip_batch': clip_batch,
             'num_frames_batch': num_frames_batch,
             'num_clips_batch': num_clips_batch,
+            'path_batch': path_batch
         }
 
         return src_input, tgt_input

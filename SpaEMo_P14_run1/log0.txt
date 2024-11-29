@@ -4846,3 +4846,13 @@ config: configs/SpaEMo_P14_config.yaml
 [32m[11/20 14:52:00 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 2
 [32m[11/20 14:52:03 SpaEMo_P14]: [0mCreating model and loss module.
 [32m[11/20 14:52:12 SpaEMo_P14]: [0mAll globbed checkpoints are: []
+[32m[11/29 16:12:52 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 8
+[32m[11/29 16:19:34 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 8
+[32m[11/29 16:23:10 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 8
+[32m[11/29 16:24:55 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 8
+[32m[11/29 16:51:00 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 8
+[32m[11/29 16:54:25 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 8
+[32m[11/29 17:19:26 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/29 20:51:26 SpaEMo_P14]: [0mCreating model and loss module.
+[32m[11/29 20:52:06 SpaEMo_P14]: [0mCreating Signloaders. Batch_size = 8
+[32m[11/29 20:53:51 SpaEMo_P14]: [0mCreating model and loss module.

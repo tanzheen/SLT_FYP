@@ -11,15 +11,19 @@ experiment:
   init_weight:
 
 model:
-  tokenizer: text/gemma_instruct_2b
+  tokenizer: text/m2m_1.2b
   emotion_model: trpakov/vit-face-expression
   spatio_model: openai/clip-vit-large-patch14
   motion_model: MCG-NJU/videomae-large-finetuned-kinetics
-  llm: text/gemma_instruct_2b
-  transformer_type: causal
+  llm: text/m2m_1.2b
+  face_detector: emo/face_detection_yunet_2023mar.onnx
+  transformer_type: seq2seq # "seq2seq" or "causal"
   emo_hiddim: 768
   spatio_hiddim: 768
   motion_hiddim: 1024
+  multilingual: True 
+  llm_hiddim: 1024
+  adaptor_type : 1
 
 dataset:
   name: PHOENIX2014T
@@ -49,14 +53,18 @@ lr_scheduler:
     end_lr: 5e-5
 
 training:
-  gradient_accumulation_steps: 8
-  per_gpu_batch_size: 2
-  mixed_precision: "fp16"
-  enable_tf32: True
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 8
+  mixed_precision: "no"
+  enable_tf32: False
   enable_wandb: False # Set to True to enable wandb logging
   use_ema: False
   seed: 42
-  num_translated_images: 4
+  num_translated_images: 2
   max_grad_norm: 1.0
-  num_epochs: 32
+  num_epochs: 200
   scale_embedding: False
+  token_usage: False # Set to True to use token usage
+  vt_align: True # Set to True to use visual token alignment
+  s2_scale: False
+  vt_steps: 3000

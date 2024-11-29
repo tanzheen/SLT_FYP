@@ -56,7 +56,7 @@ class TemporalConv(nn.Module):
             if ks[0] == 'P':
                 feat_len = torch.div(feat_len, 2)
             else:
-                feat_len -= int(ks[1]) - 1
+                feat_len -= int(ks[1]) - 1 #K5 means -4
                 #pass
         return feat_len
 
