@@ -62,7 +62,9 @@ class AverageMeter(object):
         self.avg = self.sum / self.count
 
 
-def create_dataloader(config, logger, tokenizer, device =  None): 
+def create_dataloader(config, logger,accelerator, tokenizer, device =  None): 
+    if device is None: 
+        device = accelerator.device
     batch_size = config.training.per_gpu_batch_size 
     logger.info(f"Creating Signloaders. Batch_size = {batch_size}")
 
@@ -74,6 +76,7 @@ def create_dataloader(config, logger, tokenizer, device =  None):
                                   num_workers=config.dataset.params.num_workers,
                                   collate_fn=train_dataset.collate_tokens if config.training.token_usage else train_dataset.collate_fn,
                                   generator=torch.Generator(device=device))
+    #train_dataloader = accelerator.prepare(train_dataloader)
     print("train dataloader done!")
 
     dev_dataset = SignVideoDataset(tokenizer, config,  'dev')
@@ -81,6 +84,7 @@ def create_dataloader(config, logger, tokenizer, device =  None):
                                 num_workers=config.dataset.params.num_workers,
                                 collate_fn=dev_dataset.collate_tokens if config.training.token_usage else dev_dataset.collate_fn, 
                                 generator=torch.Generator(device=device) )
+    #dev_dataloader = accelerator.prepare(dev_dataloader)
     print("dev dataloader done!")
 
     test_dataset = SignVideoDataset(tokenizer, config, 'test')
@@ -88,21 +92,21 @@ def create_dataloader(config, logger, tokenizer, device =  None):
                                   num_workers=config.dataset.params.num_workers, 
                                   collate_fn=test_dataset.collate_tokens if config.training.token_usage else test_dataset.collate_fn, 
                                   generator=torch.Generator(device=device))
-
+    #test_dataloader = accelerator.prepare(test_dataloader)
     print("train dataloader done!")
 
     return train_dataloader, dev_dataloader, test_dataloader
 
 
 
-def auto_resume(config, logger, 
+def auto_resume(config, logger, accelerator, 
              strict=True):
     """Auto resuming the training."""
     global_step = 0
     first_epoch = 0
     # If resuming training.
     if config.experiment.resume:            
-
+        accelerator.wait_for_everyone()
         local_ckpt_list = list(glob.glob(os.path.join(
             config.experiment.output_dir, "checkpoint*")))
         logger.info(f"All globbed checkpoints are: {local_ckpt_list}")
@@ -122,7 +126,7 @@ def auto_resume(config, logger,
     return global_step, first_epoch
 
 
-def save_checkpoint(model,  output_dir, global_step, logger) -> Path:
+def save_checkpoint(model,  output_dir, accelerator, global_step, logger) -> Path:
     save_path = Path(output_dir) / f"checkpoint-{global_step}"
 
     state_dict = accelerator.get_state_dict(model)
@@ -142,7 +146,7 @@ def save_checkpoint(model,  output_dir, global_step, logger) -> Path:
     return save_path
 
 
-def load_checkpoint(checkpoint_path: Path,  logger, strict=True):
+def load_checkpoint(checkpoint_path: Path, accelerator, logger, strict=True):
     '''need to check where will the metadata.json being printed'''
 
     logger.info(f"Load checkpoint from {checkpoint_path}")
@@ -155,7 +159,7 @@ def load_checkpoint(checkpoint_path: Path,  logger, strict=True):
     logger.info(f"Resuming at global_step {global_step}")
     return global_step
 
-def log_grad_norm(model, global_step):
+def log_grad_norm(model, accelerator, global_step):
     for name, param in model.named_parameters():
         if param.grad is not None:
             grads = param.grad.detach().data
@@ -163,10 +167,15 @@ def log_grad_norm(model, global_step):
             accelerator.log({"grad_norm/" + name: grad_norm}, step=global_step)
 
 
-def translate_images(model, src, tgt, config, global_step, output_dir, logger, tokenizer):
+def translate_images(model, src, tgt, accelerator, config, global_step, output_dir, logger, tokenizer):
     logger.info("Translating images...")
+    model = accelerator.unwrap_model(model)
 
-
+    dtype = torch.float32
+    if accelerator.mixed_precision == "fp16":
+        dtype = torch.float16
+    elif accelerator.mixed_precision == "bf16":
+        dtype = torch.bfloat16does 
 
     ## Generate some examples
     model.eval()
@@ -249,7 +258,7 @@ class EarlyStopping:
         return save_boo
     
 
-def eval_SpaEMo(model,dev_dataloader): 
+def eval_SpaEMo(model,dev_dataloader,accelerator): 
     '''
     translate sample images in the dev_loader 
     '''
@@ -267,7 +276,7 @@ def eval_SpaEMo(model,dev_dataloader):
     total_val_loss = torch.tensor(total_val_loss, device=accelerator.device)
     return total_val_loss
 
-def generate_bleu(model, dev_dataloader,  tokenizer, output_dir, phase): 
+def generate_bleu(model, dev_dataloader, accelerator, tokenizer, output_dir, phase): 
     model.eval() 
     name = [] 
     refs = [] 
