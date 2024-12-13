@@ -74,7 +74,7 @@ def make_resnet(name='resnet18'):
     elif name == 'resnet101':
         model = torchvision.models.resnet101(pretrained=False)
     else:
-        raise Exception('There are no supported resnet model {}.'.format(_('resnet')))
+        raise Exception('There are no supported resnet model {}.'.format(('resnet')))
     weights_path = "resnet18-f37072fd.pth"
     state_dict = torch.load(weights_path, map_location="cpu")
     model.load_state_dict(state_dict)

@@ -5,9 +5,9 @@ from torchvision import transforms  # Assuming frames are images
 from accelerate.utils import set_seed
 from accelerate import Accelerator
 # Assuming the TiTok model is imported from your project
-from vis_tokenizer.modeling.titok import TiTok # Replace with the actual path to your model class
-from vis_tokenizer.utils.logger import setup_logger
-from vis_tokenizer.utils.train_utils import (
+from modeling.titok import TiTok # Replace with the actual path to your model class
+from utils.logger import setup_logger
+from utils.train_utils import (
     get_config, create_pretrained_tokenizer, 
     create_model_and_loss_module,
     create_optimizer, create_lr_scheduler,  create_dataloader,
@@ -41,6 +41,9 @@ def main():
     tracker = "tensorboard"
     if config.training.enable_wandb:
         tracker = "wandb"
+
+    # Download the weights of the model
+
 
     accelerator = Accelerator(
         gradient_accumulation_steps=config.training.gradient_accumulation_steps,

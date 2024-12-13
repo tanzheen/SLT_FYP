@@ -65,8 +65,8 @@ def main ():
 
     train_dataloader, dev_dataloader, test_dataloader = create_dataloader(config, 
                                                                           logger, 
-                                                                          accelerator,
-                                                                            tokenizer)
+                                                                            tokenizer, 
+                                                                            "cuda")
     model = create_SpaEMo(config, logger)
 
     # tokenise training set 

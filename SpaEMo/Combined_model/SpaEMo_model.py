@@ -123,7 +123,7 @@ class SignAdaptor (nn.Module):
             
             #print(f"shape of current_emos: {current_emos.shape}, shape of current_images: {current_images.shape}, shape of expanded_clips: {expanded_clips.shape}")
             # Concat the features along the dimensions
-            combined_features = torch.cat([current_emos, current_images, expanded_clips], dim=1) 
+            combined_features = torch.cat([ current_images, expanded_clips], dim=1) 
             embeddings_batch.append(combined_features)
             src_length.append(combined_features.size(0))
 
@@ -163,7 +163,7 @@ class SignAdaptor (nn.Module):
             
             #print(f"shape of current_emos: {current_emos.shape}, shape of current_images: {current_images.shape}, shape of expanded_clips: {expanded_clips.shape}")
             # Concat the features along the dimensions
-            combined_features = torch.cat([current_emos, current_images, expanded_clips], dim=1) 
+            combined_features = torch.cat([ current_images, expanded_clips], dim=1) 
             embeddings_batch.append(combined_features)
             src_length.append(combined_features.size(0))
 
@@ -174,7 +174,7 @@ class SignAdaptorV2(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.config = config
-        self.spatio_proj = nn.Linear(self.config.model.spatio_hiddim + self.config.model.emo_hiddim,
+        self.spatio_proj = nn.Linear(self.config.model.spatio_hiddim ,
                                      self.config.model.llm_hiddim)
         self.motion_proj = nn.Linear(self.config.model.motion_hiddim,
                                      self.config.model.llm_hiddim)
@@ -211,7 +211,7 @@ class SignAdaptorV2(nn.Module):
             # Therefore, don't need to repeat the clips
 
             # Go through the different projection layers
-            spatio_emo = torch.cat([current_emos, current_images], dim=1)
+            spatio_emo = torch.cat([current_images], dim=1)
             spatio_proj = self.spatio_proj(spatio_emo)
             motion_proj = self.motion_proj(current_clips)
 
@@ -246,7 +246,7 @@ class SignAdaptorV2(nn.Module):
             current_emos = emo_batch[i]
 
             # Go through the different projection layers
-            spatio_emo = torch.cat([current_emos, current_images], dim=1)
+            spatio_emo = torch.cat([current_images], dim=1)
             spatio_proj = self.spatio_proj(spatio_emo)
             motion_proj = self.motion_proj(current_clips)
             
@@ -489,7 +489,7 @@ class SpaEMo(BaseModel):
     def __init__(self, config): 
         super().__init__()
         self.config = config
-        self.combined_dim = config.model.emo_hiddim + config.model.spatio_hiddim + config.model.motion_hiddim
+        self.combined_dim =  config.model.spatio_hiddim + config.model.motion_hiddim
         self.logit_scale = nn.Parameter(torch.tensor(2.6592))
         self.emo_extractor = Emo_extractor(config)
         self.spatio_extractor = Spatio_extractor(config)
@@ -637,7 +637,7 @@ class SpaEMo(BaseModel):
                                        labels = new_labels.cuda())
 
         
-        return outputs, temporal_features
+        return outputs
     
     def save_embeddings(self, src_input, phase = None ):
         assert phase is not None, "Please specify the phase of the model"
@@ -735,7 +735,7 @@ class SpaEMo(BaseModel):
         image_embeds = self.mlp(temporal_features['visual_feat'])
 
         # Get textual features 
-        text_embeds = self.lora_model.get_input_embeddings()(tgt_input["input_ids"])
+        text_embeds = self.lora_model.get_input_embeddings()(tgt_input["input_ids"].cuda())
 
         image_embeds = image_embeds.mean(1)  # pooler_output
         text_embeds = text_embeds.mean(1)  # pooler_output
