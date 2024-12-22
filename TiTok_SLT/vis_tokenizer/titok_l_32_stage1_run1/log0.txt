@@ -1,0 +1,352 @@
+[32m[12/13 14:07:55 TiTok]: [0mSaving config to titok_l_32_stage1_run1\config.yaml
+[32m[12/13 14:07:55 TiTok]: [0mConfig:
+experiment:
+  project: titok_l_32_stage1
+  name: titok_l_32_stage1_run1
+  output_dir: titok_l_32_stage1_run1
+  generate_every: 0.25
+  save_every: 0.25
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: tokenizer_titok_l32.bin
+  logging_dir: titok_l_32_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: large
+    vit_dec_model_size: large
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 32
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    img_path: ../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/
+    num_workers: 4
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 32
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_l32_P14.yaml
+--experiment:
+  project: tokenise_titok
+  name: tokenise_titok
+  output_dir: titok_l32_P14_tokenise
+
+[32m[12/13 14:12:01 TiTok]: [0mSaving config to titok_l_32_stage1_run1\config.yaml
+[32m[12/13 14:12:01 TiTok]: [0mConfig:
+experiment:
+  project: titok_l_32_stage1
+  name: titok_l_32_stage1_run1
+  output_dir: titok_l_32_stage1_run1
+  generate_every: 0.25
+  save_every: 0.25
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: tokenizer_titok_l32.bin
+  logging_dir: titok_l_32_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: large
+    vit_dec_model_size: large
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 32
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    img_path: ../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/
+    num_workers: 4
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 32
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_l32_P14.yaml
+--experiment:
+  project: tokenise_titok
+  name: tokenise_titok
+  output_dir: titok_l32_P14_tokenise
+
+[32m[12/13 14:12:31 TiTok]: [0mSaving config to titok_l_32_stage1_run1\config.yaml
+[32m[12/13 14:12:31 TiTok]: [0mConfig:
+experiment:
+  project: titok_l_32_stage1
+  name: titok_l_32_stage1_run1
+  output_dir: titok_l_32_stage1_run1
+  generate_every: 0.25
+  save_every: 0.25
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: tokenizer_titok_l32.bin
+  logging_dir: titok_l_32_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: large
+    vit_dec_model_size: large
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 32
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    img_path: ../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/
+    num_workers: 4
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 32
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_l32_P14.yaml
+--experiment:
+  project: tokenise_titok
+  name: tokenise_titok
+  output_dir: titok_l32_P14_tokenise
+
+[32m[12/13 14:12:44 TiTok]: [0mSaving config to titok_l_32_stage1_run1\config.yaml
+[32m[12/13 14:12:44 TiTok]: [0mConfig:
+experiment:
+  project: titok_l_32_stage1
+  name: titok_l_32_stage1_run1
+  output_dir: titok_l_32_stage1_run1
+  generate_every: 0.25
+  save_every: 0.25
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: tokenizer_titok_l32.bin
+  logging_dir: titok_l_32_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: large
+    vit_dec_model_size: large
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 32
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    img_path: ../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/
+    num_workers: 4
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 32
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_l32_P14.yaml
+--experiment:
+  project: tokenise_titok
+  name: tokenise_titok
+  output_dir: titok_l32_P14_tokenise
+
+[32m[12/13 14:12:48 TiTok]: [0mCreating dataloaders. Batch size = 32
+[32m[12/13 14:14:29 TiTok]: [0mSaving config to titok_l_32_stage1_run1\config.yaml
+[32m[12/13 14:14:29 TiTok]: [0mConfig:
+experiment:
+  project: titok_l_32_stage1
+  name: titok_l_32_stage1_run1
+  output_dir: titok_l_32_stage1_run1
+  generate_every: 0.25
+  save_every: 0.25
+  log_every: 1
+  eval_every: 1
+  log_grad_norm_every: 0.1
+  resume: true
+  init_weight: tokenizer_titok_l32.bin
+  logging_dir: titok_l_32_stage1_run1\logs
+model:
+  vq_model:
+    codebook_size: 4096
+    token_size: 12
+    use_l2_norm: true
+    commitment_cost: 0.25
+    vit_enc_model_size: large
+    vit_dec_model_size: large
+    vit_enc_patch_size: 16
+    vit_dec_patch_size: 16
+    num_latent_tokens: 32
+    finetune_decoder: false
+    pretrained_tokenizer_weight: maskgit-vqgan-imagenet-f16-256.bin
+losses:
+  quantizer_weight: 1.0
+dataset:
+  params:
+    img_path: ../../../PHOENIX-2014-T-release-v3/PHOENIX-2014-T/features/fullFrame-210x260px/
+    num_workers: 4
+  preprocessing:
+    resize_shorter_edge: 256
+    crop_size: 256
+    random_crop: true
+    random_flip: true
+    person_size: 410
+optimizer:
+  name: adamw
+  params:
+    learning_rate: 0.0001
+    beta1: 0.9
+    beta2: 0.99
+    weight_decay: 0.0001
+lr_scheduler:
+  scheduler: cosine
+  params:
+    learning_rate: ${optimizer.params.learning_rate}
+    warmup_steps: 10000
+    end_lr: 1.0e-05
+training:
+  gradient_accumulation_steps: 1
+  per_gpu_batch_size: 32
+  mixed_precision: 'no'
+  enable_tf32: true
+  enable_wandb: false
+  use_ema: true
+  seed: 42
+  num_generated_images: 4
+  max_grad_norm: 1.0
+  num_epochs: 10
+  frame_every: 5
+config: configs/training/stage1/titok_l32_P14.yaml
+--experiment:
+  project: tokenise_titok
+  name: tokenise_titok
+  output_dir: titok_l32_P14_tokenise
+
+[32m[12/13 14:14:32 TiTok]: [0mCreating dataloaders. Batch size = 32
