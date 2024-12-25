@@ -41,10 +41,7 @@ class SignModel(BaseModel, PyTorchModelHubMixin):
         trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
         print(f"Number of trainable parameters: {trainable_params}")
 
-        
-
-            
-
+    
         
 
         

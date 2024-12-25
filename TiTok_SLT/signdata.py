@@ -205,8 +205,6 @@ class SignTransDataset(Dataset):
             
             return tokens , paths  # Return the tensor (frames, RGB channels, height, width).
 
-            
-
 
     
     def __str__(self):

@@ -163,7 +163,7 @@ class SignAdaptor (nn.Module):
             
             #print(f"shape of current_emos: {current_emos.shape}, shape of current_images: {current_images.shape}, shape of expanded_clips: {expanded_clips.shape}")
             # Concat the features along the dimensions
-            combined_features = torch.cat([ current_images, expanded_clips], dim=1) 
+            combined_features = torch.cat([current_images, expanded_clips], dim=1) 
             embeddings_batch.append(combined_features)
             src_length.append(combined_features.size(0))
 
@@ -174,7 +174,7 @@ class SignAdaptorV2(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.config = config
-        self.spatio_proj = nn.Linear(self.config.model.spatio_hiddim ,
+        self.spatio_proj = nn.Linear(self.config.model.spatio_hiddim  + self.config.model.emo_hiddim,
                                      self.config.model.llm_hiddim)
         self.motion_proj = nn.Linear(self.config.model.motion_hiddim,
                                      self.config.model.llm_hiddim)
@@ -211,7 +211,7 @@ class SignAdaptorV2(nn.Module):
             # Therefore, don't need to repeat the clips
 
             # Go through the different projection layers
-            spatio_emo = torch.cat([current_images], dim=1)
+            spatio_emo = torch.cat([current_images, current_emos], dim=1)
             spatio_proj = self.spatio_proj(spatio_emo)
             motion_proj = self.motion_proj(current_clips)
 
@@ -246,7 +246,7 @@ class SignAdaptorV2(nn.Module):
             current_emos = emo_batch[i]
 
             # Go through the different projection layers
-            spatio_emo = torch.cat([current_images], dim=1)
+            spatio_emo = torch.cat([current_images, current_emos], dim=1)
             spatio_proj = self.spatio_proj(spatio_emo)
             motion_proj = self.motion_proj(current_clips)
             
