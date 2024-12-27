@@ -1,7 +1,7 @@
 experiment:
   project: "SpaEMo_P14"
   name: "SpaEMo_P14_run2"
-  output_dir: "/scratch2/e0724993/SpaEMo_P14_run2"
+  output_dir: "/scratch2/e0724993/SpaEMo_P14_run_final"
   save_every: 1
   log_every: 0.1
   eval_every: 1
@@ -11,12 +11,12 @@ experiment:
   init_weight:
 
 model:
-  tokenizer: /scratch2/e0724993/m2m_1.2b
+  tokenizer: /home/svu/e0724993/GFSLT-VLP/pretrain_models/MBart_trimmed
   emotion_model: /scratch2/e0724993/vit_face_expression
   spatio_model: /scratch2/e0724993/openai_vit
   motion_model: /scratch2/e0724993/videomae
   face_detector: /scratch2/e0724993/yunet/face_detection_yunet_2023mar.onnx
-  llm: /scratch2/e0724993/m2m_1.2b
+  llm: /home/svu/e0724993/GFSLT-VLP/pretrain_models/MBart_trimmed
   transformer_type: seq2seq # "seq2seq" or "causal"
   emo_hiddim: 768
   spatio_hiddim: 768
@@ -38,7 +38,7 @@ dataset:
     num_workers: 4
 
 optimizer:
-  name: adamw
+  name: sgd
   params:
     learning_rate: 1e-4
     beta1: 0.9

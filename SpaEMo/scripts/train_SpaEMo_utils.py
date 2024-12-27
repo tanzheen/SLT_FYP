@@ -29,6 +29,7 @@ from tqdm import tqdm
 from torch.nn.utils import clip_grad_norm_
 from collections import defaultdict
 import torch.distributed as dist
+import utils as utils 
 '''
 Might not need to have create scheduler and optimizer in this file
 '''
@@ -738,8 +739,10 @@ def create_SpaEMo(config, logger):
 #     return global_step, early_stop
 
 
-def train_one_epoch(config, model, tokenizer, train_dataloader, dev_dataloader, optimizer,
-                    logger, scheduler, global_step, early_stop, current_epoch, device):
+def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss,
+                    data_loader, optimizer: torch.optim.Optimizer,
+                    device: torch.device, epoch: int, config, loss_scaler, mixup_fn=None, max_norm: float = 1.0,
+                    set_training_mode=True, gradient_accumulation_steps=4):
     """
     Train the model for one epoch.
 
@@ -761,93 +764,55 @@ def train_one_epoch(config, model, tokenizer, train_dataloader, dev_dataloader, 
         global_step (int): Updated global step.
         early_stop: Updated early stopping object.
     """
-    batch_time_meter = AverageMeter()
-    data_time_meter = AverageMeter()
-    end = time.time()
+    
+    model.train(set_training_mode)
 
-    total_loss = 0
-    transformer_logs = defaultdict(float)
+    metric_logger = utils.MetricLogger(delimiter="  ")
+    metric_logger.add_meter('lr', utils.SmoothedValue(window_size=1, fmt='{value:.6f}'))
+    header = 'Epoch: [{}/{}]'.format(epoch, args.epochs)
+    print_freq = 10
 
     model.to(device)
 
-    for step, (src_input, tgt_input) in enumerate(tqdm(train_dataloader, desc="Training!")):
-        model.train()
-        data_time_meter.update(time.time() - end)
+    for step, (src_input, tgt_input) in enumerate(metric_logger.log_every(data_loader, print_freq, header)):
 
-        # Move inputs to the correct device
-
-        # Forward pass
-        if config.training.vt_align and global_step < config.training.vt_steps:
-            logits_per_text = model.vis_text_align(src_input, tgt_input)
-            loss = clip_loss(logits_per_text)
-        else:
-            outputs = model(src_input, tgt_input)
-            loss = outputs.loss
-
-        optimizer.zero_grad()
+        # Calculate loss
+        logits_per_text = model.vis_text_align(src_input, tgt_input)
+        cliploss = clip_loss(logits_per_text)
+        out_logits = model(src_input, tgt_input)
+        label = tgt_input['input_ids'].reshape(-1)
+        logits = out_logits.reshape(-1, out_logits.shape[-1])
+        textloss = criterion(logits, label.to(device, non_blocking=True))   # Scale loss
+        
+        loss = textloss + 0.3 * cliploss
         loss.backward()
 
-        # Gradient clipping
-        # if config.training.max_grad_norm is not None:
-        #     clip_grad_norm_(model.parameters(), config.training.max_grad_norm)
+        # Perform optimizer step and zero gradients every `gradient_accumulation_steps` steps
+        if (step + 1) % gradient_accumulation_steps == 0:
+            if max_norm > 0:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm)  # Gradient clipping
+            optimizer.step()
+            optimizer.zero_grad()
 
-        optimizer.step()
-        scheduler.step(current_epoch)
-
-        loss_value = loss.item()
+        # Log metrics
+        loss_value = loss.item()  # Scale back for logging
         if not math.isfinite(loss_value):
-            logger.error(f"Loss is {loss_value}, stopping training")
+            print("Loss is {}, stopping training".format(loss_value))
             sys.exit(1)
 
-        total_loss += loss_value
-        transformer_logs["train current loss"] = loss_value
-        transformer_logs["train total_loss"] = total_loss
+        metric_logger.update(loss=loss_value)
+        metric_logger.update(lr=optimizer.param_groups[0]["lr"])
+        if len(optimizer.param_groups) > 1:  # If there are multiple parameter groups
+            metric_logger.update(lr_mbart=round(float(optimizer.param_groups[1]["lr"]), 8))
 
-        # Generate some examples
-        if (global_step + 1) % int(config.experiment.translate_every * len(train_dataloader)/config.training.gradient_accumulation_steps)== 0 :
+        if (step + 1) % 10 == 0 and args.visualize and utils.is_main_process():
+            utils.visualization(model.module.visualize())
+        
+    # Gather the stats from all processes
+    metric_logger.synchronize_between_processes()
+    print("Averaged stats:", metric_logger)
 
-            # Save a batch of translated images to check by reading
-            translate_images(model=model, 
-                                src=src_input, 
-                                tgt=tgt_input, 
-                                global_step= global_step, 
-                                config=config, output_dir=config.experiment.output_dir, 
-                                logger = logger, 
-                                tokenizer = tokenizer)
-
-        # Logging
-        if (global_step + 1) % int(config.experiment.log_every * len(train_dataloader) /
-                                   config.training.gradient_accumulation_steps) == 0:
-            logger.info(
-                f"Batch time: {batch_time_meter.val:.4f} "
-                f"Step: {global_step + 1} "
-                f"Total Loss: {transformer_logs['train total_loss']:.4f} "
-                f"Current Loss: {transformer_logs['train current loss']:.4f}"
-            )
-
-        # Validation
-        if dev_dataloader is not None and \
-                (global_step + 1) % int(config.experiment.eval_every * len(train_dataloader) /
-                                        config.training.gradient_accumulation_steps) == 0:
-            logger.info("Computing metrics on the validation set.")
-            total_val_loss = eval_SpaEMo(model=model, dev_dataloader=dev_dataloader, device=device)
-            if dist.is_initialized():
-                dist.barrier()
-                dist.all_reduce(total_val_loss, op=dist.ReduceOp.SUM)
-                total_val_loss /= dist.get_world_size()
-
-            if early_stop(total_val_loss):
-                save_path = save_checkpoint(
-                    model=model,
-                    output_dir=config.experiment.output_dir,
-                    global_step=global_step + 1,
-                    logger=logger
-                )
-                logger.info(f"Checkpoint saved at {save_path}")
-
-        global_step += 1
-        end = time.time()
-
+    return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
     return global_step, early_stop
 
 def contrastive_loss(logits: torch.Tensor) -> torch.Tensor:
@@ -858,3 +823,73 @@ def clip_loss(similarity: torch.Tensor) -> torch.Tensor:
     caption_loss = contrastive_loss(similarity)
     image_loss = contrastive_loss(similarity.t())
     return (caption_loss + image_loss) / 2.0
+
+def evaluate(args, dev_dataloader, model, model_without_ddp, tokenizer, criterion,  config, UNK_IDX, SPECIAL_SYMBOLS, PAD_IDX, device):
+    model.eval()
+
+    metric_logger = utils.MetricLogger(delimiter="  ")
+    header = 'Test:'
+
+    with torch.no_grad():
+        tgt_pres = []
+        tgt_refs = []
+ 
+        for step, (src_input, tgt_input) in enumerate(metric_logger.log_every(dev_dataloader, 10, header)):
+
+            out_logits = model(src_input, tgt_input)
+            total_loss = 0.0
+            label = tgt_input['input_ids'].reshape(-1)
+            
+            logits = out_logits.reshape(-1,out_logits.shape[-1])
+            tgt_loss = criterion(logits, label.to(device))
+            
+            total_loss += tgt_loss
+
+            metric_logger.update(loss=total_loss.item())
+            
+            output = model_without_ddp.generate(src_input, max_new_tokens=150, num_beams = 4,
+                        decoder_start_token_id=tokenizer.lang_code_to_id['de_DE']
+                        )
+
+            tgt_input['input_ids'] = tgt_input['input_ids'].to(device)
+            for i in range(len(output)):
+                tgt_pres.append(output[i,:])
+                tgt_refs.append(tgt_input['input_ids'][i,:])
+            
+            if (step+1) % 10 == 0 and args.visualize and utils.is_main_process():
+                utils.visualization(model_without_ddp.visualize())
+
+    pad_tensor = torch.ones(200-len(tgt_pres[0])).to(device)
+    tgt_pres[0] = torch.cat((tgt_pres[0],pad_tensor.long()),dim = 0)
+    tgt_pres = pad_sequence(tgt_pres,batch_first=True,padding_value=PAD_IDX)
+
+    pad_tensor = torch.ones(200-len(tgt_refs[0])).to(device)
+    tgt_refs[0] = torch.cat((tgt_refs[0],pad_tensor.long()),dim = 0)
+    tgt_refs = pad_sequence(tgt_refs,batch_first=True,padding_value=PAD_IDX)
+
+    tgt_pres = tokenizer.batch_decode(tgt_pres, skip_special_tokens=True)
+    tgt_refs = tokenizer.batch_decode(tgt_refs, skip_special_tokens=True)
+
+    bleu = BLEU()
+    bleu_s = bleu.corpus_score(tgt_pres, [tgt_refs]).score
+    # metrics_dict['belu4']=bleu_s
+
+    metric_logger.meters['belu4'].update(bleu_s)
+
+    # gather the stats from all processes
+    metric_logger.synchronize_between_processes()
+    print('* BELU-4 {top1.global_avg:.3f} loss {losses.global_avg:.3f}'
+          .format(top1=metric_logger.belu4, losses=metric_logger.loss))
+    
+    if utils.is_main_process() and utils.get_world_size() == 1 and args.eval:
+        with open(args.output_dir+'/tmp_pres.txt','w') as f:
+            for i in range(len(tgt_pres)):
+                f.write(tgt_pres[i]+'\n')
+        with open(args.output_dir+'/tmp_refs.txt','w') as f:
+            for i in range(len(tgt_refs)):
+                f.write(tgt_refs[i]+'\n')
+        print('\n'+'*'*80)
+        # metrics_dict = compute_metrics(hypothesis=args.output_dir+'/tmp_pres.txt',
+        #                    references=[args.output_dir+'/tmp_refs.txt'],no_skipthoughts=True,no_glove=True)
+        print('*'*80)
+    return {k: meter.global_avg for k, meter in metric_logger.meters.items()}
