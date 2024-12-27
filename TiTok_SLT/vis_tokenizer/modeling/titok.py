@@ -165,6 +165,16 @@ class TiTok(BaseModel, PyTorchModelHubMixin, tags=["arxiv:2304.12244", "image-to
             decoded = self.pixel_decoder(quantized_states)
         return decoded
     
+    def codebook_quantize_tokens(self, tokens):
+        tokens = tokens.squeeze(1)
+        batch, seq_len = tokens.shape # B x N
+        z_quantized = self.quantize.get_codebook_entry(
+            tokens.reshape(-1))
+        print(z_quantized.shape)
+        z_quantized = z_quantized.reshape(batch, 1, seq_len, -1)
+        z_quantized = rearrange(z_quantized, 'b h w c -> b c h w').contiguous()
+        return z_quantized
+
     def decode_tokens(self, tokens):
         tokens = tokens.squeeze(1)
         batch, seq_len = tokens.shape # B x N
