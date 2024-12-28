@@ -174,7 +174,7 @@ class SignAdaptorV2(nn.Module):
     def __init__(self, config):
         super().__init__()
         self.config = config
-        self.spatio_proj = nn.Linear(self.config.model.spatio_hiddim  + self.config.model.emo_hiddim,
+        self.spatio_proj = nn.Linear(self.config.model.spatio_hiddim,
                                      self.config.model.llm_hiddim)
         self.motion_proj = nn.Linear(self.config.model.motion_hiddim,
                                      self.config.model.llm_hiddim)
@@ -211,7 +211,7 @@ class SignAdaptorV2(nn.Module):
             # Therefore, don't need to repeat the clips
 
             # Go through the different projection layers
-            spatio_emo = torch.cat([current_images, current_emos], dim=1)
+            spatio_emo = torch.cat([current_images], dim=1)
             spatio_proj = self.spatio_proj(spatio_emo)
             motion_proj = self.motion_proj(current_clips)
 
@@ -246,7 +246,7 @@ class SignAdaptorV2(nn.Module):
             current_emos = emo_batch[i]
 
             # Go through the different projection layers
-            spatio_emo = torch.cat([current_images, current_emos], dim=1)
+            spatio_emo = torch.cat([current_images], dim=1)
             spatio_proj = self.spatio_proj(spatio_emo)
             motion_proj = self.motion_proj(current_clips)
             
@@ -539,8 +539,9 @@ class SpaEMo(BaseModel):
                                         )
             model = AutoModelForSeq2SeqLM.from_pretrained(config.model.llm)
 
-        self.lora_model = get_peft_model(model, self.lora_config)
-        self.lora_model.print_trainable_parameters()
+        self.lora_model = model 
+        # self.lora_model = get_peft_model(model, self.lora_config)
+        # self.lora_model.print_trainable_parameters()
 
     def create_causal_inputs(self, visual_feats ,visual_attn,  tgt_ids,tokenizer , prompt): 
         '''This function is only for causal language modeling.'''
@@ -736,7 +737,7 @@ class SpaEMo(BaseModel):
 
         # Get textual features 
         text_embeds = self.lora_model.get_input_embeddings()(tgt_input["input_ids"].cuda())
-
+        
         image_embeds = image_embeds.mean(1)  # pooler_output
         text_embeds = text_embeds.mean(1)  # pooler_output
 

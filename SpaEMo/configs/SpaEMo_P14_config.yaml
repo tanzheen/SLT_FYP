@@ -23,7 +23,7 @@ model:
   motion_hiddim: 1024
   multilingual: True
   llm_hiddim: 1024
-  adaptor_type: 1
+  adaptor_type: 2
 
 dataset:
   name: PHOENIX2014T
