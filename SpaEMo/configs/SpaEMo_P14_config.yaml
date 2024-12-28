@@ -11,11 +11,11 @@ experiment:
   init_weight:
 
 model:
-  tokenizer: text/m2m_1.2b
+  tokenizer: E:\GFSLT-VLP\pretrain_models\MBart_trimmed
   emotion_model: trpakov/vit-face-expression
   spatio_model: openai/clip-vit-large-patch14
   motion_model: MCG-NJU/videomae-large-finetuned-kinetics
-  llm: text/m2m_1.2b
+  llm: E:\GFSLT-VLP\pretrain_models\MBart_trimmed
   face_detector: emo/face_detection_yunet_2023mar.onnx
   transformer_type: seq2seq # "seq2seq" or "causal"
   emo_hiddim: 768

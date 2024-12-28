@@ -33,9 +33,6 @@ from torch.nn.utils.rnn import pad_sequence
 from transformers import MBartForConditionalGeneration, MBartTokenizer,MBartConfig
 from transformers.models.mbart.modeling_mbart import shift_tokens_right
 
-# *user-defined
-from models import gloss_free_model
-from datasets import S2T_Dataset
 import utils as utils
 
 # *basic
@@ -60,7 +57,6 @@ from hpman.m import _
 import hpargparse
 
 # *metric
-from metrics import wer_list
 from sacrebleu.metrics import BLEU, CHRF, TER
 # try:
 #     from nlgeval import compute_metrics
@@ -321,16 +317,30 @@ if __name__ == "__main__":
     world_size = torch.cuda.device_count()
     mp.set_start_method('spawn', force=True)
     config = get_config()
-    if world_size > 1:
-        mp.spawn(
-            main,
-            args=(world_size, get_config()),
-            nprocs=world_size,
-            join=True
-        )
-    else:
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        main(rank=0, world_size=1, config = config)
+    parser = argparse.ArgumentParser('Gloss-free Sign Language Translation script', parents=[get_args_parser()])
+    _.parse_file(Path(__file__).resolve().parent)
+    hpargparse.bind(parser, _)
+    args = parser.parse_args()
+    
+    # if utils.is_main_process():
+    #     wandb.init(project='GF-SLT',config=config)
+    #     wandb.run.name = args.output_dir.split('/')[-1]
+    #     wandb.define_metric("epoch")
+    #     wandb.define_metric("training/*", step_metric="epoch")
+    #     wandb.define_metric("dev/*", step_metric="epoch")
+    # Set default environment variables if not already set
+    os.environ.setdefault("MASTER_ADDR", "127.0.0.1")
+    os.environ.setdefault("MASTER_PORT", "12355")
+    os.environ.setdefault("WORLD_SIZE", "1")
+    os.environ.setdefault("RANK", "0")
+    os.environ.setdefault("LOCAL_RANK", "0")
+    # Initialize the distributed process group
+ 
+    # Set the local device
+    local_rank = int(os.environ["LOCAL_RANK"]) if "LOCAL_RANK" in os.environ else 0
+    if args.output_dir:
+        Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+    main(args, config)
 
 '''
 python train_SpaEMo_script.py --config=configs/SpaEMo_P14_config.yaml --experiment.project="SpaEMo_P14" --experiment.name="SpaEMo_P14_run1" --experiment.output_dir="SpaEMo_P14_run1"

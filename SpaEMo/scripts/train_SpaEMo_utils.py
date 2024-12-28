@@ -779,7 +779,7 @@ def train_one_epoch(args, model: torch.nn.Module, criterion: nn.CrossEntropyLoss
         # Calculate loss
         logits_per_text = model.vis_text_align(src_input, tgt_input)
         cliploss = clip_loss(logits_per_text)
-        out_logits = model(src_input, tgt_input)
+        out_logits = model(src_input, tgt_input).logits
         label = tgt_input['input_ids'].reshape(-1)
         logits = out_logits.reshape(-1, out_logits.shape[-1])
         textloss = criterion(logits, label.to(device, non_blocking=True))   # Scale loss
@@ -829,17 +829,16 @@ def evaluate(args, dev_dataloader, model, model_without_ddp, tokenizer, criterio
 
     metric_logger = utils.MetricLogger(delimiter="  ")
     header = 'Test:'
-
     with torch.no_grad():
         tgt_pres = []
         tgt_refs = []
  
         for step, (src_input, tgt_input) in enumerate(metric_logger.log_every(dev_dataloader, 10, header)):
 
-            out_logits = model(src_input, tgt_input)
-            total_loss = 0.0
-            label = tgt_input['input_ids'].reshape(-1)
+            out_logits = model(src_input, tgt_input).logits
             
+            label = tgt_input['input_ids'].reshape(-1)
+            total_loss = 0.0
             logits = out_logits.reshape(-1,out_logits.shape[-1])
             tgt_loss = criterion(logits, label.to(device))
             
@@ -847,8 +846,7 @@ def evaluate(args, dev_dataloader, model, model_without_ddp, tokenizer, criterio
 
             metric_logger.update(loss=total_loss.item())
             
-            output = model_without_ddp.generate(src_input, max_new_tokens=150, num_beams = 4,
-                        decoder_start_token_id=tokenizer.lang_code_to_id['de_DE']
+            output = model_without_ddp.generate(src_input, max_length=150, num_beams = 4,
                         )
 
             tgt_input['input_ids'] = tgt_input['input_ids'].to(device)
