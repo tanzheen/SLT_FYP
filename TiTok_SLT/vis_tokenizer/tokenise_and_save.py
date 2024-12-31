@@ -73,9 +73,21 @@ def main():
         # save the encoded tokens 
         new_file_path = os.path.splitext(img_path)[0] + ".pt"
         torch.save(encoded_tokens, new_file_path)
+    
+    def tokenize_and_quantize(img_path): 
+        img_path = os.path.join('E:\PHOENIX-2014-T-release-v3\PHOENIX-2014-T/features/fullFrame-210x260px/', img_path)
+        print(img_path)
+        original_image = Image.open(img_path)
+        original_image = original_image.resize((256, 256)) 
+        image = torch.from_numpy(np.array(original_image).astype(np.float32)).permute(2, 0, 1).unsqueeze(0) / 255.0
+        encoded_tokens = titok_tokenizer.encode(image.to(device))[1]["min_encoding_indices"]
+        quantized_image = titok_tokenizer.codebook_quantize_tokens(encoded_tokens).squeeze()
+        # save the encoded tokens 
+        new_file_path = os.path.splitext(img_path)[0] + "_quant.pt"
+        torch.save(quantized_image, new_file_path)
     print("Tokenizing! ")
     for img_path in all_paths: 
-        tokenize_and_save(img_path)
+        tokenize_and_quantize(img_path)
 
 
     
